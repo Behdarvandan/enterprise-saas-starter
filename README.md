@@ -89,6 +89,27 @@ Organizations are created atomically (org + owner membership) via the
 `create_organization` RPC, so there is intentionally no insert policy on the
 `organizations` table.
 
+## Stripe Billing & Subscriptions
+
+Billing is handled by Stripe. Configure the Stripe env vars (see
+`.env.example`), then create the corresponding price IDs in the Stripe
+dashboard and wire them to `STRIPE_PRICE_PRO` / `STRIPE_PRICE_ENTERPRISE`.
+
+- `/pricing` — plan selection, redirects to Stripe Checkout.
+- `/api/checkout` — creates a Checkout Session and returns its id.
+- `/api/billing-portal` — opens the Stripe customer billing portal.
+- `/api/webhooks/stripe` — verifies webhook signatures and syncs subscription
+  state to `organizations` (`checkout.session.completed`,
+  `customer.subscription.updated`, `customer.subscription.deleted`).
+
+To test locally, forward Stripe webhooks to your app:
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+```
+
+Then set `STRIPE_WEBHOOK_SECRET` to the `whsec_...` value Stripe prints.
+
 ## Production Build & Docker
 
 ```bash
