@@ -10,6 +10,7 @@ export type { Database, Json } from "./database";
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type Organization = Database["public"]["Tables"]["organizations"]["Row"];
 export type Membership = Database["public"]["Tables"]["memberships"]["Row"];
+export type Invitation = Database["public"]["Tables"]["invitations"]["Row"];
 export type MembershipRole = Database["public"]["Enums"]["membership_role"];
 
 /** Backwards-compatible alias for the user profile row. */

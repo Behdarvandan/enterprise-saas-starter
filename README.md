@@ -110,6 +110,21 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 
 Then set `STRIPE_WEBHOOK_SECRET` to the `whsec_...` value Stripe prints.
 
+## Team & Invitations
+
+Multi-tenant team management:
+
+- `/dashboard/team` — lists organization members, their roles, and pending
+  invitations. Owners/admins can invite members, change roles, remove members,
+  and revoke invitations.
+- `/invite/[token]` — lets an invited user accept an invitation and join the
+  organization.
+
+Role-based access control (RBAC) is enforced both in the UI and in server
+actions: only `owner`/`admin` roles can manage members and invitations. The
+`accept_invitation` RPC runs with `SECURITY DEFINER` so an invited user can join
+without already being a member.
+
 ## Production Build & Docker
 
 ```bash

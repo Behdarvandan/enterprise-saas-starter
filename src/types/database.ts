@@ -60,6 +60,47 @@ export type Database = {
           },
         ];
       };
+      invitations: {
+        Row: {
+          id: string;
+          organization_id: string;
+          email: string;
+          role: Database["public"]["Enums"]["membership_role"];
+          token: string;
+          expires_at: string;
+          status: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          email: string;
+          role?: Database["public"]["Enums"]["membership_role"];
+          token: string;
+          expires_at: string;
+          status?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          email?: string;
+          role?: Database["public"]["Enums"]["membership_role"];
+          token?: string;
+          expires_at?: string;
+          status?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "invitations_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       organizations: {
         Row: {
           id: string;
@@ -139,6 +180,12 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      accept_invitation: {
+        Args: {
+          p_token: string;
+        };
+        Returns: Database["public"]["Tables"]["organizations"]["Row"];
+      };
       create_organization: {
         Args: {
           org_name: string;
