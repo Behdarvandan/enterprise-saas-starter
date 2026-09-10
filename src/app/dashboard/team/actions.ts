@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { randomBytes } from "node:crypto";
 import { createClient } from "@/lib/supabase/server";
 import { canManageMembers, getUserMembership } from "@/lib/team";
+import { sendInvitationEmail } from "@/lib/email";
+import { getBaseUrl } from "@/lib/url";
 import type { MembershipRole } from "@/types";
 
 export type TeamActionResult = { error?: string; success?: boolean };
@@ -73,6 +75,25 @@ export async function inviteMember(
       return { error: "An invitation for this email already exists." };
     }
     return { error: error.message };
+  }
+
+  // Best-effort: send the invitation email (the invitation is already saved).
+  try {
+    const baseUrl = await getBaseUrl();
+    const { data: organization } = await supabase
+      .from("organizations")
+      .select("name")
+      .eq("id", membership.organizationId)
+      .single();
+
+    await sendInvitationEmail({
+      to: email,
+      organizationName: organization?.name ?? "Your organization",
+      role,
+      inviteUrl: `${baseUrl}/invite/${token}`,
+    });
+  } catch (sendError) {
+    console.error("Failed to send invitation email:", sendError);
   }
 
   revalidatePath("/dashboard/team");

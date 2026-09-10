@@ -136,6 +136,22 @@ actions: only `owner`/`admin` roles can manage members and invitations. The
 `accept_invitation` RPC runs with `SECURITY DEFINER` so an invited user can join
 without already being a member.
 
+## Email, Testing & Error Tracking
+
+- **Transactional email** — `src/lib/email.ts` wraps [Resend](https://resend.com)
+  to send invitation and password reset emails. Set `RESEND_API_KEY` (and
+  optionally `EMAIL_FROM`) to enable sending.
+- **E2E tests** — [Playwright](https://playwright.dev) with a config
+  (`playwright.config.ts`) and basic specs in `e2e/`. Run with
+  `npx playwright install && npx playwright test`.
+- **Error tracking** — [Sentry](https://sentry.io) is wired via
+  `sentry.client.config.ts`, `sentry.server.config.ts`,
+  `sentry.edge.config.ts`, and `src/instrumentation.ts`. Set
+  `NEXT_PUBLIC_SENTRY_DSN` / `SENTRY_DSN` to start capturing errors. Source map
+  upload is disabled by default; set `SENTRY_ORG`, `SENTRY_PROJECT`, and
+  `SENTRY_AUTH_TOKEN` (and remove the `sourcemaps.disable` block in
+  `next.config.js`) to enable it.
+
 ## Production Build & Docker
 
 ```bash

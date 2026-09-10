@@ -38,3 +38,12 @@ next-env.d.ts
 # misc
 .DS_Store
 *.pem
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Sentry
+.sentryclirc
