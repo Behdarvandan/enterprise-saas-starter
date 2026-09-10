@@ -11,7 +11,8 @@ export const config = {
      * Match all request paths except:
      * - _next/static, _next/image (static build assets)
      * - favicon.ico and other static files
+     * - /api/health (health check should not depend on a session)
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/health|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

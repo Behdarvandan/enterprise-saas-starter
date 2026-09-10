@@ -12,21 +12,28 @@ export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature");
 
   if (!signature) {
+    console.error("[stripe-webhook] Missing stripe-signature header.");
     return NextResponse.json(
       { error: "Missing stripe-signature header." },
       { status: 400 },
     );
   }
 
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.error("[stripe-webhook] STRIPE_WEBHOOK_SECRET is not configured.");
+    return NextResponse.json(
+      { error: "Webhook secret is not configured." },
+      { status: 500 },
+    );
+  }
+
+  // Strictly verify the event signature using the webhook signing secret.
   let event: Stripe.Event;
   try {
-    event = getStripe().webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!,
-    );
+    event = getStripe().webhooks.constructEvent(body, signature, webhookSecret);
   } catch (error) {
-    console.error("Stripe webhook signature verification failed:", error);
+    console.error("[stripe-webhook] Signature verification failed:", error);
     return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
   }
 
@@ -39,6 +46,7 @@ export async function POST(request: Request) {
         await handleCheckoutCompleted(admin, session);
         break;
       }
+      case "customer.subscription.created":
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription;
@@ -46,11 +54,15 @@ export async function POST(request: Request) {
         break;
       }
       default:
-        // Ignore events we do not handle.
+        // Acknowledge unhandled events so Stripe does not retry them.
+        console.info(`[stripe-webhook] Ignoring unhandled event: ${event.type}`);
         break;
     }
   } catch (error) {
-    console.error(`Error handling Stripe event ${event.type}:`, error);
+    console.error(
+      `[stripe-webhook] Error handling event ${event.type} (id: ${event.id}):`,
+      error,
+    );
     return NextResponse.json(
       { error: "Webhook handler failed." },
       { status: 500 },
@@ -66,7 +78,10 @@ async function handleCheckoutCompleted(
 ) {
   const subscriptionId =
     typeof session.subscription === "string" ? session.subscription : null;
-  if (!subscriptionId) return;
+  if (!subscriptionId) {
+    console.warn("[stripe-webhook] checkout.session.completed without a subscription id.");
+    return;
+  }
 
   const subscription = await getStripe().subscriptions.retrieve(subscriptionId);
   await persistSubscription(admin, subscription, session.client_reference_id);
@@ -104,15 +119,22 @@ async function persistSubscription(
       : null,
   };
 
-  if (organizationId) {
-    await admin
-      .from("organizations")
-      .update(update)
-      .eq("id", organizationId);
-  } else {
-    await admin
-      .from("organizations")
-      .update(update)
-      .eq("stripe_subscription_id", subscription.id);
+  const { error } = organizationId
+    ? await admin
+        .from("organizations")
+        .update(update)
+        .eq("id", organizationId)
+    : await admin
+        .from("organizations")
+        .update(update)
+        .eq("stripe_subscription_id", subscription.id);
+
+  if (error) {
+    console.error(
+      `[stripe-webhook] Failed to persist subscription ${subscription.id}:`,
+      error,
+    );
+    throw new Error(error.message);
   }
 }
+

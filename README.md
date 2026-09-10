@@ -152,6 +152,14 @@ without already being a member.
   `SENTRY_AUTH_TOKEN` (and remove the `sourcemaps.disable` block in
   `next.config.js`) to enable it.
 
+## CI/CD & Operations
+
+- **CI/CD** — `.github/workflows/ci-cd.yml` runs lint, build, and Playwright E2E
+  tests on every push/PR to `main`, with placeholder AWS ECR/ECS deployment
+  steps ready to wire up.
+- **Health check** — `GET /api/health` returns a lightweight status/uptime
+  payload for uptime monitors and load balancers.
+
 ## Production Build & Docker
 
 ```bash
