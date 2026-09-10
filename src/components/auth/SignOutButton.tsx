@@ -5,7 +5,7 @@ import { LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Button from "@/components/ui/Button";
 
-export default function SignOutButton() {
+export default function SignOutButton({ className }: { className?: string }) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -16,7 +16,7 @@ export default function SignOutButton() {
   }
 
   return (
-    <Button variant="secondary" onClick={handleSignOut}>
+    <Button variant="secondary" onClick={handleSignOut} className={className}>
       <LogOut size={16} />
       Sign out
     </Button>

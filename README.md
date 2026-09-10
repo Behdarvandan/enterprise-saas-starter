@@ -16,16 +16,27 @@ deployment pipeline.
 
 ```text
 src/
-├── app/                    # App Router (landing, login, protected dashboard)
+├── app/
+│   ├── (marketing)/        # Landing, auth, pricing, invite (Header + Footer)
+│   ├── dashboard/          # Authenticated app (sidebar layout)
+│   │   ├── billing/        # Subscription & billing portal
+│   │   ├── settings/       # Profile & organization settings
+│   │   └── team/           # Members & invitations
+│   └── api/                # checkout, billing-portal, webhooks/stripe
 ├── components/
 │   ├── auth/               # SignOutButton
-│   ├── layout/             # Header & Footer
+│   ├── billing/            # Checkout & billing portal buttons
+│   ├── dashboard/          # Sidebar
+│   ├── layout/             # Header & Footer (marketing)
 │   └── ui/                 # Button & Card atoms
 ├── lib/
-│   ├── supabase/           # client.ts, server.ts, middleware.ts helpers
+│   ├── supabase/           # client.ts, server.ts, admin.ts, middleware.ts
+│   ├── billing.ts          # Organization/customer helpers
+│   ├── stripe.ts           # Server + client Stripe helpers
+│   ├── team.ts             # Membership & RBAC helpers
 │   └── utils.ts            # cn() class merging
 ├── middleware.ts           # Session refresh middleware
-└── types/                  # Shared TypeScript contracts
+└── types/                  # Database + shared TypeScript contracts
 ```
 
 ## Getting Started

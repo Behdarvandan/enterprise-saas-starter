@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { canManageMembers, getUserMembership } from "@/lib/team";
 import Card from "@/components/ui/Card";
@@ -51,20 +50,12 @@ export default async function TeamPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Team</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            {organization?.name ?? "Your organization"}
-          </p>
-        </div>
-        <Link
-          href="/dashboard"
-          className="text-sm font-semibold text-brand-600 hover:text-brand-700"
-        >
-          Back to dashboard
-        </Link>
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-slate-900">Team</h1>
+        <p className="mt-1 text-sm text-slate-500">
+          {organization?.name ?? "Your organization"}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6">
