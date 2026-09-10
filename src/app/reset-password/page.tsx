@@ -1,31 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LogIn } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  async function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
+  async function handleUpdatePassword(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setError(null);
+    setMessage(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      setLoading(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setLoading(false);
+      return;
+    }
+
+    const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
       setError(error.message);
@@ -33,54 +43,59 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
-    router.refresh();
+    setMessage("Password updated successfully. Redirecting to sign in...");
+    setTimeout(() => {
+      router.push("/login");
+      router.refresh();
+    }, 1500);
   }
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
       <Card className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-lg bg-brand-600 text-white">
-          <LogIn size={22} />
+          <ShieldCheck size={22} />
         </div>
-        <h1 className="text-xl font-bold text-slate-900">Sign in</h1>
+        <h1 className="text-xl font-bold text-slate-900">Set a new password</h1>
         <p className="mt-1 text-sm text-slate-500">
-          Use your Supabase credentials to continue.
+          Choose a new password for your account.
         </p>
 
-        <form onSubmit={handleSignIn} className="mt-6 space-y-4">
+        <form onSubmit={handleUpdatePassword} className="mt-6 space-y-4">
           <div className="space-y-1.5">
             <label
-              htmlFor="email"
+              htmlFor="password"
               className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
             >
-              Email
+              New password
             </label>
             <input
-              id="email"
-              type="email"
+              id="password"
+              type="password"
               required
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              minLength={8}
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
             />
           </div>
 
           <div className="space-y-1.5">
             <label
-              htmlFor="password"
+              htmlFor="confirm-password"
               className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
             >
-              Password
+              Confirm new password
             </label>
             <input
-              id="password"
+              id="confirm-password"
               type="password"
               required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              minLength={8}
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
             />
           </div>
@@ -91,26 +106,16 @@ export default function LoginPage() {
             </p>
           )}
 
+          {message && (
+            <p className="rounded-lg bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-600">
+              {message}
+            </p>
+          )}
+
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? "Updating..." : "Update password"}
           </Button>
-
-          <p className="text-center text-sm text-slate-500">
-            <Link
-              href="/forgot-password"
-              className="font-semibold text-brand-600 hover:text-brand-700"
-            >
-              Forgot password?
-            </Link>
-          </p>
         </form>
-
-        <p className="mt-6 text-center text-sm text-slate-500">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="font-semibold text-brand-600 hover:text-brand-700">
-            Sign up
-          </Link>
-        </p>
       </Card>
     </div>
   );

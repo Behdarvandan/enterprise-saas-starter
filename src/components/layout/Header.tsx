@@ -30,6 +30,12 @@ export default function Header() {
           <Link href="/login" className="transition-colors hover:text-brand-600">
             Sign in
           </Link>
+          <Link
+            href="/signup"
+            className="rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700"
+          >
+            Sign up
+          </Link>
         </nav>
       </div>
     </header>
