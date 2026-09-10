@@ -2,25 +2,20 @@
  * Application-level shared TypeScript contracts.
  */
 
-export interface UserProfile {
-  id: string;
-  email: string;
-  full_name?: string | null;
-  avatar_url?: string | null;
-  created_at: string;
-}
+import type { Database } from "./database";
+
+export type { Database, Json } from "./database";
+
+// Convenience entity types derived from the generated database schema.
+export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+export type Organization = Database["public"]["Tables"]["organizations"]["Row"];
+export type Membership = Database["public"]["Tables"]["memberships"]["Row"];
+export type MembershipRole = Database["public"]["Enums"]["membership_role"];
+
+/** Backwards-compatible alias for the user profile row. */
+export type UserProfile = Profile;
 
 export interface NavItem {
   label: string;
   href: string;
 }
-
-/**
- * NOTE: Generate the fully-typed Supabase database schema from your project
- * and place it alongside this file:
- *
- *   npx supabase gen types typescript --project-id <project-ref> \
- *     > src/types/database.ts
- *
- * Then reference it via `createClient<Database>()` in the Supabase helpers.
- */

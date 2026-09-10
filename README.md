@@ -55,12 +55,39 @@ src/
 - **`/dashboard`** is a protected Server Component that redirects to `/login`
   when no session exists.
 
-To enable full-typed queries, generate your database types and add them to
-`src/types/database.ts`:
+Typed database helpers are wired to `src/types/database.ts`, which mirrors the
+SQL migrations in `supabase/migrations/`. To regenerate it from a live project:
 
 ```bash
 npx supabase gen types typescript --project-id <project-ref> > src/types/database.ts
 ```
+
+## Database Schema & Migrations
+
+SQL migrations live in `supabase/migrations/`:
+
+- `20240101000000_init_schema.sql` — tables (`profiles`, `organizations`,
+  `memberships`), the `membership_role` enum, indexes, triggers, and helper
+  functions (`create_organization`, `is_org_member`, `current_user_role`).
+- `20240101000001_rls_policies.sql` — Row Level Security policies.
+
+Apply them with the Supabase CLI:
+
+```bash
+supabase link --project-ref <project-ref>
+supabase db push
+```
+
+Schema summary:
+
+- `profiles` — one row per `auth.users` account (auto-created on signup).
+- `organizations` — a tenant / workspace.
+- `memberships` — links a profile to an organization with a role
+  (`owner`, `admin`, or `member`).
+
+Organizations are created atomically (org + owner membership) via the
+`create_organization` RPC, so there is intentionally no insert policy on the
+`organizations` table.
 
 ## Production Build & Docker
 
