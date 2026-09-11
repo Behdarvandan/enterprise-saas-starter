@@ -13,6 +13,12 @@ export type Membership = Database["public"]["Tables"]["memberships"]["Row"];
 export type Invitation = Database["public"]["Tables"]["invitations"]["Row"];
 export type MembershipRole = Database["public"]["Enums"]["membership_role"];
 
+// AI Chatbot & RAG Knowledge Assistant entities.
+export type Document = Database["public"]["Tables"]["documents"]["Row"];
+export type DocumentChunk = Database["public"]["Tables"]["document_chunks"]["Row"];
+export type ChatSession = Database["public"]["Tables"]["chat_sessions"]["Row"];
+export type ChatMessage = Database["public"]["Tables"]["chat_messages"]["Row"];
+
 /** Backwards-compatible alias for the user profile row. */
 export type UserProfile = Profile;
 

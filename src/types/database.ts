@@ -174,7 +174,198 @@ export type Database = {
             referencedColumns: ["id"];
           },
         ];
-      };
+      },
+      documents: {
+        Row: {
+          id: string;
+          organization_id: string;
+          title: string;
+          source_type: string;
+          content: string;
+          mime_type: string | null;
+          byte_size: number | null;
+          status: string;
+          metadata: Json;
+          created_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          title: string;
+          source_type?: string;
+          content: string;
+          mime_type?: string | null;
+          byte_size?: number | null;
+          status?: string;
+          metadata?: Json;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          title?: string;
+          source_type?: string;
+          content?: string;
+          mime_type?: string | null;
+          byte_size?: number | null;
+          status?: string;
+          metadata?: Json;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "documents_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "documents_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      },
+      document_chunks: {
+        Row: {
+          id: string;
+          organization_id: string;
+          document_id: string;
+          chunk_index: number;
+          content: string;
+          token_count: number | null;
+          embedding: string;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          document_id: string;
+          chunk_index: number;
+          content: string;
+          token_count?: number | null;
+          embedding: number[] | string;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          document_id?: string;
+          chunk_index?: number;
+          content?: string;
+          token_count?: number | null;
+          embedding?: number[] | string;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "document_chunks_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "document_chunks_document_id_fkey";
+            columns: ["document_id"];
+            isOneToOne: false;
+            referencedRelation: "documents";
+            referencedColumns: ["id"];
+          },
+        ];
+      },
+      chat_sessions: {
+        Row: {
+          id: string;
+          organization_id: string;
+          visitor_id: string | null;
+          title: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          visitor_id?: string | null;
+          title?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          visitor_id?: string | null;
+          title?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "chat_sessions_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
+      },
+      chat_messages: {
+        Row: {
+          id: string;
+          organization_id: string;
+          session_id: string;
+          role: "user" | "assistant" | "system";
+          content: string;
+          sources: Json | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          session_id: string;
+          role: "user" | "assistant" | "system";
+          content: string;
+          sources?: Json | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          session_id?: string;
+          role?: "user" | "assistant" | "system";
+          content?: string;
+          sources?: Json | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chat_messages_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "chat_sessions";
+            referencedColumns: ["id"];
+          },
+        ];
+      },
     };
     Views: {
       [_ in never]: never;
@@ -204,6 +395,21 @@ export type Database = {
           org_id: string;
         };
         Returns: boolean;
+      };
+      match_document_chunks: {
+        Args: {
+          query_embedding: number[] | string;
+          match_organization_id: string;
+          match_count?: number;
+          match_threshold?: number;
+        };
+        Returns: {
+          id: string;
+          document_id: string;
+          chunk_index: number;
+          content: string;
+          similarity: number;
+        }[];
       };
     };
     Enums: {
