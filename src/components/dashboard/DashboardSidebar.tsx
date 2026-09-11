@@ -8,6 +8,7 @@ import {
   CreditCard,
   LayoutDashboard,
   Menu,
+  MessageSquareText,
   Settings,
   Users,
   X,
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 const NAV_ITEMS = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Team", href: "/dashboard/team", icon: Users },
+  { label: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageSquareText },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
