@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isOrganizationServiceable } from "@/lib/billing";
 import { getEmbedding } from "@/lib/rag/embeddings";
 import { streamChatCompletion, type LLMMessage } from "@/lib/rag/llm";
+import { checkRateLimit } from "@/lib/rate-limit";
 import type { Json } from "@/types";
 
 const MATCH_COUNT = 5;
@@ -112,9 +114,26 @@ export async function POST(request: Request) {
     );
   }
 
+  const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+  const allowed = await checkRateLimit(`rag:${organizationId}:${ip}`);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again shortly." },
+      { status: 429 },
+    );
+  }
+
   const admin = createAdminClient();
 
   try {
+    // Only serve tenants with an active or trialing subscription.
+    if (!(await isOrganizationServiceable(organizationId))) {
+      return NextResponse.json(
+        { error: "This service is not currently available." },
+        { status: 403 },
+      );
+    }
+
     // Resolve or create a session scoped strictly to the tenant.
     let sessionId = body.sessionId ?? null;
 

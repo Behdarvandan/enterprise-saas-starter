@@ -159,6 +159,12 @@ without already being a member.
   steps ready to wire up.
 - **Health check** — `GET /api/health` returns a lightweight status/uptime
   payload for uptime monitors and load balancers.
+- **Booking cleanup cron** — `GET /api/cron/cleanup-pending-appointments`
+  cancels stale `pending` appointments whose Stripe Checkout session expired
+  without a `checkout.session.expired` webhook ever being delivered. It
+  requires an `Authorization: Bearer <CRON_SECRET>` header. Schedule it every
+  10-15 minutes with Vercel Cron, a GitHub Actions schedule, or Supabase
+  pg_cron hitting the URL.
 
 ## Production Build & Docker
 

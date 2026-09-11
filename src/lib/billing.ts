@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { Organization } from "@/types";
 
 /**
@@ -55,4 +56,26 @@ export async function ensureOrganization(user: {
   }
 
   return data;
+}
+
+/**
+ * Returns whether the organization's subscription allows the public,
+ * unauthenticated services (chat RAG and booking checkout) to run. Only
+ * `active` and `trialing` subscriptions are considered serviceable.
+ */
+export async function isOrganizationServiceable(
+  organizationId: string,
+): Promise<boolean> {
+  const admin = createAdminClient();
+
+  const { data: organization } = await admin
+    .from("organizations")
+    .select("subscription_status")
+    .eq("id", organizationId)
+    .maybeSingle();
+
+  return (
+    organization?.subscription_status === "active" ||
+    organization?.subscription_status === "trialing"
+  );
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAvailableSlots } from "@/lib/booking";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -21,6 +22,15 @@ export async function GET(request: Request) {
     return NextResponse.json(
       { error: "organizationId, serviceId, and a valid date are required." },
       { status: 400 },
+    );
+  }
+
+  const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+  const allowed = await checkRateLimit(`booking-slots:${organizationId}:${ip}`);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again shortly." },
+      { status: 429 },
     );
   }
 

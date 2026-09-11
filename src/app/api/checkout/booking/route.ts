@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getBaseUrl } from "@/lib/url";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isOrganizationServiceable } from "@/lib/billing";
 import { createPendingAppointment } from "@/lib/booking";
 import { sendBookingConfirmationEmail } from "@/lib/email";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const STRIPE_CURRENCY = process.env.STRIPE_CURRENCY ?? "usd";
 
@@ -40,6 +42,15 @@ export async function POST(request: Request) {
       );
     }
 
+    const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+    const allowed = await checkRateLimit(`booking-checkout:${organizationId}:${ip}`);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again shortly." },
+        { status: 429 },
+      );
+    }
+
     const admin = createAdminClient();
 
     // Validate the service belongs to the tenant and is bookable.
@@ -66,6 +77,14 @@ export async function POST(request: Request) {
 
     if (!organization) {
       return NextResponse.json({ error: "Organization not found." }, { status: 404 });
+    }
+
+    // Only serve organizations with an active or trialing subscription.
+    if (!(await isOrganizationServiceable(organizationId))) {
+      return NextResponse.json(
+        { error: "This service is not currently available." },
+        { status: 403 },
+      );
     }
 
     // Create the pending appointment (the DB trigger prevents double-booking).
@@ -143,6 +162,7 @@ export async function POST(request: Request) {
       },
       success_url: successUrl,
       cancel_url: cancelUrl,
+      expires_at: Math.floor(Date.now() / 1000) + 30 * 60, // 30 minutes
     });
 
     return NextResponse.json({ url: session.url, requiresPayment: true });

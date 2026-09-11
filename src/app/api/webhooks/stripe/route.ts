@@ -98,14 +98,15 @@ async function handleBookingCompleted(
   const paymentIntentId =
     typeof session.payment_intent === "string" ? session.payment_intent : null;
 
-  const { error } = await admin
+  const { error, data: updated } = await admin
     .from("appointments")
     .update({
       status: "confirmed",
       stripe_payment_intent_id: paymentIntentId,
     })
     .eq("id", appointmentId)
-    .eq("status", "pending");
+    .eq("status", "pending")
+    .select("id");
 
   if (error) {
     console.error(
@@ -113,6 +114,13 @@ async function handleBookingCompleted(
       error,
     );
     throw new Error(error.message);
+  }
+
+  if (!updated || updated.length === 0) {
+    console.info(
+      `[stripe-webhook] Duplicate checkout.session.completed for appointment ${appointmentId} — already processed, skipping confirmation email.`,
+    );
+    return;
   }
 
   // Best-effort: send the customer a confirmation email after payment.
@@ -149,11 +157,12 @@ async function handleBookingCancelled(
   const appointmentId = session.metadata?.appointment_id;
   if (!appointmentId) return;
 
-  const { error } = await admin
+  const { error, data: updated } = await admin
     .from("appointments")
     .update({ status: "cancelled" })
     .eq("id", appointmentId)
-    .eq("status", "pending");
+    .eq("status", "pending")
+    .select("id");
 
   if (error) {
     console.error(
@@ -161,6 +170,13 @@ async function handleBookingCancelled(
       error,
     );
     throw new Error(error.message);
+  }
+
+  if (!updated || updated.length === 0) {
+    console.info(
+      `[stripe-webhook] Duplicate session expiry/async_payment_failed for appointment ${appointmentId} — already processed, skipping cancellation.`,
+    );
+    return;
   }
 }
 

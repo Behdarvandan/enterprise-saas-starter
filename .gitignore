@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Sentry
 .sentryclirc
+
+repomix-output.xml
+repomix-output.txt
