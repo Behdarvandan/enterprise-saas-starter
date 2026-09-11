@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getAppointmentDetails } from "@/lib/booking";
+import { sendBookingConfirmationEmail } from "@/lib/email";
 import type { Database } from "@/types/database";
 
 type OrganizationUpdate = Database["public"]["Tables"]["organizations"]["Update"];
@@ -111,6 +113,28 @@ async function handleBookingCompleted(
       error,
     );
     throw new Error(error.message);
+  }
+
+  // Best-effort: send the customer a confirmation email after payment.
+  try {
+    const details = await getAppointmentDetails(appointmentId);
+    if (details) {
+      await sendBookingConfirmationEmail({
+        to: details.appointment.customer_email,
+        organizationName: details.organizationName,
+        serviceName: details.serviceName,
+        appointmentStart: details.appointment.start_time,
+        appointmentEnd: details.appointment.end_time,
+        customerName: details.appointment.customer_name,
+        customerEmail: details.appointment.customer_email,
+        customerPhone: details.appointment.customer_phone,
+      });
+    }
+  } catch (emailError) {
+    console.error(
+      `[stripe-webhook] Failed to send booking confirmation for appointment ${appointmentId}:`,
+      emailError,
+    );
   }
 }
 

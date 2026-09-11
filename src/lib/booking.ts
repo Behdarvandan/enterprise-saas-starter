@@ -192,3 +192,45 @@ export async function createPendingAppointment({
 
   return appointment as Appointment;
 }
+
+export interface AppointmentDetails {
+  appointment: Appointment;
+  serviceName: string;
+  organizationName: string;
+}
+
+/**
+ * Resolves an appointment together with its service and organization names for
+ * confirmation pages and email notifications.
+ */
+export async function getAppointmentDetails(
+  appointmentId: string,
+): Promise<AppointmentDetails | null> {
+  const admin = createAdminClient();
+
+  const { data: appointment } = await admin
+    .from("appointments")
+    .select("*")
+    .eq("id", appointmentId)
+    .maybeSingle();
+
+  if (!appointment) return null;
+
+  const { data: service } = await admin
+    .from("services")
+    .select("name")
+    .eq("id", appointment.service_id)
+    .maybeSingle();
+
+  const { data: organization } = await admin
+    .from("organizations")
+    .select("name")
+    .eq("id", appointment.organization_id)
+    .maybeSingle();
+
+  return {
+    appointment: appointment as Appointment,
+    serviceName: service?.name ?? "Service",
+    organizationName: organization?.name ?? "Provider",
+  };
+}

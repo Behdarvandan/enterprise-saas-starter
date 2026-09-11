@@ -3,6 +3,7 @@ import { getStripe } from "@/lib/stripe";
 import { getBaseUrl } from "@/lib/url";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createPendingAppointment } from "@/lib/booking";
+import { sendBookingConfirmationEmail } from "@/lib/email";
 
 const STRIPE_CURRENCY = process.env.STRIPE_CURRENCY ?? "usd";
 
@@ -44,7 +45,7 @@ export async function POST(request: Request) {
     // Validate the service belongs to the tenant and is bookable.
     const { data: service } = await admin
       .from("services")
-      .select("id, name, price")
+      .select("id, name, price, duration_minutes")
       .eq("id", serviceId)
       .eq("organization_id", organizationId)
       .eq("is_active", true)
@@ -59,7 +60,7 @@ export async function POST(request: Request) {
 
     const { data: organization } = await admin
       .from("organizations")
-      .select("slug")
+      .select("slug, name")
       .eq("id", organizationId)
       .maybeSingle();
 
@@ -97,6 +98,26 @@ export async function POST(request: Request) {
         .from("appointments")
         .update({ status: "confirmed" })
         .eq("id", appointmentId);
+
+      // Best-effort: notify the customer about the confirmed booking.
+      try {
+        const appointmentEnd = new Date(
+          new Date(startTime).getTime() + service.duration_minutes * 60_000,
+        ).toISOString();
+
+        await sendBookingConfirmationEmail({
+          to: customerEmail,
+          organizationName: organization.name,
+          serviceName: service.name,
+          appointmentStart: startTime,
+          appointmentEnd,
+          customerName,
+          customerEmail,
+          customerPhone,
+        });
+      } catch (emailError) {
+        console.error("Failed to send booking confirmation email:", emailError);
+      }
 
       return NextResponse.json({ url: successUrl, requiresPayment: false });
     }

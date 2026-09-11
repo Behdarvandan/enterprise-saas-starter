@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
 
 let resendClient: Resend | null = null;
 
@@ -109,6 +110,78 @@ export async function sendPasswordResetEmail({
         </a>
         <p style="font-size: 12px; color: #64748b; margin-top: 24px;">
           If you didn't request this, you can safely ignore this email.
+        </p>
+      </div>
+    `,
+  });
+}
+
+export async function sendBookingConfirmationEmail({
+  to,
+  organizationName,
+  serviceName,
+  appointmentStart,
+  appointmentEnd,
+  customerName,
+  customerEmail,
+  customerPhone,
+}: {
+  to: string;
+  organizationName: string;
+  serviceName: string;
+  appointmentStart: string;
+  appointmentEnd: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string | null;
+}): Promise<void> {
+  const safeOrg = escapeHtml(organizationName);
+  const safeService = escapeHtml(serviceName);
+  const safeName = escapeHtml(customerName);
+  const safeEmail = escapeHtml(customerEmail);
+  const safePhone = escapeHtml(customerPhone ?? "Not provided");
+
+  const date = formatAppointmentDate(appointmentStart);
+  const startTime = formatAppointmentTime(appointmentStart);
+  const endTime = formatAppointmentTime(appointmentEnd);
+
+  await sendEmail({
+    to,
+    subject: `Booking confirmed: ${serviceName} on ${date}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; color: #0f172a;">
+        <h1 style="font-size: 20px; margin: 0 0 12px;">Booking confirmed</h1>
+        <p style="font-size: 14px; line-height: 1.6;">
+          Your appointment with <strong>${safeOrg}</strong> has been confirmed.
+        </p>
+        <table style="width: 100%; margin-top: 16px; border-collapse: collapse; font-size: 14px;">
+          <tr>
+            <td style="padding: 8px 0; color: #64748b;">Service</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${safeService}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #64748b;">Date</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${escapeHtml(date)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #64748b;">Time</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${escapeHtml(startTime)} &ndash; ${escapeHtml(endTime)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #64748b;">Name</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${safeName}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #64748b;">Email</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${safeEmail}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #64748b;">Phone</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${safePhone}</td>
+          </tr>
+        </table>
+        <p style="font-size: 12px; color: #64748b; margin-top: 24px;">
+          If you need to change or cancel this appointment, please contact ${safeOrg}.
         </p>
       </div>
     `,

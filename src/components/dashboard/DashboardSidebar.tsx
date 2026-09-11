@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   Boxes,
+  CalendarDays,
   CreditCard,
   LayoutDashboard,
   Menu,
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 const NAV_ITEMS = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Team", href: "/dashboard/team", icon: Users },
+  { label: "Bookings", href: "/dashboard/bookings", icon: CalendarDays },
   { label: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageSquareText },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
