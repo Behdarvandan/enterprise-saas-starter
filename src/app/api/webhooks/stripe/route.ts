@@ -43,7 +43,17 @@ export async function POST(request: Request) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-        await handleCheckoutCompleted(admin, session);
+        if (session.metadata?.appointment_id) {
+          await handleBookingCompleted(admin, session);
+        } else {
+          await handleCheckoutCompleted(admin, session);
+        }
+        break;
+      }
+      case "checkout.session.expired":
+      case "checkout.session.async_payment_failed": {
+        const session = event.data.object as Stripe.Checkout.Session;
+        await handleBookingCancelled(admin, session);
         break;
       }
       case "customer.subscription.created":
@@ -70,6 +80,64 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ received: true });
+}
+
+/**
+ * Confirms an appointment after a successful booking deposit. Only transitions
+ * `pending` -> `confirmed` so duplicate webhook deliveries are idempotent.
+ */
+async function handleBookingCompleted(
+  admin: AdminClient,
+  session: Stripe.Checkout.Session,
+) {
+  const appointmentId = session.metadata?.appointment_id;
+  if (!appointmentId) return;
+
+  const paymentIntentId =
+    typeof session.payment_intent === "string" ? session.payment_intent : null;
+
+  const { error } = await admin
+    .from("appointments")
+    .update({
+      status: "confirmed",
+      stripe_payment_intent_id: paymentIntentId,
+    })
+    .eq("id", appointmentId)
+    .eq("status", "pending");
+
+  if (error) {
+    console.error(
+      `[stripe-webhook] Failed to confirm appointment ${appointmentId}:`,
+      error,
+    );
+    throw new Error(error.message);
+  }
+}
+
+/**
+ * Releases a time slot by cancelling a still-pending appointment when its
+ * Stripe Checkout session expires or its async payment fails.
+ */
+async function handleBookingCancelled(
+  admin: AdminClient,
+  session: Stripe.Checkout.Session,
+) {
+  const appointmentId = session.metadata?.appointment_id;
+  if (!appointmentId) return;
+
+  const { error } = await admin
+    .from("appointments")
+    .update({ status: "cancelled" })
+    .eq("id", appointmentId)
+    .eq("status", "pending");
+
+  if (error) {
+    console.error(
+      `[stripe-webhook] Failed to cancel appointment ${appointmentId}:`,
+      error,
+    );
+    throw new Error(error.message);
+  }
 }
 
 async function handleCheckoutCompleted(
