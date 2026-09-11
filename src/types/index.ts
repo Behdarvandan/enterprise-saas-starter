@@ -19,6 +19,12 @@ export type DocumentChunk = Database["public"]["Tables"]["document_chunks"]["Row
 export type ChatSession = Database["public"]["Tables"]["chat_sessions"]["Row"];
 export type ChatMessage = Database["public"]["Tables"]["chat_messages"]["Row"];
 
+// Appointment & Reservation System entities.
+export type Service = Database["public"]["Tables"]["services"]["Row"];
+export type AvailabilitySlot = Database["public"]["Tables"]["availability_slots"]["Row"];
+export type Appointment = Database["public"]["Tables"]["appointments"]["Row"];
+export type AppointmentStatus = Appointment["status"];
+
 /** Backwards-compatible alias for the user profile row. */
 export type UserProfile = Profile;
 

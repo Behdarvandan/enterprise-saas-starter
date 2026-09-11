@@ -366,6 +366,145 @@ export type Database = {
           },
         ];
       },
+      services: {
+        Row: {
+          id: string;
+          organization_id: string;
+          name: string;
+          description: string | null;
+          duration_minutes: number;
+          price: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          name: string;
+          description?: string | null;
+          duration_minutes?: number;
+          price?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          name?: string;
+          description?: string | null;
+          duration_minutes?: number;
+          price?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "services_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
+      },
+      availability_slots: {
+        Row: {
+          id: string;
+          organization_id: string;
+          day_of_week: number;
+          start_time: string;
+          end_time: string;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          day_of_week: number;
+          start_time: string;
+          end_time: string;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          day_of_week?: number;
+          start_time?: string;
+          end_time?: string;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "availability_slots_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
+      },
+      appointments: {
+        Row: {
+          id: string;
+          organization_id: string;
+          service_id: string;
+          customer_name: string;
+          customer_email: string;
+          customer_phone: string | null;
+          start_time: string;
+          end_time: string;
+          status: "pending" | "confirmed" | "cancelled" | "completed";
+          stripe_payment_intent_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          service_id: string;
+          customer_name: string;
+          customer_email: string;
+          customer_phone?: string | null;
+          start_time: string;
+          end_time: string;
+          status?: "pending" | "confirmed" | "cancelled" | "completed";
+          stripe_payment_intent_id?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          service_id?: string;
+          customer_name?: string;
+          customer_email?: string;
+          customer_phone?: string | null;
+          start_time?: string;
+          end_time?: string;
+          status?: "pending" | "confirmed" | "cancelled" | "completed";
+          stripe_payment_intent_id?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "appointments_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "appointments_service_id_fkey";
+            columns: ["service_id"];
+            isOneToOne: false;
+            referencedRelation: "services";
+            referencedColumns: ["id"];
+          },
+        ];
+      },
     };
     Views: {
       [_ in never]: never;
