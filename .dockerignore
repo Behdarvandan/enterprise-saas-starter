@@ -1,12 +1,42 @@
+# Dependencies and build output
 node_modules
 .next
 out
 build
+dist
+
+# Version control and CI configuration
 .git
 .gitignore
-README.md
+.github
+
+# Local environment files — never bake credentials into an image
+.env
+.env.*
+.env*.local
+
+# Tooling and documentation (not needed at runtime)
 Dockerfile
 docker-compose.yml
 .dockerignore
-.env
-.env*.local
+.clineignore
+README.md
+repomix-output.xml
+repomix-output.txt
+
+# Tests and reports
+e2e
+coverage
+playwright-report
+test-results
+blob-report
+
+# Editor and OS artifacts
+.DS_Store
+*.pem
+*.tsbuildinfo
+
+# Platform / vendor artifacts
+.vercel
+.sentryclirc
+
