@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { ArrowRight, Database, Layers, Lock } from "lucide-react";
 import Card from "@/components/ui/Card";

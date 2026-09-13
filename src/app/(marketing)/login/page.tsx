@@ -1,4 +1,5 @@
-"use client";
+export const dynamic = "force-dynamic";
+("use client");
 
 import { useState } from "react";
 import Link from "next/link";
@@ -110,7 +111,10 @@ export default function LoginPage() {
 
         <p className="mt-6 text-center text-sm text-slate-500">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="font-semibold text-brand-600 hover:text-brand-700">
+          <Link
+            href="/signup"
+            className="font-semibold text-brand-600 hover:text-brand-700"
+          >
             Sign up
           </Link>
         </p>
