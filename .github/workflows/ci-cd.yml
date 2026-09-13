@@ -18,6 +18,10 @@ env:
   STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET || 'whsec_placeholder' }}
   STRIPE_PRICE_PRO: ${{ secrets.STRIPE_PRICE_PRO || 'price_placeholder' }}
   STRIPE_PRICE_ENTERPRISE: ${{ secrets.STRIPE_PRICE_ENTERPRISE || 'price_placeholder' }}
+  NEXT_PUBLIC_PAYMENT_PROVIDER: ${{ secrets.NEXT_PUBLIC_PAYMENT_PROVIDER || 'stripe' }}
+  PAYTR_MERCHANT_ID: ${{ secrets.PAYTR_MERCHANT_ID || 'placeholder-merchant-id' }}
+  PAYTR_MERCHANT_KEY: ${{ secrets.PAYTR_MERCHANT_KEY || 'placeholder-merchant-key' }}
+  PAYTR_MERCHANT_SALT: ${{ secrets.PAYTR_MERCHANT_SALT || 'placeholder-merchant-salt' }}
   RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_placeholder' }}
 
 jobs:

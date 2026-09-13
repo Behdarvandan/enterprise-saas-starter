@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe } from "@/lib/stripe";
 import { ensureOrganization } from "@/lib/billing";
+import { getPaymentAdapter, resolvePaymentProvider } from "@/lib/payment/adapter";
 
 export async function POST(request: Request) {
   try {
@@ -18,13 +19,21 @@ export async function POST(request: Request) {
       );
     }
 
-    const { priceId } = await request.json();
-    if (!priceId || typeof priceId !== "string") {
+    const body = (await request.json().catch(() => null)) as {
+      priceId?: unknown;
+      amount?: unknown;
+    } | null;
+
+    const priceId = typeof body?.priceId === "string" ? body.priceId : "";
+    if (!priceId) {
       return NextResponse.json(
         { error: "A valid priceId is required." },
         { status: 400 },
       );
     }
+
+    const amount =
+      typeof body?.amount === "number" && body.amount > 0 ? body.amount : null;
 
     const organization = await ensureOrganization(user);
     if (!organization) {
@@ -34,39 +43,53 @@ export async function POST(request: Request) {
       );
     }
 
-    const stripe = getStripe();
+    const provider = resolvePaymentProvider();
+    const origin = new URL(request.url).origin;
 
-    // Create or reuse the organization's Stripe customer.
-    let customerId = organization.stripe_customer_id;
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: user.email ?? undefined,
-        metadata: { organization_id: organization.id },
-      });
-      customerId = customer.id;
+    // Stripe subscription checkout needs a reusable customer; other providers
+    // skip customer provisioning.
+    let existingCustomerId: string | null = null;
+    if (provider === "stripe") {
+      const stripe = getStripe();
 
-      const admin = createAdminClient();
-      await admin
-        .from("organizations")
-        .update({ stripe_customer_id: customerId })
-        .eq("id", organization.id);
+      let customerId = organization.stripe_customer_id;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: user.email ?? undefined,
+          metadata: { organization_id: organization.id },
+        });
+        customerId = customer.id;
+
+        const admin = createAdminClient();
+        await admin
+          .from("organizations")
+          .update({ stripe_customer_id: customerId })
+          .eq("id", organization.id);
+      }
+      existingCustomerId = customerId;
     }
 
-    const session = await stripe.checkout.sessions.create({
+    // PayTR has no native subscription API, so a plan purchase is a one-time
+    // activation charge that requires an explicit amount in minor units.
+    if (provider === "paytr" && !amount) {
+      return NextResponse.json(
+        { error: "PayTR plan activation requires an amount in minor units." },
+        { status: 400 },
+      );
+    }
+
+    const result = await getPaymentAdapter(provider).createCheckoutSession({
       mode: "subscription",
-      payment_method_types: ["card"],
-      customer: customerId,
-      line_items: [{ price: priceId, quantity: 1 }],
-      client_reference_id: organization.id,
-      allow_promotion_codes: true,
-      subscription_data: {
-        metadata: { organization_id: organization.id },
-      },
-      success_url: `${new URL(request.url).origin}/dashboard?checkout=success`,
-      cancel_url: `${new URL(request.url).origin}/pricing?checkout=canceled`,
+      priceId,
+      amount,
+      organizationId: organization.id,
+      existingCustomerId,
+      customerEmail: user.email,
+      successUrl: `${origin}/dashboard?checkout=success`,
+      cancelUrl: `${origin}/pricing?checkout=canceled`,
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: result.url });
   } catch (error) {
     console.error("Checkout error:", error);
     return NextResponse.json(
@@ -75,3 +98,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

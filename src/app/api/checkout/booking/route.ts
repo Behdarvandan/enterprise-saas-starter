@@ -1,13 +1,19 @@
 import { NextResponse } from "next/server";
-import { getStripe } from "@/lib/stripe";
 import { getBaseUrl } from "@/lib/url";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isOrganizationServiceable } from "@/lib/billing";
 import { createPendingAppointment } from "@/lib/booking";
 import { sendBookingConfirmationEmail } from "@/lib/email";
 import { checkRateLimit } from "@/lib/rate-limit";
+import {
+  encodeAppointmentOrderId,
+  getPaymentAdapter,
+  resolvePaymentProvider,
+} from "@/lib/payment/adapter";
 
 const STRIPE_CURRENCY = process.env.STRIPE_CURRENCY ?? "usd";
+const PAYTR_MAX_INSTALLMENT = Number(process.env.PAYTR_MAX_INSTALLMENT ?? 12);
+const PAYTR_NO_INSTALLMENT = process.env.PAYTR_NO_INSTALLMENT === "1";
 
 interface BookingCheckoutBody {
   organizationId?: string;
@@ -42,7 +48,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+    const forwardedFor = request.headers.get("x-forwarded-for") ?? "";
+    const ip = forwardedFor.split(",")[0]?.trim() || "unknown";
     const allowed = await checkRateLimit(`booking-checkout:${organizationId}:${ip}`);
     if (!allowed) {
       return NextResponse.json(
@@ -141,31 +148,36 @@ export async function POST(request: Request) {
       return NextResponse.json({ url: successUrl, requiresPayment: false });
     }
 
-    const session = await getStripe().checkout.sessions.create({
+    const provider = resolvePaymentProvider();
+
+    const result = await getPaymentAdapter(provider).createCheckoutSession({
       mode: "payment",
-      customer_email: customerEmail,
-      client_reference_id: appointmentId,
-      line_items: [
-        {
-          quantity: 1,
-          price_data: {
-            currency: STRIPE_CURRENCY,
-            unit_amount: service.price,
-            product_data: { name: service.name },
-          },
-        },
-      ],
+      customerEmail,
+      customerName,
+      customerPhone,
+      customerIp: ip,
+      merchantOrderId:
+        provider === "paytr" ? encodeAppointmentOrderId(appointmentId) : appointmentId,
+      lineItems: [{ name: service.name, unitAmount: service.price, quantity: 1 }],
+      currency: provider === "paytr" ? undefined : STRIPE_CURRENCY,
+      installments:
+        provider === "paytr"
+          ? {
+              disabled: PAYTR_NO_INSTALLMENT,
+              maxCount: PAYTR_MAX_INSTALLMENT,
+            }
+          : undefined,
       metadata: {
         appointment_id: appointmentId,
         organization_id: organizationId,
         service_id: serviceId,
       },
-      success_url: successUrl,
-      cancel_url: cancelUrl,
-      expires_at: Math.floor(Date.now() / 1000) + 30 * 60, // 30 minutes
+      successUrl,
+      cancelUrl,
+      expiresAt: Math.floor(Date.now() / 1000) + 30 * 60, // 30 minutes
     });
 
-    return NextResponse.json({ url: session.url, requiresPayment: true });
+    return NextResponse.json({ url: result.url, requiresPayment: true });
   } catch (error) {
     console.error("Booking checkout error:", error);
     return NextResponse.json(
