@@ -1,3 +1,6 @@
+create extension if not exists vector with schema extensions;
+set search_path to public, extensions;
+
 -- ============================================================================
 -- Nimbus SaaS — AI Chatbot & RAG Knowledge Assistant
 -- ----------------------------------------------------------------------------
