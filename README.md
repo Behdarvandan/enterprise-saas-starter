@@ -6,7 +6,7 @@ an AI assistant grounded in their own knowledge base.
 
 ## Live Demo
 
-**[[Live Demo(https://enterprise-saas-starter.vercel.app/)]**
+**[Live Demo](https://enterprise-saas-starter.vercel.app)**
 
 
 ## Badges
@@ -69,9 +69,9 @@ No license badge is included — see [License](#license).
 | Upstash Redis | Rate limiting for public API routes |
 | Sentry | Error tracking (client, server, edge) |
 | Playwright | End-to-end testing |
-| Docker (multi-stage, standalone output) | Production container image |
-| AWS ECS Fargate | Intended container hosting target (see [Deployment](#deployment)) |
-| GitHub Actions | CI (lint, build, E2E) and a placeholder CD stage |
+| Docker (multi-stage, standalone output) | Optional local/self-hosted container image — not used for the live Vercel deployment |
+| Vercel | Production hosting; builds and deploys automatically on push via its GitHub integration |
+| GitHub Actions | CI (lint, build, E2E) — deployment is handled by Vercel, not this workflow |
 
 ## Architecture
 
@@ -85,7 +85,7 @@ tenant's `organizations` row.
 
 ```mermaid
 flowchart LR
-    Browser -->|HTTPS| App["Next.js 15 app<br/>(Docker standalone image)"]
+    Browser -->|HTTPS| App["Next.js 15 app<br/>(deployed on Vercel)"]
     App -->|SSR client, RLS-scoped| DB[("Supabase Postgres<br/>+ pgvector + RLS")]
     App -->|Checkout / webhooks| Stripe[Stripe]
     App -->|Local payments| PayTR[PayTR]
@@ -94,7 +94,6 @@ flowchart LR
     App -->|Invite / reset emails| Resend[Resend]
     App -->|Rate limiting| Redis[("Upstash Redis")]
     App -->|Errors| Sentry[Sentry]
-    App -.container image.-> ECS["AWS ECS Fargate<br/>(target, not yet wired up)"]
 ```
 
 ## Getting Started
@@ -155,10 +154,45 @@ flowchart LR
 
 ## Deployment
 
-The app builds into a minimal, non-root production image via a multi-stage
-`Dockerfile` (`deps` → `builder` → `runner`), using Next.js's
-`output: "standalone"` build. The image exposes port `3000` and a Docker
-`HEALTHCHECK` against `GET /api/health`.
+Production runs on **[Vercel](https://enterprise-saas-starter.vercel.app)**,
+linked directly to this GitHub repository. Vercel builds and deploys
+automatically on every push to `main` — there's no separate build/deploy step
+to run by hand. Environment variables live in the Vercel project's settings
+(`Production`/`Preview`/`Development` scopes), encrypted at rest, never
+committed to the repo.
+
+The Vercel CLI is included as a dev dependency, so `npm install` is enough to
+use it locally:
+
+```bash
+# One-time: link this checkout to the Vercel project
+npx vercel link
+
+# Inspect or manage environment variables
+npx vercel env ls
+npx vercel env add <NAME> production
+
+# Trigger a production deploy by hand (normally automatic on push to main)
+npx vercel --prod
+```
+
+**CI** (`.github/workflows/ci-cd.yml`) runs on every push and pull request to
+`main`:
+
+1. `build` — install, lint, build.
+2. `e2e` — install, build, run the Playwright suite.
+
+Deployment itself is handled entirely by Vercel's GitHub integration, not by
+this workflow.
+
+### Local container image (optional)
+
+The app also builds into a minimal, non-root production image via a
+multi-stage `Dockerfile` (`deps` → `builder` → `runner`), using Next.js's
+`output: "standalone"` build, with a `HEALTHCHECK` against `GET /api/health`.
+This isn't part of the live deployment path — Vercel builds natively without
+Docker — but it's available for local containerized testing or a self-hosted
+target:
 
 ```bash
 # Local container run
@@ -171,21 +205,6 @@ docker build \
   --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=... \
   -t nimbus .
 ```
-
-**CI/CD** (`.github/workflows/ci-cd.yml`) runs on every push and pull request
-to `main`:
-
-1. `build` — install, lint, build.
-2. `e2e` — install, build, run the Playwright suite.
-3. `deploy` — gated to `push` on `main`, runs only after `e2e` passes.
-
-The `deploy` job is currently a **placeholder**: it checks out the repo and
-prints a message, and contains commented-out steps for the intended flow
-(configure AWS credentials, log in to Amazon ECR, build/tag/push the Docker
-image, then `aws ecs update-service --force-new-deployment`). To make
-deployment live, uncomment and configure those steps with a real AWS role,
-ECR repository, and ECS cluster/service, and add the corresponding secrets to
-the repository.
 
 ## Project Structure
 
