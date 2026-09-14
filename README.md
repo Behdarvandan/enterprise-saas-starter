@@ -6,7 +6,7 @@ an AI assistant grounded in their own knowledge base.
 
 ## Live Demo
 
-**[[[<LIVE_DEMO_URL>](https://enterprise-saas-starter.vercel.app/)]**
+**[[(https://enterprise-saas-starter.vercel.app/)]**
 
 
 ## Badges
