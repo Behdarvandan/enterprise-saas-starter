@@ -33,6 +33,10 @@ export interface CreatePendingAppointmentInput {
   customerName: string;
   customerEmail: string;
   customerPhone?: string | null;
+  /** Optional device details (e.g. "iPhone 13 Pro, 128GB"). Repair-shop tenants only. */
+  deviceInfo?: string | null;
+  /** Optional free-text description of the customer's issue. Repair-shop tenants only. */
+  issueDescription?: string | null;
   /** ISO-8601 start timestamp. */
   startTime: string;
 }
@@ -144,6 +148,8 @@ export async function createPendingAppointment({
   customerName,
   customerEmail,
   customerPhone,
+  deviceInfo,
+  issueDescription,
   startTime,
 }: CreatePendingAppointmentInput): Promise<Appointment> {
   const admin = createAdminClient();
@@ -175,6 +181,8 @@ export async function createPendingAppointment({
       customer_name: customerName,
       customer_email: customerEmail,
       customer_phone: customerPhone ?? null,
+      device_info: deviceInfo ?? null,
+      issue_description: issueDescription ?? null,
       start_time: start.toISOString(),
       end_time: end.toISOString(),
       status: "pending",

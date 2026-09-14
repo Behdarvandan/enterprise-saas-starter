@@ -51,6 +51,8 @@ export default function BookingForm({
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+  const [deviceInfo, setDeviceInfo] = useState("");
+  const [issueDescription, setIssueDescription] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -129,6 +131,8 @@ export default function BookingForm({
           customerName,
           customerEmail,
           customerPhone: customerPhone || null,
+          deviceInfo: deviceInfo || null,
+          issueDescription: issueDescription || null,
           startTime: selectedStartTime,
         }),
       });
@@ -279,6 +283,25 @@ export default function BookingForm({
             value={customerPhone}
             onChange={(event) => setCustomerPhone(event.target.value)}
             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+          />
+          <input
+            type="text"
+            name="device"
+            placeholder="Device (e.g. iPhone 13, Dell XPS 15)"
+            value={deviceInfo}
+            onChange={(event) => setDeviceInfo(event.target.value)}
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+          />
+        </div>
+
+        <div className="mt-3">
+          <textarea
+            name="issue"
+            placeholder="Describe the issue (optional)"
+            rows={3}
+            value={issueDescription}
+            onChange={(event) => setIssueDescription(event.target.value)}
+            className="w-full resize-none rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
           />
         </div>
 

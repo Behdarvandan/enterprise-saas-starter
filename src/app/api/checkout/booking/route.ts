@@ -21,6 +21,8 @@ interface BookingCheckoutBody {
   customerName?: string;
   customerEmail?: string;
   customerPhone?: string;
+  deviceInfo?: string;
+  issueDescription?: string;
   startTime?: string;
 }
 
@@ -39,6 +41,9 @@ export async function POST(request: Request) {
     const customerName = typeof body?.customerName === "string" ? body.customerName.trim() : "";
     const customerEmail = typeof body?.customerEmail === "string" ? body.customerEmail.trim() : "";
     const customerPhone = typeof body?.customerPhone === "string" ? body.customerPhone.trim() : null;
+    const deviceInfo = typeof body?.deviceInfo === "string" ? body.deviceInfo.trim() || null : null;
+    const issueDescription =
+      typeof body?.issueDescription === "string" ? body.issueDescription.trim() || null : null;
     const startTime = typeof body?.startTime === "string" ? body.startTime : "";
 
     if (!organizationId || !serviceId || !customerName || !customerEmail || !startTime) {
@@ -103,6 +108,8 @@ export async function POST(request: Request) {
         customerName,
         customerEmail,
         customerPhone,
+        deviceInfo,
+        issueDescription,
         startTime,
       });
       appointmentId = appointment.id;
