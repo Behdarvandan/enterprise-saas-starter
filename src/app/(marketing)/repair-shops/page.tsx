@@ -148,11 +148,11 @@ export default function RepairShopsLandingPage() {
       {/* ---------------------------------------------------------------- */}
       <section className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-semibold text-ink-primary sm:text-3xl">
-          Everything a repair shop's front desk needs.
+          Everything a repair shop&apos;s front desk needs.
         </h2>
         <p className="mt-3 max-w-2xl text-ink-muted">
           No point-of-sale integration required to get started — just a
-          booking page and an assistant that's already grounded in your own
+          booking page and an assistant that&apos;s already grounded in your own
           documentation.
         </p>
 
