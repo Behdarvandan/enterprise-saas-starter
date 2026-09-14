@@ -17,10 +17,19 @@ export const ratelimit = new Ratelimit({
 /**
  * Checks whether the given key is still within its rate limit.
  *
+ * Fails open: if Redis is unreachable or misconfigured, the underlying
+ * endpoint should stay up rather than 500 for every caller, so the request
+ * is allowed through and the failure is only logged server-side.
+ *
  * @returns `true` when the request is allowed, `false` when it has been
  * rate-limited and should be rejected.
  */
 export async function checkRateLimit(key: string): Promise<boolean> {
-  const { success } = await ratelimit.limit(key);
-  return success;
+  try {
+    const { success } = await ratelimit.limit(key);
+    return success;
+  } catch (error) {
+    console.warn("[rate-limit] Redis error, failing open:", error);
+    return true;
+  }
 }
