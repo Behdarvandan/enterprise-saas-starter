@@ -30,42 +30,42 @@ export default async function BookingSuccessPage({
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                 <CheckCircle2 size={24} />
               </div>
-              <h1 className="mt-4 text-xl font-bold text-slate-900">
+              <h1 className="mt-4 text-xl font-bold text-ink-primary">
                 Booking confirmed
               </h1>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-ink-muted">
                 {details.organizationName}
               </p>
 
-              <dl className="mt-6 space-y-3 border-t border-slate-100 pt-6 text-left">
+              <dl className="mt-6 space-y-3 border-t border-subtle pt-6 text-left">
                 <div className="flex justify-between gap-4">
-                  <dt className="text-sm text-slate-500">Service</dt>
-                  <dd className="text-right text-sm font-semibold text-slate-900">
+                  <dt className="text-sm text-ink-muted">Service</dt>
+                  <dd className="text-right text-sm font-semibold text-ink-primary">
                     {details.serviceName}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-sm text-slate-500">Date</dt>
-                  <dd className="text-right text-sm font-semibold text-slate-900">
+                  <dt className="text-sm text-ink-muted">Date</dt>
+                  <dd className="text-right text-sm font-semibold text-ink-primary">
                     {formatAppointmentDate(details.appointment.start_time)}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-sm text-slate-500">Time</dt>
-                  <dd className="text-right text-sm font-semibold text-slate-900">
+                  <dt className="text-sm text-ink-muted">Time</dt>
+                  <dd className="text-right text-sm font-semibold text-ink-primary">
                     {formatAppointmentTime(details.appointment.start_time)} –{" "}
                     {formatAppointmentTime(details.appointment.end_time)}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-sm text-slate-500">Name</dt>
-                  <dd className="text-right text-sm font-semibold text-slate-900">
+                  <dt className="text-sm text-ink-muted">Name</dt>
+                  <dd className="text-right text-sm font-semibold text-ink-primary">
                     {details.appointment.customer_name}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-sm text-slate-500">Status</dt>
-                  <dd className="text-right text-sm font-semibold capitalize text-slate-900">
+                  <dt className="text-sm text-ink-muted">Status</dt>
+                  <dd className="text-right text-sm font-semibold capitalize text-ink-primary">
                     {details.appointment.status}
                   </dd>
                 </div>
@@ -80,10 +80,10 @@ export default async function BookingSuccessPage({
             </>
           ) : (
             <>
-              <h1 className="text-xl font-bold text-slate-900">
+              <h1 className="text-xl font-bold text-ink-primary">
                 Booking not found
               </h1>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-ink-muted">
                 We could not find the appointment you requested.
               </p>
               <Link
