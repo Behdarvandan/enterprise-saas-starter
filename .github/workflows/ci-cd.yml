@@ -71,44 +71,5 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  deploy:
-    name: Deploy (placeholder)
-    needs: e2e
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # ---------------------------------------------------------------------
-      # Placeholder deployment steps — wire up your target (AWS ECR/ECS, etc.)
-      # ---------------------------------------------------------------------
-      #
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsDeploy
-      #     aws-region: us-east-1
-      #
-      # - name: Login to Amazon ECR
-      #   id: login-ecr
-      #   uses: aws-actions/amazon-ecr-login@v2
-      #
-      # - name: Build, tag, and push image to Amazon ECR
-      #   env:
-      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #     ECR_REPOSITORY: enterprise-saas-starter
-      #     IMAGE_TAG: ${{ github.sha }}
-      #   run: |
-      #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-      #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-      #
-      # - name: Deploy to Amazon ECS
-      #   run: |
-      #     aws ecs update-service \
-      #       --cluster production \
-      #       --service enterprise-saas-starter \
-      #       --force-new-deployment
-
-      - name: Placeholder deploy
-        run: echo "Deploy step is a placeholder — configure AWS/Docker/ECR/ECS here."
+  # Deployment is handled by Vercel's own GitHub integration (auto-deploy on
+  # push to main), not by a workflow job here.
