@@ -6,12 +6,8 @@ an AI assistant grounded in their own knowledge base.
 
 ## Live Demo
 
-**[<LIVE_DEMO_URL>](<LIVE_DEMO_URL>)**
+**[[Live Demo(https://enterprise-saas-starter.vercel.app/)]**
 
-> Not yet deployed publicly. The CI/CD pipeline includes a `deploy` stage
-> targeting AWS ECS Fargate, but it is currently a placeholder (see
-> [Deployment](#deployment)) — no live endpoint exists in this repository yet.
-> Replace the link above once the service is deployed.
 
 ## Badges
 
