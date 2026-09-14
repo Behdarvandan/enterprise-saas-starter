@@ -3,41 +3,36 @@ import { Boxes } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-subtle bg-canvas/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="flex items-center gap-2 text-xl font-bold tracking-tight text-slate-900"
+          className="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-ink-primary"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-white shadow-md">
-            <Boxes size={20} />
+          <div className="flex h-8 w-8 items-center justify-center rounded-control bg-violet text-white">
+            <Boxes size={17} />
           </div>
-          <span>
-            Nimbus<span className="text-brand-600">SaaS</span>
-          </span>
+          <span>Nimbus</span>
         </Link>
 
-        <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
-          <Link href="/" className="transition-colors hover:text-brand-600">
-            Home
+        <nav className="flex items-center gap-6 text-sm font-medium text-ink-muted">
+          <Link href="/#platform" className="transition-colors hover:text-ink-primary">
+            Platform
           </Link>
-          <Link href="/pricing" className="transition-colors hover:text-brand-600">
+          <Link href="/#security" className="transition-colors hover:text-ink-primary">
+            Security
+          </Link>
+          <Link href="/pricing" className="transition-colors hover:text-ink-primary">
             Pricing
           </Link>
-          <Link
-            href="/dashboard"
-            className="transition-colors hover:text-brand-600"
-          >
-            Dashboard
-          </Link>
-          <Link href="/login" className="transition-colors hover:text-brand-600">
+          <Link href="/login" className="transition-colors hover:text-ink-primary">
             Sign in
           </Link>
           <Link
             href="/signup"
-            className="rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700"
+            className="rounded-interactive bg-violet px-4 py-2 font-semibold text-white transition-colors hover:bg-violet/90"
           >
-            Sign up
+            Start free trial
           </Link>
         </nav>
       </div>

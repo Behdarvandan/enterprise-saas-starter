@@ -29,25 +29,25 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="text-2xl font-semibold text-ink-primary">Settings</h1>
+      <p className="mt-1 text-sm text-ink-muted">
         Manage your account and organization.
       </p>
 
       <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {SETTINGS.map((setting) => (
           <Link key={setting.href} href={setting.href}>
-            <Card className="p-6 transition hover:border-brand-300 hover:shadow-md">
+            <Card className="p-6 transition hover:border-violet-dim/60 hover:shadow-md">
               <div className="flex items-center justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 text-brand-600">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet/10 text-violet-dim">
                   <setting.icon size={20} />
                 </div>
-                <ChevronRight size={18} className="text-slate-400" />
+                <ChevronRight size={18} className="text-ink-muted" />
               </div>
-              <h2 className="mt-4 text-base font-semibold text-slate-900">
+              <h2 className="mt-4 text-base font-semibold text-ink-primary">
                 {setting.label}
               </h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-ink-muted">
                 {setting.description}
               </p>
             </Card>

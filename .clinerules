@@ -1,0 +1,19 @@
+# ARCHITECTURAL RULES & CONSTRAINTS (enterprise-saas-starter)
+
+You are acting as a Senior UI/UX Architect and Lead Cloud Engineer.
+When generating code, modifying files, or executing tasks, strictly follow these rules:
+
+1. DESIGN SYSTEM & UI/UX (DARK VIOLET THEME):
+   - Canvas: Use `bg-slate-950` for background.
+   - Cards/Containers: Use `bg-slate-900` with subtle `border-slate-800`.
+   - Typography: Crisp `text-slate-100` for headings, `text-slate-400` for secondary copy, monospace (`font-mono`) for metrics.
+   - Primary Accent: Deep violet/indigo (`violet-600` buttons, `violet-500/10` subtle hovers).
+   - Status Pulses: Use `bg-emerald-500 animate-pulse` for active tenant RLS indicators.
+
+2. MULTI-TENANT & DATABASE SECURITY:
+   - Every Supabase operation MUST explicitly check and respect `organization_id` Row-Level Security (RLS).
+   - Never expose raw SQL queries; use RPCs like `match_document_chunks` or existing helpers.
+
+3. WORKFLOW & CODE HYGIENE:
+   - Run `npx tsc --noEmit` after significant code modifications.
+   - All generated comments, commit messages, and documentation MUST strictly be in professional English.

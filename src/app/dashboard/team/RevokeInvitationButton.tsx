@@ -30,11 +30,11 @@ export default function RevokeInvitationButton({
         type="button"
         onClick={handleRevoke}
         disabled={loading}
-        className="rounded-lg px-2 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50 disabled:opacity-50"
+        className="rounded-control px-2 py-1.5 text-xs font-semibold text-status-error transition-colors hover:bg-status-error/10 disabled:opacity-50"
       >
         {loading ? "Revoking..." : "Revoke"}
       </button>
-      {error && <p className="mt-1 text-xs font-medium text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-xs font-medium text-status-error">{error}</p>}
     </div>
   );
 }

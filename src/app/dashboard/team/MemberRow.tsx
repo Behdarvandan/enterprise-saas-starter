@@ -15,9 +15,9 @@ interface MemberRowProps {
 }
 
 const roleStyles: Record<MembershipRole, string> = {
-  owner: "bg-brand-100 text-brand-700",
-  admin: "bg-violet-100 text-violet-700",
-  member: "bg-slate-100 text-slate-700",
+  owner: "bg-violet/15 text-violet-dim",
+  admin: "bg-violet/10 text-violet-dim",
+  member: "bg-surface-raised text-ink-muted",
 };
 
 export default function MemberRow({
@@ -57,13 +57,13 @@ export default function MemberRow({
   return (
     <li className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-slate-800">
+        <p className="truncate text-sm font-medium text-ink-primary">
           {name ?? email}
           {isCurrentUser && (
-            <span className="ml-2 text-xs text-slate-400">(you)</span>
+            <span className="ml-2 text-xs text-ink-muted">(you)</span>
           )}
         </p>
-        <p className="truncate text-xs text-slate-500">{email}</p>
+        <p className="truncate text-xs text-ink-muted">{email}</p>
       </div>
 
       <div className="flex items-center gap-3">
@@ -73,14 +73,14 @@ export default function MemberRow({
             onChange={(event) =>
               handleRoleChange(event.target.value as MembershipRole)
             }
-            className="rounded-lg border border-slate-200 px-2 py-1.5 text-xs outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+            className="rounded-control border border-subtle bg-surface-raised px-2 py-1.5 text-xs text-ink-primary outline-none transition-colors focus:border-violet-dim"
           >
             <option value="member">Member</option>
             <option value="admin">Admin</option>
           </select>
         ) : (
           <span
-            className={`rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${roleStyles[role]}`}
+            className={`rounded-control px-2.5 py-1 text-xs font-semibold capitalize ${roleStyles[role]}`}
           >
             {role}
           </span>
@@ -90,14 +90,14 @@ export default function MemberRow({
           <button
             type="button"
             onClick={handleRemove}
-            className="rounded-lg px-2 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+            className="rounded-control px-2 py-1.5 text-xs font-semibold text-status-error transition-colors hover:bg-status-error/10"
           >
             Remove
           </button>
         )}
       </div>
 
-      {error && <p className="text-xs font-medium text-red-600">{error}</p>}
+      {error && <p className="text-xs font-medium text-status-error">{error}</p>}
     </li>
   );
 }

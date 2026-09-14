@@ -6,6 +6,12 @@ export interface UserMembership {
   role: MembershipRole;
 }
 
+export interface UserOrganization {
+  organizationId: string;
+  organizationName: string;
+  role: MembershipRole;
+}
+
 /**
  * Returns the first organization membership for the given user, or null.
  */
@@ -24,6 +30,28 @@ export async function getUserMembership(
   if (!data) return null;
 
   return { organizationId: data.organization_id, role: data.role };
+}
+
+/**
+ * Returns every organization the user belongs to, for the tenant switcher.
+ * The schema permits more than one membership per user even though the
+ * current onboarding flow only ever creates one.
+ */
+export async function getUserOrganizations(
+  userId: string,
+): Promise<UserOrganization[]> {
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("memberships")
+    .select("organization_id, role, organizations ( name )")
+    .eq("user_id", userId);
+
+  return (data ?? []).map((row) => ({
+    organizationId: row.organization_id,
+    organizationName: row.organizations?.name ?? "Untitled organization",
+    role: row.role,
+  }));
 }
 
 /**

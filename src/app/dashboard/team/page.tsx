@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
+import { MailX } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { canManageMembers, getUserMembership } from "@/lib/team";
 import Card from "@/components/ui/Card";
+import EmptyState from "@/components/ui/EmptyState";
 import InviteMemberForm from "./InviteMemberForm";
 import MemberRow from "./MemberRow";
 import RevokeInvitationButton from "./RevokeInvitationButton";
@@ -52,18 +54,18 @@ export default async function TeamPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Team</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-2xl font-semibold text-ink-primary">Team</h1>
+        <p className="mt-1 text-sm text-ink-muted">
           {organization?.name ?? "Your organization"}
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6">
         <Card className="p-6">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Members ({members?.length ?? 0})
           </h2>
-          <ul className="mt-4 divide-y divide-slate-100">
+          <ul className="mt-4 divide-y divide-subtle">
             {(members ?? []).map((member) => {
               const profile = profileMap.get(member.user_id);
               return (
@@ -82,34 +84,36 @@ export default async function TeamPage() {
         </Card>
 
         <Card className="p-6">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Invite member
           </h2>
           {canManage ? (
             <InviteMemberForm />
           ) : (
-            <p className="mt-4 text-sm text-slate-500">
+            <p className="mt-4 text-sm text-ink-muted">
               Only owners and admins can invite new members.
             </p>
           )}
         </Card>
 
-        <Card className="p-6">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
-            Pending invitations ({invitations?.length ?? 0})
-          </h2>
+        <Card>
+          <div className="p-6 pb-0">
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+              Pending invitations ({invitations?.length ?? 0})
+            </h2>
+          </div>
           {invitations && invitations.length > 0 ? (
-            <ul className="mt-4 divide-y divide-slate-100">
+            <ul className="mt-4 divide-y divide-subtle px-6 pb-6">
               {invitations.map((invitation) => (
                 <li
                   key={invitation.id}
                   className="flex items-center justify-between py-3"
                 >
                   <div>
-                    <p className="text-sm font-medium text-slate-800">
+                    <p className="text-sm font-medium text-ink-primary">
                       {invitation.email}
                     </p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-ink-muted">
                       {invitation.role} · expires{" "}
                       {new Date(invitation.expires_at).toLocaleDateString()}
                     </p>
@@ -121,9 +125,11 @@ export default async function TeamPage() {
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-sm text-slate-500">
-              No pending invitations.
-            </p>
+            <EmptyState
+              icon={MailX}
+              title="No pending invitations"
+              description="Invitations you send will show up here until they're accepted or revoked."
+            />
           )}
         </Card>
       </div>

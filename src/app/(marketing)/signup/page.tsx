@@ -62,19 +62,19 @@ export default function SignUpPage() {
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
       <Card className="p-8">
-        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-lg bg-brand-600 text-white">
+        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <UserPlus size={22} />
         </div>
-        <h1 className="text-xl font-bold text-slate-900">Create your account</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Start building with your Nimbus SaaS workspace.
+        <h1 className="text-xl font-bold text-ink-primary">Create your account</h1>
+        <p className="mt-1 text-sm text-ink-muted">
+          Set up your organization&apos;s booking workspace on Nimbus.
         </p>
 
         <form onSubmit={handleSignUp} className="mt-6 space-y-4">
           <div className="space-y-1.5">
             <label
               htmlFor="email"
-              className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
               Email
             </label>
@@ -85,14 +85,14 @@ export default function SignUpPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
             />
           </div>
 
           <div className="space-y-1.5">
             <label
               htmlFor="password"
-              className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
               Password
             </label>
@@ -104,14 +104,14 @@ export default function SignUpPage() {
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
             />
           </div>
 
           <div className="space-y-1.5">
             <label
               htmlFor="confirm-password"
-              className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
               Confirm password
             </label>
@@ -123,18 +123,18 @@ export default function SignUpPage() {
               autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
             />
           </div>
 
           {error && (
-            <p className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-600">
+            <p className="rounded-control bg-status-error/10 px-3 py-2 text-xs font-medium text-status-error">
               {error}
             </p>
           )}
 
           {message && (
-            <p className="rounded-lg bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-600">
+            <p className="rounded-control bg-status-success/10 px-3 py-2 text-xs font-medium text-status-success">
               {message}
             </p>
           )}
@@ -144,9 +144,9 @@ export default function SignUpPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
+        <p className="mt-6 text-center text-sm text-ink-muted">
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-brand-600 hover:text-brand-700">
+          <Link href="/login" className="font-semibold text-violet-dim hover:text-violet">
             Sign in
           </Link>
         </p>

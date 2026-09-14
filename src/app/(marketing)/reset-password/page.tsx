@@ -53,11 +53,11 @@ export default function ResetPasswordPage() {
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
       <Card className="p-8">
-        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-lg bg-brand-600 text-white">
+        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <ShieldCheck size={22} />
         </div>
-        <h1 className="text-xl font-bold text-slate-900">Set a new password</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-xl font-bold text-ink-primary">Set a new password</h1>
+        <p className="mt-1 text-sm text-ink-muted">
           Choose a new password for your account.
         </p>
 
@@ -65,7 +65,7 @@ export default function ResetPasswordPage() {
           <div className="space-y-1.5">
             <label
               htmlFor="password"
-              className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
               New password
             </label>
@@ -77,14 +77,14 @@ export default function ResetPasswordPage() {
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
             />
           </div>
 
           <div className="space-y-1.5">
             <label
               htmlFor="confirm-password"
-              className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
               Confirm new password
             </label>
@@ -96,18 +96,18 @@ export default function ResetPasswordPage() {
               autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
             />
           </div>
 
           {error && (
-            <p className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-600">
+            <p className="rounded-control bg-status-error/10 px-3 py-2 text-xs font-medium text-status-error">
               {error}
             </p>
           )}
 
           {message && (
-            <p className="rounded-lg bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-600">
+            <p className="rounded-control bg-status-success/10 px-3 py-2 text-xs font-medium text-status-success">
               {message}
             </p>
           )}

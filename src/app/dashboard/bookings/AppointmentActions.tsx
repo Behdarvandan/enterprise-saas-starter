@@ -77,7 +77,7 @@ export default function AppointmentActions({
             required
             value={newDateTime}
             onChange={(event) => setNewDateTime(event.target.value)}
-            className="rounded-lg border border-slate-200 px-3 py-2 text-xs outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+            className="rounded-control border border-subtle bg-surface-raised px-3 py-2 text-xs text-ink-primary outline-none transition-colors focus:border-violet-dim"
           />
           <Button
             type="submit"
@@ -89,7 +89,7 @@ export default function AppointmentActions({
         </form>
       )}
 
-      {error && <p className="text-xs font-medium text-red-600">{error}</p>}
+      {error && <p className="text-xs font-medium text-status-error">{error}</p>}
     </div>
   );
 }

@@ -1,70 +1,42 @@
 export const dynamic = "force-dynamic";
 import Link from "next/link";
-import { ArrowRight, Database, Layers, Lock } from "lucide-react";
-import Card from "@/components/ui/Card";
-
-const features = [
-  {
-    icon: Lock,
-    title: "Supabase Authentication",
-    description:
-      "Email/password auth with SSR session-refresh middleware already wired up.",
-  },
-  {
-    icon: Database,
-    title: "Typed Database Client",
-    description:
-      "Isolated Supabase client helpers for server and browser environments.",
-  },
-  {
-    icon: Layers,
-    title: "Modular Architecture",
-    description:
-      "Strict src/app, src/components, src/lib, and src/types separation.",
-  },
-];
+import Hero from "./_components/Hero";
+import TrustBar from "./_components/TrustBar";
+import PersonaSection from "./_components/PersonaSection";
+import FeatureDepth from "./_components/FeatureDepth";
+import SecuritySection from "./_components/SecuritySection";
+import SocialProof from "./_components/SocialProof";
+import PricingSection from "./_components/PricingSection";
 
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-3xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-          Enterprise SaaS starter kit
-        </h1>
-        <p className="mt-4 text-lg text-slate-500">
-          A production-ready Next.js 15 foundation with Supabase authentication,
-          typed clients, and container-first deployment.
-        </p>
-        <div className="mt-8 flex items-center justify-center gap-3">
+    <div>
+      <Hero />
+      <TrustBar />
+      <PersonaSection />
+      <FeatureDepth />
+      <SecuritySection />
+      <SocialProof />
+      <PricingSection />
+
+      <section className="border-t border-subtle bg-surface">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-16 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+          <div>
+            <h2 className="text-xl font-semibold text-ink-primary">
+              Set up your first organization in minutes.
+            </h2>
+            <p className="mt-1 text-sm text-ink-muted">
+              Free to start — no card required for the Starter plan.
+            </p>
+          </div>
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+            className="inline-flex items-center gap-2 rounded-interactive bg-violet px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet/90"
           >
-            Get started
-            <ArrowRight size={16} />
-          </Link>
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-          >
-            View dashboard
+            Start free trial
           </Link>
         </div>
-      </div>
-
-      <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {features.map((feature) => (
-          <Card key={feature.title} className="p-6">
-            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand-100 text-brand-600">
-              <feature.icon size={22} />
-            </div>
-            <h2 className="mt-4 text-base font-semibold text-slate-900">
-              {feature.title}
-            </h2>
-            <p className="mt-2 text-sm text-slate-500">{feature.description}</p>
-          </Card>
-        ))}
-      </div>
+      </section>
     </div>
   );
 }

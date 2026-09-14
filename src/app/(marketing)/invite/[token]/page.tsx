@@ -52,36 +52,36 @@ export default async function InvitePage({
       <Card className="p-8">
         {!user ? (
           <>
-            <h1 className="text-xl font-bold text-slate-900">
+            <h1 className="text-xl font-bold text-ink-primary">
               Sign in to accept
             </h1>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-ink-muted">
               You need to sign in before accepting this invitation.
             </p>
             <Link
               href={`/login?next=/invite/${token}`}
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-violet px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet/90"
             >
               Sign in
             </Link>
           </>
         ) : state === "valid" && invitation && organization ? (
           <>
-            <h1 className="text-xl font-bold text-slate-900">
+            <h1 className="text-xl font-bold text-ink-primary">
               You&apos;re invited
             </h1>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-ink-muted">
               Join{" "}
-              <span className="font-semibold text-slate-900">
+              <span className="font-semibold text-ink-primary">
                 {organization.name}
               </span>{" "}
               as{" "}
-              <span className="font-semibold capitalize text-slate-900">
+              <span className="font-semibold capitalize text-ink-primary">
                 {invitation.role}
               </span>
               .
             </p>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-xs text-ink-muted">
               This invitation was sent to {invitation.email}.
             </p>
             <div className="mt-6">
@@ -90,15 +90,15 @@ export default async function InvitePage({
           </>
         ) : (
           <>
-            <h1 className="text-xl font-bold text-slate-900">
+            <h1 className="text-xl font-bold text-ink-primary">
               Invitation unavailable
             </h1>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-ink-muted">
               {stateMessages[state]}
             </p>
             <Link
               href="/dashboard"
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-violet px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet/90"
             >
               Go to dashboard
             </Link>

@@ -25,7 +25,7 @@ export default function AcceptInviteButton({ token }: { token: string }) {
         {loading ? "Joining..." : "Accept invitation"}
       </Button>
       {error && (
-        <p className="mt-2 text-xs font-medium text-red-600">{error}</p>
+        <p className="mt-2 text-xs font-medium text-status-error">{error}</p>
       )}
     </div>
   );

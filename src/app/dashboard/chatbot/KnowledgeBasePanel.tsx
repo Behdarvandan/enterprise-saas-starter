@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FileText, Loader2, Upload } from "lucide-react";
 import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
+import EmptyState from "@/components/ui/EmptyState";
 
 interface DocumentRow {
   id: string;
@@ -95,25 +97,25 @@ export default function KnowledgeBasePanel({
   }
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
+    <section className="border border-subtle bg-surface p-6">
+      <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
         Knowledge base
       </h2>
 
       <div className="mt-4">
-        <label className="mb-1 block text-xs font-medium text-slate-500">
+        <label className="mb-1 block text-xs font-medium text-ink-muted">
           Title
         </label>
         <input
           value={title}
           onChange={(event) => setTitle(event.target.value)}
           placeholder="e.g. Refund policy"
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-brand-500"
+          className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
         />
       </div>
 
       <div className="mt-3">
-        <label className="mb-1 block text-xs font-medium text-slate-500">
+        <label className="mb-1 block text-xs font-medium text-ink-muted">
           Content
         </label>
         <textarea
@@ -121,7 +123,7 @@ export default function KnowledgeBasePanel({
           onChange={(event) => setContent(event.target.value)}
           rows={6}
           placeholder="Paste document text, guidelines, or FAQs…"
-          className="w-full resize-y rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-brand-500"
+          className="w-full resize-y rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
         />
       </div>
 
@@ -157,45 +159,47 @@ export default function KnowledgeBasePanel({
         />
       </div>
 
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-3 text-sm text-status-error">{error}</p>}
 
       <div className="mt-6">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
           Ingested documents
         </h3>
 
         {loading ? (
-          <div className="mt-3 flex items-center gap-2 text-sm text-slate-500">
+          <div className="mt-3 flex items-center gap-2 text-sm text-ink-muted">
             <Loader2 size={16} className="animate-spin" />
             Loading…
           </div>
         ) : documents.length === 0 ? (
-          <p className="mt-3 text-sm text-slate-500">
-            No documents yet. Ingest your first document to power the assistant.
-          </p>
+          <EmptyState
+            icon={FileText}
+            title="No documents yet"
+            description="Ingest your first document above so the assistant has something to search."
+          />
         ) : (
-          <ul className="mt-3 divide-y divide-slate-100">
+          <ul className="mt-3 divide-y divide-subtle">
             {documents.map((document) => (
               <li key={document.id} className="flex items-center justify-between py-2">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-slate-800">
+                  <p className="truncate text-sm font-medium text-ink-primary">
                     {document.title}
                   </p>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-ink-muted">
                     {document.source_type} · {document.chunk_count} chunks
                   </p>
                 </div>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                <Badge
+                  tone={
                     document.status === "ready"
-                      ? "bg-emerald-100 text-emerald-700"
+                      ? "success"
                       : document.status === "failed"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-amber-100 text-amber-700"
-                  }`}
+                        ? "error"
+                        : "warn"
+                  }
                 >
                   {document.status}
-                </span>
+                </Badge>
               </li>
             ))}
           </ul>

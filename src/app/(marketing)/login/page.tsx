@@ -43,11 +43,11 @@ export default function LoginPage() {
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
       <Card className="p-8">
-        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-lg bg-brand-600 text-white">
+        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <LogIn size={22} />
         </div>
-        <h1 className="text-xl font-bold text-slate-900">Sign in</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-xl font-bold text-ink-primary">Sign in</h1>
+        <p className="mt-1 text-sm text-ink-muted">
           Use your Supabase credentials to continue.
         </p>
 
@@ -55,7 +55,7 @@ export default function LoginPage() {
           <div className="space-y-1.5">
             <label
               htmlFor="email"
-              className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
               Email
             </label>
@@ -66,14 +66,14 @@ export default function LoginPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
             />
           </div>
 
           <div className="space-y-1.5">
             <label
               htmlFor="password"
-              className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
               Password
             </label>
@@ -84,12 +84,12 @@ export default function LoginPage() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
             />
           </div>
 
           {error && (
-            <p className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-600">
+            <p className="rounded-control bg-status-error/10 px-3 py-2 text-xs font-medium text-status-error">
               {error}
             </p>
           )}
@@ -98,21 +98,21 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Sign in"}
           </Button>
 
-          <p className="text-center text-sm text-slate-500">
+          <p className="text-center text-sm text-ink-muted">
             <Link
               href="/forgot-password"
-              className="font-semibold text-brand-600 hover:text-brand-700"
+              className="font-semibold text-violet-dim hover:text-violet"
             >
               Forgot password?
             </Link>
           </p>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
+        <p className="mt-6 text-center text-sm text-ink-muted">
           Don&apos;t have an account?{" "}
           <Link
             href="/signup"
-            className="font-semibold text-brand-600 hover:text-brand-700"
+            className="font-semibold text-violet-dim hover:text-violet"
           >
             Sign up
           </Link>

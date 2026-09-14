@@ -37,8 +37,8 @@ export default async function BillingPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold text-slate-900">Billing</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="text-2xl font-semibold text-ink-primary">Billing</h1>
+      <p className="mt-1 text-sm text-ink-muted">
         Manage your subscription and payment details.
       </p>
 
@@ -46,21 +46,21 @@ export default async function BillingPage() {
         {organization ? (
           <Card className="p-6">
             <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-              <div className="border-b border-slate-100 pb-2">
-                <dt className="text-xs font-medium text-slate-400">Plan</dt>
-                <dd className="text-sm font-medium text-slate-800">
+              <div className="border-b border-subtle pb-2">
+                <dt className="text-xs font-medium text-ink-muted">Plan</dt>
+                <dd className="text-sm font-medium text-ink-primary">
                   {planLabel}
                 </dd>
               </div>
-              <div className="border-b border-slate-100 pb-2">
-                <dt className="text-xs font-medium text-slate-400">Status</dt>
-                <dd className="text-sm font-medium capitalize text-slate-800">
+              <div className="border-b border-subtle pb-2">
+                <dt className="text-xs font-medium text-ink-muted">Status</dt>
+                <dd className="text-sm font-medium capitalize text-ink-primary">
                   {organization.subscription_status}
                 </dd>
               </div>
-              <div className="border-b border-slate-100 pb-2">
-                <dt className="text-xs font-medium text-slate-400">Renews</dt>
-                <dd className="text-sm font-medium text-slate-800">
+              <div className="border-b border-subtle pb-2">
+                <dt className="text-xs font-medium text-ink-muted">Renews</dt>
+                <dd className="text-sm font-medium text-ink-primary">
                   {organization.current_period_end
                     ? new Date(
                         organization.current_period_end,
@@ -76,7 +76,7 @@ export default async function BillingPage() {
               ) : (
                 <Link
                   href="/pricing"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-violet px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet/90"
                 >
                   Choose a plan
                 </Link>
@@ -85,11 +85,11 @@ export default async function BillingPage() {
           </Card>
         ) : (
           <Card className="p-6">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-ink-muted">
               You don&apos;t belong to an organization yet.{" "}
               <Link
                 href="/pricing"
-                className="font-semibold text-brand-600 hover:text-brand-700"
+                className="font-semibold text-violet-dim hover:text-violet"
               >
                 Choose a plan
               </Link>{" "}

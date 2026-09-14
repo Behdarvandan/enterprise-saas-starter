@@ -42,7 +42,7 @@ export default function BillingPortalButton() {
         {loading ? "Loading..." : "Manage billing"}
       </Button>
       {error && (
-        <p className="mt-2 text-xs font-medium text-red-600">{error}</p>
+        <p className="mt-2 text-xs font-medium text-status-error">{error}</p>
       )}
     </div>
   );

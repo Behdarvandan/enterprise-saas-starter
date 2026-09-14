@@ -36,11 +36,11 @@ export default function ForgotPasswordPage() {
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
       <Card className="p-8">
-        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-lg bg-brand-600 text-white">
+        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <KeyRound size={22} />
         </div>
-        <h1 className="text-xl font-bold text-slate-900">Reset your password</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-xl font-bold text-ink-primary">Reset your password</h1>
+        <p className="mt-1 text-sm text-ink-muted">
           Enter the email associated with your account and we&apos;ll send you a
           reset link.
         </p>
@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
           <div className="space-y-1.5">
             <label
               htmlFor="email"
-              className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+              className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
               Email
             </label>
@@ -60,18 +60,18 @@ export default function ForgotPasswordPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
             />
           </div>
 
           {error && (
-            <p className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-600">
+            <p className="rounded-control bg-status-error/10 px-3 py-2 text-xs font-medium text-status-error">
               {error}
             </p>
           )}
 
           {message && (
-            <p className="rounded-lg bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-600">
+            <p className="rounded-control bg-status-success/10 px-3 py-2 text-xs font-medium text-status-success">
               {message}
             </p>
           )}
@@ -81,9 +81,9 @@ export default function ForgotPasswordPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
+        <p className="mt-6 text-center text-sm text-ink-muted">
           Remembered your password?{" "}
-          <Link href="/login" className="font-semibold text-brand-600 hover:text-brand-700">
+          <Link href="/login" className="font-semibold text-violet-dim hover:text-violet">
             Sign in
           </Link>
         </p>

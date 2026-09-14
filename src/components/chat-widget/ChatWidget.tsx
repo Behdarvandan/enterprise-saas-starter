@@ -18,6 +18,8 @@ interface ChatWidgetProps {
   title?: string;
   /** Where the floating launcher is anchored. */
   position?: "bottom-right" | "bottom-left";
+  /** Opens the panel and sends this as the first message, once. */
+  initialQuery?: string;
 }
 
 interface StreamEvent {
@@ -40,6 +42,7 @@ export default function ChatWidget({
   apiBaseUrl = "",
   title = "AI Assistant",
   position = "bottom-right",
+  initialQuery,
 }: ChatWidgetProps) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<WidgetMessage[]>([]);
@@ -98,8 +101,17 @@ export default function ChatWidget({
     });
   }, [messages, streaming]);
 
-  async function sendMessage() {
-    const text = input.trim();
+  const sentInitialQuery = useRef(false);
+  useEffect(() => {
+    if (!initialQuery || sentInitialQuery.current) return;
+    sentInitialQuery.current = true;
+    setOpen(true);
+    sendMessage(initialQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuery]);
+
+  async function sendMessage(override?: string) {
+    const text = (override ?? input).trim();
     if (!text || streaming) return;
 
     setInput("");
@@ -203,7 +215,7 @@ export default function ChatWidget({
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-label={open ? "Close chat" : "Open chat"}
-        className={`fixed bottom-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand-600 text-white shadow-lg transition hover:bg-brand-700 ${launcherClass}`}
+        className={`fixed bottom-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-violet text-white shadow-lg transition hover:bg-violet/90 ${launcherClass}`}
       >
         {open ? <X size={24} /> : <Bot size={24} />}
       </button>
@@ -211,25 +223,25 @@ export default function ChatWidget({
       {/* Chat panel */}
       {open && (
         <div
-          className={`fixed bottom-20 z-50 flex w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl ${launcherClass}`}
+          className={`fixed bottom-20 z-50 flex w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-subtle bg-surface shadow-2xl ${launcherClass}`}
           style={{ height: "min(28rem, calc(100vh - 7rem))" }}
         >
-          <header className="flex items-center gap-2 border-b border-slate-200 bg-white px-4 py-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
+          <header className="flex items-center gap-2 border-b border-subtle bg-surface px-4 py-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet text-white">
               <Bot size={16} />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-slate-900">{title}</p>
-              <p className="text-xs text-slate-500">Online · AI knowledge base</p>
+              <p className="text-sm font-semibold text-ink-primary">{title}</p>
+              <p className="text-xs text-ink-muted">Online · AI knowledge base</p>
             </div>
           </header>
 
           <div
             ref={scrollRef}
-            className="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-4 py-4"
+            className="flex-1 space-y-3 overflow-y-auto bg-canvas px-4 py-4"
           >
             {messages.length === 0 && (
-              <div className="rounded-lg bg-white p-4 text-sm text-slate-500 shadow-sm">
+              <div className="rounded-lg bg-surface p-4 text-sm text-ink-muted shadow-sm">
                 Hi there! Ask me anything about our products and services.
               </div>
             )}
@@ -242,8 +254,8 @@ export default function ChatWidget({
                 <div
                   className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm shadow-sm ${
                     message.role === "user"
-                      ? "bg-brand-600 text-white"
-                      : "bg-white text-slate-800"
+                      ? "bg-violet text-white"
+                      : "bg-surface text-ink-primary"
                   }`}
                 >
                   {message.content}
@@ -253,9 +265,9 @@ export default function ChatWidget({
 
             {streaming && (
               <div className="flex justify-start">
-                <div className="flex items-center gap-1 rounded-2xl bg-white px-3 py-2 shadow-sm">
-                  <Loader2 size={16} className="animate-spin text-brand-600" />
-                  <span className="text-sm text-slate-500">Thinking…</span>
+                <div className="flex items-center gap-1 rounded-2xl bg-surface px-3 py-2 shadow-sm">
+                  <Loader2 size={16} className="animate-spin text-violet-dim" />
+                  <span className="text-sm text-ink-muted">Thinking…</span>
                 </div>
               </div>
             )}
@@ -266,20 +278,20 @@ export default function ChatWidget({
               event.preventDefault();
               sendMessage();
             }}
-            className="flex items-center gap-2 border-t border-slate-200 bg-white p-3"
+            className="flex items-center gap-2 border-t border-subtle bg-surface p-3"
           >
             <input
               value={input}
               onChange={(event) => setInput(event.target.value)}
               placeholder="Type your message…"
               disabled={streaming}
-              className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-brand-500 disabled:opacity-60"
+              className="flex-1 rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim disabled:opacity-60"
             />
             <button
               type="submit"
               disabled={streaming || !input.trim()}
               aria-label="Send message"
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-white transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet text-white transition hover:bg-violet/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Send size={16} />
             </button>
