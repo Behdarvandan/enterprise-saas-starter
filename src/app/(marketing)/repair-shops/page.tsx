@@ -9,6 +9,13 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import CheckoutButton from "@/components/billing/CheckoutButton";
+import { getPlans } from "@/lib/plans";
+
+// Reads STRIPE_PRICE_PRO (via getPlans()) at request time, same reason as
+// /(marketing)/pricing: plan pricing must stay in sync with the configured
+// Stripe price id, never statically baked into the build.
+export const dynamic = "force-dynamic";
 
 const STEPS = [
   {
@@ -55,6 +62,10 @@ const FEATURES = [
 ];
 
 export default function RepairShopsLandingPage() {
+  // Reuses the real Pro plan's price/priceId — the entitlements are the
+  // same subscription, just described for a repair-shop audience below.
+  const proPlan = getPlans().find((plan) => plan.name === "Pro");
+
   return (
     <div>
       {/* ---------------------------------------------------------------- */}
@@ -175,7 +186,7 @@ export default function RepairShopsLandingPage() {
       </section>
 
       {/* ---------------------------------------------------------------- */}
-      {/* PRICING (placeholder — see inline note)                           */}
+      {/* PRICING                                                           */}
       {/* ---------------------------------------------------------------- */}
       <section className="border-y border-subtle bg-surface">
         <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
@@ -189,47 +200,44 @@ export default function RepairShopsLandingPage() {
             </p>
           </div>
 
-          {/*
-            TODO(pricing): $29/mo below is a PLACEHOLDER, not a finalized
-            price — swap it out before this page goes live. The visible
-            "Placeholder — TODO" badge is intentional so this can't be
-            mistaken for a real, final price if shipped as-is.
-          */}
-          <div className="mt-10 max-w-sm rounded-interactive border border-violet-dim bg-surface-raised p-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-ink-primary">
-                Shop
-              </h3>
-              <span className="rounded-control border border-status-warn/40 bg-status-warn/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-status-warn">
-                Placeholder — TODO
-              </span>
+          {proPlan && (
+            <div className="mt-10 max-w-sm rounded-interactive border border-violet-dim bg-surface-raised p-6">
+              <h3 className="text-sm font-semibold text-ink-primary">Shop</h3>
+              <div className="mt-3 flex items-baseline gap-1">
+                <span className="text-3xl font-semibold text-ink-primary">
+                  {proPlan.price}
+                </span>
+                {proPlan.period && (
+                  <span className="text-sm text-ink-muted">{proPlan.period}</span>
+                )}
+              </div>
+              <p className="mt-2 text-sm text-ink-muted">
+                Everything in the Pro plan, for a single shop.
+              </p>
+              <ul className="mt-5 space-y-2">
+                {["Unlimited bookings", "AI pre-diagnosis chat", "Priority support"].map(
+                  (feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-2 text-sm text-ink-muted"
+                    >
+                      <CheckCircle2 size={14} className="shrink-0 text-status-success" />
+                      {feature}
+                    </li>
+                  ),
+                )}
+              </ul>
+              <div className="mt-6">
+                {proPlan.priceId ? (
+                  <CheckoutButton priceId={proPlan.priceId} label="Get started" />
+                ) : (
+                  <p className="text-center text-sm font-semibold text-ink-muted">
+                    Contact us
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="mt-3 flex items-baseline gap-1">
-              <span className="text-3xl font-semibold text-ink-primary">
-                $29
-              </span>
-              <span className="text-sm text-ink-muted">/mo</span>
-            </div>
-            <p className="mt-2 text-sm text-ink-muted">
-              Placeholder price — to be finalized.
-            </p>
-            <ul className="mt-5 space-y-2">
-              {[
-                "Unlimited bookings",
-                "Public booking page & availability calendar",
-                "AI pre-diagnosis chat & knowledge base",
-                "Stripe deposits at checkout",
-              ].map((feature) => (
-                <li
-                  key={feature}
-                  className="flex items-center gap-2 text-sm text-ink-muted"
-                >
-                  <CheckCircle2 size={14} className="shrink-0 text-status-success" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
         </div>
       </section>
 

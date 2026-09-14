@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 
 interface CheckoutButtonProps {
@@ -12,6 +13,7 @@ export default function CheckoutButton({
   priceId,
   label,
 }: CheckoutButtonProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,6 +27,14 @@ export default function CheckoutButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ priceId }),
       });
+
+      // Not signed in: send them to sign up instead of showing a dead-end
+      // error. The priceId is preserved in the query string for a future
+      // "continue to checkout after signup" flow — nothing reads it yet.
+      if (response.status === 401) {
+        router.push(`/signup?priceId=${encodeURIComponent(priceId)}`);
+        return;
+      }
 
       const data = await response.json();
 
