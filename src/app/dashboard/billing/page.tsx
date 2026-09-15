@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getUserMembership } from "@/lib/team";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 import BillingPortalButton from "@/components/billing/BillingPortalButton";
 import type { Organization } from "@/types";
 
@@ -44,7 +44,7 @@ export default async function BillingPage() {
 
       <div className="mt-6">
         {organization ? (
-          <Card className="p-6">
+          <LegacyCard className="p-6">
             <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
               <div className="border-b border-subtle pb-2">
                 <dt className="text-xs font-medium text-ink-muted">Plan</dt>
@@ -82,9 +82,9 @@ export default async function BillingPage() {
                 </Link>
               )}
             </div>
-          </Card>
+          </LegacyCard>
         ) : (
-          <Card className="p-6">
+          <LegacyCard className="p-6">
             <p className="text-sm text-ink-muted">
               You don&apos;t belong to an organization yet.{" "}
               <Link
@@ -95,7 +95,7 @@ export default async function BillingPage() {
               </Link>{" "}
               to get started.
             </p>
-          </Card>
+          </LegacyCard>
         )}
       </div>
     </div>

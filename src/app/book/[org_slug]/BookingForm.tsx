@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import Button from "@/components/ui/Button";
+import LegacyButton from "@/components/ui/LegacyButton";
 import { formatAppointmentTime } from "@/lib/utils";
 
 export interface BookableService {
@@ -311,13 +311,13 @@ export default function BookingForm({
           </p>
         )}
 
-        <Button type="submit" disabled={submitting} className="mt-6 w-full">
+        <LegacyButton type="submit" disabled={submitting} className="mt-6 w-full">
           {submitting
             ? "Redirecting..."
             : selectedService && selectedService.price > 0
               ? "Continue to payment"
               : "Confirm booking"}
-        </Button>
+        </LegacyButton>
       </div>
     </form>
   );

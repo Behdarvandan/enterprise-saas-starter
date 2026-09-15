@@ -15,7 +15,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   danger: "bg-status-error text-white shadow-sm hover:bg-status-error/90",
 };
 
-export default function Button({
+export default function LegacyButton({
   className,
   variant = "primary",
   ...props

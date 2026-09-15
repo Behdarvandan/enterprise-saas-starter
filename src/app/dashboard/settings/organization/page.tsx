@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { canManageMembers, getUserMembership } from "@/lib/team";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 import OrganizationForm from "./OrganizationForm";
 
 export default async function OrganizationSettingsPage() {
@@ -31,7 +31,7 @@ export default async function OrganizationSettingsPage() {
       </p>
 
       <div className="mt-6">
-        <Card className="p-6">
+        <LegacyCard className="p-6">
           {canManage ? (
             <OrganizationForm name={organization?.name ?? ""} />
           ) : (
@@ -39,7 +39,7 @@ export default async function OrganizationSettingsPage() {
               Only owners and admins can edit organization settings.
             </p>
           )}
-        </Card>
+        </LegacyCard>
       </div>
     </div>
   );

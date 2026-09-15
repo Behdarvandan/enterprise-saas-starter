@@ -20,7 +20,7 @@ const variantStyles: Record<CardVariant, string> = {
   raised: "rounded-interactive border border-subtle bg-surface-raised shadow-lg",
 };
 
-export default function Card({
+export default function LegacyCard({
   children,
   className,
   variant = "section",

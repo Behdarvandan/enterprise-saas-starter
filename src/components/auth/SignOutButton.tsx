@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import Button from "@/components/ui/Button";
+import LegacyButton from "@/components/ui/LegacyButton";
 
 export default function SignOutButton({ className }: { className?: string }) {
   const router = useRouter();
@@ -16,9 +16,9 @@ export default function SignOutButton({ className }: { className?: string }) {
   }
 
   return (
-    <Button variant="secondary" onClick={handleSignOut} className={className}>
+    <LegacyButton variant="secondary" onClick={handleSignOut} className={className}>
       <LogOut size={16} />
       Sign out
-    </Button>
+    </LegacyButton>
   );
 }

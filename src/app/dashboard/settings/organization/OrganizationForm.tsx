@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/ui/Button";
+import LegacyButton from "@/components/ui/LegacyButton";
 import { updateOrganization } from "./actions";
 
 export default function OrganizationForm({ name }: { name: string }) {
@@ -57,9 +57,9 @@ export default function OrganizationForm({ name }: { name: string }) {
         </p>
       )}
 
-      <Button type="submit" disabled={loading}>
+      <LegacyButton type="submit" disabled={loading}>
         {loading ? "Saving..." : "Save changes"}
-      </Button>
+      </LegacyButton>
     </form>
   );
 }

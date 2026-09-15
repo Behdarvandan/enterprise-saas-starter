@@ -1,12 +1,4 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-/**
- * Merge conditional Tailwind class names while resolving conflicts.
- */
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+export { cn } from "cn";
 
 const APPOINTMENT_DATE_FORMAT: Intl.DateTimeFormatOptions = {
   weekday: "long",

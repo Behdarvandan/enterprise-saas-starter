@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { MessageSquareText } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getUserMembership } from "@/lib/team";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 import KnowledgeBasePanel from "./KnowledgeBasePanel";
 import ChatWidget from "@/components/chat-widget/ChatWidget";
 
@@ -44,7 +44,7 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <KnowledgeBasePanel organizationId={organizationId} />
 
-        <Card className="p-6">
+        <LegacyCard className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Embed the widget
           </h2>
@@ -72,7 +72,7 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
               <li>The LLM streams a grounded answer in real time.</li>
             </ol>
           </div>
-        </Card>
+        </LegacyCard>
       </div>
 
       {/* Floating playground widget scoped to this tenant. */}

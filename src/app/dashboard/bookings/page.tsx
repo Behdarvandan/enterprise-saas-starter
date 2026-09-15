@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getUserMembership } from "@/lib/team";
 import { formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
 import type { Appointment, AppointmentStatus } from "@/types";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 import AppointmentActions from "./AppointmentActions";
@@ -95,7 +95,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
         </p>
       </div>
 
-      <Card className="mb-6 p-6">
+      <LegacyCard className="mb-6 p-6">
         <form
           method="get"
           action="/dashboard/bookings"
@@ -146,7 +146,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
             </Link>
           )}
         </form>
-      </Card>
+      </LegacyCard>
 
       <div className="space-y-6">
         <section>
@@ -154,7 +154,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
             Upcoming ({upcoming.length})
           </h2>
           {upcoming.length === 0 ? (
-            <Card>
+            <LegacyCard>
               <EmptyState
                 icon={CalendarX2}
                 title={isFiltered ? "No appointments match this filter" : "No upcoming appointments"}
@@ -176,7 +176,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
                   ) : undefined
                 }
               />
-            </Card>
+            </LegacyCard>
           ) : (
             <div className="space-y-3">
               {upcoming.map((appointment) => (
@@ -195,13 +195,13 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
             Past ({past.length})
           </h2>
           {past.length === 0 ? (
-            <Card>
+            <LegacyCard>
               <EmptyState
                 icon={CalendarX2}
                 title="No past appointments"
                 description="Completed and cancelled bookings will show up here once they happen."
               />
-            </Card>
+            </LegacyCard>
           ) : (
             <div className="space-y-3">
               {past.map((appointment) => (
@@ -230,7 +230,7 @@ function AppointmentRow({
   const isActive = status === "confirmed" || status === "pending";
 
   return (
-    <Card variant="item" className="p-4 sm:p-5">
+    <LegacyCard variant="item" className="p-4 sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -253,6 +253,6 @@ function AppointmentRow({
 
         {isActive && <AppointmentActions appointmentId={appointment.id} />}
       </div>
-    </Card>
+    </LegacyCard>
   );
 }

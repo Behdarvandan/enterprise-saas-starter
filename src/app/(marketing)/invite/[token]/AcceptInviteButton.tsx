@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/components/ui/Button";
+import LegacyButton from "@/components/ui/LegacyButton";
 import { acceptInvitation } from "./actions";
 
 export default function AcceptInviteButton({ token }: { token: string }) {
@@ -21,9 +21,9 @@ export default function AcceptInviteButton({ token }: { token: string }) {
 
   return (
     <div>
-      <Button onClick={handleAccept} disabled={loading} className="w-full">
+      <LegacyButton onClick={handleAccept} disabled={loading} className="w-full">
         {loading ? "Joining..." : "Accept invitation"}
-      </Button>
+      </LegacyButton>
       {error && (
         <p className="mt-2 text-xs font-medium text-status-error">{error}</p>
       )}

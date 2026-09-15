@@ -1,10 +1,157 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Class-based dark mode — the product ships dark-first. */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Typography — wired to the next/font variables set on <html>. */
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Map shadcn semantic tokens to Tailwind color utilities. */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Legacy design tokens — aliased to the semantic palette above. */
+  --color-canvas: var(--background);
+  --color-surface: var(--card);
+  --color-surface-raised: var(--popover);
+  --color-subtle: var(--border);
+  --color-violet: var(--primary);
+  --color-violet-dim: var(--ring);
+  --color-ink-primary: var(--foreground);
+  --color-ink-muted: var(--muted-foreground);
+
+  /* Radius scale derived from --radius (0.75rem). */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 16px);
+  --radius-4xl: calc(var(--radius) + 24px);
+}
+
+@theme {
+  /* Legacy brand palette (public booking flow + global error boundary). */
+  --color-brand-50: #f5f7ff;
+  --color-brand-100: #ebf0ff;
+  --color-brand-300: #a5b4fc;
+  --color-brand-500: #5b4fe0;
+  --color-brand-600: #5b4fe0;
+  --color-brand-700: #4a3fc9;
+
+  /* Status colors. */
+  --color-status-success: #3fbf7f;
+  --color-status-warn: #e0a63f;
+  --color-status-error: #e0574f;
+
+  /* Legacy control radii. */
+  --radius-control: 6px;
+  --radius-interactive: 8px;
+
+  /* Legacy entrance animation. */
+  --animate-reveal-up: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes reveal-up {
+    0% {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Dark violet theme — the product ships dark-first. */
+:root,
+.dark {
+  color-scheme: dark;
+
+  --radius: 0.75rem;
+
+  /* Minimum comfortable tap-target size for touch devices (44px). */
+  --touch-target-min: 2.75rem;
+
+  --background: #0d0e13;
+  --foreground: #e9eaf0;
+  --card: #181a22;
+  --card-foreground: #e9eaf0;
+  --popover: #20222d;
+  --popover-foreground: #e9eaf0;
+  --primary: #5b4fe0;
+  --primary-foreground: #ffffff;
+  --secondary: #20222d;
+  --secondary-foreground: #e9eaf0;
+  --muted: #181a22;
+  --muted-foreground: #8c90a0;
+  --accent: #2a2d3a;
+  --accent-foreground: #e9eaf0;
+  --destructive: #e0574f;
+  --destructive-foreground: #ffffff;
+  --border: #2a2d3a;
+  --input: #2a2d3a;
+  --ring: #8b7fe8;
+  --chart-1: #5b4fe0;
+  --chart-2: #3fbf7f;
+  --chart-3: #e0a63f;
+  --chart-4: #e0574f;
+  --chart-5: #8b7fe8;
+  --sidebar: #181a22;
+  --sidebar-foreground: #e9eaf0;
+  --sidebar-primary: #5b4fe0;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2a2d3a;
+  --sidebar-accent-foreground: #e9eaf0;
+  --sidebar-border: #2a2d3a;
+  --sidebar-ring: #8b7fe8;
+}
 
 @layer base {
   html {
-    color-scheme: dark;
+    @apply font-sans;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 
   ::selection {
@@ -22,12 +169,24 @@
     width: 10px;
     height: 10px;
   }
+
   ::-webkit-scrollbar-track {
     background: transparent;
   }
+
   ::-webkit-scrollbar-thumb {
     background-color: #2a2d3a;
     border-radius: 999px;
+  }
+
+  /* Mobile-first baseline (375px): enforce a comfortable 44px tap target
+     for text-entry controls on coarse (touch) pointers. */
+  @media (pointer: coarse) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+    select,
+    textarea {
+      min-height: var(--touch-target-min);
+    }
   }
 }
 

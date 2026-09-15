@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { KeyRound } from "lucide-react";
-import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
+import LegacyCard from "@/components/ui/LegacyCard";
+import LegacyButton from "@/components/ui/LegacyButton";
 import { requestPasswordReset } from "./actions";
 
 export default function ForgotPasswordPage() {
@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <Card className="p-8">
+      <LegacyCard className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <KeyRound size={22} />
         </div>
@@ -76,9 +76,9 @@ export default function ForgotPasswordPage() {
             </p>
           )}
 
-          <Button type="submit" disabled={loading} className="w-full">
+          <LegacyButton type="submit" disabled={loading} className="w-full">
             {loading ? "Sending..." : "Send reset link"}
-          </Button>
+          </LegacyButton>
         </form>
 
         <p className="mt-6 text-center text-sm text-ink-muted">
@@ -87,7 +87,7 @@ export default function ForgotPasswordPage() {
             Sign in
           </Link>
         </p>
-      </Card>
+      </LegacyCard>
     </div>
   );
 }

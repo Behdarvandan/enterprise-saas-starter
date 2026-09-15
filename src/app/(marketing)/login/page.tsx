@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogIn } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
+import LegacyCard from "@/components/ui/LegacyCard";
+import LegacyButton from "@/components/ui/LegacyButton";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,7 +42,7 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <Card className="p-8">
+      <LegacyCard className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <LogIn size={22} />
         </div>
@@ -94,9 +94,9 @@ export default function LoginPage() {
             </p>
           )}
 
-          <Button type="submit" disabled={loading} className="w-full">
+          <LegacyButton type="submit" disabled={loading} className="w-full">
             {loading ? "Signing in..." : "Sign in"}
-          </Button>
+          </LegacyButton>
 
           <p className="text-center text-sm text-ink-muted">
             <Link
@@ -117,7 +117,7 @@ export default function LoginPage() {
             Sign up
           </Link>
         </p>
-      </Card>
+      </LegacyCard>
     </div>
   );
 }

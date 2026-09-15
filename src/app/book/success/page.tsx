@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { getAppointmentDetails } from "@/lib/booking";
 import { formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 
 interface SuccessPageProps {
   searchParams: Promise<{ appointment_id?: string }>;
@@ -24,7 +24,7 @@ export default async function BookingSuccessPage({
   return (
     <div className="min-h-screen bg-slate-50 py-16">
       <div className="mx-auto max-w-lg px-4 sm:px-6">
-        <Card className="p-8 text-center">
+        <LegacyCard className="p-8 text-center">
           {details ? (
             <>
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
@@ -94,7 +94,7 @@ export default async function BookingSuccessPage({
               </Link>
             </>
           )}
-        </Card>
+        </LegacyCard>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 import ProfileForm from "./ProfileForm";
 
 export default async function ProfileSettingsPage() {
@@ -28,9 +28,9 @@ export default async function ProfileSettingsPage() {
       </p>
 
       <div className="mt-6">
-        <Card className="p-6">
+        <LegacyCard className="p-6">
           <ProfileForm email={email} fullName={fullName} />
-        </Card>
+        </LegacyCard>
       </div>
     </div>
   );

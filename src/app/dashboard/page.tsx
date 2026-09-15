@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getUserMembership } from "@/lib/team";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 import OnboardingChecklist from "@/components/dashboard/OnboardingChecklist";
 
 export default async function DashboardPage() {
@@ -86,7 +86,7 @@ export default async function DashboardPage() {
       <div className="mt-6 grid grid-cols-1 gap-6">
         <OnboardingChecklist userId={user.id} items={checklistItems} />
 
-        <Card className="p-6">
+        <LegacyCard className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Authenticated user
           </h2>
@@ -106,9 +106,9 @@ export default async function DashboardPage() {
               </dd>
             </div>
           </dl>
-        </Card>
+        </LegacyCard>
 
-        <Card className="p-6">
+        <LegacyCard className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Organization
           </h2>
@@ -130,7 +130,7 @@ export default async function DashboardPage() {
               You don&apos;t belong to an organization yet.
             </p>
           )}
-        </Card>
+        </LegacyCard>
       </div>
     </div>
   );

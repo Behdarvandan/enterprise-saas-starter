@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/components/ui/Button";
+import LegacyButton from "@/components/ui/LegacyButton";
 
 export default function BillingPortalButton() {
   const [loading, setLoading] = useState(false);
@@ -33,14 +33,14 @@ export default function BillingPortalButton() {
 
   return (
     <div>
-      <Button
+      <LegacyButton
         type="button"
         variant="secondary"
         onClick={handleOpenPortal}
         disabled={loading}
       >
         {loading ? "Loading..." : "Manage billing"}
-      </Button>
+      </LegacyButton>
       {error && (
         <p className="mt-2 text-xs font-medium text-status-error">{error}</p>
       )}

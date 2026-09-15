@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 import AcceptInviteButton from "./AcceptInviteButton";
 
 export default async function InvitePage({
@@ -49,7 +49,7 @@ export default async function InvitePage({
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <Card className="p-8">
+      <LegacyCard className="p-8">
         {!user ? (
           <>
             <h1 className="text-xl font-bold text-ink-primary">
@@ -104,7 +104,7 @@ export default async function InvitePage({
             </Link>
           </>
         )}
-      </Card>
+      </LegacyCard>
     </div>
   );
 }

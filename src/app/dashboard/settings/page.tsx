@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Building2, ChevronRight, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import Card from "@/components/ui/Card";
+import LegacyCard from "@/components/ui/LegacyCard";
 
 const SETTINGS = [
   {
@@ -37,7 +37,7 @@ export default async function SettingsPage() {
       <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {SETTINGS.map((setting) => (
           <Link key={setting.href} href={setting.href}>
-            <Card className="p-6 transition hover:border-violet-dim/60 hover:shadow-md">
+            <LegacyCard className="p-6 transition hover:border-violet-dim/60 hover:shadow-md">
               <div className="flex items-center justify-between">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet/10 text-violet-dim">
                   <setting.icon size={20} />
@@ -50,7 +50,7 @@ export default async function SettingsPage() {
               <p className="mt-1 text-sm text-ink-muted">
                 {setting.description}
               </p>
-            </Card>
+            </LegacyCard>
           </Link>
         ))}
       </div>

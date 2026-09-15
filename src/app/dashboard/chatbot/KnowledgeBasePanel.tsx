@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FileText, Loader2, Upload } from "lucide-react";
-import Button from "@/components/ui/Button";
+import LegacyButton from "@/components/ui/LegacyButton";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 
@@ -128,7 +128,7 @@ export default function KnowledgeBasePanel({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <Button type="button" onClick={handleIngest} disabled={ingesting || !content.trim()}>
+        <LegacyButton type="button" onClick={handleIngest} disabled={ingesting || !content.trim()}>
           {ingesting ? (
             <>
               <Loader2 size={16} className="animate-spin" />
@@ -140,16 +140,16 @@ export default function KnowledgeBasePanel({
               Ingest document
             </>
           )}
-        </Button>
+        </LegacyButton>
 
-        <Button
+        <LegacyButton
           type="button"
           variant="secondary"
           onClick={() => fileInputRef.current?.click()}
         >
           <FileText size={16} />
           Upload file
-        </Button>
+        </LegacyButton>
         <input
           ref={fileInputRef}
           type="file"
