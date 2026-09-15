@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Boxes } from "lucide-react";
+import ThemeToggle from "@/components/theme-toggle";
 
 export default function Header() {
   return (
@@ -28,6 +29,7 @@ export default function Header() {
           <Link href="/login" className="transition-colors hover:text-ink-primary">
             Sign in
           </Link>
+          <ThemeToggle />
           <Link
             href="/signup"
             className="rounded-interactive bg-violet px-4 py-2 font-semibold text-white transition-colors hover:bg-violet/90"

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, Search, User } from "lucide-react";
 import SignOutButton from "@/components/auth/SignOutButton";
+import ThemeToggle from "@/components/theme-toggle";
 
 interface TopbarProps {
   userEmail: string;
@@ -39,6 +40,8 @@ export default function Topbar({ userEmail }: TopbarProps) {
       </form>
 
       <div className="ml-auto flex items-center gap-2">
+        <ThemeToggle />
+
         <div className="relative">
           <button
             type="button"
