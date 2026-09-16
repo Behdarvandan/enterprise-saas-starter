@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { requireMembership } from "@/lib/auth";
@@ -29,6 +30,10 @@ export default async function ClientLayout({
   if (isOperatorAdmin) {
     redirect({ href: "/admin", locale: locale as Locale });
   }
+
+  // Tags every error/transaction reported from within this portal so
+  // Sentry issues can be filtered/triaged by which portal they came from.
+  Sentry.setTag("portal", "client");
 
   return (
     <div className="min-h-screen bg-canvas lg:flex">

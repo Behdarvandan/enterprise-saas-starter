@@ -8,8 +8,38 @@ import { canManageMembers } from "@/lib/team";
 import { sendInvitationEmail } from "@/lib/email";
 import { getBaseUrl } from "@/lib/url";
 import { getOrganizationName } from "@/lib/organizations";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { firstIssueMessage, formField } from "@/lib/validation";
-import type { MembershipRole } from "@/types";
+import type { Json, MembershipRole } from "@/types";
+
+/**
+ * `write_audit_log` is grant-restricted to `service_role` (see
+ * supabase/migrations/20261114000005_audit_logs.sql), so every call site
+ * below goes through the admin client rather than the caller's RLS-scoped
+ * one. Best-effort: a logging failure never blocks the membership change
+ * that already succeeded.
+ */
+async function logMembershipAudit(params: {
+  action: string;
+  organizationId: string;
+  actorId: string;
+  targetId?: string | null;
+  metadata?: Record<string, Json>;
+}): Promise<void> {
+  try {
+    const admin = createAdminClient();
+    await admin.rpc("write_audit_log", {
+      p_action: params.action,
+      p_organization_id: params.organizationId,
+      p_actor_id: params.actorId,
+      p_target_table: "memberships",
+      p_target_id: params.targetId ?? null,
+      p_metadata: params.metadata ?? {},
+    });
+  } catch (error) {
+    console.error(`Failed to write audit log for "${params.action}":`, error);
+  }
+}
 
 export type TeamActionResult = { error?: string; success?: boolean };
 
@@ -97,6 +127,13 @@ export async function inviteMember(
     console.error("Failed to send invitation email:", sendError);
   }
 
+  await logMembershipAudit({
+    action: "membership.invited",
+    organizationId: membership.organizationId,
+    actorId: auth.user.id,
+    metadata: { email, role },
+  });
+
   revalidatePath("/dashboard/team");
   return { success: true };
 }
@@ -155,6 +192,14 @@ export async function removeMember(
 
   if (error) return { error: error.message };
 
+  await logMembershipAudit({
+    action: "membership.removed",
+    organizationId: membership.organizationId,
+    actorId: auth.user.id,
+    targetId: membershipId,
+    metadata: { role: target.role },
+  });
+
   revalidatePath("/dashboard/team");
   return { success: true };
 }
@@ -193,6 +238,14 @@ export async function updateMemberRole(
     .eq("organization_id", membership.organizationId);
 
   if (error) return { error: error.message };
+
+  await logMembershipAudit({
+    action: "membership.role_changed",
+    organizationId: membership.organizationId,
+    actorId: auth.user.id,
+    targetId: membershipId,
+    metadata: { from: target.role, to: role },
+  });
 
   revalidatePath("/dashboard/team");
   return { success: true };
