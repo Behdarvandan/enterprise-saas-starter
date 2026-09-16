@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import LegacyCard from "@/components/ui/LegacyCard";
+import { Card } from "@/components/ui/card";
 import CheckoutButton from "@/components/billing/CheckoutButton";
 import { getPlans } from "@/lib/plans";
 
@@ -23,7 +23,7 @@ export default function PricingPage() {
 
       <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {plans.map((plan) => (
-          <LegacyCard
+          <Card
             key={plan.name}
             id={plan.name === "Enterprise" ? "enterprise" : undefined}
             variant="item"
@@ -60,7 +60,7 @@ export default function PricingPage() {
                 )}
               </div>
             </div>
-          </LegacyCard>
+          </Card>
         ))}
       </div>
     </div>

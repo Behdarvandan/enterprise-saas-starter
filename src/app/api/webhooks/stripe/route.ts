@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
-import {
-  getPaymentAdapter,
-  WebhookConfigurationError,
-  WebhookSignatureError,
-} from "@/lib/payment/adapter";
+import { getPaymentAdapter } from "@/lib/payment/adapter";
+import { mapWebhookError } from "@/lib/payment/webhook-error";
 
 /**
  * POST /api/webhooks/stripe
@@ -22,27 +19,15 @@ export async function POST(request: Request) {
       signatureHeader,
     });
   } catch (error) {
-    if (error instanceof WebhookSignatureError) {
-      console.error(
-        "[stripe-webhook] Signature verification failed:",
-        error.message,
-      );
-      return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
-    }
+    const mapped = mapWebhookError("stripe", error);
+    const message =
+      mapped.kind === "signature"
+        ? "Invalid signature."
+        : mapped.kind === "configuration"
+          ? "Webhook secret is not configured."
+          : "Webhook handler failed.";
 
-    if (error instanceof WebhookConfigurationError) {
-      console.error("[stripe-webhook] Configuration error:", error.message);
-      return NextResponse.json(
-        { error: "Webhook secret is not configured." },
-        { status: 500 },
-      );
-    }
-
-    console.error("[stripe-webhook] Webhook handler failed:", error);
-    return NextResponse.json(
-      { error: "Webhook handler failed." },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: message }, { status: mapped.status });
   }
 
   return NextResponse.json({ received: true });

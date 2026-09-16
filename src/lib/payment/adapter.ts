@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import type Stripe from "stripe";
+import { z } from "zod";
 import { getStripe } from "@/lib/stripe";
 import {
   activateOrganizationById,
@@ -7,6 +8,12 @@ import {
   confirmAppointmentById,
   persistSubscriptionSnapshot,
 } from "./handlers";
+
+const payTRTokenResponseSchema = z.object({
+  status: z.string().optional(),
+  token: z.string().optional(),
+  reason: z.string().optional(),
+});
 
 /**
  * Modular payment-provider adapter layer.
@@ -74,6 +81,23 @@ export interface CreateCheckoutSessionResult {
   providerReference?: string | null;
   /** PayTR iframe token, when applicable. */
   iframeToken?: string | null;
+  /**
+   * Provider-side customer id (Stripe only). Echoes back `existingCustomerId`
+   * when one was supplied, or a newly-provisioned id when the adapter had to
+   * create one. Callers should persist this on the organization row.
+   */
+  customerId?: string | null;
+}
+
+export interface CreateBillingPortalSessionInput {
+  /** Provider-side customer id (`organizations.provider_customer_id`). */
+  customerId: string;
+  /** Where the customer is sent back to after leaving the portal. */
+  returnUrl: string;
+}
+
+export interface CreateBillingPortalSessionResult {
+  url: string;
 }
 
 export interface HandleWebhookEventInput {
@@ -104,6 +128,15 @@ export interface PaymentAdapter {
   handleWebhookEvent(input: HandleWebhookEventInput): Promise<void>;
 
   cancelSubscription(input: CancelSubscriptionInput): Promise<void>;
+
+  /**
+   * Opens a self-service billing management session for an existing
+   * customer. Throws `UnsupportedFeatureError` for providers with no
+   * self-service portal (PayTR).
+   */
+  createBillingPortalSession(
+    input: CreateBillingPortalSessionInput,
+  ): Promise<CreateBillingPortalSessionResult>;
 }
 
 /** Raised when an incoming webhook fails signature/verification checks. */
@@ -119,6 +152,14 @@ export class WebhookConfigurationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "WebhookConfigurationError";
+  }
+}
+
+/** Raised when a provider doesn't support a requested capability (e.g. PayTR has no billing portal). */
+export class UnsupportedFeatureError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "UnsupportedFeatureError";
   }
 }
 
@@ -169,12 +210,17 @@ function safeEqual(left: string, right: string): boolean {
 // PayTR order-id encoding
 // ---------------------------------------------------------------------------
 //
-// PayTR's `merchant_oid` must be a unique, alphanumeric value (max 64 chars).
-// We encode a UUID without hyphens and prefix it so the webhook can tell
-// whether a callback refers to an appointment or an organization.
-
-const ORDER_PREFIX_APPOINTMENT = "apt";
-const ORDER_PREFIX_ORGANIZATION = "org";
+// PayTR's `merchant_oid` must be a unique, alphanumeric value (max 64 chars)
+// — no hyphens, colons, or other punctuation — so UUIDs are hex-encoded
+// (hyphens stripped) and concatenated rather than joined with a separator.
+// Length alone distinguishes the two shapes, since each encoded UUID is
+// exactly 32 hex chars:
+//   - 32 chars  -> organization-only order (plan activation)
+//   - 64 chars  -> organization + appointment order (booking deposit)
+//
+// Embedding the organization id in appointment orders lets the webhook
+// confirm/cancel the booking with a tenant-scoped lookup, instead of the
+// appointment id alone (see `getAppointmentDetails` in `@/lib/booking`).
 
 function toHexUuid(uuid: string): string {
   return uuid.replace(/-/g, "");
@@ -185,32 +231,34 @@ function fromHexUuid(hex: string): string {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-export function encodeAppointmentOrderId(appointmentId: string): string {
-  return `${ORDER_PREFIX_APPOINTMENT}${toHexUuid(appointmentId)}`;
+export function encodeAppointmentOrderId(
+  organizationId: string,
+  appointmentId: string,
+): string {
+  return `${toHexUuid(organizationId)}${toHexUuid(appointmentId)}`;
 }
 
 export function encodeOrganizationOrderId(organizationId: string): string {
-  return `${ORDER_PREFIX_ORGANIZATION}${toHexUuid(organizationId)}`;
+  return toHexUuid(organizationId);
 }
 
-interface DecodedOrderId {
-  type: "appointment" | "organization";
-  id: string;
-}
+type DecodedOrderId =
+  | { type: "appointment"; organizationId: string; appointmentId: string }
+  | { type: "organization"; organizationId: string };
 
 export function decodeMerchantOrderId(
   merchantOid: string,
 ): DecodedOrderId | null {
-  if (merchantOid.startsWith(ORDER_PREFIX_APPOINTMENT)) {
-    const hex = merchantOid.slice(ORDER_PREFIX_APPOINTMENT.length);
-    if (hex.length !== 32) return null;
-    return { type: "appointment", id: fromHexUuid(hex) };
+  if (merchantOid.length === 64) {
+    return {
+      type: "appointment",
+      organizationId: fromHexUuid(merchantOid.slice(0, 32)),
+      appointmentId: fromHexUuid(merchantOid.slice(32, 64)),
+    };
   }
 
-  if (merchantOid.startsWith(ORDER_PREFIX_ORGANIZATION)) {
-    const hex = merchantOid.slice(ORDER_PREFIX_ORGANIZATION.length);
-    if (hex.length !== 32) return null;
-    return { type: "organization", id: fromHexUuid(hex) };
+  if (merchantOid.length === 32) {
+    return { type: "organization", organizationId: fromHexUuid(merchantOid) };
   }
 
   return null;
@@ -241,16 +289,26 @@ export class StripeAdapter implements PaymentAdapter {
       if (!input.priceId) {
         throw new Error("Stripe subscription checkout requires a price id.");
       }
-      if (!input.existingCustomerId) {
-        throw new Error(
-          "Stripe subscription checkout requires an existing customer id.",
-        );
-      }
+
+      // Reuse an existing Stripe customer when the caller has one on file;
+      // otherwise provision one now so the caller can persist it. Keeping
+      // this inside the adapter means callers never touch the Stripe SDK
+      // directly to manage customer provisioning.
+      const customerId =
+        input.existingCustomerId ??
+        (
+          await stripe.customers.create({
+            email: input.customerEmail ?? undefined,
+            metadata: input.organizationId
+              ? { organization_id: input.organizationId }
+              : undefined,
+          })
+        ).id;
 
       const session = await stripe.checkout.sessions.create({
         mode: "subscription",
         payment_method_types: ["card"],
-        customer: input.existingCustomerId,
+        customer: customerId,
         line_items: [{ price: input.priceId, quantity: 1 }],
         client_reference_id: input.organizationId ?? undefined,
         allow_promotion_codes: true,
@@ -265,7 +323,7 @@ export class StripeAdapter implements PaymentAdapter {
         cancel_url: input.cancelUrl,
       });
 
-      return { url: session.url, providerReference: session.id };
+      return { url: session.url, providerReference: session.id, customerId };
     }
 
     const lineItems = input.lineItems ?? [];
@@ -361,6 +419,16 @@ export class StripeAdapter implements PaymentAdapter {
     await getStripe().subscriptions.cancel(input.subscriptionId);
   }
 
+  async createBillingPortalSession(
+    input: CreateBillingPortalSessionInput,
+  ): Promise<CreateBillingPortalSessionResult> {
+    const session = await getStripe().billingPortal.sessions.create({
+      customer: input.customerId,
+      return_url: input.returnUrl,
+    });
+    return { url: session.url };
+  }
+
   private async handleBookingCompleted(
     session: Stripe.Checkout.Session,
   ): Promise<void> {
@@ -370,7 +438,11 @@ export class StripeAdapter implements PaymentAdapter {
     const paymentIntentId =
       typeof session.payment_intent === "string" ? session.payment_intent : null;
 
-    await confirmAppointmentById(appointmentId, paymentIntentId);
+    await confirmAppointmentById(
+      appointmentId,
+      paymentIntentId,
+      session.metadata?.organization_id ?? null,
+    );
   }
 
   private async handleBookingCancelled(
@@ -514,15 +586,23 @@ export class PayTRAdapter implements PaymentAdapter {
     }
 
     if (order.type === "appointment") {
-      await confirmAppointmentById(order.id);
+      await confirmAppointmentById(order.appointmentId, undefined, order.organizationId);
     } else {
-      await activateOrganizationById(order.id);
+      await activateOrganizationById(order.organizationId);
     }
   }
 
   async cancelSubscription(input: CancelSubscriptionInput): Promise<void> {
     throw new Error(
       `Subscription cancellation (${input.subscriptionId}) is not supported by the PayTR adapter.`,
+    );
+  }
+
+  async createBillingPortalSession(): Promise<CreateBillingPortalSessionResult> {
+    // PayTR has no self-service customer portal API. Subscribers manage
+    // their plan from the app's own billing page instead.
+    throw new UnsupportedFeatureError(
+      "PayTR does not provide a self-service billing portal. Manage your subscription from the Billing page.",
     );
   }
 
@@ -686,12 +766,15 @@ export class PayTRAdapter implements PaymentAdapter {
       );
     }
 
-    const data = (await response.json()) as {
-      status?: string;
-      token?: string;
-      reason?: string;
-    };
+    const parsed = payTRTokenResponseSchema.safeParse(
+      await response.json().catch(() => null),
+    );
 
+    if (!parsed.success) {
+      throw new Error("PayTR get-token returned an unexpected response.");
+    }
+
+    const data = parsed.data;
     if (data.status !== "success" || !data.token) {
       throw new Error(data.reason ?? "PayTR get-token request failed.");
     }

@@ -7,8 +7,14 @@
  * SDK dependency.
  */
 
+import { z } from "zod";
+
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const EMBEDDING_DIMENSIONS = 1536;
+
+const embeddingResponseSchema = z.object({
+  data: z.array(z.object({ embedding: z.array(z.number()) })).min(1),
+});
 
 /** A single chunk produced by {@link chunkText}. */
 export interface TextChunk {
@@ -105,12 +111,16 @@ export async function getEmbedding(text: string): Promise<number[]> {
     throw new Error(`Embedding request failed (${response.status}): ${body}`);
   }
 
-  const data = (await response.json()) as {
-    data: { embedding: number[] }[];
-  };
+  const parsed = embeddingResponseSchema.safeParse(
+    await response.json().catch(() => null),
+  );
 
-  const embedding = data.data?.[0]?.embedding;
-  if (!embedding || embedding.length !== EMBEDDING_DIMENSIONS) {
+  if (!parsed.success) {
+    throw new Error("Unexpected embedding response from OpenAI.");
+  }
+
+  const embedding = parsed.data.data[0].embedding;
+  if (embedding.length !== EMBEDDING_DIMENSIONS) {
     throw new Error("Unexpected embedding response from OpenAI.");
   }
 

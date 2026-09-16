@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bot, Loader2, Send, X } from "lucide-react";
+import type { ChatStreamEvent } from "@/types";
 
 interface WidgetMessage {
   id: string;
@@ -20,13 +21,6 @@ interface ChatWidgetProps {
   position?: "bottom-right" | "bottom-left";
   /** Opens the panel and sends this as the first message, once. */
   initialQuery?: string;
-}
-
-interface StreamEvent {
-  type: "session" | "sources" | "delta" | "done" | "error";
-  sessionId?: string;
-  content?: string;
-  message?: string;
 }
 
 /** Generates a unique id that is safe to call in the browser. */
@@ -153,9 +147,9 @@ export default function ChatWidget({
           const payload = line.slice(5).trim();
           if (!payload) continue;
 
-          let event: StreamEvent;
+          let event: ChatStreamEvent;
           try {
-            event = JSON.parse(payload) as StreamEvent;
+            event = JSON.parse(payload) as ChatStreamEvent;
           } catch {
             continue;
           }

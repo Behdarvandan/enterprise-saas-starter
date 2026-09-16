@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getBaseUrl } from "@/lib/url";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAnonClient } from "@/lib/supabase/anon";
 import { isOrganizationServiceable } from "@/lib/billing";
-import { createPendingAppointment } from "@/lib/booking";
+import { createPendingAppointment, confirmPendingAppointment } from "@/lib/booking";
 import { sendBookingConfirmationEmail } from "@/lib/email";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { firstIssueMessage } from "@/lib/validation";
+import { withApiErrorHandling } from "@/lib/api-error";
 import {
   encodeAppointmentOrderId,
   getPaymentAdapter,
@@ -15,16 +18,18 @@ const STRIPE_CURRENCY = process.env.STRIPE_CURRENCY ?? "usd";
 const PAYTR_MAX_INSTALLMENT = Number(process.env.PAYTR_MAX_INSTALLMENT ?? 12);
 const PAYTR_NO_INSTALLMENT = process.env.PAYTR_NO_INSTALLMENT === "1";
 
-interface BookingCheckoutBody {
-  organizationId?: string;
-  serviceId?: string;
-  customerName?: string;
-  customerEmail?: string;
-  customerPhone?: string;
-  deviceInfo?: string;
-  issueDescription?: string;
-  startTime?: string;
-}
+const bookingCheckoutSchema = z.object({
+  organizationId: z.string().uuid("A valid organizationId is required."),
+  serviceId: z.string().uuid("A valid serviceId is required."),
+  customerName: z.string().trim().min(1, "Customer name is required."),
+  customerEmail: z.string().trim().email("A valid customer email is required."),
+  customerPhone: z.string().optional(),
+  deviceInfo: z.string().optional(),
+  issueDescription: z.string().optional(),
+  startTime: z.string().refine((value) => !Number.isNaN(Date.parse(value)), {
+    message: "A valid start time is required.",
+  }),
+});
 
 /**
  * POST /api/checkout/booking
@@ -32,26 +37,26 @@ interface BookingCheckoutBody {
  * deposit. The appointment, organization, and service ids are attached to the
  * session metadata so the webhook can confirm the booking on payment.
  */
-export async function POST(request: Request) {
-  try {
-    const body = (await request.json().catch(() => null)) as BookingCheckoutBody | null;
+export const POST = withApiErrorHandling(
+  "Booking checkout error",
+  "Failed to start the booking.",
+  async (request: Request) => {
+    const parsedBody = bookingCheckoutSchema.safeParse(
+      await request.json().catch(() => null),
+    );
 
-    const organizationId = typeof body?.organizationId === "string" ? body.organizationId : "";
-    const serviceId = typeof body?.serviceId === "string" ? body.serviceId : "";
-    const customerName = typeof body?.customerName === "string" ? body.customerName.trim() : "";
-    const customerEmail = typeof body?.customerEmail === "string" ? body.customerEmail.trim() : "";
-    const customerPhone = typeof body?.customerPhone === "string" ? body.customerPhone.trim() : null;
-    const deviceInfo = typeof body?.deviceInfo === "string" ? body.deviceInfo.trim() || null : null;
-    const issueDescription =
-      typeof body?.issueDescription === "string" ? body.issueDescription.trim() || null : null;
-    const startTime = typeof body?.startTime === "string" ? body.startTime : "";
-
-    if (!organizationId || !serviceId || !customerName || !customerEmail || !startTime) {
+    if (!parsedBody.success) {
       return NextResponse.json(
-        { error: "Missing required booking fields." },
+        { error: firstIssueMessage(parsedBody.error) },
         { status: 400 },
       );
     }
+
+    const { organizationId, serviceId, customerName, customerEmail, startTime } =
+      parsedBody.data;
+    const customerPhone = parsedBody.data.customerPhone?.trim() || null;
+    const deviceInfo = parsedBody.data.deviceInfo?.trim() || null;
+    const issueDescription = parsedBody.data.issueDescription?.trim() || null;
 
     const forwardedFor = request.headers.get("x-forwarded-for") ?? "";
     const ip = forwardedFor.split(",")[0]?.trim() || "unknown";
@@ -63,16 +68,13 @@ export async function POST(request: Request) {
       );
     }
 
-    const admin = createAdminClient();
+    const anon = createAnonClient();
 
     // Validate the service belongs to the tenant and is bookable.
-    const { data: service } = await admin
-      .from("services")
-      .select("id, name, price, duration_minutes")
-      .eq("id", serviceId)
-      .eq("organization_id", organizationId)
-      .eq("is_active", true)
-      .maybeSingle();
+    const { data: service } = await anon.rpc("get_bookable_service", {
+      p_organization_id: organizationId,
+      p_service_id: serviceId,
+    });
 
     if (!service) {
       return NextResponse.json(
@@ -81,10 +83,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const { data: organization } = await admin
-      .from("organizations")
-      .select("slug, name")
-      .eq("id", organizationId)
+    const { data: organization } = await anon
+      .rpc("get_organization_booking_info", { p_organization_id: organizationId })
       .maybeSingle();
 
     if (!organization) {
@@ -122,15 +122,12 @@ export async function POST(request: Request) {
     }
 
     const baseUrl = await getBaseUrl();
-    const successUrl = `${baseUrl}/book/success?appointment_id=${appointmentId}`;
+    const successUrl = `${baseUrl}/book/success?appointment_id=${appointmentId}&organization_id=${organizationId}`;
     const cancelUrl = `${baseUrl}/book/${organization.slug}`;
 
     // Free services skip Stripe and are confirmed immediately.
     if (service.price <= 0) {
-      await admin
-        .from("appointments")
-        .update({ status: "confirmed" })
-        .eq("id", appointmentId);
+      await confirmPendingAppointment(appointmentId, organizationId);
 
       // Best-effort: notify the customer about the confirmed booking.
       try {
@@ -164,7 +161,9 @@ export async function POST(request: Request) {
       customerPhone,
       customerIp: ip,
       merchantOrderId:
-        provider === "paytr" ? encodeAppointmentOrderId(appointmentId) : appointmentId,
+        provider === "paytr"
+          ? encodeAppointmentOrderId(organizationId, appointmentId)
+          : appointmentId,
       lineItems: [{ name: service.name, unitAmount: service.price, quantity: 1 }],
       currency: provider === "paytr" ? undefined : STRIPE_CURRENCY,
       installments:
@@ -185,11 +184,5 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ url: result.url, requiresPayment: true });
-  } catch (error) {
-    console.error("Booking checkout error:", error);
-    return NextResponse.json(
-      { error: "Failed to start the booking." },
-      { status: 500 },
-    );
-  }
-}
+  },
+);

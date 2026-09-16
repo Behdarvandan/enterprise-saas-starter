@@ -1,39 +1,40 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { getUserMembership } from "@/lib/team";
+import { z } from "zod";
+import { requireMembershipOrResponse } from "@/lib/auth";
+import { withApiErrorHandling } from "@/lib/api-error";
 import {
   chunkText,
   getEmbedding,
   mapWithConcurrency,
 } from "@/lib/rag/embeddings";
+import { firstIssueMessage } from "@/lib/validation";
 
 const MAX_CONTENT_LENGTH = 500_000;
 const EMBEDDING_CONCURRENCY = 5;
 const INSERT_BATCH_SIZE = 50;
+
+// Mirrors the `documents.source_type` CHECK constraint
+// (`supabase/migrations/20261109000000_ai_rag_chatbot.sql`).
+const ingestRequestSchema = z.object({
+  title: z.string().trim().optional(),
+  content: z.string().refine((value) => value.trim().length > 0, {
+    message: "Content is required.",
+  }),
+  sourceType: z.enum(["text", "file", "url"]).default("text"),
+});
 
 /**
  * GET /api/rag/ingest
  * Lists the authenticated user's organization documents (and chunk counts)
  * so the dashboard knowledge-base panel can render the current state.
  */
-export async function GET() {
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "You must be signed in." }, { status: 401 });
-    }
-
-    const membership = await getUserMembership(user.id);
-    if (!membership) {
-      return NextResponse.json(
-        { error: "You do not belong to an organization." },
-        { status: 403 },
-      );
-    }
+export const GET = withApiErrorHandling(
+  "RAG ingestion list error",
+  "Failed to load documents.",
+  async () => {
+    const auth = await requireMembershipOrResponse();
+    if ("response" in auth) return auth.response;
+    const { supabase, membership } = auth;
 
     const { data: documents, error } = await supabase
       .from("documents")
@@ -60,52 +61,35 @@ export async function GET() {
     }));
 
     return NextResponse.json({ documents: result });
-  } catch (error) {
-    console.error("RAG ingestion list error:", error);
-    return NextResponse.json(
-      { error: "Failed to load documents." },
-      { status: 500 },
-    );
-  }
-}
+  },
+);
 
 /**
  * POST /api/rag/ingest
  * Authenticated ingestion: chunks the provided text, generates embeddings,
  * and bulk-inserts them into `document_chunks` for the caller's organization.
  */
-export async function POST(request: Request) {
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+export const POST = withApiErrorHandling(
+  "RAG ingestion error",
+  "Failed to ingest the document.",
+  async (request: Request) => {
+    const auth = await requireMembershipOrResponse();
+    if ("response" in auth) return auth.response;
+    const { supabase, user, membership } = auth;
 
-    if (!user) {
-      return NextResponse.json({ error: "You must be signed in." }, { status: 401 });
-    }
+    const parsedBody = ingestRequestSchema.safeParse(
+      await request.json().catch(() => null),
+    );
 
-    const membership = await getUserMembership(user.id);
-    if (!membership) {
+    if (!parsedBody.success) {
       return NextResponse.json(
-        { error: "You do not belong to an organization." },
-        { status: 403 },
+        { error: firstIssueMessage(parsedBody.error) },
+        { status: 400 },
       );
     }
 
-    const body = (await request.json().catch(() => null)) as {
-      title?: string;
-      content?: string;
-      sourceType?: string;
-    } | null;
-
-    const title = typeof body?.title === "string" ? body.title.trim() : "";
-    const sourceType = typeof body?.sourceType === "string" ? body.sourceType : "text";
-    const content = typeof body?.content === "string" ? body.content : "";
-
-    if (!content.trim()) {
-      return NextResponse.json({ error: "Content is required." }, { status: 400 });
-    }
+    const title = parsedBody.data.title?.trim() ?? "";
+    const { sourceType, content } = parsedBody.data;
 
     if (content.length > MAX_CONTENT_LENGTH) {
       return NextResponse.json(
@@ -167,11 +151,5 @@ export async function POST(request: Request) {
       { documentId: document.id, chunkCount: rows.length },
       { status: 201 },
     );
-  } catch (error) {
-    console.error("RAG ingestion error:", error);
-    return NextResponse.json(
-      { error: "Failed to ingest the document." },
-      { status: 500 },
-    );
-  }
-}
+  },
+);

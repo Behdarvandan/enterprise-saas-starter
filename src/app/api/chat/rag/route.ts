@@ -1,31 +1,27 @@
 import { NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { z } from "zod";
+import * as Sentry from "@sentry/nextjs";
+import { createAnonClient } from "@/lib/supabase/anon";
 import { isOrganizationServiceable } from "@/lib/billing";
 import { getEmbedding } from "@/lib/rag/embeddings";
 import { streamChatCompletion, type LLMMessage } from "@/lib/rag/llm";
 import { checkRateLimit } from "@/lib/rate-limit";
-import type { Json } from "@/types";
+import { firstIssueMessage } from "@/lib/validation";
+import type { ChatMatchSource, ChatRequestBody, ChatStreamEvent, Json } from "@/types";
 
 const MATCH_COUNT = 5;
 const MATCH_THRESHOLD = 0.5;
 const HISTORY_LIMIT = 12;
 const MAX_MESSAGE_LENGTH = 4000;
 
-interface ChatRequestBody {
-  organizationId?: string;
-  sessionId?: string | null;
-  message?: string;
-}
-
-interface MatchSource {
-  documentId: string;
-  chunkIndex: number;
-  content: string;
-  similarity: number;
-}
+const chatRequestSchema = z.object({
+  organizationId: z.string().uuid("A valid organizationId is required."),
+  sessionId: z.string().uuid().nullable().optional(),
+  message: z.string().trim().min(1, "A message is required."),
+}) satisfies z.ZodType<ChatRequestBody>;
 
 /** Serializes a JSON payload as a Server-Sent Events `data:` frame. */
-function toSSE(payload: unknown): string {
+function toSSE(payload: ChatStreamEvent): string {
   return `data: ${JSON.stringify(payload)}\n\n`;
 }
 
@@ -49,32 +45,47 @@ export async function GET(request: Request) {
       );
     }
 
-    const admin = createAdminClient();
+    const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+    const allowed = await checkRateLimit(`rag-history:${organizationId}:${ip}`);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again shortly." },
+        { status: 429 },
+      );
+    }
+
+    const anon = createAnonClient();
 
     // Confirm the session belongs to the requested tenant before returning data.
-    const { data: session } = await admin
-      .from("chat_sessions")
-      .select("id")
-      .eq("id", sessionId)
-      .eq("organization_id", organizationId)
-      .maybeSingle();
+    const { data: session } = await anon.rpc("get_chat_session_for_org", {
+      p_organization_id: organizationId,
+      p_session_id: sessionId,
+    });
 
     if (!session) {
       return NextResponse.json({ error: "Session not found." }, { status: 404 });
     }
 
-    const { data: messages, error } = await admin
-      .from("chat_messages")
-      .select("id, role, content, created_at")
-      .eq("session_id", sessionId)
-      .eq("organization_id", organizationId)
+    const { data: history, error } = await anon
+      .rpc("get_chat_history", {
+        p_organization_id: organizationId,
+        p_session_id: sessionId,
+      })
       .order("created_at", { ascending: true });
 
     if (error) throw error;
 
-    return NextResponse.json({ messages: messages ?? [] });
+    const messages = (history ?? []).map((entry) => ({
+      id: entry.id,
+      role: entry.role,
+      content: entry.content,
+      created_at: entry.created_at,
+    }));
+
+    return NextResponse.json({ messages });
   } catch (error) {
     console.error("RAG chat history error:", error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { error: "Failed to load the conversation." },
       { status: 500 },
@@ -86,26 +97,25 @@ export async function GET(request: Request) {
  * POST /api/chat/rag
  * Receives a visitor prompt, retrieves the tenant's most relevant knowledge
  * chunks via the `match_document_chunks` RPC, and streams an LLM answer back
- * as Server-Sent Events. Runs with the service-role client because visitors
- * are anonymous; tenant isolation is enforced by the explicit
- * `organization_id` filter on every query and RPC call.
+ * as Server-Sent Events. Runs on the anon-key client because visitors are
+ * anonymous; tenant isolation is enforced inside each `SECURITY DEFINER` RPC
+ * (`get_chat_session_for_org`, `create_chat_session`, `get_chat_history`,
+ * `insert_chat_message`, `match_document_chunks`), not by TypeScript filters
+ * alone.
  */
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => ({}))) as ChatRequestBody;
+  const parsedBody = chatRequestSchema.safeParse(
+    await request.json().catch(() => ({})),
+  );
 
-  const organizationId = body.organizationId;
-  const message = body.message?.trim();
-
-  if (!organizationId) {
+  if (!parsedBody.success) {
     return NextResponse.json(
-      { error: "organizationId is required." },
+      { error: firstIssueMessage(parsedBody.error) },
       { status: 400 },
     );
   }
 
-  if (!message) {
-    return NextResponse.json({ error: "A message is required." }, { status: 400 });
-  }
+  const { organizationId, message } = parsedBody.data;
 
   if (message.length > MAX_MESSAGE_LENGTH) {
     return NextResponse.json(
@@ -123,7 +133,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const admin = createAdminClient();
+  const anon = createAnonClient();
 
   try {
     // Only serve tenants with an active or trialing subscription.
@@ -135,26 +145,22 @@ export async function POST(request: Request) {
     }
 
     // Resolve or create a session scoped strictly to the tenant.
-    let sessionId = body.sessionId ?? null;
+    let sessionId = parsedBody.data.sessionId ?? null;
 
     if (sessionId) {
-      const { data: existing } = await admin
-        .from("chat_sessions")
-        .select("id")
-        .eq("id", sessionId)
-        .eq("organization_id", organizationId)
-        .maybeSingle();
+      const { data: existing } = await anon.rpc("get_chat_session_for_org", {
+        p_organization_id: organizationId,
+        p_session_id: sessionId,
+      });
 
       // A missing or cross-tenant session id is discarded.
       if (!existing) sessionId = null;
     }
 
     if (!sessionId) {
-      const { data: created, error } = await admin
-        .from("chat_sessions")
-        .insert({ organization_id: organizationId })
-        .select("id")
-        .single();
+      const { data: created, error } = await anon.rpc("create_chat_session", {
+        p_organization_id: organizationId,
+      });
 
       if (error || !created) {
         throw error ?? new Error("Failed to create the chat session.");
@@ -164,27 +170,32 @@ export async function POST(request: Request) {
     }
 
     // Persist the visitor's message.
-    const { error: userMessageError } = await admin.from("chat_messages").insert({
-      organization_id: organizationId,
-      session_id: sessionId,
-      role: "user",
-      content: message,
+    const { error: userMessageError } = await anon.rpc("insert_chat_message", {
+      p_organization_id: organizationId,
+      p_session_id: sessionId,
+      p_role: "user",
+      p_content: message,
     });
 
     if (userMessageError) throw userMessageError;
 
     // Recent conversation history (newest first) for context.
-    const { data: history } = await admin
-      .from("chat_messages")
-      .select("role, content")
-      .eq("session_id", sessionId)
-      .eq("organization_id", organizationId)
+    const { data: historyRows } = await anon
+      .rpc("get_chat_history", {
+        p_organization_id: organizationId,
+        p_session_id: sessionId,
+      })
       .order("created_at", { ascending: false })
       .limit(HISTORY_LIMIT);
 
+    const history = (historyRows ?? []).map((entry) => ({
+      role: entry.role,
+      content: entry.content,
+    }));
+
     // Retrieve the most relevant knowledge chunks for the tenant.
     const queryEmbedding = await getEmbedding(message);
-    const { data: matches, error: matchError } = await admin.rpc(
+    const { data: matches, error: matchError } = await anon.rpc(
       "match_document_chunks",
       {
         query_embedding: queryEmbedding,
@@ -196,7 +207,7 @@ export async function POST(request: Request) {
 
     if (matchError) throw matchError;
 
-    const sources: MatchSource[] = (matches ?? []).map((match) => ({
+    const sources: ChatMatchSource[] = (matches ?? []).map((match) => ({
       documentId: match.document_id,
       chunkIndex: match.chunk_index,
       content: match.content,
@@ -223,7 +234,7 @@ export async function POST(request: Request) {
     ];
 
     // Append history in chronological order (it was fetched newest-first).
-    for (const entry of (history ?? []).slice().reverse()) {
+    for (const entry of history.slice().reverse()) {
       if (entry.role === "system") continue;
       messages.push({
         role: entry.role as "user" | "assistant",
@@ -255,6 +266,7 @@ export async function POST(request: Request) {
           controller.enqueue(encoder.encode(toSSE({ type: "done" })));
         } catch (error) {
           console.error("RAG stream error:", error);
+          Sentry.captureException(error, { extra: { organizationId, sessionId } });
           controller.enqueue(
             encoder.encode(
               toSSE({ type: "error", message: "Failed to generate a response." }),
@@ -263,12 +275,12 @@ export async function POST(request: Request) {
         } finally {
           // Persist the assistant reply (when non-empty) with citations.
           if (fullText.trim()) {
-            await admin.from("chat_messages").insert({
-              organization_id: organizationId,
-              session_id: sessionId,
-              role: "assistant",
-              content: fullText,
-              sources: sources.length ? (sources as unknown as Json) : null,
+            await anon.rpc("insert_chat_message", {
+              p_organization_id: organizationId,
+              p_session_id: sessionId,
+              p_role: "assistant",
+              p_content: fullText,
+              p_sources: sources.length ? (sources as unknown as Json) : null,
             });
           }
           controller.close();
@@ -286,10 +298,10 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("RAG chat error:", error);
+    Sentry.captureException(error, { extra: { organizationId } });
     return NextResponse.json(
       { error: "Failed to process the chat request." },
       { status: 500 },
     );
   }
 }
-

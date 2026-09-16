@@ -1,33 +1,20 @@
-import { redirect } from "next/navigation";
 import { MailX } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
-import { canManageMembers, getUserMembership } from "@/lib/team";
-import LegacyCard from "@/components/ui/LegacyCard";
+import { requireMembership } from "@/lib/auth";
+import { canManageMembers } from "@/lib/team";
+import { getOrganizationName } from "@/lib/organizations";
+import { formatDate } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 import EmptyState from "@/components/ui/EmptyState";
 import InviteMemberForm from "./InviteMemberForm";
 import MemberRow from "./MemberRow";
 import RevokeInvitationButton from "./RevokeInvitationButton";
 
 export default async function TeamPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
-
-  const membership = await getUserMembership(user.id);
-  if (!membership) redirect("/dashboard");
-
+  const { supabase, user, membership } = await requireMembership();
   const organizationId = membership.organizationId;
   const canManage = canManageMembers(membership.role);
 
-  const { data: organization } = await supabase
-    .from("organizations")
-    .select("name")
-    .eq("id", organizationId)
-    .single();
+  const organizationName = await getOrganizationName(organizationId);
 
   const { data: members } = await supabase
     .from("memberships")
@@ -56,12 +43,12 @@ export default async function TeamPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-ink-primary">Team</h1>
         <p className="mt-1 text-sm text-ink-muted">
-          {organization?.name ?? "Your organization"}
+          {organizationName ?? "Your organization"}
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6">
-        <LegacyCard className="p-6">
+        <Card className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Members ({members?.length ?? 0})
           </h2>
@@ -81,9 +68,9 @@ export default async function TeamPage() {
               );
             })}
           </ul>
-        </LegacyCard>
+        </Card>
 
-        <LegacyCard className="p-6">
+        <Card className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Invite member
           </h2>
@@ -94,9 +81,9 @@ export default async function TeamPage() {
               Only owners and admins can invite new members.
             </p>
           )}
-        </LegacyCard>
+        </Card>
 
-        <LegacyCard>
+        <Card>
           <div className="p-6 pb-0">
             <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
               Pending invitations ({invitations?.length ?? 0})
@@ -115,7 +102,7 @@ export default async function TeamPage() {
                     </p>
                     <p className="text-xs text-ink-muted">
                       {invitation.role} · expires{" "}
-                      {new Date(invitation.expires_at).toLocaleDateString()}
+                      {formatDate(invitation.expires_at)}
                     </p>
                   </div>
                   {canManage && (
@@ -131,7 +118,7 @@ export default async function TeamPage() {
               description="Invitations you send will show up here until they're accepted or revoked."
             />
           )}
-        </LegacyCard>
+        </Card>
       </div>
     </div>
   );

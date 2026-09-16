@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
 import { UserPlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import LegacyCard from "@/components/ui/LegacyCard";
-import LegacyButton from "@/components/ui/LegacyButton";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function SignUpPage() {
+  const t = useTranslations("auth.signup");
   const router = useRouter();
   const supabase = createClient();
 
@@ -26,13 +27,13 @@ export default function SignUpPage() {
     setMessage(null);
 
     if (password.length < 8) {
-      setError("Password must be at least 8 characters long.");
+      setError(t("errors.passwordTooShort"));
       setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("errors.passwordMismatch"));
       setLoading(false);
       return;
     }
@@ -48,9 +49,7 @@ export default function SignUpPage() {
     // When email confirmation is enabled, no session is returned and the
     // user must verify their address before signing in.
     if (!data.session) {
-      setMessage(
-        "Account created. Check your email to confirm your account before signing in.",
-      );
+      setMessage(t("successMessage"));
       setLoading(false);
       return;
     }
@@ -61,14 +60,12 @@ export default function SignUpPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <LegacyCard className="p-8">
+      <Card className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <UserPlus size={22} />
         </div>
-        <h1 className="text-xl font-bold text-ink-primary">Create your account</h1>
-        <p className="mt-1 text-sm text-ink-muted">
-          Set up your organization&apos;s booking workspace on Nimbus.
-        </p>
+        <h1 className="text-xl font-bold text-ink-primary">{t("title")}</h1>
+        <p className="mt-1 text-sm text-ink-muted">{t("subtitle")}</p>
 
         <form onSubmit={handleSignUp} className="mt-6 space-y-4">
           <div className="space-y-1.5">
@@ -76,7 +73,7 @@ export default function SignUpPage() {
               htmlFor="email"
               className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
-              Email
+              {t("emailLabel")}
             </label>
             <input
               id="email"
@@ -94,7 +91,7 @@ export default function SignUpPage() {
               htmlFor="password"
               className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
-              Password
+              {t("passwordLabel")}
             </label>
             <input
               id="password"
@@ -113,7 +110,7 @@ export default function SignUpPage() {
               htmlFor="confirm-password"
               className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
-              Confirm password
+              {t("confirmPasswordLabel")}
             </label>
             <input
               id="confirm-password"
@@ -139,18 +136,18 @@ export default function SignUpPage() {
             </p>
           )}
 
-          <LegacyButton type="submit" disabled={loading} className="w-full">
-            {loading ? "Creating account..." : "Create account"}
-          </LegacyButton>
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? t("creatingAccount") : t("createAccountButton")}
+          </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-ink-muted">
-          Already have an account?{" "}
+          {t("alreadyHaveAccount")}{" "}
           <Link href="/login" className="font-semibold text-violet-dim hover:text-violet">
-            Sign in
+            {t("signIn")}
           </Link>
         </p>
-      </LegacyCard>
+      </Card>
     </div>
   );
 }

@@ -28,7 +28,7 @@ export type Database = {
           service_id: string
           start_time: string
           status: string
-          stripe_payment_intent_id: string | null
+          provider_payment_intent_id: string | null
         }
         Insert: {
           created_at?: string
@@ -43,7 +43,7 @@ export type Database = {
           service_id: string
           start_time: string
           status?: string
-          stripe_payment_intent_id?: string | null
+          provider_payment_intent_id?: string | null
         }
         Update: {
           created_at?: string
@@ -58,7 +58,7 @@ export type Database = {
           service_id?: string
           start_time?: string
           status?: string
-          stripe_payment_intent_id?: string | null
+          provider_payment_intent_id?: string | null
         }
         Relationships: [
           {
@@ -394,8 +394,8 @@ export type Database = {
           name: string
           plan_id: string | null
           slug: string
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
+          provider_customer_id: string | null
+          provider_subscription_id: string | null
           subscription_status: string
           updated_at: string
         }
@@ -406,8 +406,8 @@ export type Database = {
           name: string
           plan_id?: string | null
           slug: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
+          provider_customer_id?: string | null
+          provider_subscription_id?: string | null
           subscription_status?: string
           updated_at?: string
         }
@@ -418,8 +418,8 @@ export type Database = {
           name?: string
           plan_id?: string | null
           slug?: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
+          provider_customer_id?: string | null
+          provider_subscription_id?: string | null
           subscription_status?: string
           updated_at?: string
         }
@@ -510,8 +510,8 @@ export type Database = {
           name: string
           plan_id: string | null
           slug: string
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
+          provider_customer_id: string | null
+          provider_subscription_id: string | null
           subscription_status: string
           updated_at: string
         }
@@ -531,8 +531,8 @@ export type Database = {
           name: string
           plan_id: string | null
           slug: string
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
+          provider_customer_id: string | null
+          provider_subscription_id: string | null
           subscription_status: string
           updated_at: string
         }
@@ -562,6 +562,167 @@ export type Database = {
           id: string
           similarity: number
         }[]
+      }
+      get_bookable_service: {
+        Args: { p_organization_id: string; p_service_id: string }
+        Returns: {
+          id: string
+          organization_id: string
+          name: string
+          description: string | null
+          duration_minutes: number
+          price: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+      }
+      get_organization_booking_info: {
+        Args: { p_organization_id: string }
+        Returns: { name: string; slug: string }[]
+      }
+      is_organization_serviceable: {
+        Args: { p_organization_id: string }
+        Returns: boolean
+      }
+      get_availability_windows: {
+        Args: { p_organization_id: string; p_day_of_week: number }
+        Returns: {
+          id: string
+          organization_id: string
+          day_of_week: number
+          start_time: string
+          end_time: string
+          is_active: boolean
+          created_at: string
+        }[]
+      }
+      get_appointment_conflicts: {
+        Args: {
+          p_organization_id: string
+          p_range_start: string
+          p_range_end: string
+        }
+        Returns: { start_time: string; end_time: string }[]
+      }
+      create_pending_appointment: {
+        Args: {
+          p_organization_id: string
+          p_service_id: string
+          p_customer_name: string
+          p_customer_email: string
+          p_customer_phone: string | null
+          p_device_info: string | null
+          p_issue_description: string | null
+          p_start_time: string
+        }
+        Returns: {
+          id: string
+          organization_id: string
+          service_id: string
+          customer_name: string
+          customer_email: string
+          customer_phone: string | null
+          device_info: string | null
+          issue_description: string | null
+          start_time: string
+          end_time: string
+          status: string
+          provider_payment_intent_id: string | null
+          created_at: string
+        }
+      }
+      confirm_pending_appointment: {
+        Args: { p_organization_id: string; p_appointment_id: string }
+        Returns: {
+          id: string
+          organization_id: string
+          service_id: string
+          customer_name: string
+          customer_email: string
+          customer_phone: string | null
+          device_info: string | null
+          issue_description: string | null
+          start_time: string
+          end_time: string
+          status: string
+          provider_payment_intent_id: string | null
+          created_at: string
+        }
+      }
+      get_appointment_details: {
+        Args: { p_appointment_id: string; p_organization_id: string }
+        Returns: {
+          appointment: {
+            id: string
+            organization_id: string
+            service_id: string
+            customer_name: string
+            customer_email: string
+            customer_phone: string | null
+            device_info: string | null
+            issue_description: string | null
+            start_time: string
+            end_time: string
+            status: string
+            provider_payment_intent_id: string | null
+            created_at: string
+          }
+          service_name: string
+          organization_name: string
+        }[]
+      }
+      get_chat_session_for_org: {
+        Args: { p_organization_id: string; p_session_id: string }
+        Returns: {
+          id: string
+          organization_id: string
+          visitor_id: string | null
+          title: string | null
+          created_at: string
+          updated_at: string
+        }
+      }
+      create_chat_session: {
+        Args: { p_organization_id: string }
+        Returns: {
+          id: string
+          organization_id: string
+          visitor_id: string | null
+          title: string | null
+          created_at: string
+          updated_at: string
+        }
+      }
+      get_chat_history: {
+        Args: { p_organization_id: string; p_session_id: string }
+        Returns: {
+          id: string
+          organization_id: string
+          session_id: string
+          role: string
+          content: string
+          sources: Json | null
+          created_at: string
+        }[]
+      }
+      insert_chat_message: {
+        Args: {
+          p_organization_id: string
+          p_session_id: string
+          p_role: string
+          p_content: string
+          p_sources?: Json | null
+        }
+        Returns: {
+          id: string
+          organization_id: string
+          session_id: string
+          role: string
+          content: string
+          sources: Json | null
+          created_at: string
+        }
       }
     }
     Enums: {

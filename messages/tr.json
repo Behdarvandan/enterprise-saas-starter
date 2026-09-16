@@ -1,0 +1,159 @@
+{
+  "common": {
+    "metadata": {
+      "title": "Nimbus — Çok Kiracılı Randevu Altyapısı",
+      "description": "Birden fazla organizasyonun randevularını yöneten ekipler için satır düzeyinde izole rezervasyon, planlama ve yapay zekâ desteği."
+    },
+    "notFound": {
+      "title": "Sayfa bulunamadı",
+      "body": "Aradığınız sayfa mevcut değil veya taşınmış."
+    }
+  },
+  "marketing": {
+    "header": {
+      "platform": "Platform",
+      "security": "Güvenlik",
+      "pricing": "Fiyatlandırma",
+      "signIn": "Giriş yap",
+      "startTrial": "Ücretsiz deneyin"
+    },
+    "footer": {
+      "tagline": "Her organizasyon için satır düzeyinde izolasyon sağlayan çok kiracılı randevu ve planlama altyapısı.",
+      "productHeading": "Ürün",
+      "accountHeading": "Hesap",
+      "systemStatus": "Sistem durumu",
+      "copyright": "© {year} Nimbus. PostgreSQL satır düzeyi güvenlik üzerine inşa edildi."
+    },
+    "hero": {
+      "title": "Her organizasyonun verisini kanıtlanabilir şekilde ayrı tutan randevu altyapısı.",
+      "subtitle": "Nimbus, çok kiracılı ekipler için planlama, ödeme ve bir yapay zekâ asistanını PostgreSQL satır düzeyi güvenlik üzerinde çalıştırır — bir veritabanı tetikleyicisi, çift rezervasyonları yazılmadan önce engeller, sonrasında değil.",
+      "ctaPrimary": "Ücretsiz deneyin",
+      "ctaSecondary": "Demo isteyin"
+    },
+    "pricingSection": {
+      "title": "Rezervasyon hacminize göre ölçeklenen planlar.",
+      "subtitle": "Starter ile başlayın, yapay zekâ asistanı ve öncelikli destek işinize yaradığında yükseltin.",
+      "compareLink": "Tüm plan karşılaştırmasını görün ve ödemeyi başlatın"
+    },
+    "security": {
+      "title": "Satış sunumundan önce şemayı okuyan incelemeciler için.",
+      "controls": {
+        "isolation": {
+          "label": "İzolasyon modeli",
+          "detail": "Her kiracı tablosunda is_org_member(organization_id) ile kapsamlanan Satır Düzeyi Güvenlik. Veritabanı katmanında kiracılar arası hiçbir sorgu yolu yoktur."
+        },
+        "privilegedOps": {
+          "label": "Yetkili işlemler",
+          "detail": "Organizasyon oluşturma ve davet kabulü, açık bir search_path ile SECURITY DEFINER fonksiyonları olarak çalışır; böylece yükseltilmiş yazma işlemleri yalnızca denetlenen, dar giriş noktalarından geçer."
+        },
+        "serviceRole": {
+          "label": "Servis rolü sınırı",
+          "detail": "Supabase servis rolü anahtarı yalnızca sunucu tarafı bağlamlarda kullanılır — Stripe/PayTR webhook işleyicileri ve anonim müşteri rezervasyon API'si — istemciye asla gönderilmez."
+        },
+        "paymentVerification": {
+          "label": "Ödeme doğrulaması",
+          "detail": "Stripe ve PayTR webhook'ları, abonelik veya ödeme durumunu yazmadan önce istek imzalarını doğrular; doğrulanmamış istekler veritabanına dokunmadan reddedilir."
+        },
+        "deployment": {
+          "label": "Dağıtım yüzeyi",
+          "detail": "Next.js standalone çıktısı üzerinde, çok aşamalı bir Docker build içinde root olmayan bir kullanıcı olarak çalışır; özel bir health-check uç noktasına sahip bir yük dengeleyici arkasında AWS ECS Fargate'e dağıtılır."
+        }
+      }
+    },
+    "persona": {
+      "operations": {
+        "role": "Operasyon için",
+        "headline": "Artık kimse aynı zaman dilimine iki kez rezervasyon alamaz.",
+        "body": "Müsaitlik, hizmetler ve randevular, yazma anında çakışan rezervasyonları reddeden bir veritabanı tetikleyicisinin arkasında yaşar — bir yarış durumunun atlatabileceği istemci taraflı bir kontrol değil."
+      },
+      "security": {
+        "role": "BT ve güvenlik incelemesi için",
+        "headline": "Kiracı izolasyonu uygulama katmanında değil, veritabanında uygulanır.",
+        "body": "Her tabloda bir organization_id ve is_org_member() ile kapsamlanan bir Satır Düzeyi Güvenlik politikası bulunur. Ele geçirilmiş veya hatalı bir sorgu kiracı sınırını aşamaz — Postgres, kodunuz satırı hiç görmeden reddeder."
+      },
+      "finance": {
+        "role": "Finans ve faturalama için",
+        "headline": "Abonelik durumu otomatik olarak Stripe ile senkronize kalır.",
+        "body": "Ödeme, plan değişiklikleri ve iptaller, her organizasyonun abonelik kaydına doğrudan yazan imza doğrulamalı Stripe webhook'ları üzerinden akar — manuel mutabakat gerekmez."
+      }
+    },
+    "homeCta": {
+      "title": "İlk organizasyonunuzu dakikalar içinde kurun.",
+      "subtitle": "Ücretsiz başlayın — Starter plan için kart gerekmez.",
+      "button": "Ücretsiz deneyin"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Giriş yap",
+      "subtitle": "Devam etmek için Supabase kimlik bilgilerinizi kullanın.",
+      "emailLabel": "E-posta",
+      "passwordLabel": "Şifre",
+      "signInButton": "Giriş yap",
+      "signingIn": "Giriş yapılıyor...",
+      "forgotPassword": "Şifrenizi mi unuttunuz?",
+      "noAccount": "Hesabınız yok mu?",
+      "signUp": "Kayıt olun"
+    },
+    "signup": {
+      "title": "Hesabınızı oluşturun",
+      "subtitle": "Organizasyonunuzun Nimbus üzerindeki randevu çalışma alanını kurun.",
+      "emailLabel": "E-posta",
+      "passwordLabel": "Şifre",
+      "confirmPasswordLabel": "Şifreyi onaylayın",
+      "createAccountButton": "Hesap oluştur",
+      "creatingAccount": "Hesap oluşturuluyor...",
+      "alreadyHaveAccount": "Zaten bir hesabınız var mı?",
+      "signIn": "Giriş yapın",
+      "successMessage": "Hesap oluşturuldu. Giriş yapmadan önce hesabınızı onaylamak için e-postanızı kontrol edin.",
+      "errors": {
+        "passwordTooShort": "Şifre en az 8 karakter uzunluğunda olmalıdır.",
+        "passwordMismatch": "Şifreler eşleşmiyor."
+      }
+    },
+    "forgotPassword": {
+      "title": "Şifrenizi sıfırlayın",
+      "subtitle": "Hesabınızla ilişkili e-postayı girin, size bir sıfırlama bağlantısı gönderelim.",
+      "emailLabel": "E-posta",
+      "sendButton": "Sıfırlama bağlantısı gönder",
+      "sending": "Gönderiliyor...",
+      "successMessage": "Bu e-posta için bir hesap varsa, bir şifre sıfırlama bağlantısı gönderildi.",
+      "rememberedPassword": "Şifrenizi hatırladınız mı?",
+      "signIn": "Giriş yapın",
+      "errors": {
+        "invalidEmail": "Lütfen geçerli bir e-posta adresi girin."
+      }
+    },
+    "resetPassword": {
+      "title": "Yeni bir şifre belirleyin",
+      "subtitle": "Hesabınız için yeni bir şifre seçin.",
+      "newPasswordLabel": "Yeni şifre",
+      "confirmPasswordLabel": "Yeni şifreyi onaylayın",
+      "updateButton": "Şifreyi güncelle",
+      "updating": "Güncelleniyor...",
+      "successMessage": "Şifre başarıyla güncellendi. Giriş sayfasına yönlendiriliyorsunuz...",
+      "errors": {
+        "passwordTooShort": "Şifre en az 8 karakter uzunluğunda olmalıdır.",
+        "passwordMismatch": "Şifreler eşleşmiyor."
+      }
+    },
+    "invite": {
+      "signInTitle": "Kabul etmek için giriş yapın",
+      "signInSubtitle": "Bu daveti kabul etmeden önce giriş yapmanız gerekir.",
+      "signInButton": "Giriş yap",
+      "invitedTitle": "Davet edildiniz",
+      "joinAs": "{name} organizasyonuna {role} olarak katılın.",
+      "sentTo": "Bu davet {email} adresine gönderildi.",
+      "acceptButton": "Daveti kabul et",
+      "joining": "Katılınıyor...",
+      "unavailableTitle": "Davet kullanılamıyor",
+      "goToDashboard": "Panele git",
+      "states": {
+        "notFound": "Bu davet bağlantısı geçersiz veya kaldırılmış.",
+        "accepted": "Bu davet zaten kabul edilmiş.",
+        "revoked": "Bu davet iptal edilmiş.",
+        "expired": "Bu davetin süresi dolmuş."
+      }
+    }
+  }
+}

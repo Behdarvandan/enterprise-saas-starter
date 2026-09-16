@@ -1,19 +1,13 @@
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { Link } from "@/i18n/navigation";
+import { requireUser } from "@/lib/auth";
 import { getUserMembership } from "@/lib/team";
-import LegacyCard from "@/components/ui/LegacyCard";
+import { formatDate } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 import BillingPortalButton from "@/components/billing/BillingPortalButton";
 import type { Organization } from "@/types";
 
 export default async function BillingPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
+  const { supabase, user } = await requireUser();
 
   const membership = await getUserMembership(user.id);
 
@@ -44,7 +38,7 @@ export default async function BillingPage() {
 
       <div className="mt-6">
         {organization ? (
-          <LegacyCard className="p-6">
+          <Card className="p-6">
             <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
               <div className="border-b border-subtle pb-2">
                 <dt className="text-xs font-medium text-ink-muted">Plan</dt>
@@ -62,16 +56,14 @@ export default async function BillingPage() {
                 <dt className="text-xs font-medium text-ink-muted">Renews</dt>
                 <dd className="text-sm font-medium text-ink-primary">
                   {organization.current_period_end
-                    ? new Date(
-                        organization.current_period_end,
-                      ).toLocaleDateString()
+                    ? formatDate(organization.current_period_end)
                     : "N/A"}
                 </dd>
               </div>
             </dl>
 
             <div className="mt-6 flex items-center gap-3">
-              {organization.stripe_customer_id ? (
+              {organization.provider_customer_id ? (
                 <BillingPortalButton />
               ) : (
                 <Link
@@ -82,9 +74,9 @@ export default async function BillingPage() {
                 </Link>
               )}
             </div>
-          </LegacyCard>
+          </Card>
         ) : (
-          <LegacyCard className="p-6">
+          <Card className="p-6">
             <p className="text-sm text-ink-muted">
               You don&apos;t belong to an organization yet.{" "}
               <Link
@@ -95,7 +87,7 @@ export default async function BillingPage() {
               </Link>{" "}
               to get started.
             </p>
-          </LegacyCard>
+          </Card>
         )}
       </div>
     </div>

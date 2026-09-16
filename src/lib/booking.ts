@@ -1,12 +1,17 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAnonClient } from "@/lib/supabase/anon";
 import type { Appointment } from "@/types";
 
 /**
  * Booking helpers for the Appointment & Reservation System.
  *
- * All functions use the service-role client because the customer-facing flow
- * is anonymous; tenant isolation is enforced by passing an explicit
- * `organization_id` on every query and insert.
+ * The customer-facing flow is anonymous, so every function here runs on the
+ * anon-key client and reaches tenant-scoped tables only through
+ * `SECURITY DEFINER` RPCs (see `supabase/migrations/20261113000000_booking_anon_rpcs.sql`)
+ * that take `organization_id` as an explicit parameter and enforce it as a
+ * hard SQL predicate. Unlike the service-role client this replaced, a bug in
+ * this file's TypeScript can no longer produce a cross-tenant read/write on
+ * its own — the anon key has no table-level grants, only EXECUTE on these
+ * specific functions.
  */
 
 const DEFAULT_SLOT_STEP_MINUTES = 30;
@@ -58,17 +63,15 @@ export async function getAvailableSlots({
   date,
   slotStepMinutes = DEFAULT_SLOT_STEP_MINUTES,
 }: GetAvailableSlotsInput): Promise<BookingSlot[]> {
-  const admin = createAdminClient();
+  const anon = createAnonClient();
 
-  const { data: service, error: serviceError } = await admin
-    .from("services")
-    .select("id, duration_minutes, is_active")
-    .eq("id", serviceId)
-    .eq("organization_id", organizationId)
-    .maybeSingle();
+  const { data: service, error: serviceError } = await anon.rpc(
+    "get_bookable_service",
+    { p_organization_id: organizationId, p_service_id: serviceId },
+  );
 
   if (serviceError) throw new Error(serviceError.message);
-  if (!service || !service.is_active) {
+  if (!service) {
     throw new Error("Service not found or inactive.");
   }
 
@@ -76,12 +79,10 @@ export async function getAvailableSlots({
   // `availability_slots.day_of_week` convention.
   const dayOfWeek = new Date(`${date}T00:00:00.000Z`).getUTCDay();
 
-  const { data: windows, error: windowsError } = await admin
-    .from("availability_slots")
-    .select("start_time, end_time")
-    .eq("organization_id", organizationId)
-    .eq("day_of_week", dayOfWeek)
-    .eq("is_active", true);
+  const { data: windows, error: windowsError } = await anon.rpc(
+    "get_availability_windows",
+    { p_organization_id: organizationId, p_day_of_week: dayOfWeek },
+  );
 
   if (windowsError) throw new Error(windowsError.message);
   if (!windows?.length) return [];
@@ -92,13 +93,14 @@ export async function getAvailableSlots({
   nextDay.setUTCDate(nextDay.getUTCDate() + 1);
   const dayEnd = nextDay.toISOString();
 
-  const { data: appointments, error: appointmentsError } = await admin
-    .from("appointments")
-    .select("start_time, end_time")
-    .eq("organization_id", organizationId)
-    .neq("status", "cancelled")
-    .lt("start_time", dayEnd)
-    .gt("end_time", dayStart);
+  const { data: appointments, error: appointmentsError } = await anon.rpc(
+    "get_appointment_conflicts",
+    {
+      p_organization_id: organizationId,
+      p_range_start: dayStart,
+      p_range_end: dayEnd,
+    },
+  );
 
   if (appointmentsError) throw new Error(appointmentsError.message);
 
@@ -138,9 +140,10 @@ export async function getAvailableSlots({
 }
 
 /**
- * Creates a `pending` appointment prior to Stripe Checkout initiation. The
- * end time is derived from the service duration so clients cannot book a
- * mismatched length. The database overlap trigger rejects double-bookings.
+ * Creates a `pending` appointment prior to Stripe/PayTR checkout initiation.
+ * The end time is derived from the service duration inside the
+ * `create_pending_appointment` function so clients cannot book a mismatched
+ * length. The database overlap trigger rejects double-bookings.
  */
 export async function createPendingAppointment({
   organizationId,
@@ -152,53 +155,61 @@ export async function createPendingAppointment({
   issueDescription,
   startTime,
 }: CreatePendingAppointmentInput): Promise<Appointment> {
-  const admin = createAdminClient();
-
-  const { data: service, error: serviceError } = await admin
-    .from("services")
-    .select("id, duration_minutes, is_active")
-    .eq("id", serviceId)
-    .eq("organization_id", organizationId)
-    .maybeSingle();
-
-  if (serviceError) throw new Error(serviceError.message);
-  if (!service || !service.is_active) {
-    throw new Error("Service not found or inactive.");
-  }
+  const anon = createAnonClient();
 
   const start = new Date(startTime);
   if (Number.isNaN(start.getTime())) {
     throw new Error("Invalid start time.");
   }
 
-  const end = new Date(start.getTime() + service.duration_minutes * 60_000);
-
-  const { data: appointment, error } = await admin
-    .from("appointments")
-    .insert({
-      organization_id: organizationId,
-      service_id: serviceId,
-      customer_name: customerName,
-      customer_email: customerEmail,
-      customer_phone: customerPhone ?? null,
-      device_info: deviceInfo ?? null,
-      issue_description: issueDescription ?? null,
-      start_time: start.toISOString(),
-      end_time: end.toISOString(),
-      status: "pending",
-    })
-    .select()
-    .single();
+  const { data: appointment, error } = await anon.rpc(
+    "create_pending_appointment",
+    {
+      p_organization_id: organizationId,
+      p_service_id: serviceId,
+      p_customer_name: customerName,
+      p_customer_email: customerEmail,
+      p_customer_phone: customerPhone ?? null,
+      p_device_info: deviceInfo ?? null,
+      p_issue_description: issueDescription ?? null,
+      p_start_time: start.toISOString(),
+    },
+  );
 
   if (error) {
-    // P0001 is raised by the overlap trigger when the slot is already taken.
+    // P0001 is raised by the overlap trigger when the slot is already taken;
+    // P0002 is raised by the function itself when the service lookup fails.
     if (error.code === "P0001") {
       throw new Error("The selected time is no longer available.");
+    }
+    if (error.code === "P0002") {
+      throw new Error("Service not found or inactive.");
     }
     throw new Error(error.message);
   }
 
-  return appointment as Appointment;
+  return appointment;
+}
+
+/**
+ * Immediately confirms a still-pending appointment for free (price = 0)
+ * services, which skip the payment step entirely. Scoped to `pending` rows
+ * for idempotency. Returns `null` if the appointment was already confirmed
+ * (or doesn't belong to the given organization).
+ */
+export async function confirmPendingAppointment(
+  appointmentId: string,
+  organizationId: string,
+): Promise<Appointment | null> {
+  const anon = createAnonClient();
+
+  const { data, error } = await anon.rpc("confirm_pending_appointment", {
+    p_organization_id: organizationId,
+    p_appointment_id: appointmentId,
+  });
+
+  if (error) throw new Error(error.message);
+  return data ?? null;
 }
 
 export interface AppointmentDetails {
@@ -208,37 +219,30 @@ export interface AppointmentDetails {
 }
 
 /**
- * Resolves an appointment together with its service and organization names for
- * confirmation pages and email notifications.
+ * Resolves an appointment together with its service and organization names
+ * for confirmation pages and email notifications. `organizationId` is
+ * mandatory: the `get_appointment_details` RPC enforces it as a hard filter,
+ * so a guessed or leaked `appointmentId` alone is never enough to read
+ * another tenant's booking.
  */
 export async function getAppointmentDetails(
   appointmentId: string,
+  organizationId: string,
 ): Promise<AppointmentDetails | null> {
-  const admin = createAdminClient();
+  const anon = createAnonClient();
 
-  const { data: appointment } = await admin
-    .from("appointments")
-    .select("*")
-    .eq("id", appointmentId)
+  const { data, error } = await anon
+    .rpc("get_appointment_details", {
+      p_appointment_id: appointmentId,
+      p_organization_id: organizationId,
+    })
     .maybeSingle();
 
-  if (!appointment) return null;
-
-  const { data: service } = await admin
-    .from("services")
-    .select("name")
-    .eq("id", appointment.service_id)
-    .maybeSingle();
-
-  const { data: organization } = await admin
-    .from("organizations")
-    .select("name")
-    .eq("id", appointment.organization_id)
-    .maybeSingle();
+  if (error || !data) return null;
 
   return {
-    appointment: appointment as Appointment,
-    serviceName: service?.name ?? "Service",
-    organizationName: organization?.name ?? "Provider",
+    appointment: data.appointment,
+    serviceName: data.service_name,
+    organizationName: data.organization_name,
   };
 }

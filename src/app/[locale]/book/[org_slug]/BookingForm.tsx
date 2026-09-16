@@ -2,16 +2,14 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import LegacyButton from "@/components/ui/LegacyButton";
-import { formatAppointmentTime } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { formatAppointmentTime, formatPrice } from "@/lib/utils";
+import type { Service } from "@/types";
 
-export interface BookableService {
-  id: string;
-  name: string;
-  description: string | null;
-  duration_minutes: number;
-  price: number;
-}
+export type BookableService = Pick<
+  Service,
+  "id" | "name" | "description" | "duration_minutes" | "price" | "is_active"
+>;
 
 interface BookingSlot {
   startTime: string;
@@ -27,14 +25,6 @@ function todayLocalDate(): string {
   const now = new Date();
   const local = new Date(now.getTime() - now.getTimezoneOffset() * 60_000);
   return local.toISOString().slice(0, 10);
-}
-
-function formatPrice(cents: number): string {
-  if (cents <= 0) return "Free";
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(cents / 100);
 }
 
 export default function BookingForm({
@@ -311,13 +301,13 @@ export default function BookingForm({
           </p>
         )}
 
-        <LegacyButton type="submit" disabled={submitting} className="mt-6 w-full">
+        <Button type="submit" disabled={submitting} className="mt-6 w-full">
           {submitting
             ? "Redirecting..."
             : selectedService && selectedService.price > 0
               ? "Continue to payment"
               : "Confirm booking"}
-        </LegacyButton>
+        </Button>
       </div>
     </form>
   );

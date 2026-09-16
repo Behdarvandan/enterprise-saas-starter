@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import LegacyCard from "@/components/ui/LegacyCard";
-import LegacyButton from "@/components/ui/LegacyButton";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function ResetPasswordPage() {
+  const t = useTranslations("auth.resetPassword");
   const router = useRouter();
   const supabase = createClient();
 
@@ -24,13 +26,13 @@ export default function ResetPasswordPage() {
     setMessage(null);
 
     if (password.length < 8) {
-      setError("Password must be at least 8 characters long.");
+      setError(t("errors.passwordTooShort"));
       setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("errors.passwordMismatch"));
       setLoading(false);
       return;
     }
@@ -43,7 +45,7 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    setMessage("Password updated successfully. Redirecting to sign in...");
+    setMessage(t("successMessage"));
     setTimeout(() => {
       router.push("/login");
       router.refresh();
@@ -52,14 +54,12 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <LegacyCard className="p-8">
+      <Card className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <ShieldCheck size={22} />
         </div>
-        <h1 className="text-xl font-bold text-ink-primary">Set a new password</h1>
-        <p className="mt-1 text-sm text-ink-muted">
-          Choose a new password for your account.
-        </p>
+        <h1 className="text-xl font-bold text-ink-primary">{t("title")}</h1>
+        <p className="mt-1 text-sm text-ink-muted">{t("subtitle")}</p>
 
         <form onSubmit={handleUpdatePassword} className="mt-6 space-y-4">
           <div className="space-y-1.5">
@@ -67,7 +67,7 @@ export default function ResetPasswordPage() {
               htmlFor="password"
               className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
-              New password
+              {t("newPasswordLabel")}
             </label>
             <input
               id="password"
@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
               htmlFor="confirm-password"
               className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
-              Confirm new password
+              {t("confirmPasswordLabel")}
             </label>
             <input
               id="confirm-password"
@@ -112,11 +112,11 @@ export default function ResetPasswordPage() {
             </p>
           )}
 
-          <LegacyButton type="submit" disabled={loading} className="w-full">
-            {loading ? "Updating..." : "Update password"}
-          </LegacyButton>
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? t("updating") : t("updateButton")}
+          </Button>
         </form>
-      </LegacyCard>
+      </Card>
     </div>
   );
 }

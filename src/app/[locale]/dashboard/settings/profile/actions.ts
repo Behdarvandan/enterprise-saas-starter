@@ -1,19 +1,26 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { z } from "zod";
+import { requireUserResult } from "@/lib/auth";
+import { firstIssueMessage, formField } from "@/lib/validation";
+
+const updateProfileSchema = z.object({
+  fullName: formField(z.string().trim().max(100, "Full name is too long.")),
+});
 
 export async function updateProfile(
   formData: FormData,
 ): Promise<{ error?: string; success?: boolean }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const auth = await requireUserResult();
+  if ("error" in auth) return auth;
+  const { supabase, user } = auth;
 
-  if (!user) return { error: "You must be signed in." };
-
-  const fullName = String(formData.get("full_name") ?? "").trim();
+  const parsed = updateProfileSchema.safeParse({
+    fullName: formData.get("full_name"),
+  });
+  if (!parsed.success) return { error: firstIssueMessage(parsed.error) };
+  const { fullName } = parsed.data;
 
   const { error } = await supabase
     .from("profiles")

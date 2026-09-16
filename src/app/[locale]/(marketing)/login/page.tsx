@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
 import { LogIn } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import LegacyCard from "@/components/ui/LegacyCard";
-import LegacyButton from "@/components/ui/LegacyButton";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
+  const t = useTranslations("auth.login");
   const router = useRouter();
   const supabase = createClient();
 
@@ -42,14 +43,12 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <LegacyCard className="p-8">
+      <Card className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <LogIn size={22} />
         </div>
-        <h1 className="text-xl font-bold text-ink-primary">Sign in</h1>
-        <p className="mt-1 text-sm text-ink-muted">
-          Use your Supabase credentials to continue.
-        </p>
+        <h1 className="text-xl font-bold text-ink-primary">{t("title")}</h1>
+        <p className="mt-1 text-sm text-ink-muted">{t("subtitle")}</p>
 
         <form onSubmit={handleSignIn} className="mt-6 space-y-4">
           <div className="space-y-1.5">
@@ -57,7 +56,7 @@ export default function LoginPage() {
               htmlFor="email"
               className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
-              Email
+              {t("emailLabel")}
             </label>
             <input
               id="email"
@@ -75,7 +74,7 @@ export default function LoginPage() {
               htmlFor="password"
               className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
-              Password
+              {t("passwordLabel")}
             </label>
             <input
               id="password"
@@ -94,30 +93,30 @@ export default function LoginPage() {
             </p>
           )}
 
-          <LegacyButton type="submit" disabled={loading} className="w-full">
-            {loading ? "Signing in..." : "Sign in"}
-          </LegacyButton>
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? t("signingIn") : t("signInButton")}
+          </Button>
 
           <p className="text-center text-sm text-ink-muted">
             <Link
               href="/forgot-password"
               className="font-semibold text-violet-dim hover:text-violet"
             >
-              Forgot password?
+              {t("forgotPassword")}
             </Link>
           </p>
         </form>
 
         <p className="mt-6 text-center text-sm text-ink-muted">
-          Don&apos;t have an account?{" "}
+          {t("noAccount")}{" "}
           <Link
             href="/signup"
             className="font-semibold text-violet-dim hover:text-violet"
           >
-            Sign up
+            {t("signUp")}
           </Link>
         </p>
-      </LegacyCard>
+      </Card>
     </div>
   );
 }

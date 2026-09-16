@@ -55,4 +55,18 @@ next-env.d.ts
 
 repomix-output.xml
 repomix-output.txt
-.env*
+
+# planning / scratch documents (not shipped with the app)
+REFACTOR_PLAN.md
+*_PLAN.md
+*.draft.md
+
+# agent / editor tool artifacts
+.cline/
+.clinerules
+.clineignore
+.remopix*
+.vscode/
+.idea/
+# machine-local Claude Code settings (never shared/committed, per CLAUDE.md)
+.claude/settings.local.json

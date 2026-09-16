@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import LegacyButton from "@/components/ui/LegacyButton";
+import { useRouter } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 import { inviteMember } from "./actions";
 
 export default function InviteMemberForm() {
@@ -47,9 +47,9 @@ export default function InviteMemberForm() {
           <option value="member">Member</option>
           <option value="admin">Admin</option>
         </select>
-        <LegacyButton type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading}>
           {loading ? "Sending..." : "Send invite"}
-        </LegacyButton>
+        </Button>
       </div>
 
       {result?.error && (

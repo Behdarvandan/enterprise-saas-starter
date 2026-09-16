@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { KeyRound } from "lucide-react";
-import LegacyCard from "@/components/ui/LegacyCard";
-import LegacyButton from "@/components/ui/LegacyButton";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { requestPasswordReset } from "./actions";
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations("auth.forgotPassword");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -27,23 +29,18 @@ export default function ForgotPasswordPage() {
       return;
     }
 
-    setMessage(
-      "If an account exists for this email, a password reset link has been sent.",
-    );
+    setMessage(t("successMessage"));
     setLoading(false);
   }
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <LegacyCard className="p-8">
+      <Card className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <KeyRound size={22} />
         </div>
-        <h1 className="text-xl font-bold text-ink-primary">Reset your password</h1>
-        <p className="mt-1 text-sm text-ink-muted">
-          Enter the email associated with your account and we&apos;ll send you a
-          reset link.
-        </p>
+        <h1 className="text-xl font-bold text-ink-primary">{t("title")}</h1>
+        <p className="mt-1 text-sm text-ink-muted">{t("subtitle")}</p>
 
         <form onSubmit={handleResetRequest} className="mt-6 space-y-4">
           <div className="space-y-1.5">
@@ -51,7 +48,7 @@ export default function ForgotPasswordPage() {
               htmlFor="email"
               className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
             >
-              Email
+              {t("emailLabel")}
             </label>
             <input
               id="email"
@@ -76,18 +73,18 @@ export default function ForgotPasswordPage() {
             </p>
           )}
 
-          <LegacyButton type="submit" disabled={loading} className="w-full">
-            {loading ? "Sending..." : "Send reset link"}
-          </LegacyButton>
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? t("sending") : t("sendButton")}
+          </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-ink-muted">
-          Remembered your password?{" "}
+          {t("rememberedPassword")}{" "}
           <Link href="/login" className="font-semibold text-violet-dim hover:text-violet">
-            Sign in
+            {t("signIn")}
           </Link>
         </p>
-      </LegacyCard>
+      </Card>
     </div>
   );
 }

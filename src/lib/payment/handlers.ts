@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getAppointmentDetails } from "@/lib/booking";
 import { sendBookingConfirmationEmail } from "@/lib/email";
@@ -30,12 +31,13 @@ export interface SubscriptionSnapshot {
 export async function confirmAppointmentById(
   appointmentId: string,
   paymentReference?: string | null,
+  organizationId?: string | null,
 ): Promise<boolean> {
   const admin = createAdminClient();
 
   const update: AppointmentUpdate = { status: "confirmed" };
   if (paymentReference) {
-    update.stripe_payment_intent_id = paymentReference;
+    update.provider_payment_intent_id = paymentReference;
   }
 
   const { error, data: updated } = await admin
@@ -50,6 +52,7 @@ export async function confirmAppointmentById(
       `[payment-webhook] Failed to confirm appointment ${appointmentId}:`,
       error,
     );
+    Sentry.captureException(error, { extra: { appointmentId } });
     throw new Error(error.message);
   }
 
@@ -61,8 +64,14 @@ export async function confirmAppointmentById(
   }
 
   // Best-effort: notify the customer about the confirmed booking.
+  // `getAppointmentDetails` requires an organization id (it's a hard filter
+  // in the underlying RPC); both providers supply one today (Stripe via
+  // checkout session metadata, PayTR via the merchant order id), but this
+  // guard keeps a missing one from throwing instead of just skipping the email.
   try {
-    const details = await getAppointmentDetails(appointmentId);
+    const details = organizationId
+      ? await getAppointmentDetails(appointmentId, organizationId)
+      : null;
     if (details) {
       await sendBookingConfirmationEmail({
         to: details.appointment.customer_email,
@@ -74,12 +83,17 @@ export async function confirmAppointmentById(
         customerEmail: details.appointment.customer_email,
         customerPhone: details.appointment.customer_phone,
       });
+    } else if (!organizationId) {
+      console.info(
+        `[payment-webhook] No organization id available for appointment ${appointmentId}; skipping confirmation email.`,
+      );
     }
   } catch (emailError) {
     console.error(
       `[payment-webhook] Failed to send booking confirmation for appointment ${appointmentId}:`,
       emailError,
     );
+    Sentry.captureException(emailError, { extra: { appointmentId } });
   }
 
   return true;
@@ -106,6 +120,7 @@ export async function cancelAppointmentById(
       `[payment-webhook] Failed to cancel appointment ${appointmentId}:`,
       error,
     );
+    Sentry.captureException(error, { extra: { appointmentId } });
     throw new Error(error.message);
   }
 
@@ -142,6 +157,7 @@ export async function activateOrganizationById(
       `[payment-webhook] Failed to activate organization ${organizationId}:`,
       error,
     );
+    Sentry.captureException(error, { extra: { organizationId } });
     throw new Error(error.message);
   }
 
@@ -168,8 +184,8 @@ export async function persistSubscriptionSnapshot(
   const admin = createAdminClient();
 
   const update: OrganizationUpdate = {
-    stripe_customer_id: snapshot.customerId,
-    stripe_subscription_id: snapshot.subscriptionId,
+    provider_customer_id: snapshot.customerId,
+    provider_subscription_id: snapshot.subscriptionId,
     plan_id: snapshot.planId,
     subscription_status: snapshot.status,
     current_period_end: snapshot.currentPeriodEnd,
@@ -183,13 +199,16 @@ export async function persistSubscriptionSnapshot(
     : await admin
         .from("organizations")
         .update(update)
-        .eq("stripe_subscription_id", snapshot.subscriptionId);
+        .eq("provider_subscription_id", snapshot.subscriptionId);
 
   if (error) {
     console.error(
       `[payment-webhook] Failed to persist subscription ${snapshot.subscriptionId}:`,
       error,
     );
+    Sentry.captureException(error, {
+      extra: { subscriptionId: snapshot.subscriptionId, organizationId },
+    });
     throw new Error(error.message);
   }
 }

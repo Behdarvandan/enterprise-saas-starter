@@ -6,6 +6,8 @@
  * chat-completions endpoint, so a single streaming parser covers both.
  */
 
+import { z } from "zod";
+
 export type LLMRole = "system" | "user" | "assistant";
 
 export interface LLMMessage {
@@ -43,9 +45,11 @@ function resolveProvider(): ProviderConfig {
   );
 }
 
-interface StreamDelta {
-  choices?: { delta?: { content?: string } }[];
-}
+const streamDeltaSchema = z.object({
+  choices: z
+    .array(z.object({ delta: z.object({ content: z.string().optional() }).optional() }))
+    .optional(),
+});
 
 /**
  * Streams a chat completion and invokes `onToken` for each generated token.
@@ -98,8 +102,10 @@ export async function streamChatCompletion(
       if (data === "[DONE]") continue;
 
       try {
-        const json = JSON.parse(data) as StreamDelta;
-        const token = json.choices?.[0]?.delta?.content ?? "";
+        const parsed = streamDeltaSchema.safeParse(JSON.parse(data));
+        const token = parsed.success
+          ? (parsed.data.choices?.[0]?.delta?.content ?? "")
+          : "";
         if (token) {
           fullText += token;
           onToken(token);

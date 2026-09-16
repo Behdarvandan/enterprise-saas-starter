@@ -1,30 +1,36 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { getAppointmentDetails } from "@/lib/booking";
 import { formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
-import LegacyCard from "@/components/ui/LegacyCard";
+import { Card } from "@/components/ui/card";
 
 interface SuccessPageProps {
-  searchParams: Promise<{ appointment_id?: string }>;
+  searchParams: Promise<{ appointment_id?: string; organization_id?: string }>;
 }
 
 /**
  * Booking confirmation page. Shown after returning from Stripe Checkout (or
  * immediately after a free booking) with the appointment id in the query string.
+ *
+ * `organization_id` is required alongside `appointment_id`: without it, this
+ * publicly-reachable page would let anyone who obtains an appointment id
+ * (e.g. from a shared link) look up another tenant's booking, since the
+ * lookup runs on the service-role client and bypasses RLS.
  */
 export default async function BookingSuccessPage({
   searchParams,
 }: SuccessPageProps) {
-  const { appointment_id } = await searchParams;
+  const { appointment_id, organization_id } = await searchParams;
 
-  const details = appointment_id
-    ? await getAppointmentDetails(appointment_id)
-    : null;
+  const details =
+    appointment_id && organization_id
+      ? await getAppointmentDetails(appointment_id, organization_id)
+      : null;
 
   return (
     <div className="min-h-screen bg-slate-50 py-16">
       <div className="mx-auto max-w-lg px-4 sm:px-6">
-        <LegacyCard className="p-8 text-center">
+        <Card className="p-8 text-center">
           {details ? (
             <>
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
@@ -94,7 +100,7 @@ export default async function BookingSuccessPage({
               </Link>
             </>
           )}
-        </LegacyCard>
+        </Card>
       </div>
     </div>
   );

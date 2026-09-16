@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendPasswordResetEmail } from "@/lib/email";
 import { getBaseUrl } from "@/lib/url";
@@ -10,7 +11,8 @@ export async function requestPasswordReset(
   const normalized = email.trim().toLowerCase();
 
   if (!normalized || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
-    return { error: "Please provide a valid email address." };
+    const t = await getTranslations("auth.forgotPassword.errors");
+    return { error: t("invalidEmail") };
   }
 
   const baseUrl = await getBaseUrl();

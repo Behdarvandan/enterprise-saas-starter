@@ -32,3 +32,26 @@ export interface NavItem {
   label: string;
   href: string;
 }
+
+// RAG chat wire contract, shared between `POST/GET /api/chat/rag` and the
+// `ChatWidget` client component so the two ends of the SSE protocol cannot
+// silently drift apart.
+export interface ChatRequestBody {
+  organizationId: string;
+  sessionId?: string | null;
+  message: string;
+}
+
+export interface ChatMatchSource {
+  documentId: string;
+  chunkIndex: number;
+  content: string;
+  similarity: number;
+}
+
+export type ChatStreamEvent =
+  | { type: "session"; sessionId: string }
+  | { type: "sources"; sources: ChatMatchSource[] }
+  | { type: "delta"; content: string }
+  | { type: "done" }
+  | { type: "error"; message: string };

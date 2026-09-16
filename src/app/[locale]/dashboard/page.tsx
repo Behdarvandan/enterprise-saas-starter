@@ -1,19 +1,10 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireUser } from "@/lib/auth";
 import { getUserMembership } from "@/lib/team";
-import LegacyCard from "@/components/ui/LegacyCard";
+import { Card } from "@/components/ui/card";
 import OnboardingChecklist from "@/components/dashboard/OnboardingChecklist";
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
+  const { supabase, user } = await requireUser();
 
   const membership = await getUserMembership(user.id);
 
@@ -86,7 +77,7 @@ export default async function DashboardPage() {
       <div className="mt-6 grid grid-cols-1 gap-6">
         <OnboardingChecklist userId={user.id} items={checklistItems} />
 
-        <LegacyCard className="p-6">
+        <Card className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Authenticated user
           </h2>
@@ -106,9 +97,9 @@ export default async function DashboardPage() {
               </dd>
             </div>
           </dl>
-        </LegacyCard>
+        </Card>
 
-        <LegacyCard className="p-6">
+        <Card className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Organization
           </h2>
@@ -130,7 +121,7 @@ export default async function DashboardPage() {
               You don&apos;t belong to an organization yet.
             </p>
           )}
-        </LegacyCard>
+        </Card>
       </div>
     </div>
   );

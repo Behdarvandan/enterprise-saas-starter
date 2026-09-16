@@ -1,7 +1,8 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import LegacyCard from "@/components/ui/LegacyCard";
+import { Card } from "@/components/ui/card";
 import AcceptInviteButton from "./AcceptInviteButton";
 
 export default async function InvitePage({
@@ -10,6 +11,7 @@ export default async function InvitePage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
+  const t = await getTranslations("auth.invite");
 
   const supabase = await createClient();
   const {
@@ -40,49 +42,35 @@ export default async function InvitePage({
         .single()
     : { data: null };
 
-  const stateMessages: Record<string, string> = {
-    "not-found": "This invitation link is invalid or has been removed.",
-    accepted: "This invitation has already been accepted.",
-    revoked: "This invitation has been revoked.",
-    expired: "This invitation has expired.",
+  const stateMessageKeys: Record<string, "notFound" | "accepted" | "revoked" | "expired"> = {
+    "not-found": "notFound",
+    accepted: "accepted",
+    revoked: "revoked",
+    expired: "expired",
   };
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <LegacyCard className="p-8">
+      <Card className="p-8">
         {!user ? (
           <>
-            <h1 className="text-xl font-bold text-ink-primary">
-              Sign in to accept
-            </h1>
-            <p className="mt-1 text-sm text-ink-muted">
-              You need to sign in before accepting this invitation.
-            </p>
+            <h1 className="text-xl font-bold text-ink-primary">{t("signInTitle")}</h1>
+            <p className="mt-1 text-sm text-ink-muted">{t("signInSubtitle")}</p>
             <Link
               href={`/login?next=/invite/${token}`}
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-violet px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet/90"
             >
-              Sign in
+              {t("signInButton")}
             </Link>
           </>
         ) : state === "valid" && invitation && organization ? (
           <>
-            <h1 className="text-xl font-bold text-ink-primary">
-              You&apos;re invited
-            </h1>
+            <h1 className="text-xl font-bold text-ink-primary">{t("invitedTitle")}</h1>
             <p className="mt-1 text-sm text-ink-muted">
-              Join{" "}
-              <span className="font-semibold text-ink-primary">
-                {organization.name}
-              </span>{" "}
-              as{" "}
-              <span className="font-semibold capitalize text-ink-primary">
-                {invitation.role}
-              </span>
-              .
+              {t("joinAs", { name: organization.name, role: invitation.role })}
             </p>
             <p className="mt-2 text-xs text-ink-muted">
-              This invitation was sent to {invitation.email}.
+              {t("sentTo", { email: invitation.email })}
             </p>
             <div className="mt-6">
               <AcceptInviteButton token={token} />
@@ -90,21 +78,19 @@ export default async function InvitePage({
           </>
         ) : (
           <>
-            <h1 className="text-xl font-bold text-ink-primary">
-              Invitation unavailable
-            </h1>
+            <h1 className="text-xl font-bold text-ink-primary">{t("unavailableTitle")}</h1>
             <p className="mt-1 text-sm text-ink-muted">
-              {stateMessages[state]}
+              {t(`states.${stateMessageKeys[state]}`)}
             </p>
             <Link
               href="/dashboard"
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-violet px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet/90"
             >
-              Go to dashboard
+              {t("goToDashboard")}
             </Link>
           </>
         )}
-      </LegacyCard>
+      </Card>
     </div>
   );
 }

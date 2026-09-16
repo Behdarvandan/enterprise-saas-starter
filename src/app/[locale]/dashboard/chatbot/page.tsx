@@ -1,8 +1,6 @@
-import { redirect } from "next/navigation";
 import { MessageSquareText } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
-import { getUserMembership } from "@/lib/team";
-import LegacyCard from "@/components/ui/LegacyCard";
+import { requireMembership } from "@/lib/auth";
+import { Card } from "@/components/ui/card";
 import KnowledgeBasePanel from "./KnowledgeBasePanel";
 import ChatWidget from "@/components/chat-widget/ChatWidget";
 
@@ -15,16 +13,7 @@ interface ChatbotPageProps {
 export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
   const { q } = await searchParams;
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
-
-  const membership = await getUserMembership(user.id);
-  if (!membership) redirect("/dashboard");
-
+  const { membership } = await requireMembership();
   const organizationId = membership.organizationId;
 
   return (
@@ -44,7 +33,7 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <KnowledgeBasePanel organizationId={organizationId} />
 
-        <LegacyCard className="p-6">
+        <Card className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Embed the widget
           </h2>
@@ -72,7 +61,7 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
               <li>The LLM streams a grounded answer in real time.</li>
             </ol>
           </div>
-        </LegacyCard>
+        </Card>
       </div>
 
       {/* Floating playground widget scoped to this tenant. */}

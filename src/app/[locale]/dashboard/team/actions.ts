@@ -2,41 +2,46 @@
 
 import { revalidatePath } from "next/cache";
 import { randomBytes } from "node:crypto";
-import { createClient } from "@/lib/supabase/server";
-import { canManageMembers, getUserMembership } from "@/lib/team";
+import { z } from "zod";
+import { requireMembershipResult } from "@/lib/auth";
+import { canManageMembers } from "@/lib/team";
 import { sendInvitationEmail } from "@/lib/email";
 import { getBaseUrl } from "@/lib/url";
+import { getOrganizationName } from "@/lib/organizations";
+import { firstIssueMessage, formField } from "@/lib/validation";
 import type { MembershipRole } from "@/types";
 
 export type TeamActionResult = { error?: string; success?: boolean };
 
-const ROLES: MembershipRole[] = ["owner", "admin", "member"];
+const inviteMemberSchema = z.object({
+  email: formField(
+    z.string().trim().toLowerCase().email("Please provide a valid email address."),
+  ),
+  // Defaults to "member" when omitted, matching the form's implicit default;
+  // any other non-empty value must be a real role or validation fails.
+  role: z.preprocess(
+    (value) => (typeof value === "string" && value ? value : "member"),
+    z.enum(["owner", "admin", "member"], { message: "Invalid role." }),
+  ),
+});
 
 export async function inviteMember(
   formData: FormData,
 ): Promise<TeamActionResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const auth = await requireMembershipResult();
+  if ("error" in auth) return auth;
+  const { supabase, membership } = auth;
 
-  if (!user) return { error: "You must be signed in." };
-
-  const membership = await getUserMembership(user.id);
-  if (!membership) return { error: "You do not belong to an organization." };
   if (!canManageMembers(membership.role)) {
     return { error: "Only owners and admins can invite members." };
   }
 
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const role = String(formData.get("role") ?? "member") as MembershipRole;
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { error: "Please provide a valid email address." };
-  }
-  if (!ROLES.includes(role)) {
-    return { error: "Invalid role." };
-  }
+  const parsed = inviteMemberSchema.safeParse({
+    email: formData.get("email"),
+    role: formData.get("role"),
+  });
+  if (!parsed.success) return { error: firstIssueMessage(parsed.error) };
+  const { email, role } = parsed.data;
 
   // Prevent inviting someone who is already a member.
   const { data: profile } = await supabase
@@ -80,15 +85,11 @@ export async function inviteMember(
   // Best-effort: send the invitation email (the invitation is already saved).
   try {
     const baseUrl = await getBaseUrl();
-    const { data: organization } = await supabase
-      .from("organizations")
-      .select("name")
-      .eq("id", membership.organizationId)
-      .single();
+    const organizationName = await getOrganizationName(membership.organizationId);
 
     await sendInvitationEmail({
       to: email,
-      organizationName: organization?.name ?? "Your organization",
+      organizationName: organizationName ?? "Your organization",
       role,
       inviteUrl: `${baseUrl}/invite/${token}`,
     });
@@ -103,15 +104,10 @@ export async function inviteMember(
 export async function revokeInvitation(
   invitationId: string,
 ): Promise<TeamActionResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const auth = await requireMembershipResult();
+  if ("error" in auth) return auth;
+  const { supabase, membership } = auth;
 
-  if (!user) return { error: "You must be signed in." };
-
-  const membership = await getUserMembership(user.id);
-  if (!membership) return { error: "You do not belong to an organization." };
   if (!canManageMembers(membership.role)) {
     return { error: "Only owners and admins can revoke invitations." };
   }
@@ -131,15 +127,10 @@ export async function revokeInvitation(
 export async function removeMember(
   membershipId: string,
 ): Promise<TeamActionResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const auth = await requireMembershipResult();
+  if ("error" in auth) return auth;
+  const { supabase, membership } = auth;
 
-  if (!user) return { error: "You must be signed in." };
-
-  const membership = await getUserMembership(user.id);
-  if (!membership) return { error: "You do not belong to an organization." };
   if (!canManageMembers(membership.role)) {
     return { error: "Only owners and admins can remove members." };
   }
@@ -172,15 +163,10 @@ export async function updateMemberRole(
   membershipId: string,
   role: MembershipRole,
 ): Promise<TeamActionResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const auth = await requireMembershipResult();
+  if ("error" in auth) return auth;
+  const { supabase, membership } = auth;
 
-  if (!user) return { error: "You must be signed in." };
-
-  const membership = await getUserMembership(user.id);
-  if (!membership) return { error: "You do not belong to an organization." };
   if (!canManageMembers(membership.role)) {
     return { error: "Only owners and admins can change roles." };
   }

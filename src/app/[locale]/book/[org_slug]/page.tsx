@@ -31,7 +31,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
     .eq("is_active", true)
     .order("name");
 
-  const bookableServices = (services ?? []) as BookableService[];
+  const bookableServices: BookableService[] = services ?? [];
 
   return (
     <div className="min-h-screen bg-slate-50 py-12">

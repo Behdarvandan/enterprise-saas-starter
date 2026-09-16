@@ -1,19 +1,37 @@
 import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+
+// This project's cards are flat containers with no built-in padding/gap —
+// callers pass their own className (e.g. `className="p-6"`) — so the root
+// intentionally doesn't apply shadcn's default flex/spacing/ring layout.
+// The variants below reproduce the three treatments the app actually uses.
+const cardVariants = cva("", {
+  variants: {
+    variant: {
+      /** Structural container (page sections, list wrappers): 0 radius, sits on bg-surface. */
+      section: "rounded-none border border-subtle bg-surface",
+      /** A discrete unit inside a section (a row, a stat tile). */
+      item: "rounded-interactive border border-subtle bg-surface",
+      /** Modals/popovers. */
+      raised: "rounded-interactive border border-subtle bg-surface-raised shadow-lg",
+    },
+  },
+  defaultVariants: {
+    variant: "section",
+  },
+})
 
 function Card({
   className,
-  size = "default",
+  variant,
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+}: React.ComponentProps<"div"> & VariantProps<typeof cardVariants>) {
   return (
     <div
       data-slot="card"
-      data-size={size}
-      className={cn(
-        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
-        className
-      )}
+      data-variant={variant}
+      className={cn(cardVariants({ variant }), className)}
       {...props}
     />
   )
@@ -93,6 +111,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
 
 export {
   Card,
+  cardVariants,
   CardHeader,
   CardFooter,
   CardTitle,

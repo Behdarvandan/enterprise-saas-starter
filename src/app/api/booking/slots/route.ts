@@ -1,8 +1,16 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getAvailableSlots } from "@/lib/booking";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { firstIssueMessage } from "@/lib/validation";
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+const bookingSlotsQuerySchema = z.object({
+  organizationId: z.string().uuid("A valid organizationId is required."),
+  serviceId: z.string().uuid("A valid serviceId is required."),
+  date: z.string().regex(DATE_PATTERN, "A valid date (YYYY-MM-DD) is required."),
+});
 
 /**
  * GET /api/booking/slots?organizationId=...&serviceId=...&date=YYYY-MM-DD
@@ -14,16 +22,20 @@ const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const organizationId = searchParams.get("organizationId") ?? "";
-  const serviceId = searchParams.get("serviceId") ?? "";
-  const date = searchParams.get("date") ?? "";
+  const parsedQuery = bookingSlotsQuerySchema.safeParse({
+    organizationId: searchParams.get("organizationId") ?? "",
+    serviceId: searchParams.get("serviceId") ?? "",
+    date: searchParams.get("date") ?? "",
+  });
 
-  if (!organizationId || !serviceId || !DATE_PATTERN.test(date)) {
+  if (!parsedQuery.success) {
     return NextResponse.json(
-      { error: "organizationId, serviceId, and a valid date are required." },
+      { error: firstIssueMessage(parsedQuery.error) },
       { status: 400 },
     );
   }
+
+  const { organizationId, serviceId, date } = parsedQuery.data;
 
   const ip = request.headers.get("x-forwarded-for") ?? "unknown";
   const allowed = await checkRateLimit(`booking-slots:${organizationId}:${ip}`);

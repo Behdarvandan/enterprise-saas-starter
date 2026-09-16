@@ -1,0 +1,159 @@
+{
+  "common": {
+    "metadata": {
+      "title": "Nimbus — Multi-Tenant Booking Infrastructure",
+      "description": "Row-level isolated booking, scheduling, and AI assistance for teams that manage appointments across multiple organizations."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "body": "The page you're looking for doesn't exist or has moved."
+    }
+  },
+  "marketing": {
+    "header": {
+      "platform": "Platform",
+      "security": "Security",
+      "pricing": "Pricing",
+      "signIn": "Sign in",
+      "startTrial": "Start free trial"
+    },
+    "footer": {
+      "tagline": "Multi-tenant booking and scheduling infrastructure with row-level isolation for every organization.",
+      "productHeading": "Product",
+      "accountHeading": "Account",
+      "systemStatus": "System status",
+      "copyright": "© {year} Nimbus. Built on PostgreSQL row-level security."
+    },
+    "hero": {
+      "title": "Booking infrastructure that keeps every organization's data provably separate.",
+      "subtitle": "Nimbus runs scheduling, payments, and an AI assistant for multi-tenant teams on PostgreSQL row-level security — a database trigger blocks double-bookings before they're written, not after.",
+      "ctaPrimary": "Start free trial",
+      "ctaSecondary": "Book a demo"
+    },
+    "pricingSection": {
+      "title": "Plans that scale with your booking volume.",
+      "subtitle": "Start on Starter, upgrade when the AI assistant and priority support earn their keep.",
+      "compareLink": "See full plan comparison and start checkout"
+    },
+    "security": {
+      "title": "For the reviewer who reads the schema before the sales deck.",
+      "controls": {
+        "isolation": {
+          "label": "Isolation model",
+          "detail": "Row Level Security on every tenant table, scoped via is_org_member(organization_id). No cross-tenant query path exists at the database layer."
+        },
+        "privilegedOps": {
+          "label": "Privileged operations",
+          "detail": "Org creation and invitation acceptance run as SECURITY DEFINER functions with an explicit search_path, so elevated writes happen only through audited, narrow entry points."
+        },
+        "serviceRole": {
+          "label": "Service-role boundary",
+          "detail": "The Supabase service-role key is used only in server-only contexts — Stripe/PayTR webhook handlers and the anonymous customer booking API — never shipped to the client."
+        },
+        "paymentVerification": {
+          "label": "Payment verification",
+          "detail": "Stripe and PayTR webhooks verify request signatures before writing subscription or payment state; unverified requests are rejected before touching the database."
+        },
+        "deployment": {
+          "label": "Deployment surface",
+          "detail": "Runs as a non-root user in a multi-stage Docker build on Next.js standalone output, deployed to AWS ECS Fargate behind a load balancer with a dedicated health-check endpoint."
+        }
+      }
+    },
+    "persona": {
+      "operations": {
+        "role": "For operations",
+        "headline": "Nobody double-books a slot again.",
+        "body": "Availability, services, and appointments live behind a database trigger that rejects overlapping bookings at write time — not a client-side check that a race condition can slip past."
+      },
+      "security": {
+        "role": "For IT & security review",
+        "headline": "Tenant isolation enforced in the database, not the app layer.",
+        "body": "Every table carries an organization_id and a Row Level Security policy scoped through is_org_member(). A compromised or buggy query can't cross a tenant boundary — Postgres refuses the row before your code ever sees it."
+      },
+      "finance": {
+        "role": "For finance & billing",
+        "headline": "Subscription state stays in sync with Stripe, automatically.",
+        "body": "Checkout, plan changes, and cancellations flow through signature-verified Stripe webhooks that write directly to each organization's subscription record — no manual reconciliation."
+      }
+    },
+    "homeCta": {
+      "title": "Set up your first organization in minutes.",
+      "subtitle": "Free to start — no card required for the Starter plan.",
+      "button": "Start free trial"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Use your Supabase credentials to continue.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "signInButton": "Sign in",
+      "signingIn": "Signing in...",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Set up your organization's booking workspace on Nimbus.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm password",
+      "createAccountButton": "Create account",
+      "creatingAccount": "Creating account...",
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "successMessage": "Account created. Check your email to confirm your account before signing in.",
+      "errors": {
+        "passwordTooShort": "Password must be at least 8 characters long.",
+        "passwordMismatch": "Passwords do not match."
+      }
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "subtitle": "Enter the email associated with your account and we'll send you a reset link.",
+      "emailLabel": "Email",
+      "sendButton": "Send reset link",
+      "sending": "Sending...",
+      "successMessage": "If an account exists for this email, a password reset link has been sent.",
+      "rememberedPassword": "Remembered your password?",
+      "signIn": "Sign in",
+      "errors": {
+        "invalidEmail": "Please provide a valid email address."
+      }
+    },
+    "resetPassword": {
+      "title": "Set a new password",
+      "subtitle": "Choose a new password for your account.",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm new password",
+      "updateButton": "Update password",
+      "updating": "Updating...",
+      "successMessage": "Password updated successfully. Redirecting to sign in...",
+      "errors": {
+        "passwordTooShort": "Password must be at least 8 characters long.",
+        "passwordMismatch": "Passwords do not match."
+      }
+    },
+    "invite": {
+      "signInTitle": "Sign in to accept",
+      "signInSubtitle": "You need to sign in before accepting this invitation.",
+      "signInButton": "Sign in",
+      "invitedTitle": "You're invited",
+      "joinAs": "Join {name} as {role}.",
+      "sentTo": "This invitation was sent to {email}.",
+      "acceptButton": "Accept invitation",
+      "joining": "Joining...",
+      "unavailableTitle": "Invitation unavailable",
+      "goToDashboard": "Go to dashboard",
+      "states": {
+        "notFound": "This invitation link is invalid or has been removed.",
+        "accepted": "This invitation has already been accepted.",
+        "revoked": "This invitation has been revoked.",
+        "expired": "This invitation has expired."
+      }
+    }
+  }
+}

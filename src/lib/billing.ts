@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAnonClient } from "@/lib/supabase/anon";
+import { getUserMembership } from "@/lib/team";
 import type { Organization } from "@/types";
 
 /**
@@ -8,21 +9,14 @@ import type { Organization } from "@/types";
 export async function getUserOrganization(
   userId: string,
 ): Promise<Organization | null> {
-  const supabase = await createClient();
-
-  const { data: membership } = await supabase
-    .from("memberships")
-    .select("organization_id")
-    .eq("user_id", userId)
-    .limit(1)
-    .maybeSingle();
-
+  const membership = await getUserMembership(userId);
   if (!membership) return null;
 
+  const supabase = await createClient();
   const { data: organization } = await supabase
     .from("organizations")
     .select("*")
-    .eq("id", membership.organization_id)
+    .eq("id", membership.organizationId)
     .single();
 
   return organization ?? null;
@@ -61,21 +55,18 @@ export async function ensureOrganization(user: {
 /**
  * Returns whether the organization's subscription allows the public,
  * unauthenticated services (chat RAG and booking checkout) to run. Only
- * `active` and `trialing` subscriptions are considered serviceable.
+ * `active` and `trialing` subscriptions are considered serviceable. Runs on
+ * the anon-key client via the `is_organization_serviceable` RPC, since this
+ * is called from anonymous request paths.
  */
 export async function isOrganizationServiceable(
   organizationId: string,
 ): Promise<boolean> {
-  const admin = createAdminClient();
+  const anon = createAnonClient();
 
-  const { data: organization } = await admin
-    .from("organizations")
-    .select("subscription_status")
-    .eq("id", organizationId)
-    .maybeSingle();
+  const { data } = await anon.rpc("is_organization_serviceable", {
+    p_organization_id: organizationId,
+  });
 
-  return (
-    organization?.subscription_status === "active" ||
-    organization?.subscription_status === "trialing"
-  );
+  return data === true;
 }

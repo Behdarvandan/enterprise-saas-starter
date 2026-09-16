@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import type { MembershipRole } from "@/types";
 import { removeMember, updateMemberRole } from "./actions";
 
@@ -19,6 +19,12 @@ const roleStyles: Record<MembershipRole, string> = {
   admin: "bg-violet/10 text-violet-dim",
   member: "bg-surface-raised text-ink-muted",
 };
+
+const ASSIGNABLE_ROLES: readonly MembershipRole[] = ["admin", "member"];
+
+function isAssignableRole(value: string): value is MembershipRole {
+  return (ASSIGNABLE_ROLES as readonly string[]).includes(value);
+}
 
 export default function MemberRow({
   membershipId,
@@ -70,9 +76,10 @@ export default function MemberRow({
         {showActions ? (
           <select
             value={role}
-            onChange={(event) =>
-              handleRoleChange(event.target.value as MembershipRole)
-            }
+            onChange={(event) => {
+              const { value } = event.target;
+              if (isAssignableRole(value)) handleRoleChange(value);
+            }}
             className="rounded-control border border-subtle bg-surface-raised px-2 py-1.5 text-xs text-ink-primary outline-none transition-colors focus:border-violet-dim"
           >
             <option value="member">Member</option>

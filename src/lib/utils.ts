@@ -32,3 +32,24 @@ export function formatAppointmentTime(iso: string): string {
   if (Number.isNaN(date.getTime())) return iso;
   return date.toLocaleTimeString("en-US", APPOINTMENT_TIME_FORMAT);
 }
+
+/**
+ * Formats a short calendar date (e.g. "1/1/2026") for list/table display.
+ */
+export function formatDate(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleDateString("en-US");
+}
+
+/**
+ * Formats a USD amount stored in cents (e.g. 1500 -> "$15.00"), rendering
+ * non-positive amounts as "Free".
+ */
+export function formatPrice(cents: number): string {
+  if (cents <= 0) return "Free";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(cents / 100);
+}

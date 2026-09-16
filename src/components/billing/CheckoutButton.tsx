@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import LegacyButton from "@/components/ui/LegacyButton";
+import { useRouter } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 
 interface CheckoutButtonProps {
   priceId: string;
@@ -58,16 +58,16 @@ export default function CheckoutButton({
 
   return (
     <div>
-      <LegacyButton
+      <Button
         type="button"
         onClick={handleCheckout}
         disabled={loading}
         className="w-full"
       >
         {loading ? "Redirecting..." : label}
-      </LegacyButton>
+      </Button>
       {error && (
-        <p className="mt-2 text-xs font-medium text-red-600">{error}</p>
+        <p className="mt-2 text-xs font-medium text-status-error">{error}</p>
       )}
     </div>
   );

@@ -1,28 +1,37 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
-import { canManageMembers, getUserMembership } from "@/lib/team";
+import { z } from "zod";
+import { requireMembershipResult } from "@/lib/auth";
+import { canManageMembers } from "@/lib/team";
+import { firstIssueMessage, formField } from "@/lib/validation";
+
+const updateOrganizationSchema = z.object({
+  name: formField(
+    z
+      .string()
+      .trim()
+      .min(1, "Organization name is required.")
+      .max(100, "Organization name is too long."),
+  ),
+});
 
 export async function updateOrganization(
   formData: FormData,
 ): Promise<{ error?: string; success?: boolean }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const auth = await requireMembershipResult();
+  if ("error" in auth) return auth;
+  const { supabase, membership } = auth;
 
-  if (!user) return { error: "You must be signed in." };
-
-  const membership = await getUserMembership(user.id);
-  if (!membership) return { error: "You do not belong to an organization." };
   if (!canManageMembers(membership.role)) {
     return { error: "Only owners and admins can edit organization settings." };
   }
 
-  const name = String(formData.get("name") ?? "").trim();
-  if (!name) return { error: "Organization name is required." };
-  if (name.length > 100) return { error: "Organization name is too long." };
+  const parsed = updateOrganizationSchema.safeParse({
+    name: formData.get("name"),
+  });
+  if (!parsed.success) return { error: firstIssueMessage(parsed.error) };
+  const { name } = parsed.data;
 
   const { error } = await supabase
     .from("organizations")

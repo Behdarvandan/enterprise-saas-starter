@@ -1,15 +1,9 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import LegacyCard from "@/components/ui/LegacyCard";
+import { requireUser } from "@/lib/auth";
+import { Card } from "@/components/ui/card";
 import ProfileForm from "./ProfileForm";
 
 export default async function ProfileSettingsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
+  const { supabase, user } = await requireUser();
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -28,9 +22,9 @@ export default async function ProfileSettingsPage() {
       </p>
 
       <div className="mt-6">
-        <LegacyCard className="p-6">
+        <Card className="p-6">
           <ProfileForm email={email} fullName={fullName} />
-        </LegacyCard>
+        </Card>
       </div>
     </div>
   );

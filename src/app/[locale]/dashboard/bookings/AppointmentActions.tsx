@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { useRouter } from "next/navigation";
-import LegacyButton from "@/components/ui/LegacyButton";
+import { useRouter } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 import { cancelAppointment, rescheduleAppointment } from "./actions";
 
 export default function AppointmentActions({
@@ -47,7 +47,7 @@ export default function AppointmentActions({
   return (
     <div className="flex flex-col gap-2 sm:items-end">
       <div className="flex items-center gap-2">
-        <LegacyButton
+        <Button
           type="button"
           variant="secondary"
           onClick={() => setShowReschedule((value) => !value)}
@@ -55,16 +55,16 @@ export default function AppointmentActions({
           className="px-3 py-1.5 text-xs"
         >
           Reschedule
-        </LegacyButton>
-        <LegacyButton
+        </Button>
+        <Button
           type="button"
-          variant="danger"
+          variant="destructive"
           onClick={handleCancel}
           disabled={loading}
           className="px-3 py-1.5 text-xs"
         >
           {loading ? "Working..." : "Cancel"}
-        </LegacyButton>
+        </Button>
       </div>
 
       {showReschedule && (
@@ -79,13 +79,13 @@ export default function AppointmentActions({
             onChange={(event) => setNewDateTime(event.target.value)}
             className="rounded-control border border-subtle bg-surface-raised px-3 py-2 text-xs text-ink-primary outline-none transition-colors focus:border-violet-dim"
           />
-          <LegacyButton
+          <Button
             type="submit"
             disabled={loading}
             className="px-3 py-1.5 text-xs"
           >
             Save
-          </LegacyButton>
+          </Button>
         </form>
       )}
 

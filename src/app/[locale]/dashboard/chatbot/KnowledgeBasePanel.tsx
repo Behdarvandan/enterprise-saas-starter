@@ -2,18 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FileText, Loader2, Upload } from "lucide-react";
-import LegacyButton from "@/components/ui/LegacyButton";
+import { Button } from "@/components/ui/button";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
+import type { Document } from "@/types";
 
-interface DocumentRow {
-  id: string;
-  title: string;
-  source_type: string;
-  status: string;
-  chunk_count: number;
-  created_at: string;
-}
+type DocumentRow = Pick<
+  Document,
+  "id" | "title" | "source_type" | "status" | "created_at"
+> & { chunk_count: number };
 
 interface KnowledgeBasePanelProps {
   organizationId: string;
@@ -128,7 +125,7 @@ export default function KnowledgeBasePanel({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <LegacyButton type="button" onClick={handleIngest} disabled={ingesting || !content.trim()}>
+        <Button type="button" onClick={handleIngest} disabled={ingesting || !content.trim()}>
           {ingesting ? (
             <>
               <Loader2 size={16} className="animate-spin" />
@@ -140,16 +137,16 @@ export default function KnowledgeBasePanel({
               Ingest document
             </>
           )}
-        </LegacyButton>
+        </Button>
 
-        <LegacyButton
+        <Button
           type="button"
           variant="secondary"
           onClick={() => fileInputRef.current?.click()}
         >
           <FileText size={16} />
           Upload file
-        </LegacyButton>
+        </Button>
         <input
           ref={fileInputRef}
           type="file"

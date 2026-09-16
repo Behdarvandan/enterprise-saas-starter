@@ -1,39 +1,37 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { getStripe } from "@/lib/stripe";
+import { z } from "zod";
 import { ensureOrganization } from "@/lib/billing";
 import { getPaymentAdapter, resolvePaymentProvider } from "@/lib/payment/adapter";
+import { firstIssueMessage } from "@/lib/validation";
+import { requireUserOrResponse } from "@/lib/auth";
+import { withApiErrorHandling } from "@/lib/api-error";
 
-export async function POST(request: Request) {
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+const checkoutSchema = z.object({
+  priceId: z.string().min(1, "A valid priceId is required."),
+  amount: z.number().positive().optional(),
+});
 
-    if (!user) {
+export const POST = withApiErrorHandling(
+  "Checkout error",
+  "Failed to start checkout.",
+  async (request: Request) => {
+    const auth = await requireUserOrResponse();
+    if ("response" in auth) return auth.response;
+    const { user, supabase } = auth;
+
+    const parsedBody = checkoutSchema.safeParse(
+      await request.json().catch(() => null),
+    );
+
+    if (!parsedBody.success) {
       return NextResponse.json(
-        { error: "You must be signed in." },
-        { status: 401 },
-      );
-    }
-
-    const body = (await request.json().catch(() => null)) as {
-      priceId?: unknown;
-      amount?: unknown;
-    } | null;
-
-    const priceId = typeof body?.priceId === "string" ? body.priceId : "";
-    if (!priceId) {
-      return NextResponse.json(
-        { error: "A valid priceId is required." },
+        { error: firstIssueMessage(parsedBody.error) },
         { status: 400 },
       );
     }
 
-    const amount =
-      typeof body?.amount === "number" && body.amount > 0 ? body.amount : null;
+    const { priceId } = parsedBody.data;
+    const amount = parsedBody.data.amount ?? null;
 
     const organization = await ensureOrganization(user);
     if (!organization) {
@@ -46,29 +44,6 @@ export async function POST(request: Request) {
     const provider = resolvePaymentProvider();
     const origin = new URL(request.url).origin;
 
-    // Stripe subscription checkout needs a reusable customer; other providers
-    // skip customer provisioning.
-    let existingCustomerId: string | null = null;
-    if (provider === "stripe") {
-      const stripe = getStripe();
-
-      let customerId = organization.stripe_customer_id;
-      if (!customerId) {
-        const customer = await stripe.customers.create({
-          email: user.email ?? undefined,
-          metadata: { organization_id: organization.id },
-        });
-        customerId = customer.id;
-
-        const admin = createAdminClient();
-        await admin
-          .from("organizations")
-          .update({ stripe_customer_id: customerId })
-          .eq("id", organization.id);
-      }
-      existingCustomerId = customerId;
-    }
-
     // PayTR has no native subscription API, so a plan purchase is a one-time
     // activation charge that requires an explicit amount in minor units.
     if (provider === "paytr" && !amount) {
@@ -78,24 +53,31 @@ export async function POST(request: Request) {
       );
     }
 
+    // Customer provisioning (Stripe-specific) happens inside the adapter;
+    // this route only decides whether the resulting id needs to be saved.
     const result = await getPaymentAdapter(provider).createCheckoutSession({
       mode: "subscription",
       priceId,
       amount,
       organizationId: organization.id,
-      existingCustomerId,
+      existingCustomerId: organization.provider_customer_id,
       customerEmail: user.email,
       successUrl: `${origin}/dashboard?checkout=success`,
       cancelUrl: `${origin}/pricing?checkout=canceled`,
     });
 
-    return NextResponse.json({ url: result.url });
-  } catch (error) {
-    console.error("Checkout error:", error);
-    return NextResponse.json(
-      { error: "Failed to start checkout." },
-      { status: 500 },
-    );
-  }
-}
+    // Persist a newly-provisioned provider customer id. This uses the
+    // caller's own RLS-scoped client rather than the service-role client:
+    // `ensureOrganization()` only ever returns an organization the caller
+    // already belongs to (or one it just created and owns), and
+    // `organizations_update_admin` grants owners/admins update access.
+    if (result.customerId && result.customerId !== organization.provider_customer_id) {
+      await supabase
+        .from("organizations")
+        .update({ provider_customer_id: result.customerId })
+        .eq("id", organization.id);
+    }
 
+    return NextResponse.json({ url: result.url });
+  },
+);

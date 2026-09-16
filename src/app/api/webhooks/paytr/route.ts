@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
-import {
-  getPaymentAdapter,
-  WebhookConfigurationError,
-  WebhookSignatureError,
-} from "@/lib/payment/adapter";
+import { getPaymentAdapter } from "@/lib/payment/adapter";
+import { mapWebhookError } from "@/lib/payment/webhook-error";
 
 /**
  * POST /api/webhooks/paytr
@@ -25,25 +22,11 @@ export async function POST(request: Request) {
       callbackFields,
     });
   } catch (error) {
-    if (error instanceof WebhookSignatureError) {
-      console.error("[paytr-webhook] Signature verification failed:", error.message);
-      return new NextResponse("INVALID", {
-        status: 400,
-        headers: { "content-type": "text/plain" },
-      });
-    }
+    const mapped = mapWebhookError("paytr", error);
+    const body = mapped.kind === "signature" ? "INVALID" : "ERROR";
 
-    if (error instanceof WebhookConfigurationError) {
-      console.error("[paytr-webhook] Configuration error:", error.message);
-      return new NextResponse("ERROR", {
-        status: 500,
-        headers: { "content-type": "text/plain" },
-      });
-    }
-
-    console.error("[paytr-webhook] Error handling PayTR callback:", error);
-    return new NextResponse("ERROR", {
-      status: 500,
+    return new NextResponse(body, {
+      status: mapped.status,
       headers: { "content-type": "text/plain" },
     });
   }
