@@ -15,7 +15,10 @@
       "security": "Güvenlik",
       "pricing": "Fiyatlandırma",
       "signIn": "Giriş yap",
-      "startTrial": "Ücretsiz deneyin"
+      "startTrial": "Ücretsiz deneyin",
+      "freelance": "Freelance",
+      "saas": "SaaS",
+      "contact": "İletişim"
     },
     "footer": {
       "tagline": "Her organizasyon için satır düzeyinde izolasyon sağlayan çok kiracılı randevu ve planlama altyapısı.",
@@ -81,6 +84,74 @@
       "title": "İlk organizasyonunuzu dakikalar içinde kurun.",
       "subtitle": "Ücretsiz başlayın — Starter plan için kart gerekmez.",
       "button": "Ücretsiz deneyin"
+    },
+    "leadForm": {
+      "fullNameLabel": "Ad soyad",
+      "emailLabel": "E-posta",
+      "phoneLabel": "Telefon",
+      "companyLabel": "Şirket",
+      "budgetLabel": "Bütçe aralığı",
+      "budgetPlaceholder": "Bir aralık seçin",
+      "budgetOptions": {
+        "under_2k": "2.000 $ altı",
+        "2k_5k": "2.000 $ – 5.000 $",
+        "5k_15k": "5.000 $ – 15.000 $",
+        "15k_50k": "15.000 $ – 50.000 $",
+        "50k_plus": "50.000 $ ve üzeri"
+      },
+      "deadlineLabel": "Hedef teslim tarihi",
+      "scopeLabel": "Proje kapsamı",
+      "scopePlaceholder": "Ne inşa etmek istiyorsunuz?",
+      "messageLabel": "Bilmemiz gereken başka bir şey var mı?",
+      "submitButton": "Talebi gönder",
+      "sending": "Gönderiliyor...",
+      "successMessage": "Teşekkürler — talebinizi aldık, en kısa sürede size dönüş yapacağız.",
+      "genericError": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+    },
+    "saasPage": {
+      "heroTitle": "Gerçek bir üretim ortamı için hazır SaaS altyapısı — oyuncak bir demo değil.",
+      "heroSubtitle": "Çok kiracılı Postgres satır düzeyi güvenlik, Stripe/PayTR faturalama ve bir AI bilgi tabanı sohbet botu — kendi ürününüzü üzerine kurmaya hazır şekilde bir araya getirildi.",
+      "ctaPrimary": "Ücretsiz deneyin",
+      "ctaSecondary": "Demo talep edin",
+      "featuresTitle": "Bir SaaS lansmanının ilk günden ihtiyaç duyacağı her şey.",
+      "features": {
+        "multiTenant": "Uygulama kodunda değil, veritabanı katmanında uygulanan Postgres satır düzeyi güvenlikli çok kiracılı mimari.",
+        "payments": "Tek bir sağlayıcıdan bağımsız adaptör arkasında Stripe ve PayTR faturalama — checkout mantığına dokunmadan sağlayıcı değiştirin.",
+        "rag": "pgvector benzerlik araması ile kendi dokümantasyonunuza dayanan bir AI bilgi tabanı sohbet botu.",
+        "rls": "Her kiracı tablosu, incelenmiş ve test edilmiş satır düzeyi güvenlik politikalarıyla birlikte gelir.",
+        "i18n": "Kutudan çıktığı haliyle yerelleştirilmiş yönlendirme, İngilizce ve Türkçe'nin ötesinde daha fazla dile hazır.",
+        "observability": "İlk günden itibaren istemci, sunucu ve edge çalışma zamanlarında devreye alınmış Sentry hata takibi."
+      },
+      "pricingTitle": "Ürününüzle birlikte ölçeklenen planlar.",
+      "demoTitle": "Önce rehberli bir tur mu istiyorsunuz?",
+      "demoSubtitle": "Ürününüz hakkında bize bilgi verin, size özel bir demo ayarlayalım."
+    },
+    "freelancePage": {
+      "heroTitle": "Hayata geçirmesi gereken kurucular için freelance ürün mühendisliği.",
+      "heroSubtitle": "Nimbus'un kendisini çalıştıran aynı çok kiracılı, RLS ile sertleştirilmiş temel üzerinde uçtan uca geliştirme — ilk commit'ten üretime kadar.",
+      "ctaPrimary": "Bir proje başlatın",
+      "servicesTitle": "Neler inşa ediyorum",
+      "services": {
+        "fullStack": "Veritabanı şemasından üretime dağıtıma kadar uçtan uca SaaS geliştirme.",
+        "multiTenant": "Hassas müşteri verisi işleyen ürünler için çok kiracılı mimari ve satır düzeyi güvenlik tasarımı.",
+        "ragAi": "AI/RAG entegrasyonları — bilgi tabanı sohbet botları, anlamsal arama ve LLM destekli özellikler.",
+        "payments": "Stripe ve bölgesel ödeme sağlayıcıları arasında, sağlayıcıdan bağımsız temiz soyutlamalarla ödeme entegrasyonu."
+      },
+      "portfolioTitle": "Son çalışmalar",
+      "portfolioViewAll": "Tüm çalışmaları görüntüle",
+      "formTitle": "Projeniz hakkında bilgi verin",
+      "formSubtitle": "Bütçenizi ve zaman çizelgenizi paylaşın, sonraki adımlarla size dönüş yapayım."
+    },
+    "portfolioPage": {
+      "backLink": "Freelance hizmetlerine dön",
+      "stackLabel": "Teknoloji yığını",
+      "notFoundTitle": "Vaka çalışması bulunamadı"
+    },
+    "contactPage": {
+      "title": "Konuşalım",
+      "subtitle": "Ne inşa ettiğinizi bize anlatın ve size en uygun seçeneği seçin.",
+      "kindFreelance": "Freelance proje",
+      "kindSaas": "SaaS talebi"
     }
   },
   "auth": {

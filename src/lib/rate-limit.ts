@@ -15,18 +15,33 @@ export const ratelimit = new Ratelimit({
 });
 
 /**
+ * Tighter limiter for the public lead-intake form: it's spam-prone (no
+ * auth, no CAPTCHA) and low-volume by nature, unlike booking/chat traffic,
+ * so it gets its own instance rather than sharing the default's budget.
+ */
+export const leadRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(5, "300 s"),
+});
+
+/**
  * Checks whether the given key is still within its rate limit.
  *
  * Fails open: if Redis is unreachable or misconfigured, the underlying
  * endpoint should stay up rather than 500 for every caller, so the request
  * is allowed through and the failure is only logged server-side.
  *
+ * @param limiter Which `Ratelimit` instance to check against; defaults to
+ * the shared default so existing call sites are unaffected.
  * @returns `true` when the request is allowed, `false` when it has been
  * rate-limited and should be rejected.
  */
-export async function checkRateLimit(key: string): Promise<boolean> {
+export async function checkRateLimit(
+  key: string,
+  limiter: Ratelimit = ratelimit,
+): Promise<boolean> {
   try {
-    const { success } = await ratelimit.limit(key);
+    const { success } = await limiter.limit(key);
     return success;
   } catch (error) {
     console.warn("[rate-limit] Redis error, failing open:", error);

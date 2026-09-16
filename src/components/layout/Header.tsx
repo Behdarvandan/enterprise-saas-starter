@@ -30,6 +30,15 @@ export default async function Header() {
           <Link href="/pricing" className="transition-colors hover:text-ink-primary">
             {t("pricing")}
           </Link>
+          <Link href="/saas" className="transition-colors hover:text-ink-primary">
+            {t("saas")}
+          </Link>
+          <Link href="/freelance" className="transition-colors hover:text-ink-primary">
+            {t("freelance")}
+          </Link>
+          <Link href="/contact" className="transition-colors hover:text-ink-primary">
+            {t("contact")}
+          </Link>
           <Link href="/login" className="transition-colors hover:text-ink-primary">
             {t("signIn")}
           </Link>

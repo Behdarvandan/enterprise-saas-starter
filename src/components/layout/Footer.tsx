@@ -12,6 +12,9 @@ export default async function Footer() {
     { label: tHeader("platform"), href: "/#platform" },
     { label: tHeader("security"), href: "/#security" },
     { label: tHeader("pricing"), href: "/pricing" },
+    { label: tHeader("saas"), href: "/saas" },
+    { label: tHeader("freelance"), href: "/freelance" },
+    { label: tHeader("contact"), href: "/contact" },
   ];
 
   const ACCOUNT_LINKS = [

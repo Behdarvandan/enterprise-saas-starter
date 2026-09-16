@@ -15,7 +15,10 @@
       "security": "Security",
       "pricing": "Pricing",
       "signIn": "Sign in",
-      "startTrial": "Start free trial"
+      "startTrial": "Start free trial",
+      "freelance": "Freelance",
+      "saas": "SaaS",
+      "contact": "Contact"
     },
     "footer": {
       "tagline": "Multi-tenant booking and scheduling infrastructure with row-level isolation for every organization.",
@@ -81,6 +84,74 @@
       "title": "Set up your first organization in minutes.",
       "subtitle": "Free to start — no card required for the Starter plan.",
       "button": "Start free trial"
+    },
+    "leadForm": {
+      "fullNameLabel": "Full name",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone",
+      "companyLabel": "Company",
+      "budgetLabel": "Budget range",
+      "budgetPlaceholder": "Select a range",
+      "budgetOptions": {
+        "under_2k": "Under $2,000",
+        "2k_5k": "$2,000 – $5,000",
+        "5k_15k": "$5,000 – $15,000",
+        "15k_50k": "$15,000 – $50,000",
+        "50k_plus": "$50,000+"
+      },
+      "deadlineLabel": "Target deadline",
+      "scopeLabel": "Project scope",
+      "scopePlaceholder": "What are you looking to build?",
+      "messageLabel": "Anything else we should know?",
+      "submitButton": "Send request",
+      "sending": "Sending...",
+      "successMessage": "Thanks — we've received your request and will be in touch shortly.",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "saasPage": {
+      "heroTitle": "A production-ready SaaS starter, not a toy demo.",
+      "heroSubtitle": "Multi-tenant Postgres row-level security, Stripe/PayTR billing, and an AI knowledge-base chatbot — wired together and ready to launch your own product on.",
+      "ctaPrimary": "Start free trial",
+      "ctaSecondary": "Request a demo",
+      "featuresTitle": "Everything a SaaS launch needs on day one.",
+      "features": {
+        "multiTenant": "Multi-tenant architecture with Postgres row-level security enforced at the database layer, not in application code.",
+        "payments": "Stripe and PayTR billing behind a single provider-agnostic adapter — swap providers without touching checkout logic.",
+        "rag": "An AI knowledge-base chatbot grounded in your own documentation via pgvector similarity search.",
+        "rls": "Every tenant table ships with matching row-level security policies, reviewed and battle-tested.",
+        "i18n": "Localized routing out of the box, ready for more locales beyond English and Turkish.",
+        "observability": "Sentry error tracking wired in across client, server, and edge runtimes from day one."
+      },
+      "pricingTitle": "Plans that scale with your product.",
+      "demoTitle": "Want a guided walkthrough first?",
+      "demoSubtitle": "Tell us about your product and we'll set up a demo tailored to it."
+    },
+    "freelancePage": {
+      "heroTitle": "Freelance product engineering for founders who need to ship.",
+      "heroSubtitle": "Full-stack builds on the same multi-tenant, RLS-hardened foundation that powers Nimbus itself — from first commit to production.",
+      "ctaPrimary": "Start a project",
+      "servicesTitle": "What I build",
+      "services": {
+        "fullStack": "Full-stack SaaS development, from database schema to production deployment.",
+        "multiTenant": "Multi-tenant architecture and row-level security design for products handling sensitive customer data.",
+        "ragAi": "AI/RAG integrations — knowledge-base chatbots, semantic search, and LLM-powered features.",
+        "payments": "Payment integration across Stripe and regional processors, with clean provider-agnostic abstractions."
+      },
+      "portfolioTitle": "Recent work",
+      "portfolioViewAll": "View all work",
+      "formTitle": "Tell me about your project",
+      "formSubtitle": "Share your budget and timeline and I'll follow up with next steps."
+    },
+    "portfolioPage": {
+      "backLink": "Back to freelance services",
+      "stackLabel": "Stack",
+      "notFoundTitle": "Case study not found"
+    },
+    "contactPage": {
+      "title": "Let's talk",
+      "subtitle": "Tell us what you're building and pick the option that fits best.",
+      "kindFreelance": "Freelance project",
+      "kindSaas": "SaaS inquiry"
     }
   },
   "auth": {
