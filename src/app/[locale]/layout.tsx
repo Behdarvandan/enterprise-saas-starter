@@ -4,7 +4,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/theme-provider";
-import { routing, type Locale } from "@/i18n/routing";
+import { isRtlLocale, routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
 // Inter carries body/UI copy; Fraunces is reserved for headings and display
@@ -58,6 +58,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      dir={isRtlLocale(locale) ? "rtl" : "ltr"}
       suppressHydrationWarning
       className={`${inter.variable} ${fraunces.variable} ${geistMono.variable}`}
     >
