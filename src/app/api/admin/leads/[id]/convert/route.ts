@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 import { requireOperatorAdminOrResponse } from "@/lib/operator";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { withApiErrorHandling } from "@/lib/api-error";
-import { getBaseUrl } from "@/lib/url";
-import { sendInvitationEmail } from "@/lib/email";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -16,10 +14,13 @@ interface RouteParams {
  * Converts an accepted lead into a real tenant: creates a fresh
  * single-tenant organization for them (they have no auth.users account yet,
  * so `create_organization()`'s "caller becomes owner" RPC doesn't apply
- * here — the org is inserted directly via the service-role client), sends
- * them an "owner" invitation through the existing team-invite email flow,
- * and links a `client_projects` row so their project immediately shows up
- * in both the admin CRM and their future client portal.
+ * here — the org is inserted directly via the service-role client), links a
+ * `client_projects` row so their project immediately shows up in both the
+ * admin CRM and their future client portal, and creates a pending "owner"
+ * invitation row. The invite EMAIL is deliberately not sent here — per
+ * brief §5.3, creating the client and sending the invite are two separate,
+ * explicit steps ("Client oluşturuldu. Davet e-postası gönderilsin mi?"),
+ * handled by a follow-up call to `/api/admin/leads/[id]/send-invite`.
  *
  * Idempotent: refuses to convert the same lead twice.
  */
@@ -94,9 +95,9 @@ export const POST = withApiErrorHandling(
       );
     }
 
-    // Best-effort: invite the lead's contact as the owner of their new
-    // organization, reusing the same invitation table/email the team invite
-    // flow uses — the org/project rows above are already saved either way.
+    // Creates the pending "owner" invitation row (reusing the same table the
+    // team invite flow uses) but does not send the email — that's a
+    // separate, explicit step via /send-invite.
     const token = randomBytes(32).toString("hex");
     const expiresAt = new Date(
       Date.now() + 7 * 24 * 60 * 60 * 1000,
@@ -111,19 +112,7 @@ export const POST = withApiErrorHandling(
       status: "pending",
     });
 
-    if (!invitationError) {
-      try {
-        const baseUrl = await getBaseUrl();
-        await sendInvitationEmail({
-          to: lead.email,
-          organizationName: organization.name,
-          role: "owner",
-          inviteUrl: `${baseUrl}/invite/${token}`,
-        });
-      } catch (sendError) {
-        console.error("Failed to send lead-conversion invitation email:", sendError);
-      }
-    } else {
+    if (invitationError) {
       console.error("Failed to create lead-conversion invitation:", invitationError);
     }
 

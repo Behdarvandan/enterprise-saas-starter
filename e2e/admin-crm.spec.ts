@@ -47,6 +47,18 @@ test.describe("Admin CRM API guards", () => {
     expect(body.error).toBeTruthy();
   });
 
+  test("POST /api/admin/leads/[id]/send-invite requires an authenticated session", async ({
+    request,
+  }) => {
+    const response = await request.post(
+      "/api/admin/leads/00000000-0000-0000-0000-000000000000/send-invite",
+    );
+    expect(response.status()).toBe(401);
+
+    const body = await response.json();
+    expect(body.error).toBeTruthy();
+  });
+
   test("POST /api/admin/tasks requires an authenticated session", async ({
     request,
   }) => {
