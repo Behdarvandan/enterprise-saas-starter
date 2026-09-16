@@ -12,6 +12,20 @@ export type Organization = Database["public"]["Tables"]["organizations"]["Row"];
 export type Membership = Database["public"]["Tables"]["memberships"]["Row"];
 export type Invitation = Database["public"]["Tables"]["invitations"]["Row"];
 export type MembershipRole = Database["public"]["Enums"]["membership_role"];
+export type PortalKind = Database["public"]["Enums"]["portal_kind"];
+
+// Freelance operations & enterprise starter-kit entities.
+export type Lead = Database["public"]["Tables"]["leads"]["Row"];
+export type LeadStatus = Lead["status"];
+export type ClientProject = Database["public"]["Tables"]["client_projects"]["Row"];
+export type ProjectStage = ClientProject["stage"];
+export type ClientInvoice = Database["public"]["Tables"]["client_invoices"]["Row"];
+export type InvoiceStatus = ClientInvoice["status"];
+export type SaasSubscription = Database["public"]["Tables"]["saas_subscriptions"]["Row"];
+export type InternalTask = Database["public"]["Tables"]["internal_tasks"]["Row"];
+export type TaskColumnStatus = InternalTask["column_status"];
+export type AuditLog = Database["public"]["Tables"]["audit_logs"]["Row"];
+export type PlatformSettings = Database["public"]["Tables"]["platform_settings"]["Row"];
 
 // AI Chatbot & RAG Knowledge Assistant entities.
 export type Document = Database["public"]["Tables"]["documents"]["Row"];

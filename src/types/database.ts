@@ -77,6 +77,54 @@ export type Database = {
           },
         ]
       }
+      audit_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          organization_id: string | null
+          target_id: string | null
+          target_table: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          organization_id?: string | null
+          target_id?: string | null
+          target_table?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          organization_id?: string | null
+          target_id?: string | null
+          target_table?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       availability_slots: {
         Row: {
           created_at: string
@@ -195,6 +243,120 @@ export type Database = {
           },
         ]
       }
+      client_invoices: {
+        Row: {
+          amount: number
+          contract_url: string | null
+          created_at: string
+          currency: string
+          due_date: string | null
+          id: string
+          invoice_number: string
+          organization_id: string
+          paid_at: string | null
+          project_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          contract_url?: string | null
+          created_at?: string
+          currency?: string
+          due_date?: string | null
+          id?: string
+          invoice_number: string
+          organization_id: string
+          paid_at?: string | null
+          project_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          contract_url?: string | null
+          created_at?: string
+          currency?: string
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          organization_id?: string
+          paid_at?: string | null
+          project_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_invoices_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_invoices_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "client_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_projects: {
+        Row: {
+          created_at: string
+          id: string
+          lead_id: string | null
+          live_url: string | null
+          name: string
+          notes: string | null
+          organization_id: string
+          repo_url: string | null
+          stage: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          live_url?: string | null
+          name: string
+          notes?: string | null
+          organization_id: string
+          repo_url?: string | null
+          stage?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          live_url?: string | null
+          name?: string
+          notes?: string | null
+          organization_id?: string
+          repo_url?: string | null
+          stage?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_projects_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_projects_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_chunks: {
         Row: {
           chunk_index: number
@@ -306,6 +468,44 @@ export type Database = {
           },
         ]
       }
+      internal_tasks: {
+        Row: {
+          column_status: string
+          created_at: string
+          description: string | null
+          id: string
+          related_client_project_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          column_status?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          related_client_project_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          column_status?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          related_client_project_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "internal_tasks_related_client_project_id_fkey"
+            columns: ["related_client_project_id"]
+            isOneToOne: false
+            referencedRelation: "client_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invitations: {
         Row: {
           created_at: string
@@ -340,6 +540,68 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "invitations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          budget_range: string | null
+          company: string | null
+          created_at: string
+          deadline: string | null
+          email: string
+          full_name: string
+          id: string
+          kind: string
+          message: string | null
+          organization_id: string
+          phone: string | null
+          project_scope: string | null
+          source: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          budget_range?: string | null
+          company?: string | null
+          created_at?: string
+          deadline?: string | null
+          email: string
+          full_name: string
+          id?: string
+          kind: string
+          message?: string | null
+          organization_id: string
+          phone?: string | null
+          project_scope?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          budget_range?: string | null
+          company?: string | null
+          created_at?: string
+          deadline?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          kind?: string
+          message?: string | null
+          organization_id?: string
+          phone?: string | null
+          project_scope?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -425,6 +687,35 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_settings: {
+        Row: {
+          created_at: string
+          id: boolean
+          operator_organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: boolean
+          operator_organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: boolean
+          operator_organization_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_settings_operator_organization_id_fkey"
+            columns: ["operator_organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -432,6 +723,7 @@ export type Database = {
           email: string
           full_name: string | null
           id: string
+          portal_kind: Database["public"]["Enums"]["portal_kind"]
           updated_at: string
         }
         Insert: {
@@ -440,6 +732,7 @@ export type Database = {
           email: string
           full_name?: string | null
           id: string
+          portal_kind?: Database["public"]["Enums"]["portal_kind"]
           updated_at?: string
         }
         Update: {
@@ -448,9 +741,54 @@ export type Database = {
           email?: string
           full_name?: string | null
           id?: string
+          portal_kind?: Database["public"]["Enums"]["portal_kind"]
           updated_at?: string
         }
         Relationships: []
+      }
+      saas_subscriptions: {
+        Row: {
+          api_key_hash: string | null
+          created_at: string
+          id: string
+          license_key: string
+          organization_id: string
+          seats: number
+          status: string
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          api_key_hash?: string | null
+          created_at?: string
+          id?: string
+          license_key?: string
+          organization_id: string
+          seats?: number
+          status?: string
+          tier?: string
+          updated_at?: string
+        }
+        Update: {
+          api_key_hash?: string | null
+          created_at?: string
+          id?: string
+          license_key?: string
+          organization_id?: string
+          seats?: number
+          status?: string
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saas_subscriptions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       services: {
         Row: {
@@ -724,9 +1062,40 @@ export type Database = {
           created_at: string
         }
       }
+      is_operator_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      submit_lead: {
+        Args: {
+          p_kind: string
+          p_full_name: string
+          p_email: string
+          p_phone: string | null
+          p_company: string | null
+          p_budget_range: string | null
+          p_project_scope: string | null
+          p_deadline: string | null
+          p_message: string | null
+          p_source: string | null
+        }
+        Returns: string
+      }
+      write_audit_log: {
+        Args: {
+          p_action: string
+          p_organization_id: string | null
+          p_actor_id: string | null
+          p_target_table: string | null
+          p_target_id: string | null
+          p_metadata: Json | null
+        }
+        Returns: string
+      }
     }
     Enums: {
       membership_role: "owner" | "admin" | "member"
+      portal_kind: "operator" | "tenant"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -855,6 +1224,7 @@ export const Constants = {
   public: {
     Enums: {
       membership_role: ["owner", "admin", "member"],
+      portal_kind: ["operator", "tenant"],
     },
   },
 } as const
