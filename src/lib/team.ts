@@ -60,3 +60,12 @@ export async function getUserOrganizations(
 export function canManageMembers(role: MembershipRole): boolean {
   return role === "owner" || role === "admin";
 }
+
+/**
+ * Whether a role is allowed to self-serve rotate their organization's SaaS
+ * API key. Mirrors `canManageMembers` — same owner/admin threshold, kept as
+ * a separate helper since the two permissions may diverge later.
+ */
+export function canRotateApiKey(role: MembershipRole): boolean {
+  return role === "owner" || role === "admin";
+}

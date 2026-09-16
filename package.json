@@ -9,6 +9,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.9.0",
     "@sentry/nextjs": "^8.55.2",
     "@stripe/stripe-js": "^9.16.0",
     "@supabase/ssr": "^0.12.7",
