@@ -834,6 +834,82 @@ export type Database = {
           },
         ]
       }
+      sso_connections: {
+        Row: {
+          config: Json
+          created_at: string
+          enabled: boolean
+          id: string
+          organization_id: string
+          provider: Database["public"]["Enums"]["sso_provider"]
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          organization_id: string
+          provider: Database["public"]["Enums"]["sso_provider"]
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          organization_id?: string
+          provider?: Database["public"]["Enums"]["sso_provider"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sso_connections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      usage_quotas: {
+        Row: {
+          created_at: string
+          id: string
+          organization_id: string
+          period_start: string
+          tokens_limit: number
+          tokens_used: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          organization_id: string
+          period_start?: string
+          tokens_limit?: number
+          tokens_used?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          organization_id?: string
+          period_start?: string
+          tokens_limit?: number
+          tokens_used?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_quotas_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1092,10 +1168,15 @@ export type Database = {
         }
         Returns: string
       }
+      increment_token_usage: {
+        Args: { p_organization_id: string; p_tokens: number }
+        Returns: undefined
+      }
     }
     Enums: {
       membership_role: "owner" | "admin" | "member"
       portal_kind: "operator" | "tenant"
+      sso_provider: "okta" | "google_workspace"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1225,6 +1306,7 @@ export const Constants = {
     Enums: {
       membership_role: ["owner", "admin", "member"],
       portal_kind: ["operator", "tenant"],
+      sso_provider: ["okta", "google_workspace"],
     },
   },
 } as const

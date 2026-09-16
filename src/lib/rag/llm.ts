@@ -49,16 +49,36 @@ const streamDeltaSchema = z.object({
   choices: z
     .array(z.object({ delta: z.object({ content: z.string().optional() }).optional() }))
     .optional(),
+  // Only present on the trailing chunk when `stream_options.include_usage`
+  // is set — both Groq and OpenAI's chat-completions endpoints support it.
+  usage: z
+    .object({
+      prompt_tokens: z.number(),
+      completion_tokens: z.number(),
+    })
+    .optional(),
 });
+
+export interface LLMUsage {
+  promptTokens: number;
+  completionTokens: number;
+}
+
+export interface LLMCompletionResult {
+  text: string;
+  /** `null` when the provider didn't return a usage chunk. */
+  usage: LLMUsage | null;
+}
 
 /**
  * Streams a chat completion and invokes `onToken` for each generated token.
- * Resolves with the fully accumulated assistant text.
+ * Resolves with the fully accumulated assistant text and token usage (for
+ * the RAG chat quota — see src/lib/rag/quota.ts).
  */
 export async function streamChatCompletion(
   messages: LLMMessage[],
   onToken: (token: string) => void,
-): Promise<string> {
+): Promise<LLMCompletionResult> {
   const provider = resolveProvider();
 
   const response = await fetch(provider.url, {
@@ -71,6 +91,7 @@ export async function streamChatCompletion(
       model: provider.model,
       messages,
       stream: true,
+      stream_options: { include_usage: true },
       temperature: 0.2,
       max_tokens: 1024,
     }),
@@ -85,6 +106,7 @@ export async function streamChatCompletion(
   const decoder = new TextDecoder();
   let buffer = "";
   let fullText = "";
+  let usage: LLMUsage | null = null;
 
   while (true) {
     const { done, value } = await reader.read();
@@ -103,12 +125,19 @@ export async function streamChatCompletion(
 
       try {
         const parsed = streamDeltaSchema.safeParse(JSON.parse(data));
-        const token = parsed.success
-          ? (parsed.data.choices?.[0]?.delta?.content ?? "")
-          : "";
+        if (!parsed.success) continue;
+
+        const token = parsed.data.choices?.[0]?.delta?.content ?? "";
         if (token) {
           fullText += token;
           onToken(token);
+        }
+
+        if (parsed.data.usage) {
+          usage = {
+            promptTokens: parsed.data.usage.prompt_tokens,
+            completionTokens: parsed.data.usage.completion_tokens,
+          };
         }
       } catch {
         // Ignore malformed or keep-alive lines emitted by some providers.
@@ -116,5 +145,5 @@ export async function streamChatCompletion(
     }
   }
 
-  return fullText;
+  return { text: fullText, usage };
 }

@@ -26,6 +26,11 @@ export type InternalTask = Database["public"]["Tables"]["internal_tasks"]["Row"]
 export type TaskColumnStatus = InternalTask["column_status"];
 export type AuditLog = Database["public"]["Tables"]["audit_logs"]["Row"];
 export type PlatformSettings = Database["public"]["Tables"]["platform_settings"]["Row"];
+// Named to match src/lib/sso/adapter.ts's SsoConnectionProvider, avoiding a
+// clash with that module's own (interface) SsoProvider export.
+export type SsoConnectionProviderKind = Database["public"]["Enums"]["sso_provider"];
+export type SsoConnection = Database["public"]["Tables"]["sso_connections"]["Row"];
+export type UsageQuota = Database["public"]["Tables"]["usage_quotas"]["Row"];
 
 // AI Chatbot & RAG Knowledge Assistant entities.
 export type Document = Database["public"]["Tables"]["documents"]["Row"];

@@ -6,6 +6,9 @@ import FreelanceRevenueChart, {
 import SaasRevenueChart, {
   type PlanRevenuePoint,
 } from "@/components/admin/SaasRevenueChart";
+import TokenUsageChart, {
+  type OrgTokenUsagePoint,
+} from "@/components/admin/TokenUsageChart";
 
 export const dynamic = "force-dynamic";
 
@@ -75,6 +78,30 @@ export default async function AdminAnalyticsPage() {
   });
   const saasTotal = saasRevenue.reduce((sum, point) => sum + point.amount, 0);
 
+  // --- Token usage: live per-org quota snapshot, top 10 by usage (see -----
+  // TokenUsageChart's doc comment for why this isn't a historical trend).
+  const { data: quotas } = await supabase
+    .from("usage_quotas")
+    .select("organization_id, tokens_used, tokens_limit")
+    .order("tokens_used", { ascending: false })
+    .limit(10);
+
+  const quotaOrgIds = (quotas ?? []).map((quota) => quota.organization_id);
+  const { data: quotaOrganizations } = quotaOrgIds.length
+    ? await supabase.from("organizations").select("id, name").in("id", quotaOrgIds)
+    : { data: [] as { id: string; name: string }[] };
+  const orgNameById = new Map((quotaOrganizations ?? []).map((org) => [org.id, org.name]));
+
+  const tokenUsage: OrgTokenUsagePoint[] = (quotas ?? []).map((quota) => ({
+    organization: orgNameById.get(quota.organization_id) ?? "Unknown",
+    percentUsed:
+      quota.tokens_limit > 0
+        ? Math.min(100, (quota.tokens_used / quota.tokens_limit) * 100)
+        : 0,
+    tokensUsed: quota.tokens_used,
+    tokensLimit: quota.tokens_limit,
+  }));
+
   // --- Audit log -----------------------------------------------------------
   const { data: auditLogs } = await supabase
     .from("audit_logs")
@@ -122,6 +149,22 @@ export default async function AdminAnalyticsPage() {
           <div className="mt-4">
             <SaasRevenueChart data={saasRevenue} />
           </div>
+        </div>
+      </div>
+
+      <div className="mt-8 rounded-interactive border border-subtle bg-surface p-6">
+        <h2 className="text-sm font-semibold text-ink-primary">AI assistant token usage</h2>
+        <p className="mt-1 text-xs text-ink-muted">
+          Current period quota consumption, top 10 organizations by usage
+        </p>
+        <div className="mt-4">
+          {tokenUsage.length === 0 ? (
+            <p className="py-8 text-center text-sm text-ink-muted">
+              No RAG chat usage recorded yet.
+            </p>
+          ) : (
+            <TokenUsageChart data={tokenUsage} />
+          )}
         </div>
       </div>
 

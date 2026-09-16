@@ -5,6 +5,7 @@ import { createAnonClient } from "@/lib/supabase/anon";
 import { isOrganizationServiceable } from "@/lib/billing";
 import { getEmbedding } from "@/lib/rag/embeddings";
 import { streamChatCompletion, type LLMMessage } from "@/lib/rag/llm";
+import { checkQuota, incrementTokenUsage } from "@/lib/rag/quota";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { firstIssueMessage } from "@/lib/validation";
 import type { ChatMatchSource, ChatRequestBody, ChatStreamEvent, Json } from "@/types";
@@ -144,6 +145,16 @@ export async function POST(request: Request) {
       );
     }
 
+    const quota = await checkQuota(organizationId);
+    if (!quota.allowed) {
+      return NextResponse.json(
+        {
+          error: `This organization has reached its AI assistant token quota (${quota.tokensUsed}/${quota.tokensLimit}). Contact support to increase the limit.`,
+        },
+        { status: 429 },
+      );
+    }
+
     // Resolve or create a session scoped strictly to the tenant.
     let sessionId = parsedBody.data.sessionId ?? null;
 
@@ -249,6 +260,7 @@ export async function POST(request: Request) {
     const stream = new ReadableStream({
       async start(controller) {
         let fullText = "";
+        let usage: Awaited<ReturnType<typeof streamChatCompletion>>["usage"] = null;
 
         try {
           controller.enqueue(encoder.encode(toSSE({ type: "session", sessionId })));
@@ -257,11 +269,13 @@ export async function POST(request: Request) {
             controller.enqueue(encoder.encode(toSSE({ type: "sources", sources })));
           }
 
-          fullText = await streamChatCompletion(messages, (token) => {
+          const result = await streamChatCompletion(messages, (token) => {
             controller.enqueue(
               encoder.encode(toSSE({ type: "delta", content: token })),
             );
           });
+          fullText = result.text;
+          usage = result.usage;
 
           controller.enqueue(encoder.encode(toSSE({ type: "done" })));
         } catch (error) {
@@ -282,6 +296,14 @@ export async function POST(request: Request) {
               p_content: fullText,
               p_sources: sources.length ? (sources as unknown as Json) : null,
             });
+          }
+          // Best-effort — a missing usage chunk (some providers/configs)
+          // just means this exchange isn't metered, not a hard failure.
+          if (usage) {
+            await incrementTokenUsage(
+              organizationId,
+              usage.promptTokens + usage.completionTokens,
+            );
           }
           controller.close();
         }
