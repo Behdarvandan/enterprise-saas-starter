@@ -12,10 +12,19 @@
 -- operator admin has full override access.
 -- ============================================================================
 
+-- `gen_random_bytes` is provided by pgcrypto, installed into the
+-- `extensions` schema on Supabase projects (unlike `gen_random_uuid`, which
+-- is a Postgres 13+ built-in and needs no extension or schema
+-- qualification). `is_operator_admin`/other SECURITY DEFINER functions run
+-- with `search_path = public`, and `extensions` is not on every role's
+-- default search_path either, so the call below is schema-qualified
+-- explicitly rather than relying on search_path.
+create extension if not exists "pgcrypto" with schema extensions;
+
 create table public.saas_subscriptions (
   id              uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations (id) on delete cascade,
-  license_key     text not null unique default encode(gen_random_bytes(24), 'hex'),
+  license_key     text not null unique default encode(extensions.gen_random_bytes(24), 'hex'),
   api_key_hash    text, -- hash only; the raw key is shown once on generation/rotation
   tier            text not null default 'starter',
   seats           integer not null default 1 check (seats > 0),
