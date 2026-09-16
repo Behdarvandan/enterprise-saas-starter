@@ -11,7 +11,7 @@ function getResend(): Resend {
 }
 
 // Defaults to Resend's test sender. In production, set this to a verified
-// domain (e.g. "Pasargad <hello@yourdomain.com>").
+// domain (e.g. "Pasargad <hello@yourdomain.com>") — see .env.example.
 const FROM_EMAIL = process.env.EMAIL_FROM ?? "Pasargad <onboarding@resend.dev>";
 
 function escapeHtml(value: string): string {
@@ -48,6 +48,50 @@ export async function sendEmail({
   }
 }
 
+// ----------------------------------------------------------------------------
+// Pasargad email shell — hardcoded hex, not CSS custom properties: email
+// clients don't reliably support `:root`/`var()`, so these mirror
+// globals.css's dark-ink/gold tokens (§1.1) as literal values instead of
+// referencing them. No inline SVG motif for the same reason (inconsistent
+// email-client support) — the wordmark is styled text.
+// ----------------------------------------------------------------------------
+const EMAIL_COLORS = {
+  canvas: "#14121b",
+  card: "#1d1a28",
+  foreground: "#ede9e1",
+  muted: "#94899e",
+  primary: "#b08d57",
+  primaryForeground: "#1a1520",
+  border: "#332f40",
+};
+
+function emailButton(label: string, url: string): string {
+  return `
+    <a href="${url}"
+       style="display: inline-block; margin-top: 20px; padding: 12px 22px; background-color: ${EMAIL_COLORS.primary}; color: ${EMAIL_COLORS.primaryForeground}; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 600;">
+      ${label}
+    </a>
+  `;
+}
+
+function emailShell(title: string, bodyHtml: string): string {
+  const year = new Date().getFullYear();
+  return `
+    <div style="background-color: ${EMAIL_COLORS.canvas}; padding: 40px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;">
+      <div style="max-width: 480px; margin: 0 auto; background-color: ${EMAIL_COLORS.card}; border: 1px solid ${EMAIL_COLORS.border}; border-radius: 8px; padding: 32px;">
+        <p style="margin: 0 0 24px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: ${EMAIL_COLORS.primary};">
+          Pasargad
+        </p>
+        <h1 style="font-size: 20px; margin: 0 0 12px; color: ${EMAIL_COLORS.foreground};">${title}</h1>
+        ${bodyHtml}
+      </div>
+      <p style="max-width: 480px; margin: 24px auto 0; padding: 0 8px; text-align: center; font-size: 12px; color: ${EMAIL_COLORS.muted};">
+        © ${year} Pasargad. This is an automated notification.
+      </p>
+    </div>
+  `;
+}
+
 export async function sendInvitationEmail({
   to,
   organizationName,
@@ -66,22 +110,19 @@ export async function sendInvitationEmail({
   await sendEmail({
     to,
     subject: `You've been invited to join ${organizationName}`,
-    html: `
-      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; color: #0f172a;">
-        <h1 style="font-size: 20px; margin: 0 0 12px;">You've been invited</h1>
-        <p style="font-size: 14px; line-height: 1.6;">
+    html: emailShell(
+      "You've been invited",
+      `
+        <p style="font-size: 14px; line-height: 1.6; color: ${EMAIL_COLORS.foreground};">
           You've been invited to join <strong>${safeOrg}</strong> as a
           <strong>${safeRole}</strong>.
         </p>
-        <a href="${safeUrl}"
-           style="display: inline-block; margin-top: 16px; padding: 10px 16px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 600;">
-          Accept invitation
-        </a>
-        <p style="font-size: 12px; color: #64748b; margin-top: 24px;">
+        ${emailButton("Accept invitation", safeUrl)}
+        <p style="font-size: 12px; color: ${EMAIL_COLORS.muted}; margin-top: 24px;">
           This invitation link expires in 7 days.
         </p>
-      </div>
-    `,
+      `,
+    ),
   });
 }
 
@@ -97,22 +138,19 @@ export async function sendPasswordResetEmail({
   await sendEmail({
     to,
     subject: "Reset your password",
-    html: `
-      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; color: #0f172a;">
-        <h1 style="font-size: 20px; margin: 0 0 12px;">Reset your password</h1>
-        <p style="font-size: 14px; line-height: 1.6;">
+    html: emailShell(
+      "Reset your password",
+      `
+        <p style="font-size: 14px; line-height: 1.6; color: ${EMAIL_COLORS.foreground};">
           We received a request to reset your password. Click the button below to
           choose a new one.
         </p>
-        <a href="${safeUrl}"
-           style="display: inline-block; margin-top: 16px; padding: 10px 16px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 600;">
-          Reset password
-        </a>
-        <p style="font-size: 12px; color: #64748b; margin-top: 24px;">
+        ${emailButton("Reset password", safeUrl)}
+        <p style="font-size: 12px; color: ${EMAIL_COLORS.muted}; margin-top: 24px;">
           If you didn't request this, you can safely ignore this email.
         </p>
-      </div>
-    `,
+      `,
+    ),
   });
 }
 
@@ -145,45 +183,34 @@ export async function sendBookingConfirmationEmail({
   const startTime = formatAppointmentTime(appointmentStart);
   const endTime = formatAppointmentTime(appointmentEnd);
 
+  const row = (label: string, value: string) => `
+    <tr>
+      <td style="padding: 8px 0; border-bottom: 1px solid ${EMAIL_COLORS.border}; color: ${EMAIL_COLORS.muted};">${label}</td>
+      <td style="padding: 8px 0; border-bottom: 1px solid ${EMAIL_COLORS.border}; text-align: right; font-weight: 600; color: ${EMAIL_COLORS.foreground};">${value}</td>
+    </tr>
+  `;
+
   await sendEmail({
     to,
     subject: `Booking confirmed: ${serviceName} on ${date}`,
-    html: `
-      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; color: #0f172a;">
-        <h1 style="font-size: 20px; margin: 0 0 12px;">Booking confirmed</h1>
-        <p style="font-size: 14px; line-height: 1.6;">
+    html: emailShell(
+      "Booking confirmed",
+      `
+        <p style="font-size: 14px; line-height: 1.6; color: ${EMAIL_COLORS.foreground};">
           Your appointment with <strong>${safeOrg}</strong> has been confirmed.
         </p>
         <table style="width: 100%; margin-top: 16px; border-collapse: collapse; font-size: 14px;">
-          <tr>
-            <td style="padding: 8px 0; color: #64748b;">Service</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${safeService}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b;">Date</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${escapeHtml(date)}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b;">Time</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${escapeHtml(startTime)} &ndash; ${escapeHtml(endTime)}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b;">Name</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${safeName}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b;">Email</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${safeEmail}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b;">Phone</td>
-            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${safePhone}</td>
-          </tr>
+          ${row("Service", safeService)}
+          ${row("Date", escapeHtml(date))}
+          ${row("Time", `${escapeHtml(startTime)} &ndash; ${escapeHtml(endTime)}`)}
+          ${row("Name", safeName)}
+          ${row("Email", safeEmail)}
+          ${row("Phone", safePhone)}
         </table>
-        <p style="font-size: 12px; color: #64748b; margin-top: 24px;">
+        <p style="font-size: 12px; color: ${EMAIL_COLORS.muted}; margin-top: 24px;">
           If you need to change or cancel this appointment, please contact ${safeOrg}.
         </p>
-      </div>
-    `,
+      `,
+    ),
   });
 }
