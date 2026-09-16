@@ -71,3 +71,8 @@ REFACTOR_PLAN.md
 # machine-local Claude Code settings (never shared/committed, per CLAUDE.md)
 .claude/settings.local.json
 CLAUDE.md
+repomix-output.xml
+repomix-output.txt
+.cline/
+.clinerules
+.clineignore
