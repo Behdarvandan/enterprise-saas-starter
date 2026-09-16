@@ -1,7 +1,7 @@
 {
   "common": {
     "metadata": {
-      "title": "Nimbus — Multi-Tenant Booking Infrastructure",
+      "title": "Pasargad — Multi-Tenant Booking Infrastructure",
       "description": "Row-level isolated booking, scheduling, and AI assistance for teams that manage appointments across multiple organizations."
     },
     "notFound": {
@@ -25,11 +25,11 @@
       "productHeading": "Product",
       "accountHeading": "Account",
       "systemStatus": "System status",
-      "copyright": "© {year} Nimbus. Built on PostgreSQL row-level security."
+      "copyright": "© {year} Pasargad. Built on PostgreSQL row-level security."
     },
     "hero": {
       "title": "Booking infrastructure that keeps every organization's data provably separate.",
-      "subtitle": "Nimbus runs scheduling, payments, and an AI assistant for multi-tenant teams on PostgreSQL row-level security — a database trigger blocks double-bookings before they're written, not after.",
+      "subtitle": "Pasargad runs scheduling, payments, and an AI assistant for multi-tenant teams on PostgreSQL row-level security — a database trigger blocks double-bookings before they're written, not after.",
       "ctaPrimary": "Start free trial",
       "ctaSecondary": "Book a demo"
     },
@@ -128,7 +128,7 @@
     },
     "freelancePage": {
       "heroTitle": "Freelance product engineering for founders who need to ship.",
-      "heroSubtitle": "Full-stack builds on the same multi-tenant, RLS-hardened foundation that powers Nimbus itself — from first commit to production.",
+      "heroSubtitle": "Full-stack builds on the same multi-tenant, RLS-hardened foundation that powers Pasargad itself — from first commit to production.",
       "ctaPrimary": "Start a project",
       "servicesTitle": "What I build",
       "services": {
@@ -168,7 +168,7 @@
     },
     "signup": {
       "title": "Create your account",
-      "subtitle": "Set up your organization's booking workspace on Nimbus.",
+      "subtitle": "Set up your organization's booking workspace on Pasargad.",
       "emailLabel": "Email",
       "passwordLabel": "Password",
       "confirmPasswordLabel": "Confirm password",

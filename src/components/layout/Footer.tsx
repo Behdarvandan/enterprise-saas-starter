@@ -1,6 +1,6 @@
-import { Boxes } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import Logo from "@/components/layout/Logo";
 
 export default async function Footer() {
   const tHeader = await getTranslations("marketing.header");
@@ -28,12 +28,7 @@ export default async function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
           <div>
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-control bg-violet text-white">
-                <Boxes size={17} />
-              </div>
-              <span className="text-sm font-semibold text-ink-primary">Nimbus</span>
-            </div>
+            <Logo />
             <p className="mt-3 max-w-xs text-sm text-ink-muted">{tFooter("tagline")}</p>
           </div>
 

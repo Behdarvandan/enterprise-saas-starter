@@ -2,7 +2,8 @@
 
 import { Link, usePathname } from "@/i18n/navigation";
 import { useState } from "react";
-import { Boxes, KeyRound, LayoutDashboard, Menu, Receipt, X } from "lucide-react";
+import { KeyRound, LayoutDashboard, Menu, Receipt, X } from "lucide-react";
+import Logo from "@/components/layout/Logo";
 
 const NAV_ITEMS = [
   { label: "Project status", href: "/client", icon: LayoutDashboard },
@@ -52,25 +53,14 @@ export default function ClientSidebar() {
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-64 flex-col border-r border-subtle bg-surface lg:flex">
         <div className="flex h-16 items-center gap-2.5 border-b border-subtle px-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-control bg-violet text-white">
-            <Boxes size={16} />
-          </div>
-          <div>
-            <span className="block text-sm font-semibold text-ink-primary">Nimbus</span>
-            <span className="block text-xs text-ink-muted">Client portal</span>
-          </div>
+          <Logo subtitle="Client portal" />
         </div>
         <div className="flex-1 overflow-y-auto px-3 py-4">{nav}</div>
       </aside>
 
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-subtle bg-surface px-4 lg:hidden">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-control bg-violet text-white">
-            <Boxes size={16} />
-          </div>
-          <span className="text-sm font-semibold text-ink-primary">Nimbus</span>
-        </div>
+        <Logo />
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}

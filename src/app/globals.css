@@ -6,8 +6,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* Typography — wired to the next/font variables set on <html>. */
-  --font-sans: var(--font-geist), system-ui, sans-serif;
+  /* Typography — wired to the next/font variables set on <html>.
+     Fraunces (--font-serif) is for headings/display text only; Inter
+     (--font-sans) carries body/UI copy. See CLAUDE.md §1.2. */
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   /* Map shadcn semantic tokens to Tailwind color utilities. */
@@ -97,85 +100,89 @@
   }
 }
 
-/* Semantic design tokens — dark violet palette (dark) and its light counterpart. */
+/* Semantic design tokens — Pasargad palette (dark-only; see CLAUDE.md §1.1).
+   `:root` and `.dark` are kept identical on purpose: the product is forced
+   to dark via `forcedTheme="dark"` on `ThemeProvider`, but both blocks are
+   populated so the correct palette still applies if `.dark` is briefly
+   absent during hydration. `--sidebar*` is the one admin-only exception —
+   never consumed by /services, /saas, or /client code paths. */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  --radius: 0.75rem;
+  --radius: 0.375rem;
 
   /* Minimum comfortable tap-target size for touch devices (44px). */
   --touch-target-min: 2.75rem;
 
-  --background: #ffffff;
-  --foreground: #1a1b23;
-  --card: #ffffff;
-  --card-foreground: #1a1b23;
-  --popover: #ffffff;
-  --popover-foreground: #1a1b23;
-  --primary: #5b4fe0;
-  --primary-foreground: #ffffff;
-  --secondary: #f2f3f7;
-  --secondary-foreground: #1a1b23;
-  --muted: #f2f3f7;
-  --muted-foreground: #6b6f7d;
-  --accent: #eceef4;
-  --accent-foreground: #1a1b23;
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
-  --border: #e4e6ee;
-  --input: #e4e6ee;
-  --ring: #8b7fe8;
-  --chart-1: #5b4fe0;
-  --chart-2: #3fbf7f;
-  --chart-3: #e0a63f;
-  --chart-4: #dc2626;
-  --chart-5: #8b7fe8;
-  --sidebar: #fafafc;
-  --sidebar-foreground: #1a1b23;
-  --sidebar-primary: #5b4fe0;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eceef4;
-  --sidebar-accent-foreground: #1a1b23;
-  --sidebar-border: #e4e6ee;
-  --sidebar-ring: #8b7fe8;
+  --background: #14121b;
+  --foreground: #ede9e1;
+  --card: #1d1a28;
+  --card-foreground: #ede9e1;
+  --popover: #1d1a28;
+  --popover-foreground: #ede9e1;
+  --primary: #b08d57;
+  --primary-foreground: #1a1520;
+  --secondary: #33303f;
+  --secondary-foreground: #ede9e1;
+  --muted: #33303f;
+  --muted-foreground: #94899e;
+  --accent: #c9a876;
+  --accent-foreground: #1a1520;
+  --destructive: #b4514b;
+  --destructive-foreground: #ede9e1;
+  --border: #332f40;
+  --input: #332f40;
+  --ring: #b08d57;
+  --chart-1: #b08d57;
+  --chart-2: #c9a876;
+  --chart-3: #3fbf7f;
+  --chart-4: #b4514b;
+  --chart-5: #94899e;
+  --sidebar: #20132c;
+  --sidebar-foreground: #ede9e1;
+  --sidebar-primary: #2a1938;
+  --sidebar-primary-foreground: #ede9e1;
+  --sidebar-accent: #2e1a3d;
+  --sidebar-accent-foreground: #ede9e1;
+  --sidebar-border: #33204a;
+  --sidebar-ring: #b08d57;
 }
 
-/* Dark violet theme — the product ships dark-first. */
 .dark {
   color-scheme: dark;
 
-  --background: #0d0e13;
-  --foreground: #e9eaf0;
-  --card: #181a22;
-  --card-foreground: #e9eaf0;
-  --popover: #20222d;
-  --popover-foreground: #e9eaf0;
-  --primary: #5b4fe0;
-  --primary-foreground: #ffffff;
-  --secondary: #20222d;
-  --secondary-foreground: #e9eaf0;
-  --muted: #181a22;
-  --muted-foreground: #8c90a0;
-  --accent: #2a2d3a;
-  --accent-foreground: #e9eaf0;
-  --destructive: #e0574f;
-  --destructive-foreground: #ffffff;
-  --border: #2a2d3a;
-  --input: #2a2d3a;
-  --ring: #8b7fe8;
-  --chart-1: #5b4fe0;
-  --chart-2: #3fbf7f;
-  --chart-3: #e0a63f;
-  --chart-4: #e0574f;
-  --chart-5: #8b7fe8;
-  --sidebar: #181a22;
-  --sidebar-foreground: #e9eaf0;
-  --sidebar-primary: #5b4fe0;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2a2d3a;
-  --sidebar-accent-foreground: #e9eaf0;
-  --sidebar-border: #2a2d3a;
-  --sidebar-ring: #8b7fe8;
+  --background: #14121b;
+  --foreground: #ede9e1;
+  --card: #1d1a28;
+  --card-foreground: #ede9e1;
+  --popover: #1d1a28;
+  --popover-foreground: #ede9e1;
+  --primary: #b08d57;
+  --primary-foreground: #1a1520;
+  --secondary: #33303f;
+  --secondary-foreground: #ede9e1;
+  --muted: #33303f;
+  --muted-foreground: #94899e;
+  --accent: #c9a876;
+  --accent-foreground: #1a1520;
+  --destructive: #b4514b;
+  --destructive-foreground: #ede9e1;
+  --border: #332f40;
+  --input: #332f40;
+  --ring: #b08d57;
+  --chart-1: #b08d57;
+  --chart-2: #c9a876;
+  --chart-3: #3fbf7f;
+  --chart-4: #b4514b;
+  --chart-5: #94899e;
+  --sidebar: #20132c;
+  --sidebar-foreground: #ede9e1;
+  --sidebar-primary: #2a1938;
+  --sidebar-primary-foreground: #ede9e1;
+  --sidebar-accent: #2e1a3d;
+  --sidebar-accent-foreground: #ede9e1;
+  --sidebar-border: #33204a;
+  --sidebar-ring: #b08d57;
 }
 
 @layer base {
@@ -192,8 +199,8 @@
   }
 
   ::selection {
-    background-color: #5b4fe0;
-    color: #e9eaf0;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
   }
 
   :focus-visible {

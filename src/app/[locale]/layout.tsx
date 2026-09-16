@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist_Mono, Inter } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -7,7 +7,14 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
+// Inter carries body/UI copy; Fraunces is reserved for headings and display
+// text only — see CLAUDE.md §1.2. Geist Mono stays for code/mono contexts.
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-fraunces",
+});
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
@@ -52,11 +59,11 @@ export default async function RootLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${geist.variable} ${geistMono.variable}`}
+      className={`${inter.variable} ${fraunces.variable} ${geistMono.variable}`}
     >
       <body className="min-h-screen bg-canvas font-sans text-ink-primary antialiased">
         <NextIntlClientProvider messages={messages}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" forcedTheme="dark" enableSystem={false}>
             {children}
           </ThemeProvider>
         </NextIntlClientProvider>

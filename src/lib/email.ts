@@ -11,8 +11,8 @@ function getResend(): Resend {
 }
 
 // Defaults to Resend's test sender. In production, set this to a verified
-// domain (e.g. "Nimbus SaaS <hello@yourdomain.com>").
-const FROM_EMAIL = process.env.EMAIL_FROM ?? "Nimbus SaaS <onboarding@resend.dev>";
+// domain (e.g. "Pasargad <hello@yourdomain.com>").
+const FROM_EMAIL = process.env.EMAIL_FROM ?? "Pasargad <onboarding@resend.dev>";
 
 function escapeHtml(value: string): string {
   return value

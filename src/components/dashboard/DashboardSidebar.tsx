@@ -3,7 +3,6 @@
 import { Link, usePathname } from "@/i18n/navigation";
 import { useState } from "react";
 import {
-  Boxes,
   CalendarDays,
   CreditCard,
   LayoutDashboard,
@@ -14,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import type { UserOrganization } from "@/lib/team";
+import Logo from "@/components/layout/Logo";
 import OrgSwitcher from "./OrgSwitcher";
 
 const NAV_ITEMS = [
@@ -70,10 +70,7 @@ export default function DashboardSidebar({
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-64 flex-col border-r border-subtle bg-surface lg:flex">
         <div className="flex h-16 items-center gap-2.5 border-b border-subtle px-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-control bg-violet text-white">
-            <Boxes size={16} />
-          </div>
-          <span className="text-sm font-semibold text-ink-primary">Nimbus</span>
+          <Logo />
         </div>
         <OrgSwitcher organizations={organizations} activeOrganizationId={activeOrganizationId} />
         <div className="flex-1 overflow-y-auto px-3 py-4">{nav}</div>
@@ -81,12 +78,7 @@ export default function DashboardSidebar({
 
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-subtle bg-surface px-4 lg:hidden">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-control bg-violet text-white">
-            <Boxes size={16} />
-          </div>
-          <span className="text-sm font-semibold text-ink-primary">Nimbus</span>
-        </div>
+        <Logo />
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
