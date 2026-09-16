@@ -13,9 +13,13 @@ export default async function Footer() {
     { label: tHeader("security"), href: "/#security" },
     { label: tHeader("pricing"), href: "/pricing" },
     { label: tHeader("saas"), href: "/saas" },
-    { label: tHeader("freelance"), href: "/freelance" },
-    { label: tHeader("contact"), href: "/contact" },
+    { label: tHeader("services"), href: "/services" },
   ];
+
+  // No /contact page — brief §4/§4.6: general questions go to a footer
+  // email link only. Placeholder address until a verified sending domain
+  // is configured (see the Resend-sandbox caveat in src/lib/email.ts).
+  const CONTACT_EMAIL = "hello@pasargad.com";
 
   const ACCOUNT_LINKS = [
     { label: tHeader("signIn"), href: "/login" },
@@ -65,10 +69,16 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-subtle pt-6">
+        <div className="mt-10 flex flex-col gap-3 border-t border-subtle pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-ink-muted">
             {tFooter("copyright", { year: new Date().getFullYear() })}
           </p>
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="text-xs font-medium text-ink-muted transition-colors hover:text-ink-primary"
+          >
+            {CONTACT_EMAIL}
+          </a>
         </div>
       </div>
     </footer>

@@ -560,10 +560,12 @@ export type Database = {
           message: string | null
           organization_id: string
           phone: string | null
+          project_category: string | null
           project_scope: string | null
           source: string | null
           status: string
           updated_at: string
+          working_mode: string | null
         }
         Insert: {
           budget_range?: string | null
@@ -577,10 +579,12 @@ export type Database = {
           message?: string | null
           organization_id: string
           phone?: string | null
+          project_category?: string | null
           project_scope?: string | null
           source?: string | null
           status?: string
           updated_at?: string
+          working_mode?: string | null
         }
         Update: {
           budget_range?: string | null
@@ -594,10 +598,12 @@ export type Database = {
           message?: string | null
           organization_id?: string
           phone?: string | null
+          project_category?: string | null
           project_scope?: string | null
           source?: string | null
           status?: string
           updated_at?: string
+          working_mode?: string | null
         }
         Relationships: [
           {
@@ -1149,9 +1155,9 @@ export type Database = {
           p_email: string
           p_phone: string | null
           p_company: string | null
-          p_budget_range: string | null
+          p_project_category: string | null
+          p_working_mode: string | null
           p_project_scope: string | null
-          p_deadline: string | null
           p_message: string | null
           p_source: string | null
         }

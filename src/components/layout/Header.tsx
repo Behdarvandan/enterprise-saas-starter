@@ -26,11 +26,8 @@ export default async function Header() {
           <Link href="/saas" className="transition-colors hover:text-ink-primary">
             {t("saas")}
           </Link>
-          <Link href="/freelance" className="transition-colors hover:text-ink-primary">
-            {t("freelance")}
-          </Link>
-          <Link href="/contact" className="transition-colors hover:text-ink-primary">
-            {t("contact")}
+          <Link href="/services" className="transition-colors hover:text-ink-primary">
+            {t("services")}
           </Link>
           <Link href="/login" className="transition-colors hover:text-ink-primary">
             {t("signIn")}
@@ -38,7 +35,7 @@ export default async function Header() {
           <LocaleSwitcher />
           <Link
             href="/signup"
-            className="rounded-interactive bg-violet px-4 py-2 font-semibold text-white transition-colors hover:bg-violet/90"
+            className="rounded-interactive bg-violet px-4 py-2 font-semibold text-primary-foreground transition-colors hover:bg-violet/90"
           >
             {t("startTrial")}
           </Link>

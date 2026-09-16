@@ -7,11 +7,9 @@ export interface PortfolioItem {
 }
 
 /**
- * Static case-study content for the freelance portfolio pages. MVP: a
- * hardcoded array, not a database table — matching the pattern used for
- * `/repair-shops`' static feature/step content elsewhere in the marketing
- * site. Promote this to a real table only if editing it outside a deploy
- * becomes a real need.
+ * Static case-study content for the /services portfolio pages. MVP: a
+ * hardcoded array, not a database table. Promote this to a real table only
+ * if editing it outside a deploy becomes a real need.
  */
 const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {

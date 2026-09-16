@@ -9,6 +9,18 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const nextConfig = {
   output: "standalone",
   reactStrictMode: true,
+  // /repair-shops was folded into /services as an industry example (Pasargad
+  // rebrand, brief §4). Keep old links/bookmarks working instead of 404ing.
+  async redirects() {
+    return [
+      { source: "/repair-shops", destination: "/services", permanent: true },
+      {
+        source: "/:locale(tr|de|fa)/repair-shops",
+        destination: "/:locale/services",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = withSentryConfig(withNextIntl(nextConfig), {

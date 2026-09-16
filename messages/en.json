@@ -16,9 +16,8 @@
       "pricing": "Pricing",
       "signIn": "Sign in",
       "startTrial": "Start free trial",
-      "freelance": "Freelance",
-      "saas": "SaaS",
-      "contact": "Contact"
+      "services": "Services",
+      "saas": "SaaS"
     },
     "footer": {
       "tagline": "Multi-tenant booking and scheduling infrastructure with row-level isolation for every organization.",
@@ -89,30 +88,40 @@
       "fullNameLabel": "Full name",
       "emailLabel": "Email",
       "phoneLabel": "Phone",
-      "companyLabel": "Company",
-      "budgetLabel": "Budget range",
-      "budgetPlaceholder": "Select a range",
-      "budgetOptions": {
-        "under_2k": "Under $2,000",
-        "2k_5k": "$2,000 – $5,000",
-        "5k_15k": "$5,000 – $15,000",
-        "15k_50k": "$15,000 – $50,000",
-        "50k_plus": "$50,000+"
+      "categoryLabel": "Project type",
+      "categoryPlaceholder": "Select a category",
+      "categoryOptions": {
+        "fullstack_saas": "Full-Stack & SaaS Development",
+        "ai_automation": "AI & Automation Integrations",
+        "architecture_security": "System Architecture & Security Review",
+        "payment_subscription": "Payments & Subscription Infrastructure"
       },
-      "deadlineLabel": "Target deadline",
-      "scopeLabel": "Project scope",
-      "scopePlaceholder": "What are you looking to build?",
-      "messageLabel": "Anything else we should know?",
+      "messageLabel": "Short description",
+      "messagePlaceholder": "What are you looking to build?",
+      "workingModeLabel": "Working mode",
+      "workingModeOptional": "(optional)",
+      "workingModePlaceholder": "Select one",
+      "workingModeOptions": {
+        "hourly": "Hourly",
+        "project": "Project-based",
+        "either": "Either works"
+      },
+      "followUpQuestions": {
+        "fullstack_saas": "Is this a brand-new project, or an addition to an existing system?",
+        "ai_automation": "Which data or source will it work with?",
+        "architecture_security": "Is an existing system being reviewed, or is this a new setup?",
+        "payment_subscription": "Are you thinking one-time payment, or a subscription model?"
+      },
       "submitButton": "Send request",
       "sending": "Sending...",
       "successMessage": "Thanks — we've received your request and will be in touch shortly.",
       "genericError": "Something went wrong. Please try again."
     },
     "saasPage": {
-      "heroTitle": "A production-ready SaaS starter, not a toy demo.",
-      "heroSubtitle": "Multi-tenant Postgres row-level security, Stripe/PayTR billing, and an AI knowledge-base chatbot — wired together and ready to launch your own product on.",
-      "ctaPrimary": "Start free trial",
-      "ctaSecondary": "Request a demo",
+      "heroTitle": "A system built around your business, that grows with you.",
+      "heroSubtitle": "Appointments, payments, customer tracking — choose what you need, add more as it grows. The system adapts to your business, not the other way around.",
+      "ctaPrimary": "Watch the Demo",
+      "ctaSecondary": "See Plans",
       "featuresTitle": "Everything a SaaS launch needs on day one.",
       "features": {
         "multiTenant": "Multi-tenant architecture with Postgres row-level security enforced at the database layer, not in application code.",
@@ -123,35 +132,98 @@
         "observability": "Sentry error tracking wired in across client, server, and edge runtimes from day one."
       },
       "pricingTitle": "Plans that scale with your product.",
-      "demoTitle": "Want a guided walkthrough first?",
-      "demoSubtitle": "Tell us about your product and we'll set up a demo tailored to it."
+      "bridgeLink": "As your business grows, the same team grows with you"
     },
-    "freelancePage": {
-      "heroTitle": "Freelance product engineering for founders who need to ship.",
-      "heroSubtitle": "Full-stack builds on the same multi-tenant, RLS-hardened foundation that powers Pasargad itself — from first commit to production.",
-      "ctaPrimary": "Start a project",
-      "servicesTitle": "What I build",
-      "services": {
-        "fullStack": "Full-stack SaaS development, from database schema to production deployment.",
-        "multiTenant": "Multi-tenant architecture and row-level security design for products handling sensitive customer data.",
-        "ragAi": "AI/RAG integrations — knowledge-base chatbots, semantic search, and LLM-powered features.",
-        "payments": "Payment integration across Stripe and regional processors, with clean provider-agnostic abstractions."
+    "servicesPage": {
+      "heroTitle": "Solutions designed for you, built together with you.",
+      "heroSubtitle": "From a small integration to an end-to-end project — we work hourly or project-based, depending on your needs.",
+      "ctaPrimary": "Get a Quote",
+      "ctaSecondary": "Explore Services",
+      "bridgeLink": "Looking for a ready-made starting point instead",
+      "categoriesTitle": "What we do",
+      "categories": {
+        "fullstackSaas": {
+          "title": "Full-Stack & SaaS Development",
+          "description": "We turn your idea into a working product — production-ready web applications and MVPs built on Next.js and Supabase.",
+          "bullets": [
+            "Building a product from the ground up",
+            "Adding new capabilities to an existing system",
+            "Setting up an architecture built to scale",
+            "Example: booking and pre-diagnosis system for repair shops"
+          ]
+        },
+        "aiAutomation": {
+          "title": "AI & Automation Integrations",
+          "description": "We build intelligent systems that speak with your business's own data and take repetitive work off your hands.",
+          "bullets": [
+            "Assistants grounded in your own data",
+            "Process automation",
+            "AI integration into existing systems"
+          ]
+        },
+        "architectureSecurity": {
+          "title": "System Architecture & Security Review",
+          "description": "We build the foundation correctly from the start, so your data stays locked in your own vault.",
+          "bullets": [
+            "Data isolation and access-control setup",
+            "Security review of an existing system",
+            "Multi-user / multi-branch architecture"
+          ]
+        },
+        "paymentSubscription": {
+          "title": "Payments & Subscription Infrastructure",
+          "description": "Taking payment matters — taking it correctly matters just as much. We build flexible billing and subscription systems.",
+          "bullets": [
+            "One-time and subscription-based payment setup",
+            "Invoicing / record automation",
+            "Troubleshooting an existing payment flow"
+          ]
+        }
       },
       "portfolioTitle": "Recent work",
       "portfolioViewAll": "View all work",
-      "formTitle": "Tell me about your project",
-      "formSubtitle": "Share your budget and timeline and I'll follow up with next steps."
+      "formTitle": "Tell us about your project",
+      "formSubtitle": "Share a short description of what you need and we'll follow up."
     },
     "portfolioPage": {
-      "backLink": "Back to freelance services",
+      "backLink": "Back to services",
       "stackLabel": "Stack",
       "notFoundTitle": "Case study not found"
     },
-    "contactPage": {
-      "title": "Let's talk",
-      "subtitle": "Tell us what you're building and pick the option that fits best.",
-      "kindFreelance": "Freelance project",
-      "kindSaas": "SaaS inquiry"
+    "socialProof": {
+      "trustBadgesTitle": "Security and reliability",
+      "trustBadges": {
+        "dataIsolation": {
+          "title": "Data isolation",
+          "body": "Every customer's data stays locked to its own database rows — no other account can reach it."
+        },
+        "securePayments": {
+          "title": "Secure payments",
+          "body": "Card details never touch our servers; payments are processed directly through Stripe or PayTR."
+        },
+        "noDoubleBooking": {
+          "title": "No double-bookings",
+          "body": "Two customers can never take the same slot — that rule is guaranteed at the database level."
+        }
+      },
+      "howWeWorkTitle": "How we work",
+      "howWeWork": {
+        "meeting": {
+          "step": "1",
+          "title": "Consultation",
+          "body": "We clarify what you need, together."
+        },
+        "setup": {
+          "step": "2",
+          "title": "Setup",
+          "body": "We build the foundation with the right architecture."
+        },
+        "delivery": {
+          "step": "3",
+          "title": "Delivery",
+          "body": "We hand off a working system, with care."
+        }
+      }
     }
   },
   "auth": {

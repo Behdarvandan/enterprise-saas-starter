@@ -2,7 +2,6 @@ import { Check } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import LeadForm from "../_components/LeadForm";
 import { getPlans } from "@/lib/plans";
 
 // Reads STRIPE_PRICE_PRO/_ENTERPRISE (via getPlans()) at request time, same
@@ -18,24 +17,29 @@ export default async function SaasPage() {
     <div>
       <section className="mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
+          <h1 className="font-serif text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
             {t("heroTitle")}
           </h1>
           <p className="mt-5 text-lg text-ink-muted">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button asChild size="lg">
-              <Link href="/signup">{t("ctaPrimary")}</Link>
+              <Link href="#features">{t("ctaPrimary")}</Link>
             </Button>
             <Button asChild variant="secondary" size="lg">
-              <Link href="#demo">{t("ctaSecondary")}</Link>
+              <Link href="/pricing">{t("ctaSecondary")}</Link>
             </Button>
           </div>
+          <p className="mt-4 text-sm text-ink-muted">
+            <Link href="/services" className="font-semibold text-violet-dim hover:text-violet">
+              {t("bridgeLink")}
+            </Link>
+          </p>
         </div>
       </section>
 
-      <section className="border-y border-subtle bg-surface">
+      <section id="features" className="border-y border-subtle bg-surface">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold text-ink-primary sm:text-3xl">
+          <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("featuresTitle")}
           </h2>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -60,7 +64,7 @@ export default async function SaasPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-semibold text-ink-primary sm:text-3xl">
+        <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
           {t("pricingTitle")}
         </h2>
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -88,20 +92,8 @@ export default async function SaasPage() {
         </div>
         <div className="mt-6">
           <Link href="/pricing" className="text-sm font-semibold text-violet-dim hover:text-violet">
-            {t("ctaPrimary")} →
+            {t("ctaSecondary")} →
           </Link>
-        </div>
-      </section>
-
-      <section id="demo" className="border-t border-subtle bg-surface">
-        <div className="mx-auto max-w-2xl px-4 py-20 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold text-ink-primary sm:text-3xl">
-            {t("demoTitle")}
-          </h2>
-          <p className="mt-3 text-ink-muted">{t("demoSubtitle")}</p>
-          <div className="mt-8">
-            <LeadForm kind="saas" />
-          </div>
         </div>
       </section>
     </div>

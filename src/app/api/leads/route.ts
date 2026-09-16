@@ -5,30 +5,30 @@ import { checkRateLimit, leadRatelimit } from "@/lib/rate-limit";
 import { firstIssueMessage } from "@/lib/validation";
 import { withApiErrorHandling } from "@/lib/api-error";
 
-const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-
 const leadSchema = z.object({
   kind: z.enum(["saas", "freelance"]),
   fullName: z.string().trim().min(1, "Full name is required."),
   email: z.string().trim().email("A valid email is required."),
   phone: z.string().optional(),
   company: z.string().optional(),
-  budgetRange: z.string().optional(),
+  projectCategory: z.enum([
+    "fullstack_saas",
+    "ai_automation",
+    "architecture_security",
+    "payment_subscription",
+  ]),
+  workingMode: z.enum(["hourly", "project", "either"]).optional(),
   projectScope: z.string().optional(),
-  deadline: z
-    .string()
-    .regex(DATE_PATTERN, "A valid deadline (YYYY-MM-DD) is required.")
-    .optional()
-    .or(z.literal("")),
-  message: z.string().optional(),
+  message: z.string().trim().min(1, "A short description is required."),
   source: z.string().optional(),
 });
 
 /**
  * POST /api/leads
  *
- * Public, anonymous lead-intake endpoint backing the marketing site's
- * contact form (`/saas`, `/freelance`, `/contact`). Writes go through the
+ * Public, anonymous lead-intake endpoint backing the "Teklif Al" quote form
+ * on `/services` (the marketing site's only lead-capture form — `/saas`
+ * links to `/services` instead of embedding a form). Writes go through the
  * `submit_lead` SECURITY DEFINER RPC via the anon-scoped client — the RPC
  * hardcodes `organization_id` to the operator organization server-side, so
  * this route never touches the `leads` table directly and can't be tricked
@@ -59,13 +59,11 @@ export const POST = withApiErrorHandling(
       );
     }
 
-    const { kind, fullName, email } = parsedBody.data;
+    const { kind, fullName, email, projectCategory, message } = parsedBody.data;
     const phone = parsedBody.data.phone?.trim() || null;
     const company = parsedBody.data.company?.trim() || null;
-    const budgetRange = parsedBody.data.budgetRange?.trim() || null;
+    const workingMode = parsedBody.data.workingMode?.trim() || null;
     const projectScope = parsedBody.data.projectScope?.trim() || null;
-    const deadline = parsedBody.data.deadline?.trim() || null;
-    const message = parsedBody.data.message?.trim() || null;
     const source = parsedBody.data.source?.trim() || null;
 
     const anon = createAnonClient();
@@ -75,10 +73,10 @@ export const POST = withApiErrorHandling(
       p_email: email,
       p_phone: phone,
       p_company: company,
-      p_budget_range: budgetRange,
+      p_project_category: projectCategory,
+      p_working_mode: workingMode,
       p_project_scope: projectScope,
-      p_deadline: deadline,
-      p_message: message,
+      p_message: message.trim(),
       p_source: source,
     });
 

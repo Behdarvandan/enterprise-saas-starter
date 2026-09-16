@@ -12,7 +12,7 @@ export default function Hero() {
           className="animate-reveal-up"
           style={{ animationDelay: "0ms" }}
         >
-          <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
+          <h1 className="font-serif text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl lg:text-6xl">
             {t("title")}
           </h1>
           <p
@@ -28,7 +28,7 @@ export default function Hero() {
           >
             <Link
               href="/signup"
-              className="inline-flex items-center gap-2 rounded-interactive bg-violet px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet/90"
+              className="inline-flex items-center gap-2 rounded-interactive bg-violet px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-violet/90"
             >
               {t("ctaPrimary")}
             </Link>

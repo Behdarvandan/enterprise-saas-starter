@@ -4,17 +4,16 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
-const BUDGET_RANGES = [
-  "under_2k",
-  "2k_5k",
-  "5k_15k",
-  "15k_50k",
-  "50k_plus",
+const PROJECT_CATEGORIES = [
+  "fullstack_saas",
+  "ai_automation",
+  "architecture_security",
+  "payment_subscription",
 ] as const;
 
-interface LeadFormProps {
-  kind: "saas" | "freelance";
-}
+type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
+
+const WORKING_MODES = ["hourly", "project", "either"] as const;
 
 const inputClass =
   "w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim";
@@ -22,13 +21,16 @@ const labelClass =
   "block text-xs font-semibold uppercase tracking-wide text-ink-muted";
 
 /**
- * Shared lead-intake form for the SaaS/freelance marketing pages and the
- * general contact page. `kind` is attached to the submission so the admin
- * CRM (Faz 4) can tell a SaaS demo request from a freelance project inquiry
- * — the fields themselves are identical either way.
+ * "Teklif Al" quote form (brief §4.4) — the marketing site's only
+ * lead-intake form, single page (no wizard), no budget field. Project
+ * category drives one dynamic follow-up question so the pipeline gets
+ * CRM-quality detail without adding friction up front. Always submits
+ * `kind: "freelance"` since this form only appears on /services — /saas
+ * never captures leads, it links here instead.
  */
-export default function LeadForm({ kind }: LeadFormProps) {
+export default function LeadForm() {
   const t = useTranslations("marketing.leadForm");
+  const [category, setCategory] = useState<ProjectCategory | "">("");
   const [status, setStatus] = useState<"idle" | "loading" | "error" | "success">(
     "idle",
   );
@@ -45,16 +47,15 @@ export default function LeadForm({ kind }: LeadFormProps) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        kind,
+        kind: "freelance",
         fullName: formData.get("fullName"),
         email: formData.get("email"),
         phone: formData.get("phone"),
-        company: formData.get("company"),
-        budgetRange: formData.get("budgetRange"),
-        projectScope: formData.get("projectScope"),
-        deadline: formData.get("deadline"),
+        projectCategory: formData.get("projectCategory"),
+        workingMode: formData.get("workingMode") || undefined,
         message: formData.get("message"),
-        source: `marketing_${kind}`,
+        projectScope: formData.get("followUp"),
+        source: "marketing_services",
       }),
     }).catch(() => null);
 
@@ -74,6 +75,7 @@ export default function LeadForm({ kind }: LeadFormProps) {
 
     setStatus("success");
     event.currentTarget.reset();
+    setCategory("");
   }
 
   if (status === "success") {
@@ -118,61 +120,65 @@ export default function LeadForm({ kind }: LeadFormProps) {
           <input id="phone" name="phone" type="tel" className={inputClass} />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="company" className={labelClass}>
-            {t("companyLabel")}
+          <label htmlFor="projectCategory" className={labelClass}>
+            {t("categoryLabel")}
           </label>
-          <input
-            id="company"
-            name="company"
-            type="text"
+          <select
+            id="projectCategory"
+            name="projectCategory"
+            required
+            value={category}
+            onChange={(event) => setCategory(event.target.value as ProjectCategory)}
             className={inputClass}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label htmlFor="budgetRange" className={labelClass}>
-            {t("budgetLabel")}
-          </label>
-          <select id="budgetRange" name="budgetRange" className={inputClass}>
-            <option value="">{t("budgetPlaceholder")}</option>
-            {BUDGET_RANGES.map((range) => (
-              <option key={range} value={range}>
-                {t(`budgetOptions.${range}`)}
+          >
+            <option value="" disabled>
+              {t("categoryPlaceholder")}
+            </option>
+            {PROJECT_CATEGORIES.map((option) => (
+              <option key={option} value={option}>
+                {t(`categoryOptions.${option}`)}
               </option>
             ))}
           </select>
         </div>
-        <div className="space-y-1.5">
-          <label htmlFor="deadline" className={labelClass}>
-            {t("deadlineLabel")}
-          </label>
-          <input
-            id="deadline"
-            name="deadline"
-            type="date"
-            className={inputClass}
-          />
-        </div>
-      </div>
-
-      <div className="space-y-1.5">
-        <label htmlFor="projectScope" className={labelClass}>
-          {t("scopeLabel")}
-        </label>
-        <textarea
-          id="projectScope"
-          name="projectScope"
-          rows={3}
-          placeholder={t("scopePlaceholder")}
-          className={inputClass}
-        />
       </div>
 
       <div className="space-y-1.5">
         <label htmlFor="message" className={labelClass}>
           {t("messageLabel")}
         </label>
-        <textarea id="message" name="message" rows={4} className={inputClass} />
+        <textarea
+          id="message"
+          name="message"
+          rows={3}
+          required
+          placeholder={t("messagePlaceholder")}
+          className={inputClass}
+        />
       </div>
+
+      <div className="space-y-1.5">
+        <label htmlFor="workingMode" className={labelClass}>
+          {t("workingModeLabel")} <span className="normal-case text-ink-muted/70">{t("workingModeOptional")}</span>
+        </label>
+        <select id="workingMode" name="workingMode" className={inputClass}>
+          <option value="">{t("workingModePlaceholder")}</option>
+          {WORKING_MODES.map((mode) => (
+            <option key={mode} value={mode}>
+              {t(`workingModeOptions.${mode}`)}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {category && (
+        <div className="space-y-1.5">
+          <label htmlFor="followUp" className={labelClass}>
+            {t(`followUpQuestions.${category}`)}
+          </label>
+          <textarea id="followUp" name="followUp" rows={2} className={inputClass} />
+        </div>
+      )}
 
       {error && (
         <p className="rounded-control bg-status-error/10 px-3 py-2 text-xs font-medium text-status-error">

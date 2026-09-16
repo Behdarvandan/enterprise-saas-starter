@@ -16,9 +16,8 @@
       "pricing": "Fiyatlandırma",
       "signIn": "Giriş yap",
       "startTrial": "Ücretsiz deneyin",
-      "freelance": "Freelance",
-      "saas": "SaaS",
-      "contact": "İletişim"
+      "services": "Hizmetler",
+      "saas": "SaaS"
     },
     "footer": {
       "tagline": "Her organizasyon için satır düzeyinde izolasyon sağlayan çok kiracılı randevu ve planlama altyapısı.",
@@ -86,33 +85,43 @@
       "button": "Ücretsiz deneyin"
     },
     "leadForm": {
-      "fullNameLabel": "Ad soyad",
+      "fullNameLabel": "Ad Soyad",
       "emailLabel": "E-posta",
       "phoneLabel": "Telefon",
-      "companyLabel": "Şirket",
-      "budgetLabel": "Bütçe aralığı",
-      "budgetPlaceholder": "Bir aralık seçin",
-      "budgetOptions": {
-        "under_2k": "2.000 $ altı",
-        "2k_5k": "2.000 $ – 5.000 $",
-        "5k_15k": "5.000 $ – 15.000 $",
-        "15k_50k": "15.000 $ – 50.000 $",
-        "50k_plus": "50.000 $ ve üzeri"
+      "categoryLabel": "Proje Tipi",
+      "categoryPlaceholder": "Bir kategori seçin",
+      "categoryOptions": {
+        "fullstack_saas": "Full-Stack & SaaS Geliştirme",
+        "ai_automation": "Yapay Zeka & Otomasyon Entegrasyonları",
+        "architecture_security": "Sistem Mimarisi & Güvenlik Denetimi",
+        "payment_subscription": "Ödeme & Abonelik Altyapıları"
       },
-      "deadlineLabel": "Hedef teslim tarihi",
-      "scopeLabel": "Proje kapsamı",
-      "scopePlaceholder": "Ne inşa etmek istiyorsunuz?",
-      "messageLabel": "Bilmemiz gereken başka bir şey var mı?",
+      "messageLabel": "Kısa Açıklama",
+      "messagePlaceholder": "Ne inşa etmek istiyorsunuz?",
+      "workingModeLabel": "Çalışma Şekli",
+      "workingModeOptional": "(opsiyonel)",
+      "workingModePlaceholder": "Seçiniz",
+      "workingModeOptions": {
+        "hourly": "Saatlik",
+        "project": "Proje Bazlı",
+        "either": "Farketmez"
+      },
+      "followUpQuestions": {
+        "fullstack_saas": "Bu bir sıfırdan proje mi, yoksa mevcut bir sisteme mi ekleme?",
+        "ai_automation": "Hangi veri/kaynakla çalışacak?",
+        "architecture_security": "Mevcut bir sistem mi denetlenecek, yoksa yeni kurulum mu?",
+        "payment_subscription": "Tek seferlik ödeme mi, abonelik modeli mi düşünüyorsunuz?"
+      },
       "submitButton": "Talebi gönder",
       "sending": "Gönderiliyor...",
       "successMessage": "Teşekkürler — talebinizi aldık, en kısa sürede size dönüş yapacağız.",
       "genericError": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
     },
     "saasPage": {
-      "heroTitle": "Gerçek bir üretim ortamı için hazır SaaS altyapısı — oyuncak bir demo değil.",
-      "heroSubtitle": "Çok kiracılı Postgres satır düzeyi güvenlik, Stripe/PayTR faturalama ve bir AI bilgi tabanı sohbet botu — kendi ürününüzü üzerine kurmaya hazır şekilde bir araya getirildi.",
-      "ctaPrimary": "Ücretsiz deneyin",
-      "ctaSecondary": "Demo talep edin",
+      "heroTitle": "İşinize göre kurulmuş, sizinle birlikte büyüyen bir sistem.",
+      "heroSubtitle": "Randevu, ödeme, müşteri takibi — ihtiyacınız olanı seçin, gerektiğinde ekleyin. Sistem sizin işinize uyum sağlar, siz sisteme değil.",
+      "ctaPrimary": "Demo İzle",
+      "ctaSecondary": "Planları Gör",
       "featuresTitle": "Bir SaaS lansmanının ilk günden ihtiyaç duyacağı her şey.",
       "features": {
         "multiTenant": "Uygulama kodunda değil, veritabanı katmanında uygulanan Postgres satır düzeyi güvenlikli çok kiracılı mimari.",
@@ -123,35 +132,98 @@
         "observability": "İlk günden itibaren istemci, sunucu ve edge çalışma zamanlarında devreye alınmış Sentry hata takibi."
       },
       "pricingTitle": "Ürününüzle birlikte ölçeklenen planlar.",
-      "demoTitle": "Önce rehberli bir tur mu istiyorsunuz?",
-      "demoSubtitle": "Ürününüz hakkında bize bilgi verin, size özel bir demo ayarlayalım."
+      "bridgeLink": "İşiniz büyüdükçe, aynı ekip sizinle birlikte büyür"
     },
-    "freelancePage": {
-      "heroTitle": "Hayata geçirmesi gereken kurucular için freelance ürün mühendisliği.",
-      "heroSubtitle": "Pasargad'ın kendisini çalıştıran aynı çok kiracılı, RLS ile sertleştirilmiş temel üzerinde uçtan uca geliştirme — ilk commit'ten üretime kadar.",
-      "ctaPrimary": "Bir proje başlatın",
-      "servicesTitle": "Neler inşa ediyorum",
-      "services": {
-        "fullStack": "Veritabanı şemasından üretime dağıtıma kadar uçtan uca SaaS geliştirme.",
-        "multiTenant": "Hassas müşteri verisi işleyen ürünler için çok kiracılı mimari ve satır düzeyi güvenlik tasarımı.",
-        "ragAi": "AI/RAG entegrasyonları — bilgi tabanı sohbet botları, anlamsal arama ve LLM destekli özellikler.",
-        "payments": "Stripe ve bölgesel ödeme sağlayıcıları arasında, sağlayıcıdan bağımsız temiz soyutlamalarla ödeme entegrasyonu."
+    "servicesPage": {
+      "heroTitle": "Sizin için tasarlanmış, sizinle birlikte kurulan çözümler.",
+      "heroSubtitle": "Küçük bir entegrasyondan uçtan uca bir projeye kadar — ihtiyacınıza göre, saatlik veya proje bazlı çalışırız.",
+      "ctaPrimary": "Teklif Al",
+      "ctaSecondary": "Hizmetleri İnceleyin",
+      "bridgeLink": "Hazır bir başlangıç noktası arıyorsanız",
+      "categoriesTitle": "Hizmet alanlarımız",
+      "categories": {
+        "fullstackSaas": {
+          "title": "Full-Stack & SaaS Geliştirme",
+          "description": "Fikrinizi, çalışan bir ürüne dönüştürüyoruz. Next.js ve Supabase üzerine kurulu, üretime hazır web uygulamaları ve MVP'ler.",
+          "bullets": [
+            "Sıfırdan ürün geliştirme",
+            "Mevcut sistemlere yeni özellik ekleme",
+            "Ölçeklenebilir mimari kurulumu",
+            "Örnek: tamirci dükkanları için randevu ve ön-tanı sistemi"
+          ]
+        },
+        "aiAutomation": {
+          "title": "Yapay Zeka & Otomasyon Entegrasyonları",
+          "description": "İşletmenizin kendi verisiyle konuşan, tekrarlayan işleri sizin yerinize yapan akıllı sistemler kuruyoruz.",
+          "bullets": [
+            "Kendi verinizle çalışan akıllı asistanlar",
+            "Süreç otomasyonu",
+            "Mevcut sistemlere AI entegrasyonu"
+          ]
+        },
+        "architectureSecurity": {
+          "title": "Sistem Mimarisi & Güvenlik Denetimi",
+          "description": "Verileriniz kendi kasanızda kilitli kalsın diye, temelden doğru kurulmuş bir yapı sağlıyoruz.",
+          "bullets": [
+            "Veri izolasyonu ve erişim kontrolü kurulumu",
+            "Mevcut sistemde güvenlik denetimi",
+            "Çok kullanıcılı/çok şubeli yapı mimarisi"
+          ]
+        },
+        "paymentSubscription": {
+          "title": "Ödeme & Abonelik Altyapıları",
+          "description": "Ödeme almak kadar, doğru almak da önemli. Esnek faturalandırma ve abonelik sistemleri kuruyoruz.",
+          "bullets": [
+            "Tek seferlik ve abonelik bazlı ödeme kurulumu",
+            "Fatura/kayıt otomasyonu",
+            "Mevcut ödeme akışında sorun giderme"
+          ]
+        }
       },
       "portfolioTitle": "Son çalışmalar",
       "portfolioViewAll": "Tüm çalışmaları görüntüle",
       "formTitle": "Projeniz hakkında bilgi verin",
-      "formSubtitle": "Bütçenizi ve zaman çizelgenizi paylaşın, sonraki adımlarla size dönüş yapayım."
+      "formSubtitle": "İhtiyacınızı kısaca anlatın, size dönüş yapalım."
     },
     "portfolioPage": {
-      "backLink": "Freelance hizmetlerine dön",
+      "backLink": "Hizmetlere dön",
       "stackLabel": "Teknoloji yığını",
       "notFoundTitle": "Vaka çalışması bulunamadı"
     },
-    "contactPage": {
-      "title": "Konuşalım",
-      "subtitle": "Ne inşa ettiğinizi bize anlatın ve size en uygun seçeneği seçin.",
-      "kindFreelance": "Freelance proje",
-      "kindSaas": "SaaS talebi"
+    "socialProof": {
+      "trustBadgesTitle": "Güvenlik ve güvenilirlik",
+      "trustBadges": {
+        "dataIsolation": {
+          "title": "Veri izolasyonu",
+          "body": "Her müşterinin verisi kendi veritabanı satırlarında kilitli kalır; başka hiçbir hesap erişemez."
+        },
+        "securePayments": {
+          "title": "Güvenli ödemeler",
+          "body": "Kart bilgileriniz sunucularımıza hiç dokunmaz; ödemeler doğrudan Stripe veya PayTR üzerinden işlenir."
+        },
+        "noDoubleBooking": {
+          "title": "Çakışmayan randevular",
+          "body": "İki müşteri aynı saati asla alamaz — bu kural veritabanı seviyesinde garanti altındadır."
+        }
+      },
+      "howWeWorkTitle": "Nasıl çalışırız",
+      "howWeWork": {
+        "meeting": {
+          "step": "1",
+          "title": "Görüşme",
+          "body": "İhtiyacınızı birlikte netleştiririz."
+        },
+        "setup": {
+          "step": "2",
+          "title": "Kurulum",
+          "body": "Doğru mimariyle temeli birlikte kurarız."
+        },
+        "delivery": {
+          "step": "3",
+          "title": "Teslim",
+          "body": "Çalışan sistemi özenle teslim ederiz."
+        }
+      }
     }
   },
   "auth": {

@@ -13,7 +13,7 @@ export default function PricingPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
-        <h1 className="text-4xl font-semibold tracking-tight text-ink-primary sm:text-5xl">
+        <h1 className="font-serif text-4xl font-medium tracking-tight text-ink-primary sm:text-5xl">
           Simple, transparent pricing
         </h1>
         <p className="mt-4 text-lg text-ink-muted">
