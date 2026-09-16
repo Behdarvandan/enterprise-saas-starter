@@ -298,5 +298,19 @@
         "expired": "Bu davetin süresi dolmuş."
       }
     }
+  },
+  "client": {
+    "nav": {
+      "projectStatus": "Proje Durumu",
+      "payments": "Ödemeler",
+      "files": "Dosyalar",
+      "settings": "Ayarlar"
+    },
+    "stages": {
+      "design": "Başladı",
+      "backend": "Geliştirme",
+      "test": "Test",
+      "live": "Teslim"
+    }
   }
 }

@@ -15,10 +15,18 @@ test.describe("Client portal auth guards", () => {
     await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
   });
 
-  test("/client/license redirects unauthenticated visitors to login", async ({
+  test("/client/files redirects unauthenticated visitors to login", async ({
     page,
   }) => {
-    await page.goto("/client/license");
+    await page.goto("/client/files");
+    await page.waitForURL("**/login");
+    await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+  });
+
+  test("/client/settings redirects unauthenticated visitors to login", async ({
+    page,
+  }) => {
+    await page.goto("/client/settings");
     await page.waitForURL("**/login");
     await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
   });

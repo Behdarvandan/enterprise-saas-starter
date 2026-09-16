@@ -298,5 +298,19 @@
         "expired": "This invitation has expired."
       }
     }
+  },
+  "client": {
+    "nav": {
+      "projectStatus": "Project Status",
+      "payments": "Payments",
+      "files": "Files",
+      "settings": "Settings"
+    },
+    "stages": {
+      "design": "Started",
+      "backend": "Development",
+      "test": "Test",
+      "live": "Delivered"
+    }
   }
 }

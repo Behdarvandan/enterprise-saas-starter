@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { User } from "lucide-react";
 import SignOutButton from "@/components/auth/SignOutButton";
-import ThemeToggle from "@/components/theme-toggle";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 
 interface AdminTopbarProps {
@@ -16,7 +15,6 @@ export default function AdminTopbar({ userEmail }: AdminTopbarProps) {
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-end gap-2 border-b border-subtle bg-canvas/95 px-4 backdrop-blur sm:px-6">
       <LocaleSwitcher />
-      <ThemeToggle />
 
       <div className="relative">
         <button

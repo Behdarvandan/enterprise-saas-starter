@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { Bell, Search, User } from "lucide-react";
 import SignOutButton from "@/components/auth/SignOutButton";
-import ThemeToggle from "@/components/theme-toggle";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 
 interface TopbarProps {
@@ -42,7 +41,6 @@ export default function Topbar({ userEmail }: TopbarProps) {
 
       <div className="ml-auto flex items-center gap-2">
         <LocaleSwitcher />
-        <ThemeToggle />
 
         <div className="relative">
           <button

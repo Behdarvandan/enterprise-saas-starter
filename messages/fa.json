@@ -298,5 +298,19 @@
         "expired": "This invitation has expired."
       }
     }
+  },
+  "client": {
+    "nav": {
+      "projectStatus": "وضعیت پروژه",
+      "payments": "پرداخت‌ها",
+      "files": "فایل‌ها",
+      "settings": "تنظیمات"
+    },
+    "stages": {
+      "design": "شروع شد",
+      "backend": "توسعه",
+      "test": "تست",
+      "live": "تحویل شد"
+    }
   }
 }

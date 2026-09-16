@@ -2,7 +2,6 @@ import * as Sentry from "@sentry/nextjs";
 import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { requireMembership } from "@/lib/auth";
-import ClientSidebar from "@/components/client/ClientSidebar";
 import ClientTopbar from "@/components/client/ClientTopbar";
 
 export default async function ClientLayout({
@@ -36,12 +35,9 @@ export default async function ClientLayout({
   Sentry.setTag("portal", "client");
 
   return (
-    <div className="min-h-screen bg-canvas lg:flex">
-      <ClientSidebar />
-      <div className="flex min-h-screen flex-1 flex-col">
-        <ClientTopbar userEmail={user.email ?? ""} />
-        <main className="flex-1">{children}</main>
-      </div>
+    <div className="flex min-h-screen flex-col bg-canvas">
+      <ClientTopbar userEmail={user.email ?? ""} />
+      <main className="flex-1">{children}</main>
     </div>
   );
 }

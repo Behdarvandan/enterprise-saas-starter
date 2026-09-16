@@ -1,4 +1,5 @@
 import { Download, FileText, Receipt } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { requireMembership } from "@/lib/auth";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
@@ -16,6 +17,7 @@ const STATUS_TONE: Record<InvoiceStatus, "success" | "warn" | "error" | "neutral
 
 export default async function ClientInvoicesPage() {
   const { supabase, membership } = await requireMembership();
+  const t = await getTranslations("client.nav");
 
   const { data: invoices } = await supabase
     .from("client_invoices")
@@ -42,7 +44,7 @@ export default async function ClientInvoicesPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-semibold text-ink-primary">Invoices</h1>
+      <h1 className="font-serif text-2xl font-semibold text-ink-primary">{t("payments")}</h1>
       <p className="mt-1 text-sm text-ink-muted">
         Download your invoices and access delivery links.
       </p>
@@ -94,7 +96,7 @@ export default async function ClientInvoicesPage() {
                       <div className="flex flex-wrap justify-end gap-3">
                         <a
                           href={`/api/client/invoices/${invoice.id}/pdf`}
-                          className="inline-flex items-center gap-1 text-sm font-semibold text-violet-dim hover:text-violet"
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-ink-primary hover:text-primary"
                         >
                           <Download size={14} /> PDF
                         </a>
@@ -103,7 +105,7 @@ export default async function ClientInvoicesPage() {
                             href={invoice.contract_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-sm font-semibold text-violet-dim hover:text-violet"
+                            className="inline-flex items-center gap-1 text-sm font-semibold text-ink-primary hover:text-primary"
                           >
                             <FileText size={14} /> Contract
                           </a>
@@ -113,7 +115,7 @@ export default async function ClientInvoicesPage() {
                             href={project.repo_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm font-semibold text-violet-dim hover:text-violet"
+                            className="text-sm font-semibold text-ink-primary hover:text-primary"
                           >
                             Repo
                           </a>
@@ -123,7 +125,7 @@ export default async function ClientInvoicesPage() {
                             href={project.live_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm font-semibold text-violet-dim hover:text-violet"
+                            className="text-sm font-semibold text-ink-primary hover:text-primary"
                           >
                             Live
                           </a>

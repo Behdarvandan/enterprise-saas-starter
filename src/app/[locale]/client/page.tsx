@@ -1,19 +1,16 @@
 import { LayoutDashboard } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { requireMembership } from "@/lib/auth";
 import EmptyState from "@/components/ui/EmptyState";
 import type { ClientProject, ProjectStage } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const STAGES: { key: ProjectStage; label: string }[] = [
-  { key: "design", label: "Design" },
-  { key: "backend", label: "Backend" },
-  { key: "test", label: "Test" },
-  { key: "live", label: "Live" },
-];
+const STAGE_KEYS = ["design", "backend", "test", "live"] as const;
 
 export default async function ClientPortalPage() {
   const { supabase, membership } = await requireMembership();
+  const t = await getTranslations("client");
 
   const { data: projects } = await supabase
     .from("client_projects")
@@ -21,9 +18,13 @@ export default async function ClientPortalPage() {
     .eq("organization_id", membership.organizationId)
     .order("created_at", { ascending: false });
 
+  const stages = STAGE_KEYS.map((key) => ({ key, label: t(`stages.${key}`) }));
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-semibold text-ink-primary">Project status</h1>
+      <h1 className="font-serif text-2xl font-semibold text-ink-primary">
+        {t("nav.projectStatus")}
+      </h1>
       <p className="mt-1 text-sm text-ink-muted">
         Track where your project stands, end to end.
       </p>
@@ -39,7 +40,7 @@ export default async function ClientPortalPage() {
       ) : (
         <div className="mt-8 space-y-6">
           {projects.map((project) => (
-            <ProjectStageCard key={project.id} project={project} />
+            <ProjectStageCard key={project.id} project={project} stages={stages} />
           ))}
         </div>
       )}
@@ -47,25 +48,31 @@ export default async function ClientPortalPage() {
   );
 }
 
-function ProjectStageCard({ project }: { project: ClientProject }) {
-  const currentIndex = STAGES.findIndex((stage) => stage.key === project.stage);
+function ProjectStageCard({
+  project,
+  stages,
+}: {
+  project: ClientProject;
+  stages: { key: ProjectStage; label: string }[];
+}) {
+  const currentIndex = stages.findIndex((stage) => stage.key === project.stage);
 
   return (
     <div className="rounded-interactive border border-subtle bg-surface p-6">
       <h2 className="text-lg font-semibold text-ink-primary">{project.name}</h2>
       {project.notes && <p className="mt-2 text-sm text-ink-muted">{project.notes}</p>}
 
-      <div className="mt-6 flex items-center">
-        {STAGES.map((stage, index) => {
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+        {stages.map((stage, index) => {
           const done = index <= currentIndex;
-          const isLast = index === STAGES.length - 1;
+          const isLast = index === stages.length - 1;
           return (
             <div key={stage.key} className="flex flex-1 items-center">
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex items-center gap-2 sm:flex-col sm:items-center">
                 <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold ${
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-semibold ${
                     done
-                      ? "border-violet bg-violet text-white"
+                      ? "border-primary bg-primary text-primary-foreground"
                       : "border-subtle bg-surface-raised text-ink-muted"
                   }`}
                 >
@@ -81,8 +88,8 @@ function ProjectStageCard({ project }: { project: ClientProject }) {
               </div>
               {!isLast && (
                 <div
-                  className={`mx-2 h-0.5 flex-1 ${
-                    index < currentIndex ? "bg-violet" : "bg-subtle"
+                  className={`mx-2 hidden h-0.5 flex-1 sm:block ${
+                    index < currentIndex ? "bg-primary" : "bg-subtle"
                   }`}
                 />
               )}
@@ -98,7 +105,7 @@ function ProjectStageCard({ project }: { project: ClientProject }) {
               href={project.repo_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold text-violet-dim hover:text-violet"
+              className="text-sm font-semibold text-ink-primary hover:text-primary"
             >
               View repository →
             </a>
@@ -108,7 +115,7 @@ function ProjectStageCard({ project }: { project: ClientProject }) {
               href={project.live_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold text-violet-dim hover:text-violet"
+              className="text-sm font-semibold text-ink-primary hover:text-primary"
             >
               View live →
             </a>
