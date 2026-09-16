@@ -9,7 +9,6 @@ export default async function AdminLeadsPage() {
   const { data: leads } = await supabase
     .from("leads")
     .select("*")
-    .in("status", ["new", "quoted", "accepted", "completed"])
     .order("created_at", { ascending: false });
 
   return (

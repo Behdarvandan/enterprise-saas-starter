@@ -2,11 +2,31 @@
 
 import { Link, usePathname } from "@/i18n/navigation";
 import { useState } from "react";
-import { BarChart3, Kanban, Menu, Users, X } from "lucide-react";
+import {
+  BarChart3,
+  Building2,
+  CalendarDays,
+  CreditCard,
+  Kanban,
+  LayoutDashboard,
+  Menu,
+  Settings,
+  Users,
+  X,
+} from "lucide-react";
 import Logo from "@/components/layout/Logo";
 
+// Order matches the Pasargad admin brief (§5): Dashboard -> Leads/CRM ->
+// Müşteriler -> Randevular -> Ödemeler -> Ayarlar. Analytics/Tasks predate
+// that brief and aren't part of its spec, but they're working features with
+// no replacement, so they stay appended rather than being deleted.
 const NAV_ITEMS = [
-  { label: "Leads", href: "/admin/leads", icon: Users },
+  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Leads/CRM", href: "/admin/leads", icon: Users },
+  { label: "Müşteriler", href: "/admin/clients", icon: Building2 },
+  { label: "Randevular", href: "/admin/appointments", icon: CalendarDays },
+  { label: "Ödemeler", href: "/admin/payments", icon: CreditCard },
+  { label: "Ayarlar", href: "/admin/settings", icon: Settings },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { label: "Tasks", href: "/admin/tasks", icon: Kanban },
 ];
@@ -22,6 +42,7 @@ export default function AdminSidebar() {
   const [open, setOpen] = useState(false);
 
   function isActive(href: string) {
+    if (href === "/admin") return pathname === "/admin";
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 

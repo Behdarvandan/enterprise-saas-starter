@@ -3,21 +3,26 @@
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import type { Lead, LeadStatus } from "@/types";
 
 const COLUMNS: { key: LeadStatus; label: string }[] = [
-  { key: "new", label: "New" },
-  { key: "quoted", label: "Quoted" },
-  { key: "accepted", label: "Accepted" },
-  { key: "completed", label: "Completed" },
+  { key: "new", label: "Yeni" },
+  { key: "contacted", label: "İletişime Geçildi" },
+  { key: "quoted", label: "Teklif Gönderildi" },
+  { key: "accepted", label: "Kabul Edildi" },
+  { key: "rejected", label: "Reddedildi" },
 ];
 
+// Linear forward chain — the kanban's "move to next stage" button only
+// advances along this path. Rejecting is a separate, always-available
+// action (see `handleReject`) rather than part of the forward chain, since
+// a lead can be rejected from any stage, not just the one before it.
 const NEXT_STATUS: Partial<Record<LeadStatus, LeadStatus>> = {
-  new: "quoted",
+  new: "contacted",
+  contacted: "quoted",
   quoted: "accepted",
-  accepted: "completed",
 };
 
 interface LeadPipelineBoardProps {
@@ -28,22 +33,19 @@ export default function LeadPipelineBoard({ leads }: LeadPipelineBoardProps) {
   const router = useRouter();
   const [pendingId, setPendingId] = useState<string | null>(null);
 
-  async function moveToNextStage(lead: Lead) {
-    const nextStatus = NEXT_STATUS[lead.status as LeadStatus];
-    if (!nextStatus) return;
-
+  async function setStatus(lead: Lead, status: LeadStatus) {
     setPendingId(lead.id);
     await fetch(`/api/admin/leads/${lead.id}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: nextStatus }),
+      body: JSON.stringify({ status }),
     }).catch(() => null);
     setPendingId(null);
     router.refresh();
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
       {COLUMNS.map((column) => {
         const columnLeads = leads.filter((lead) => lead.status === column.key);
 
@@ -63,6 +65,7 @@ export default function LeadPipelineBoard({ leads }: LeadPipelineBoardProps) {
 
               {columnLeads.map((lead) => {
                 const nextStatus = NEXT_STATUS[lead.status as LeadStatus];
+                const isPending = pendingId === lead.id;
                 return (
                   <div
                     key={lead.id}
@@ -79,26 +82,39 @@ export default function LeadPipelineBoard({ leads }: LeadPipelineBoardProps) {
                         {lead.kind}
                       </Badge>
                     </div>
-                    {lead.company && (
-                      <p className="mt-1 text-xs text-ink-muted">{lead.company}</p>
-                    )}
-                    {lead.budget_range && (
-                      <p className="mt-2 font-mono text-xs text-ink-muted">
-                        {lead.budget_range}
+                    {lead.project_category && (
+                      <p className="mt-1 text-xs text-ink-muted">
+                        {lead.project_category.replaceAll("_", " ")}
                       </p>
                     )}
+                    <p className="mt-1 text-xs text-ink-muted">
+                      {new Date(lead.created_at).toLocaleDateString()}
+                    </p>
 
-                    {nextStatus && (
-                      <button
-                        type="button"
-                        onClick={() => moveToNextStage(lead)}
-                        disabled={pendingId === lead.id}
-                        className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-violet-dim transition-colors hover:text-violet disabled:opacity-50"
-                      >
-                        Move to {NEXT_STATUS[lead.status as LeadStatus]}
-                        <ArrowRight size={12} />
-                      </button>
-                    )}
+                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                      {nextStatus && (
+                        <button
+                          type="button"
+                          onClick={() => setStatus(lead, nextStatus)}
+                          disabled={isPending}
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-violet-dim transition-colors hover:text-violet disabled:opacity-50"
+                        >
+                          {COLUMNS.find((c) => c.key === nextStatus)?.label}
+                          <ArrowRight size={12} />
+                        </button>
+                      )}
+                      {column.key !== "rejected" && column.key !== "accepted" && (
+                        <button
+                          type="button"
+                          onClick={() => setStatus(lead, "rejected")}
+                          disabled={isPending}
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-status-error/80 transition-colors hover:text-status-error disabled:opacity-50"
+                        >
+                          Reddet
+                          <X size={12} />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}

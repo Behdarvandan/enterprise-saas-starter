@@ -8,9 +8,9 @@ import type { LeadStatus } from "@/types";
 
 const STATUS_OPTIONS: LeadStatus[] = [
   "new",
+  "contacted",
   "quoted",
   "accepted",
-  "completed",
   "rejected",
 ];
 

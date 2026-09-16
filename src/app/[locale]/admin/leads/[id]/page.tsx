@@ -52,27 +52,25 @@ export default async function AdminLeadDetailPage({ params }: LeadDetailPageProp
         <dl className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Company
-            </dt>
-            <dd className="mt-1 text-sm text-ink-primary">{lead.company ?? "—"}</dd>
-          </div>
-          <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
               Phone
             </dt>
             <dd className="mt-1 text-sm text-ink-primary">{lead.phone ?? "—"}</dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Budget range
+              Project type
             </dt>
-            <dd className="mt-1 text-sm text-ink-primary">{lead.budget_range ?? "—"}</dd>
+            <dd className="mt-1 text-sm text-ink-primary">
+              {lead.project_category?.replaceAll("_", " ") ?? "—"}
+            </dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Target deadline
+              Working mode
             </dt>
-            <dd className="mt-1 text-sm text-ink-primary">{lead.deadline ?? "—"}</dd>
+            <dd className="mt-1 text-sm text-ink-primary">
+              {lead.working_mode?.replaceAll("_", " ") ?? "—"}
+            </dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
@@ -90,21 +88,21 @@ export default async function AdminLeadDetailPage({ params }: LeadDetailPageProp
           </div>
         </dl>
 
-        {lead.project_scope && (
-          <div className="mt-6 border-t border-subtle pt-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Project scope
-            </p>
-            <p className="mt-1 text-sm text-ink-primary">{lead.project_scope}</p>
-          </div>
-        )}
-
         {lead.message && (
           <div className="mt-6 border-t border-subtle pt-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Message
+              Short description
             </p>
             <p className="mt-1 text-sm text-ink-primary">{lead.message}</p>
+          </div>
+        )}
+
+        {lead.project_scope && (
+          <div className="mt-6 border-t border-subtle pt-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+              Follow-up answer
+            </p>
+            <p className="mt-1 text-sm text-ink-primary">{lead.project_scope}</p>
           </div>
         )}
       </div>

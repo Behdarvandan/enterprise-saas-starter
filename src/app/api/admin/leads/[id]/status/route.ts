@@ -6,7 +6,7 @@ import { withApiErrorHandling } from "@/lib/api-error";
 import { firstIssueMessage } from "@/lib/validation";
 
 const statusSchema = z.object({
-  status: z.enum(["new", "quoted", "accepted", "completed", "rejected"]),
+  status: z.enum(["new", "contacted", "quoted", "accepted", "rejected"]),
 });
 
 interface RouteParams {

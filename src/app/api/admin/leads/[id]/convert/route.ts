@@ -127,11 +127,7 @@ export const POST = withApiErrorHandling(
       console.error("Failed to create lead-conversion invitation:", invitationError);
     }
 
-    await admin
-      .from("leads")
-      .update({ status: "accepted" })
-      .eq("id", lead.id)
-      .neq("status", "completed");
+    await admin.from("leads").update({ status: "accepted" }).eq("id", lead.id);
 
     await admin.rpc("write_audit_log", {
       p_action: "lead.converted",

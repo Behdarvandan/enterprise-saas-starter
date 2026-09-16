@@ -1,29 +1,24 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Admin portal auth guards", () => {
-  test("/admin/leads redirects unauthenticated visitors to login", async ({
-    page,
-  }) => {
-    await page.goto("/admin/leads");
-    await page.waitForURL("**/login");
-    await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
-  });
+  const GUARDED_ROUTES = [
+    "/admin",
+    "/admin/leads",
+    "/admin/clients",
+    "/admin/appointments",
+    "/admin/payments",
+    "/admin/settings",
+    "/admin/analytics",
+    "/admin/tasks",
+  ];
 
-  test("/admin/analytics redirects unauthenticated visitors to login", async ({
-    page,
-  }) => {
-    await page.goto("/admin/analytics");
-    await page.waitForURL("**/login");
-    await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
-  });
-
-  test("/admin/tasks redirects unauthenticated visitors to login", async ({
-    page,
-  }) => {
-    await page.goto("/admin/tasks");
-    await page.waitForURL("**/login");
-    await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
-  });
+  for (const route of GUARDED_ROUTES) {
+    test(`${route} redirects unauthenticated visitors to login`, async ({ page }) => {
+      await page.goto(route);
+      await page.waitForURL("**/login");
+      await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+    });
+  }
 });
 
 test.describe("Admin CRM API guards", () => {
