@@ -154,6 +154,53 @@ export async function sendPasswordResetEmail({
   });
 }
 
+export async function sendLeadNotificationEmail({
+  fullName,
+  email,
+  kind,
+  projectCategory,
+  message,
+}: {
+  fullName: string;
+  email: string;
+  kind: string;
+  projectCategory: string;
+  message: string;
+}): Promise<void> {
+  const to = process.env.LEADS_NOTIFICATION_EMAIL;
+  if (!to) return;
+
+  const safeName = escapeHtml(fullName);
+  const safeEmail = escapeHtml(email);
+  const safeKind = escapeHtml(kind);
+  const safeCategory = escapeHtml(projectCategory);
+  const safeMessage = escapeHtml(message);
+
+  const row = (label: string, value: string) => `
+    <tr>
+      <td style="padding: 8px 0; border-bottom: 1px solid ${EMAIL_COLORS.border}; color: ${EMAIL_COLORS.muted};">${label}</td>
+      <td style="padding: 8px 0; border-bottom: 1px solid ${EMAIL_COLORS.border}; text-align: right; font-weight: 600; color: ${EMAIL_COLORS.foreground};">${value}</td>
+    </tr>
+  `;
+
+  await sendEmail({
+    to,
+    subject: `New lead: ${fullName}`,
+    html: emailShell(
+      "New lead submitted",
+      `
+        <table style="width: 100%; margin-top: 4px; border-collapse: collapse; font-size: 14px;">
+          ${row("Name", safeName)}
+          ${row("Email", safeEmail)}
+          ${row("Kind", safeKind)}
+          ${row("Category", safeCategory)}
+        </table>
+        <p style="font-size: 14px; line-height: 1.6; color: ${EMAIL_COLORS.foreground}; margin-top: 16px; white-space: pre-wrap;">${safeMessage}</p>
+      `,
+    ),
+  });
+}
+
 export async function sendBookingConfirmationEmail({
   to,
   organizationName,

@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 import { createAnonClient } from "@/lib/supabase/anon";
 import { checkRateLimit, leadRatelimit } from "@/lib/rate-limit";
 import { firstIssueMessage } from "@/lib/validation";
 import { withApiErrorHandling } from "@/lib/api-error";
+import { sendLeadNotificationEmail } from "@/lib/email";
 
 const leadSchema = z.object({
   kind: z.enum(["saas", "freelance"]),
@@ -86,6 +88,19 @@ export const POST = withApiErrorHandling(
         { error: "Failed to submit your request." },
         { status: 400 },
       );
+    }
+
+    try {
+      await sendLeadNotificationEmail({
+        fullName,
+        email,
+        kind,
+        projectCategory,
+        message: message.trim(),
+      });
+    } catch (emailError) {
+      console.error("Failed to send lead notification email:", emailError);
+      Sentry.captureException(emailError, { extra: { email } });
     }
 
     return NextResponse.json({ success: true });

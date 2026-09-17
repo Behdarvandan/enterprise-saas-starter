@@ -70,7 +70,9 @@ export default function DashboardSidebar({
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-64 flex-col border-r border-subtle bg-surface lg:flex">
         <div className="flex h-16 items-center gap-2.5 border-b border-subtle px-4">
-          <Logo />
+          <Link href="/dashboard">
+            <Logo />
+          </Link>
         </div>
         <OrgSwitcher organizations={organizations} activeOrganizationId={activeOrganizationId} />
         <div className="flex-1 overflow-y-auto px-3 py-4">{nav}</div>
@@ -78,7 +80,9 @@ export default function DashboardSidebar({
 
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-subtle bg-surface px-4 lg:hidden">
-        <Logo />
+        <Link href="/dashboard">
+          <Logo />
+        </Link>
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
