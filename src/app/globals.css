@@ -56,6 +56,9 @@
   --color-violet-dim: var(--ring);
   --color-ink-primary: var(--foreground);
   --color-ink-muted: var(--muted-foreground);
+  /* Named alias for the gold/bronze accent — used by hover-glow utilities
+     (shadow-gold/*, border-gold/*) per brief §7's motion rules. */
+  --color-gold: var(--primary);
 
   /* Radius scale derived from --radius (0.75rem). */
   --radius-sm: calc(var(--radius) - 4px);
@@ -85,17 +88,32 @@
   --radius-control: 6px;
   --radius-interactive: 8px;
 
-  /* Legacy entrance animation. */
-  --animate-reveal-up: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* Section entrance animation — brief §7: every animation 150-300ms,
+     ease-out; content sections fade + slide up (opacity 0->1, 8px->0). */
+  --animate-reveal-up: reveal-up 260ms ease-out both;
 
   @keyframes reveal-up {
     0% {
       opacity: 0;
-      transform: translateY(14px);
+      transform: translateY(8px);
     }
     100% {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* Skeleton shimmer — a gold-tinted sweep, not a generic gray pulse
+     (brief §7). Continuous loops run slower than the 150-300ms rule for
+     discrete transitions; 1.6s is a comfortable sweep pace. */
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
     }
   }
 }

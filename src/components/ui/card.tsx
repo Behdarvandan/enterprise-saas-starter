@@ -11,8 +11,9 @@ const cardVariants = cva("", {
     variant: {
       /** Structural container (page sections, list wrappers): 0 radius, sits on bg-surface. */
       section: "rounded-none border border-subtle bg-surface",
-      /** A discrete unit inside a section (a row, a stat tile). */
-      item: "rounded-interactive border border-subtle bg-surface",
+      /** A discrete unit inside a section (a row, a stat tile) — a subtle
+       * gold-tinted lift on hover, per brief §7 (never a heavy glow). */
+      item: "rounded-interactive border border-subtle bg-surface transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10",
       /** Modals/popovers. */
       raised: "rounded-interactive border border-subtle bg-surface-raised shadow-lg",
     },

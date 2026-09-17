@@ -20,7 +20,7 @@ export default async function ServicesPage() {
 
   return (
     <div>
-      <section className="mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
+      <section className="animate-reveal-up mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-serif text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
             {t("heroTitle")}
@@ -35,14 +35,18 @@ export default async function ServicesPage() {
             </Button>
           </div>
           <p className="mt-4 text-sm text-ink-muted">
-            <Link href="/saas" className="font-semibold text-violet-dim hover:text-violet">
+            <Link href="/saas" className="font-semibold text-ink-primary hover:text-primary">
               {t("bridgeLink")}
             </Link>
           </p>
         </div>
       </section>
 
-      <section id="categories" className="border-y border-subtle bg-surface">
+      <section
+        id="categories"
+        className="animate-reveal-up border-y border-subtle bg-surface"
+        style={{ animationDelay: "80ms" }}
+      >
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("categoriesTitle")}
@@ -54,9 +58,9 @@ export default async function ServicesPage() {
               return (
                 <div
                   key={key}
-                  className="rounded-interactive border border-subtle bg-canvas p-6"
+                  className="rounded-interactive border border-subtle bg-canvas p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
                 >
-                  <Icon size={20} className="text-violet-dim" />
+                  <Icon size={20} className="text-primary" />
                   <h3 className="mt-4 text-base font-semibold text-ink-primary">
                     {t(`categories.${key}.title`)}
                   </h3>
@@ -81,7 +85,10 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <section
+        className="animate-reveal-up mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+        style={{ animationDelay: "140ms" }}
+      >
         <div className="flex items-baseline justify-between">
           <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("portfolioTitle")}
@@ -92,7 +99,7 @@ export default async function ServicesPage() {
             <Link
               key={item.slug}
               href={`/services/portfolio/${item.slug}`}
-              className="rounded-interactive border border-subtle bg-surface p-6 transition-colors hover:border-violet-dim/60"
+              className="rounded-interactive border border-subtle bg-surface p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
             >
               <h3 className="text-base font-semibold text-ink-primary">
                 {item.title}
@@ -115,7 +122,11 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      <section id="quote" className="border-t border-subtle bg-surface">
+      <section
+        id="quote"
+        className="animate-reveal-up border-t border-subtle bg-surface"
+        style={{ animationDelay: "200ms" }}
+      >
         <div className="mx-auto max-w-2xl px-4 py-20 sm:px-6 lg:px-8">
           <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("formTitle")}

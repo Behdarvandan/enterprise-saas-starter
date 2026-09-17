@@ -23,10 +23,10 @@ export default async function PortfolioDetailPage({
   const t = await getTranslations("marketing.portfolioPage");
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
+    <div className="animate-reveal-up mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
       <Link
         href="/services"
-        className="inline-flex items-center gap-2 text-sm font-semibold text-violet-dim hover:text-violet"
+        className="inline-flex items-center gap-2 text-sm font-semibold text-ink-primary hover:text-primary"
       >
         <ArrowLeft size={16} />
         {t("backLink")}

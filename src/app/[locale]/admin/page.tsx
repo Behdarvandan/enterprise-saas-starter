@@ -5,6 +5,7 @@ import { formatPrice } from "@/lib/utils";
 import FreelanceRevenueChart, {
   type MonthlyRevenuePoint,
 } from "@/components/admin/FreelanceRevenueChart";
+import CountUp from "@/components/ui/CountUp";
 
 export const dynamic = "force-dynamic";
 
@@ -72,11 +73,11 @@ export default async function AdminDashboardPage() {
     0,
   );
 
-  const kpis = [
-    { label: "Bu Ay Tahsilat", value: formatPrice(collectedThisMonth) },
-    { label: "Aktif Müşteri", value: String(activeClients ?? 0) },
-    { label: "Bekleyen Lead", value: String(pendingLeads ?? 0) },
-    { label: "Bekleyen Randevu", value: String(pendingAppointments ?? 0) },
+  const kpis: { label: string; value: number; format?: (value: number) => string }[] = [
+    { label: "Bu Ay Tahsilat", value: collectedThisMonth, format: formatPrice },
+    { label: "Aktif Müşteri", value: activeClients ?? 0 },
+    { label: "Bekleyen Lead", value: pendingLeads ?? 0 },
+    { label: "Bekleyen Randevu", value: pendingAppointments ?? 0 },
   ];
 
   // --- Revenue trend chart ---------------------------------------------------
@@ -211,23 +212,27 @@ export default async function AdminDashboardPage() {
       </p>
 
       <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {kpis.map((kpi) => (
+        {kpis.map((kpi, index) => (
           <div
             key={kpi.label}
-            className="rounded-interactive border border-subtle bg-surface p-5"
+            className="animate-reveal-up rounded-interactive border border-subtle bg-surface p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
+            style={{ animationDelay: `${index * 60}ms` }}
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {kpi.label}
             </p>
             <p className="mt-2 font-mono text-2xl font-semibold text-ink-primary">
-              {kpi.value}
+              <CountUp value={kpi.value} format={kpi.format} />
             </p>
           </div>
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="rounded-interactive border border-subtle bg-surface p-6 lg:col-span-2">
+      <div
+        className="animate-reveal-up mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3"
+        style={{ animationDelay: "120ms" }}
+      >
+        <div className="rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10 lg:col-span-2">
           <div className="flex items-baseline justify-between">
             <h2 className="text-sm font-semibold text-ink-primary">Gelir eğilimi</h2>
             <span className="font-mono text-lg font-semibold text-ink-primary">
@@ -267,7 +272,10 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      <div className="mt-8 rounded-interactive border border-subtle bg-surface">
+      <div
+        className="animate-reveal-up mt-8 rounded-interactive border border-subtle bg-surface"
+        style={{ animationDelay: "180ms" }}
+      >
         <div className="border-b border-subtle px-5 py-4">
           <h2 className="text-sm font-semibold text-ink-primary">Aktivite akışı</h2>
         </div>

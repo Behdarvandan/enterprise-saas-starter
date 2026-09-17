@@ -2,6 +2,7 @@ import { requireOperatorAdmin } from "@/lib/operator";
 import { formatPrice } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
+import CountUp from "@/components/ui/CountUp";
 import { Receipt } from "lucide-react";
 import type { ClientInvoice, InvoiceStatus } from "@/types";
 
@@ -54,9 +55,9 @@ export default async function AdminPaymentsPage() {
     .reduce((sum, i) => sum + i.amount, 0);
 
   const summary = [
-    { label: "Bu Ay Toplam", value: formatPrice(thisMonthTotal) },
-    { label: "Bekleyen Tutar", value: formatPrice(pendingTotal) },
-    { label: "Başarısız", value: formatPrice(failedTotal) },
+    { label: "Bu Ay Toplam", value: thisMonthTotal },
+    { label: "Bekleyen Tutar", value: pendingTotal },
+    { label: "Başarısız", value: failedTotal },
   ];
 
   return (
@@ -67,13 +68,17 @@ export default async function AdminPaymentsPage() {
       </p>
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {summary.map((item) => (
-          <div key={item.label} className="rounded-interactive border border-subtle bg-surface p-5">
+        {summary.map((item, index) => (
+          <div
+            key={item.label}
+            className="animate-reveal-up rounded-interactive border border-subtle bg-surface p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
+            style={{ animationDelay: `${index * 60}ms` }}
+          >
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {item.label}
             </p>
             <p className="mt-2 font-mono text-2xl font-semibold text-ink-primary">
-              {item.value}
+              <CountUp value={item.value} format={formatPrice} />
             </p>
           </div>
         ))}

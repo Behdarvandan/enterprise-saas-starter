@@ -15,7 +15,7 @@ export default async function SaasPage() {
 
   return (
     <div>
-      <section className="mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
+      <section className="animate-reveal-up mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-serif text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
             {t("heroTitle")}
@@ -30,14 +30,18 @@ export default async function SaasPage() {
             </Button>
           </div>
           <p className="mt-4 text-sm text-ink-muted">
-            <Link href="/services" className="font-semibold text-violet-dim hover:text-violet">
+            <Link href="/services" className="font-semibold text-ink-primary hover:text-primary">
               {t("bridgeLink")}
             </Link>
           </p>
         </div>
       </section>
 
-      <section id="features" className="border-y border-subtle bg-surface">
+      <section
+        id="features"
+        className="animate-reveal-up border-y border-subtle bg-surface"
+        style={{ animationDelay: "80ms" }}
+      >
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("featuresTitle")}
@@ -53,7 +57,7 @@ export default async function SaasPage() {
             ].map((feature) => (
               <div
                 key={feature}
-                className="flex items-start gap-3 rounded-interactive border border-subtle bg-canvas p-5"
+                className="flex items-start gap-3 rounded-interactive border border-subtle bg-canvas p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
               >
                 <Check size={18} className="mt-0.5 shrink-0 text-status-success" />
                 <p className="text-sm text-ink-muted">{feature}</p>
@@ -63,7 +67,10 @@ export default async function SaasPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <section
+        className="animate-reveal-up mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+        style={{ animationDelay: "140ms" }}
+      >
         <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
           {t("pricingTitle")}
         </h2>
@@ -71,10 +78,10 @@ export default async function SaasPage() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`rounded-interactive border p-6 ${
+              className={`rounded-interactive border p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:shadow-md hover:shadow-gold/10 ${
                 plan.highlight
-                  ? "border-violet-dim bg-surface-raised"
-                  : "border-subtle bg-surface"
+                  ? "border-gold/60 bg-surface-raised"
+                  : "border-subtle bg-surface hover:border-gold/50"
               }`}
             >
               <h3 className="text-sm font-semibold text-ink-primary">{plan.name}</h3>
@@ -91,7 +98,7 @@ export default async function SaasPage() {
           ))}
         </div>
         <div className="mt-6">
-          <Link href="/pricing" className="text-sm font-semibold text-violet-dim hover:text-violet">
+          <Link href="/pricing" className="text-sm font-semibold text-ink-primary hover:text-primary">
             {t("ctaSecondary")} →
           </Link>
         </div>

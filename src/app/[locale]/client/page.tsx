@@ -39,8 +39,13 @@ export default async function ClientPortalPage() {
         </div>
       ) : (
         <div className="mt-8 space-y-6">
-          {projects.map((project) => (
-            <ProjectStageCard key={project.id} project={project} stages={stages} />
+          {projects.map((project, index) => (
+            <ProjectStageCard
+              key={project.id}
+              project={project}
+              stages={stages}
+              delayMs={index * 80}
+            />
           ))}
         </div>
       )}
@@ -51,14 +56,19 @@ export default async function ClientPortalPage() {
 function ProjectStageCard({
   project,
   stages,
+  delayMs,
 }: {
   project: ClientProject;
   stages: { key: ProjectStage; label: string }[];
+  delayMs: number;
 }) {
   const currentIndex = stages.findIndex((stage) => stage.key === project.stage);
 
   return (
-    <div className="rounded-interactive border border-subtle bg-surface p-6">
+    <div
+      className="animate-reveal-up rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
+      style={{ animationDelay: `${delayMs}ms` }}
+    >
       <h2 className="text-lg font-semibold text-ink-primary">{project.name}</h2>
       {project.notes && <p className="mt-2 text-sm text-ink-muted">{project.notes}</p>}
 
