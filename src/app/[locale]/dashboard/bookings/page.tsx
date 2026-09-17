@@ -1,7 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { CalendarX2 } from "lucide-react";
 import { requireMembership } from "@/lib/auth";
-import { formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
+import { appointmentStatusTone, formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
 import type { Appointment, AppointmentStatus } from "@/types";
 import { Card } from "@/components/ui/card";
 import Badge from "@/components/ui/Badge";
@@ -18,13 +18,6 @@ const VALID_STATUSES: AppointmentStatus[] = [
   "cancelled",
   "completed",
 ];
-
-const statusTone: Record<AppointmentStatus, "warn" | "success" | "error" | "neutral"> = {
-  pending: "warn",
-  confirmed: "success",
-  cancelled: "error",
-  completed: "neutral",
-};
 
 export default async function BookingsPage({ searchParams }: BookingsPageProps) {
   const { status, date } = await searchParams;
@@ -226,7 +219,7 @@ function AppointmentRow({
             <p className="text-sm font-semibold text-ink-primary">
               {appointment.customer_name}
             </p>
-            <Badge tone={statusTone[status]}>{status}</Badge>
+            <Badge tone={appointmentStatusTone[status]}>{status}</Badge>
           </div>
           <p className="mt-1 text-sm text-ink-muted">{serviceName}</p>
           <p className="mt-1 font-mono text-xs text-ink-muted">

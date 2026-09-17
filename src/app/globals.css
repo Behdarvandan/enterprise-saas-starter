@@ -116,6 +116,18 @@
       background-position: -200% 0;
     }
   }
+
+  /* Rotating gold sweep behind a 1px-padded wrapper — used for the landing
+     hero's border-beam accent (see BorderBeam.tsx). Slow and continuous,
+     like the shimmer above, rather than the 150-300ms discrete-transition
+     rule. */
+  --animate-border-beam: border-beam 6s linear infinite;
+
+  @keyframes border-beam {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 }
 
 /* Semantic design tokens — Pasargad palette (dark-only; see CLAUDE.md §1.1).

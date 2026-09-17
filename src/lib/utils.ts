@@ -1,4 +1,20 @@
 export { cn } from "cn";
+import type { AppointmentStatus } from "@/types";
+
+/**
+ * Shared Badge tone mapping for appointment status, used by every screen
+ * that lists appointments (dashboard bookings, dashboard overview) so the
+ * mapping stays in one place instead of being redeclared per page.
+ */
+export const appointmentStatusTone: Record<
+  AppointmentStatus,
+  "warn" | "success" | "error" | "neutral"
+> = {
+  pending: "warn",
+  confirmed: "success",
+  cancelled: "error",
+  completed: "neutral",
+};
 
 const APPOINTMENT_DATE_FORMAT: Intl.DateTimeFormatOptions = {
   weekday: "long",

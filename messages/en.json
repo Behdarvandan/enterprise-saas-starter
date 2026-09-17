@@ -27,6 +27,7 @@
       "copyright": "© {year} Pasargad. Built on PostgreSQL row-level security."
     },
     "hero": {
+      "eyebrow": "Multi-tenant SaaS infrastructure",
       "title": "Booking infrastructure that keeps every organization's data provably separate.",
       "subtitle": "Pasargad runs scheduling, payments, and an AI assistant for multi-tenant teams on PostgreSQL row-level security — a database trigger blocks double-bookings before they're written, not after.",
       "ctaPrimary": "Start free trial",

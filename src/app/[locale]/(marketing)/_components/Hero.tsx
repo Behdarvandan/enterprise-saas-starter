@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import BorderBeam from "@/components/ui/BorderBeam";
 import DashboardPreview from "./DashboardPreview";
 
 export default function Hero() {
@@ -12,7 +13,10 @@ export default function Hero() {
           className="animate-reveal-up"
           style={{ animationDelay: "0ms" }}
         >
-          <h1 className="font-serif text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl lg:text-6xl">
+          <span className="inline-block text-xs font-semibold uppercase tracking-wide text-primary">
+            {t("eyebrow")}
+          </span>
+          <h1 className="mt-3 font-serif text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl lg:text-6xl">
             {t("title")}
           </h1>
           <p
@@ -42,7 +46,9 @@ export default function Hero() {
         </div>
 
         <div className="animate-reveal-up" style={{ animationDelay: "220ms" }}>
-          <DashboardPreview />
+          <BorderBeam>
+            <DashboardPreview />
+          </BorderBeam>
         </div>
       </div>
     </section>

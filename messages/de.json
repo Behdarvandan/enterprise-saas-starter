@@ -27,6 +27,7 @@
       "copyright": "© {year} Pasargad. Aufgebaut auf PostgreSQL Row-Level Security."
     },
     "hero": {
+      "eyebrow": "Mandantenfähige SaaS-Infrastruktur",
       "title": "Buchungsinfrastruktur, die die Daten jeder Organisation nachweislich getrennt hält.",
       "subtitle": "Pasargad betreibt Terminplanung, Zahlungen und einen KI-Assistenten für mandantenfähige Teams auf PostgreSQL Row-Level Security — ein Datenbank-Trigger blockiert Doppelbuchungen vor dem Schreiben, nicht danach.",
       "ctaPrimary": "Kostenlos testen",
