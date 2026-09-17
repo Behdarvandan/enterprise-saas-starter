@@ -1,301 +1,301 @@
 {
   "common": {
     "metadata": {
-      "title": "Pasargad — Multi-Tenant Booking Infrastructure",
-      "description": "Row-level isolated booking, scheduling, and AI assistance for teams that manage appointments across multiple organizations."
+      "title": "پاسارگاد — زیرساخت رزرو چندمستأجری",
+      "description": "رزرو و برنامه‌ریزی ایزوله در سطح ردیف، به همراه دستیار هوش مصنوعی، برای تیم‌هایی که نوبت‌ها را در چندین سازمان مدیریت می‌کنند."
     },
     "notFound": {
-      "title": "Page not found",
-      "body": "The page you're looking for doesn't exist or has moved."
+      "title": "صفحه پیدا نشد",
+      "body": "صفحه‌ای که به دنبال آن هستید وجود ندارد یا جابه‌جا شده است."
     }
   },
   "marketing": {
     "header": {
-      "platform": "Platform",
-      "security": "Security",
-      "pricing": "Pricing",
-      "signIn": "Sign in",
-      "startTrial": "Start free trial",
-      "services": "Services",
+      "platform": "پلتفرم",
+      "security": "امنیت",
+      "pricing": "قیمت‌گذاری",
+      "signIn": "ورود",
+      "startTrial": "شروع رایگان",
+      "services": "خدمات",
       "saas": "SaaS"
     },
     "footer": {
-      "tagline": "Multi-tenant booking and scheduling infrastructure with row-level isolation for every organization.",
-      "productHeading": "Product",
-      "accountHeading": "Account",
-      "systemStatus": "System status",
-      "copyright": "© {year} Pasargad. Built on PostgreSQL row-level security."
+      "tagline": "زیرساخت رزرو و برنامه‌ریزی چندمستأجری با ایزوله‌سازی در سطح ردیف برای هر سازمان.",
+      "productHeading": "محصول",
+      "accountHeading": "حساب کاربری",
+      "systemStatus": "وضعیت سیستم",
+      "copyright": "© {year} پاسارگاد. ساخته‌شده بر پایه امنیت سطح ردیف PostgreSQL."
     },
     "hero": {
-      "title": "Booking infrastructure that keeps every organization's data provably separate.",
-      "subtitle": "Pasargad runs scheduling, payments, and an AI assistant for multi-tenant teams on PostgreSQL row-level security — a database trigger blocks double-bookings before they're written, not after.",
-      "ctaPrimary": "Start free trial",
-      "ctaSecondary": "Book a demo"
+      "title": "زیرساخت رزروی که داده‌های هر سازمان را به‌شکلی اثبات‌پذیر از یکدیگر جدا نگه می‌دارد.",
+      "subtitle": "پاسارگاد برنامه‌ریزی، پرداخت‌ها و یک دستیار هوش مصنوعی را برای تیم‌های چندمستأجری بر پایه امنیت سطح ردیف PostgreSQL اجرا می‌کند — یک تریگر پایگاه‌داده از ثبت رزروهای هم‌پوشان پیش از نوشته‌شدن جلوگیری می‌کند، نه پس از آن.",
+      "ctaPrimary": "شروع رایگان",
+      "ctaSecondary": "رزرو دمو"
     },
     "pricingSection": {
-      "title": "Plans that scale with your booking volume.",
-      "subtitle": "Start on Starter, upgrade when the AI assistant and priority support earn their keep.",
-      "compareLink": "See full plan comparison and start checkout"
+      "title": "پلن‌هایی که متناسب با حجم رزروهای شما رشد می‌کنند.",
+      "subtitle": "با پلن Starter شروع کنید و هر زمان دستیار هوش مصنوعی و پشتیبانی اولویت‌دار به کارتان آمد، ارتقا دهید.",
+      "compareLink": "مقایسه کامل پلن‌ها را ببینید و پرداخت را آغاز کنید"
     },
     "security": {
-      "title": "For the reviewer who reads the schema before the sales deck.",
+      "title": "برای بازبینی‌کننده‌ای که پیش از ارائه فروش، ساختار پایگاه‌داده را می‌خواند.",
       "controls": {
         "isolation": {
-          "label": "Isolation model",
-          "detail": "Row Level Security on every tenant table, scoped via is_org_member(organization_id). No cross-tenant query path exists at the database layer."
+          "label": "مدل ایزوله‌سازی",
+          "detail": "امنیت سطح ردیف روی تمام جداول مستأجر، با محدوده‌بندی از طریق is_org_member(organization_id). در لایه پایگاه‌داده هیچ مسیر پرس‌وجوی بین‌مستأجری وجود ندارد."
         },
         "privilegedOps": {
-          "label": "Privileged operations",
-          "detail": "Org creation and invitation acceptance run as SECURITY DEFINER functions with an explicit search_path, so elevated writes happen only through audited, narrow entry points."
+          "label": "عملیات ممتاز",
+          "detail": "ایجاد سازمان و پذیرش دعوت‌نامه به‌صورت توابع SECURITY DEFINER با search_path صریح اجرا می‌شوند، به‌گونه‌ای که نوشتن‌های سطح بالا تنها از نقاط ورودی محدود و قابل‌ممیزی انجام می‌شود."
         },
         "serviceRole": {
-          "label": "Service-role boundary",
-          "detail": "The Supabase service-role key is used only in server-only contexts — Stripe/PayTR webhook handlers and the anonymous customer booking API — never shipped to the client."
+          "label": "مرز نقش سرویس",
+          "detail": "کلید service-role در Supabase تنها در بافت‌های سمت سرور استفاده می‌شود — پردازشگرهای وب‌هوک Stripe/PayTR و API رزرو ناشناس مشتریان — و هرگز به سمت کلاینت ارسال نمی‌شود."
         },
         "paymentVerification": {
-          "label": "Payment verification",
-          "detail": "Stripe and PayTR webhooks verify request signatures before writing subscription or payment state; unverified requests are rejected before touching the database."
+          "label": "تأیید پرداخت",
+          "detail": "وب‌هوک‌های Stripe و PayTR پیش از ثبت وضعیت اشتراک یا پرداخت، امضای درخواست را تأیید می‌کنند؛ درخواست‌های تأییدنشده پیش از رسیدن به پایگاه‌داده رد می‌شوند."
         },
         "deployment": {
-          "label": "Deployment surface",
-          "detail": "Runs as a non-root user in a multi-stage Docker build on Next.js standalone output, deployed to AWS ECS Fargate behind a load balancer with a dedicated health-check endpoint."
+          "label": "محیط استقرار",
+          "detail": "به‌عنوان کاربر غیرریشه در یک ساخت چندمرحله‌ای Docker روی خروجی standalone نکست.جی‌اس اجرا می‌شود و پشت یک بارمتعادل‌کننده با نقطه‌پایانی اختصاصی بررسی سلامت، روی AWS ECS Fargate مستقر شده است."
         }
       }
     },
     "persona": {
       "operations": {
-        "role": "For operations",
-        "headline": "Nobody double-books a slot again.",
-        "body": "Availability, services, and appointments live behind a database trigger that rejects overlapping bookings at write time — not a client-side check that a race condition can slip past."
+        "role": "برای عملیات",
+        "headline": "دیگر هیچ‌کس یک بازه زمانی را دوبار رزرو نمی‌کند.",
+        "body": "دسترس‌پذیری، خدمات و نوبت‌ها پشت یک تریگر پایگاه‌داده قرار دارند که رزروهای هم‌پوشان را در لحظه نوشتن رد می‌کند — نه یک بررسی سمت کلاینت که یک شرایط رقابتی می‌تواند از آن عبور کند."
       },
       "security": {
-        "role": "For IT & security review",
-        "headline": "Tenant isolation enforced in the database, not the app layer.",
-        "body": "Every table carries an organization_id and a Row Level Security policy scoped through is_org_member(). A compromised or buggy query can't cross a tenant boundary — Postgres refuses the row before your code ever sees it."
+        "role": "برای بازبینی فناوری اطلاعات و امنیت",
+        "headline": "جداسازی مستأجران در پایگاه‌داده اجرا می‌شود، نه در لایه برنامه.",
+        "body": "هر جدول دارای یک organization_id و یک سیاست امنیت سطح ردیف است که از طریق is_org_member() محدوده‌بندی شده است. یک پرس‌وجوی نفوذشده یا معیوب نمی‌تواند از مرز یک مستأجر عبور کند — Postgres پیش از آنکه کد شما اصلاً ردیف را ببیند، آن را رد می‌کند."
       },
       "finance": {
-        "role": "For finance & billing",
-        "headline": "Subscription state stays in sync with Stripe, automatically.",
-        "body": "Checkout, plan changes, and cancellations flow through signature-verified Stripe webhooks that write directly to each organization's subscription record — no manual reconciliation."
+        "role": "برای مالی و صورت‌حساب",
+        "headline": "وضعیت اشتراک به‌صورت خودکار با Stripe همگام می‌ماند.",
+        "body": "پرداخت، تغییر پلن و لغو اشتراک از طریق وب‌هوک‌های Stripe با امضای تأییدشده انجام می‌شود که مستقیماً در رکورد اشتراک هر سازمان نوشته می‌شوند — بدون نیاز به تطبیق دستی."
       }
     },
     "homeCta": {
-      "title": "Set up your first organization in minutes.",
-      "subtitle": "Free to start — no card required for the Starter plan.",
-      "button": "Start free trial"
+      "title": "اولین سازمان خود را راه‌اندازی کنید.",
+      "subtitle": "شروع رایگان — برای پلن Starter نیازی به کارت بانکی نیست.",
+      "button": "شروع رایگان"
     },
     "leadForm": {
-      "fullNameLabel": "Full name",
-      "emailLabel": "Email",
-      "phoneLabel": "Phone",
-      "categoryLabel": "Project type",
-      "categoryPlaceholder": "Select a category",
+      "fullNameLabel": "نام و نام خانوادگی",
+      "emailLabel": "ایمیل",
+      "phoneLabel": "تلفن",
+      "categoryLabel": "نوع پروژه",
+      "categoryPlaceholder": "یک دسته انتخاب کنید",
       "categoryOptions": {
-        "fullstack_saas": "Full-Stack & SaaS Development",
-        "ai_automation": "AI & Automation Integrations",
-        "architecture_security": "System Architecture & Security Review",
-        "payment_subscription": "Payments & Subscription Infrastructure"
+        "fullstack_saas": "توسعه Full-Stack و SaaS",
+        "ai_automation": "یکپارچه‌سازی هوش مصنوعی و اتوماسیون",
+        "architecture_security": "بازبینی معماری سیستم و امنیت",
+        "payment_subscription": "زیرساخت پرداخت و اشتراک"
       },
-      "messageLabel": "Short description",
-      "messagePlaceholder": "What are you looking to build?",
-      "workingModeLabel": "Working mode",
-      "workingModeOptional": "(optional)",
-      "workingModePlaceholder": "Select one",
+      "messageLabel": "توضیح کوتاه",
+      "messagePlaceholder": "قصد ساخت چه چیزی را دارید؟",
+      "workingModeLabel": "شیوه همکاری",
+      "workingModeOptional": "(اختیاری)",
+      "workingModePlaceholder": "یک گزینه انتخاب کنید",
       "workingModeOptions": {
-        "hourly": "Hourly",
-        "project": "Project-based",
-        "either": "Either works"
+        "hourly": "ساعتی",
+        "project": "پروژه‌ای",
+        "either": "فرقی نمی‌کند"
       },
       "followUpQuestions": {
-        "fullstack_saas": "Is this a brand-new project, or an addition to an existing system?",
-        "ai_automation": "Which data or source will it work with?",
-        "architecture_security": "Is an existing system being reviewed, or is this a new setup?",
-        "payment_subscription": "Are you thinking one-time payment, or a subscription model?"
+        "fullstack_saas": "این یک پروژه کاملاً جدید است یا افزودنی به یک سیستم موجود؟",
+        "ai_automation": "با چه داده یا منبعی کار خواهد کرد؟",
+        "architecture_security": "سیستم موجودی بازبینی می‌شود یا این یک راه‌اندازی جدید است؟",
+        "payment_subscription": "به پرداخت یک‌باره فکر می‌کنید یا مدل اشتراکی؟"
       },
-      "submitButton": "Send request",
-      "sending": "Sending...",
-      "successMessage": "Thanks — we've received your request and will be in touch shortly.",
-      "genericError": "Something went wrong. Please try again."
+      "submitButton": "ارسال درخواست",
+      "sending": "در حال ارسال…",
+      "successMessage": "سپاسگزاریم — درخواست شما دریافت شد و به‌زودی با شما در تماس خواهیم بود.",
+      "genericError": "مشکلی پیش آمد. لطفاً دوباره تلاش کنید."
     },
     "saasPage": {
-      "heroTitle": "A system built around your business, that grows with you.",
-      "heroSubtitle": "Appointments, payments, customer tracking — choose what you need, add more as it grows. The system adapts to your business, not the other way around.",
-      "ctaPrimary": "Watch the Demo",
-      "ctaSecondary": "See Plans",
-      "featuresTitle": "Everything a SaaS launch needs on day one.",
+      "heroTitle": "سیستمی متناسب با کسب‌وکار شما که همراه شما رشد می‌کند.",
+      "heroSubtitle": "نوبت‌دهی، پرداخت‌ها، پیگیری مشتریان — آنچه نیاز دارید را انتخاب کنید و هر زمان لازم شد، افزودنی‌های بیشتری اضافه کنید. این سیستم خود را با کسب‌وکار شما تطبیق می‌دهد، نه برعکس.",
+      "ctaPrimary": "مشاهده دمو",
+      "ctaSecondary": "مشاهده پلن‌ها",
+      "featuresTitle": "هر آنچه یک راه‌اندازی SaaS از روز نخست به آن نیاز دارد.",
       "features": {
-        "multiTenant": "Multi-tenant architecture with Postgres row-level security enforced at the database layer, not in application code.",
-        "payments": "Stripe and PayTR billing behind a single provider-agnostic adapter — swap providers without touching checkout logic.",
-        "rag": "An AI knowledge-base chatbot grounded in your own documentation via pgvector similarity search.",
-        "rls": "Every tenant table ships with matching row-level security policies, reviewed and battle-tested.",
-        "i18n": "Localized routing out of the box, ready for more locales beyond English and Turkish.",
-        "observability": "Sentry error tracking wired in across client, server, and edge runtimes from day one."
+        "multiTenant": "معماری چندمستأجری با امنیت سطح ردیف Postgres که در لایه پایگاه‌داده اجرا می‌شود، نه در کد برنامه.",
+        "payments": "صورت‌حساب Stripe و PayTR پشت یک آداپتور واحد و مستقل از ارائه‌دهنده — تعویض ارائه‌دهنده بدون دست‌زدن به منطق پرداخت.",
+        "rag": "یک دستیار هوشمند مبتنی بر پایگاه دانش که از طریق جست‌وجوی شباهت pgvector بر مستندات خود شما استوار است.",
+        "rls": "هر جدول مستأجر همراه با سیاست‌های امنیت سطح ردیف متناظر، بازبینی‌شده و آزموده‌شده ارائه می‌شود.",
+        "i18n": "مسیریابی بومی‌سازی‌شده از ابتدا، آماده برای زبان‌های بیشتر فراتر از انگلیسی و ترکی.",
+        "observability": "ردیابی خطای Sentry از روز نخست در تمام محیط‌های اجرایی کلاینت، سرور و edge فعال شده است."
       },
-      "pricingTitle": "Plans that scale with your product.",
-      "bridgeLink": "As your business grows, the same team grows with you"
+      "pricingTitle": "پلن‌هایی که متناسب با محصول شما رشد می‌کنند.",
+      "bridgeLink": "هر اندازه کسب‌وکارتان رشد کند، همان تیم همراه شما رشد می‌کند"
     },
     "servicesPage": {
-      "heroTitle": "Solutions designed for you, built together with you.",
-      "heroSubtitle": "From a small integration to an end-to-end project — we work hourly or project-based, depending on your needs.",
-      "ctaPrimary": "Get a Quote",
-      "ctaSecondary": "Explore Services",
-      "bridgeLink": "Looking for a ready-made starting point instead",
-      "categoriesTitle": "What we do",
+      "heroTitle": "راهکارهایی طراحی‌شده برای شما، ساخته‌شده همراه با شما.",
+      "heroSubtitle": "از یک یکپارچه‌سازی کوچک تا یک پروژه سرتاسری — بسته به نیاز شما، به‌صورت ساعتی یا پروژه‌ای همکاری می‌کنیم.",
+      "ctaPrimary": "درخواست قیمت",
+      "ctaSecondary": "مشاهده خدمات",
+      "bridgeLink": "به‌دنبال یک نقطه شروع آماده هستید",
+      "categoriesTitle": "آنچه انجام می‌دهیم",
       "categories": {
         "fullstackSaas": {
-          "title": "Full-Stack & SaaS Development",
-          "description": "We turn your idea into a working product — production-ready web applications and MVPs built on Next.js and Supabase.",
+          "title": "توسعه Full-Stack و SaaS",
+          "description": "ایده شما را به محصولی کارآمد تبدیل می‌کنیم — اپلیکیشن‌های وب و نمونه‌های اولیه (MVP) آماده بهره‌برداری، ساخته‌شده بر پایه Next.js و Supabase.",
           "bullets": [
-            "Building a product from the ground up",
-            "Adding new capabilities to an existing system",
-            "Setting up an architecture built to scale",
-            "Example: booking and pre-diagnosis system for repair shops"
+            "توسعه محصول از صفر",
+            "افزودن قابلیت‌های جدید به سیستم موجود",
+            "راه‌اندازی معماری مقیاس‌پذیر",
+            "نمونه: سیستم نوبت‌دهی و پیش‌تشخیص برای تعمیرگاه‌ها"
           ]
         },
         "aiAutomation": {
-          "title": "AI & Automation Integrations",
-          "description": "We build intelligent systems that speak with your business's own data and take repetitive work off your hands.",
+          "title": "یکپارچه‌سازی هوش مصنوعی و اتوماسیون",
+          "description": "سیستم‌های هوشمندی می‌سازیم که با داده‌های خود کسب‌وکار شما گفت‌وگو می‌کنند و کارهای تکراری را از دوش شما برمی‌دارند.",
           "bullets": [
-            "Assistants grounded in your own data",
-            "Process automation",
-            "AI integration into existing systems"
+            "دستیارهایی متکی بر داده‌های خود شما",
+            "اتوماسیون فرایندها",
+            "یکپارچه‌سازی هوش مصنوعی در سیستم‌های موجود"
           ]
         },
         "architectureSecurity": {
-          "title": "System Architecture & Security Review",
-          "description": "We build the foundation correctly from the start, so your data stays locked in your own vault.",
+          "title": "بازبینی معماری سیستم و امنیت",
+          "description": "زیرساخت را از همان ابتدا به‌درستی می‌سازیم تا داده‌های شما در گاوصندوق خودتان قفل بماند.",
           "bullets": [
-            "Data isolation and access-control setup",
-            "Security review of an existing system",
-            "Multi-user / multi-branch architecture"
+            "راه‌اندازی ایزوله‌سازی داده و کنترل دسترسی",
+            "بازبینی امنیتی یک سیستم موجود",
+            "معماری چندکاربره / چندشعبه"
           ]
         },
         "paymentSubscription": {
-          "title": "Payments & Subscription Infrastructure",
-          "description": "Taking payment matters — taking it correctly matters just as much. We build flexible billing and subscription systems.",
+          "title": "زیرساخت پرداخت و اشتراک",
+          "description": "دریافت پرداخت مهم است — دریافت درست آن به همان اندازه اهمیت دارد. سیستم‌های انعطاف‌پذیر صورت‌حساب و اشتراک می‌سازیم.",
           "bullets": [
-            "One-time and subscription-based payment setup",
-            "Invoicing / record automation",
-            "Troubleshooting an existing payment flow"
+            "راه‌اندازی پرداخت یک‌باره و مبتنی بر اشتراک",
+            "اتوماسیون صورت‌حساب و ثبت اطلاعات",
+            "رفع اشکال در یک فرایند پرداخت موجود"
           ]
         }
       },
-      "portfolioTitle": "Recent work",
-      "portfolioViewAll": "View all work",
-      "formTitle": "Tell us about your project",
-      "formSubtitle": "Share a short description of what you need and we'll follow up."
+      "portfolioTitle": "کارهای اخیر",
+      "portfolioViewAll": "مشاهده همه کارها",
+      "formTitle": "درباره پروژه خود به ما بگویید",
+      "formSubtitle": "توضیح کوتاهی از نیاز خود ارائه دهید تا با شما در تماس باشیم."
     },
     "portfolioPage": {
-      "backLink": "Back to services",
-      "stackLabel": "Stack",
-      "notFoundTitle": "Case study not found"
+      "backLink": "بازگشت به خدمات",
+      "stackLabel": "فناوری‌ها",
+      "notFoundTitle": "نمونه‌کار یافت نشد"
     },
     "socialProof": {
-      "trustBadgesTitle": "Security and reliability",
+      "trustBadgesTitle": "امنیت و اطمینان",
       "trustBadges": {
         "dataIsolation": {
-          "title": "Data isolation",
-          "body": "Every customer's data stays locked to its own database rows — no other account can reach it."
+          "title": "ایزوله‌سازی داده",
+          "body": "داده‌های هر مشتری تنها در ردیف‌های پایگاه‌داده اختصاصی خودش باقی می‌ماند؛ هیچ حساب دیگری به آن دسترسی ندارد."
         },
         "securePayments": {
-          "title": "Secure payments",
-          "body": "Card details never touch our servers; payments are processed directly through Stripe or PayTR."
+          "title": "پرداخت‌های امن",
+          "body": "اطلاعات کارت هرگز به سرورهای ما نمی‌رسد؛ پرداخت‌ها مستقیماً از طریق Stripe یا PayTR پردازش می‌شوند."
         },
         "noDoubleBooking": {
-          "title": "No double-bookings",
-          "body": "Two customers can never take the same slot — that rule is guaranteed at the database level."
+          "title": "بدون رزرو دوگانه",
+          "body": "دو مشتری هرگز نمی‌توانند یک بازه زمانی یکسان را رزرو کنند — این قاعده در سطح پایگاه‌داده تضمین شده است."
         }
       },
-      "howWeWorkTitle": "How we work",
+      "howWeWorkTitle": "شیوه همکاری ما",
       "howWeWork": {
         "meeting": {
-          "step": "1",
-          "title": "Consultation",
-          "body": "We clarify what you need, together."
+          "step": "۱",
+          "title": "گفت‌وگو",
+          "body": "نیاز شما را با هم روشن می‌کنیم."
         },
         "setup": {
-          "step": "2",
-          "title": "Setup",
-          "body": "We build the foundation with the right architecture."
+          "step": "۲",
+          "title": "راه‌اندازی",
+          "body": "زیرساخت را با معماری درست می‌سازیم."
         },
         "delivery": {
-          "step": "3",
-          "title": "Delivery",
-          "body": "We hand off a working system, with care."
+          "step": "۳",
+          "title": "تحویل",
+          "body": "سیستمی کارآمد را با دقت به شما تحویل می‌دهیم."
         }
       }
     }
   },
   "auth": {
     "login": {
-      "title": "Sign in",
-      "subtitle": "Use your Supabase credentials to continue.",
-      "emailLabel": "Email",
-      "passwordLabel": "Password",
-      "signInButton": "Sign in",
-      "signingIn": "Signing in...",
-      "forgotPassword": "Forgot password?",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign up"
+      "title": "ورود",
+      "subtitle": "برای ادامه از اطلاعات کاربری Supabase خود استفاده کنید.",
+      "emailLabel": "ایمیل",
+      "passwordLabel": "رمز عبور",
+      "signInButton": "ورود",
+      "signingIn": "در حال ورود…",
+      "forgotPassword": "رمز عبور را فراموش کرده‌اید؟",
+      "noAccount": "حساب کاربری ندارید؟",
+      "signUp": "ثبت‌نام"
     },
     "signup": {
-      "title": "Create your account",
-      "subtitle": "Set up your organization's booking workspace on Pasargad.",
-      "emailLabel": "Email",
-      "passwordLabel": "Password",
-      "confirmPasswordLabel": "Confirm password",
-      "createAccountButton": "Create account",
-      "creatingAccount": "Creating account...",
-      "alreadyHaveAccount": "Already have an account?",
-      "signIn": "Sign in",
-      "successMessage": "Account created. Check your email to confirm your account before signing in.",
+      "title": "ایجاد حساب کاربری",
+      "subtitle": "فضای کاری رزرو سازمان خود را روی پاسارگاد راه‌اندازی کنید.",
+      "emailLabel": "ایمیل",
+      "passwordLabel": "رمز عبور",
+      "confirmPasswordLabel": "تأیید رمز عبور",
+      "createAccountButton": "ایجاد حساب",
+      "creatingAccount": "در حال ایجاد حساب…",
+      "alreadyHaveAccount": "قبلاً حساب کاربری دارید؟",
+      "signIn": "ورود",
+      "successMessage": "حساب کاربری ایجاد شد. پیش از ورود، لطفاً ایمیل خود را برای تأیید حساب بررسی کنید.",
       "errors": {
-        "passwordTooShort": "Password must be at least 8 characters long.",
-        "passwordMismatch": "Passwords do not match."
+        "passwordTooShort": "رمز عبور باید حداقل ۸ نویسه باشد.",
+        "passwordMismatch": "رمزهای عبور با یکدیگر مطابقت ندارند."
       }
     },
     "forgotPassword": {
-      "title": "Reset your password",
-      "subtitle": "Enter the email associated with your account and we'll send you a reset link.",
-      "emailLabel": "Email",
-      "sendButton": "Send reset link",
-      "sending": "Sending...",
-      "successMessage": "If an account exists for this email, a password reset link has been sent.",
-      "rememberedPassword": "Remembered your password?",
-      "signIn": "Sign in",
+      "title": "بازیابی رمز عبور",
+      "subtitle": "ایمیل مرتبط با حساب خود را وارد کنید تا لینک بازیابی برای شما ارسال شود.",
+      "emailLabel": "ایمیل",
+      "sendButton": "ارسال لینک بازیابی",
+      "sending": "در حال ارسال…",
+      "successMessage": "در صورت وجود حساب کاربری برای این ایمیل، لینک بازیابی رمز عبور ارسال شد.",
+      "rememberedPassword": "رمز عبور خود را به‌خاطر آوردید؟",
+      "signIn": "ورود",
       "errors": {
-        "invalidEmail": "Please provide a valid email address."
+        "invalidEmail": "لطفاً یک آدرس ایمیل معتبر وارد کنید."
       }
     },
     "resetPassword": {
-      "title": "Set a new password",
-      "subtitle": "Choose a new password for your account.",
-      "newPasswordLabel": "New password",
-      "confirmPasswordLabel": "Confirm new password",
-      "updateButton": "Update password",
-      "updating": "Updating...",
-      "successMessage": "Password updated successfully. Redirecting to sign in...",
+      "title": "تعیین رمز عبور جدید",
+      "subtitle": "یک رمز عبور جدید برای حساب خود انتخاب کنید.",
+      "newPasswordLabel": "رمز عبور جدید",
+      "confirmPasswordLabel": "تأیید رمز عبور جدید",
+      "updateButton": "به‌روزرسانی رمز عبور",
+      "updating": "در حال به‌روزرسانی…",
+      "successMessage": "رمز عبور با موفقیت به‌روزرسانی شد. در حال انتقال به صفحه ورود…",
       "errors": {
-        "passwordTooShort": "Password must be at least 8 characters long.",
-        "passwordMismatch": "Passwords do not match."
+        "passwordTooShort": "رمز عبور باید حداقل ۸ نویسه باشد.",
+        "passwordMismatch": "رمزهای عبور با یکدیگر مطابقت ندارند."
       }
     },
     "invite": {
-      "signInTitle": "Sign in to accept",
-      "signInSubtitle": "You need to sign in before accepting this invitation.",
-      "signInButton": "Sign in",
-      "invitedTitle": "You're invited",
-      "joinAs": "Join {name} as {role}.",
-      "sentTo": "This invitation was sent to {email}.",
-      "acceptButton": "Accept invitation",
-      "joining": "Joining...",
-      "unavailableTitle": "Invitation unavailable",
-      "goToDashboard": "Go to dashboard",
+      "signInTitle": "برای پذیرش، وارد شوید",
+      "signInSubtitle": "پیش از پذیرش این دعوت‌نامه باید وارد حساب خود شوید.",
+      "signInButton": "ورود",
+      "invitedTitle": "شما دعوت شده‌اید",
+      "joinAs": "به {name} به‌عنوان {role} بپیوندید.",
+      "sentTo": "این دعوت‌نامه به {email} ارسال شده است.",
+      "acceptButton": "پذیرش دعوت‌نامه",
+      "joining": "در حال پیوستن…",
+      "unavailableTitle": "دعوت‌نامه در دسترس نیست",
+      "goToDashboard": "رفتن به داشبورد",
       "states": {
-        "notFound": "This invitation link is invalid or has been removed.",
-        "accepted": "This invitation has already been accepted.",
-        "revoked": "This invitation has been revoked.",
-        "expired": "This invitation has expired."
+        "notFound": "این لینک دعوت‌نامه نامعتبر است یا حذف شده است.",
+        "accepted": "این دعوت‌نامه پیش‌تر پذیرفته شده است.",
+        "revoked": "این دعوت‌نامه لغو شده است.",
+        "expired": "مهلت این دعوت‌نامه به پایان رسیده است."
       }
     }
   },

@@ -1,301 +1,301 @@
 {
   "common": {
     "metadata": {
-      "title": "Pasargad — Multi-Tenant Booking Infrastructure",
-      "description": "Row-level isolated booking, scheduling, and AI assistance for teams that manage appointments across multiple organizations."
+      "title": "Pasargad — Mandantenfähige Buchungsinfrastruktur",
+      "description": "Zeilenebene isolierte Terminbuchung, Planung und KI-Unterstützung für Teams, die Termine über mehrere Organisationen hinweg verwalten."
     },
     "notFound": {
-      "title": "Page not found",
-      "body": "The page you're looking for doesn't exist or has moved."
+      "title": "Seite nicht gefunden",
+      "body": "Die gesuchte Seite existiert nicht oder wurde verschoben."
     }
   },
   "marketing": {
     "header": {
-      "platform": "Platform",
-      "security": "Security",
-      "pricing": "Pricing",
-      "signIn": "Sign in",
-      "startTrial": "Start free trial",
-      "services": "Services",
+      "platform": "Plattform",
+      "security": "Sicherheit",
+      "pricing": "Preise",
+      "signIn": "Anmelden",
+      "startTrial": "Kostenlos testen",
+      "services": "Leistungen",
       "saas": "SaaS"
     },
     "footer": {
-      "tagline": "Multi-tenant booking and scheduling infrastructure with row-level isolation for every organization.",
-      "productHeading": "Product",
-      "accountHeading": "Account",
-      "systemStatus": "System status",
-      "copyright": "© {year} Pasargad. Built on PostgreSQL row-level security."
+      "tagline": "Mandantenfähige Buchungs- und Planungsinfrastruktur mit Zeilenebene-Isolation für jede Organisation.",
+      "productHeading": "Produkt",
+      "accountHeading": "Konto",
+      "systemStatus": "Systemstatus",
+      "copyright": "© {year} Pasargad. Aufgebaut auf PostgreSQL Row-Level Security."
     },
     "hero": {
-      "title": "Booking infrastructure that keeps every organization's data provably separate.",
-      "subtitle": "Pasargad runs scheduling, payments, and an AI assistant for multi-tenant teams on PostgreSQL row-level security — a database trigger blocks double-bookings before they're written, not after.",
-      "ctaPrimary": "Start free trial",
-      "ctaSecondary": "Book a demo"
+      "title": "Buchungsinfrastruktur, die die Daten jeder Organisation nachweislich getrennt hält.",
+      "subtitle": "Pasargad betreibt Terminplanung, Zahlungen und einen KI-Assistenten für mandantenfähige Teams auf PostgreSQL Row-Level Security — ein Datenbank-Trigger blockiert Doppelbuchungen vor dem Schreiben, nicht danach.",
+      "ctaPrimary": "Kostenlos testen",
+      "ctaSecondary": "Demo vereinbaren"
     },
     "pricingSection": {
-      "title": "Plans that scale with your booking volume.",
-      "subtitle": "Start on Starter, upgrade when the AI assistant and priority support earn their keep.",
-      "compareLink": "See full plan comparison and start checkout"
+      "title": "Pläne, die mit Ihrem Buchungsvolumen wachsen.",
+      "subtitle": "Beginnen Sie mit Starter und wechseln Sie, sobald sich der KI-Assistent und der priorisierte Support auszahlen.",
+      "compareLink": "Vollständigen Planvergleich ansehen und Checkout starten"
     },
     "security": {
-      "title": "For the reviewer who reads the schema before the sales deck.",
+      "title": "Für Prüfer, die das Schema vor der Verkaufspräsentation lesen.",
       "controls": {
         "isolation": {
-          "label": "Isolation model",
-          "detail": "Row Level Security on every tenant table, scoped via is_org_member(organization_id). No cross-tenant query path exists at the database layer."
+          "label": "Isolationsmodell",
+          "detail": "Row Level Security auf jeder Mandantentabelle, kontrolliert über is_org_member(organization_id). Auf Datenbankebene existiert kein mandantenübergreifender Abfragepfad."
         },
         "privilegedOps": {
-          "label": "Privileged operations",
-          "detail": "Org creation and invitation acceptance run as SECURITY DEFINER functions with an explicit search_path, so elevated writes happen only through audited, narrow entry points."
+          "label": "Privilegierte Vorgänge",
+          "detail": "Die Erstellung von Organisationen und die Annahme von Einladungen laufen als SECURITY DEFINER-Funktionen mit explizitem search_path, sodass erweiterte Schreibvorgänge ausschließlich über geprüfte, eng begrenzte Einstiegspunkte erfolgen."
         },
         "serviceRole": {
-          "label": "Service-role boundary",
-          "detail": "The Supabase service-role key is used only in server-only contexts — Stripe/PayTR webhook handlers and the anonymous customer booking API — never shipped to the client."
+          "label": "Service-Role-Grenze",
+          "detail": "Der Supabase-Service-Role-Schlüssel wird ausschließlich in serverseitigen Kontexten verwendet — Stripe/PayTR-Webhook-Handler und die anonyme Kunden-Buchungs-API — und niemals an den Client ausgeliefert."
         },
         "paymentVerification": {
-          "label": "Payment verification",
-          "detail": "Stripe and PayTR webhooks verify request signatures before writing subscription or payment state; unverified requests are rejected before touching the database."
+          "label": "Zahlungsprüfung",
+          "detail": "Stripe- und PayTR-Webhooks verifizieren Anfragesignaturen, bevor Abonnement- oder Zahlungsstatus geschrieben wird; nicht verifizierte Anfragen werden abgelehnt, bevor sie die Datenbank erreichen."
         },
         "deployment": {
-          "label": "Deployment surface",
-          "detail": "Runs as a non-root user in a multi-stage Docker build on Next.js standalone output, deployed to AWS ECS Fargate behind a load balancer with a dedicated health-check endpoint."
+          "label": "Deployment-Umgebung",
+          "detail": "Läuft als Non-Root-Benutzer in einem mehrstufigen Docker-Build auf Next.js-Standalone-Output, bereitgestellt auf AWS ECS Fargate hinter einem Load Balancer mit dediziertem Health-Check-Endpunkt."
         }
       }
     },
     "persona": {
       "operations": {
-        "role": "For operations",
-        "headline": "Nobody double-books a slot again.",
-        "body": "Availability, services, and appointments live behind a database trigger that rejects overlapping bookings at write time — not a client-side check that a race condition can slip past."
+        "role": "Für den Betrieb",
+        "headline": "Niemand bucht einen Termin je wieder doppelt.",
+        "body": "Verfügbarkeit, Leistungen und Termine liegen hinter einem Datenbank-Trigger, der überlappende Buchungen beim Schreiben ablehnt — keine clientseitige Prüfung, die eine Race Condition umgehen könnte."
       },
       "security": {
-        "role": "For IT & security review",
-        "headline": "Tenant isolation enforced in the database, not the app layer.",
-        "body": "Every table carries an organization_id and a Row Level Security policy scoped through is_org_member(). A compromised or buggy query can't cross a tenant boundary — Postgres refuses the row before your code ever sees it."
+        "role": "Für IT & Sicherheitsprüfung",
+        "headline": "Mandantentrennung wird in der Datenbank durchgesetzt, nicht in der Anwendungsschicht.",
+        "body": "Jede Tabelle trägt eine organization_id und eine Row-Level-Security-Richtlinie, kontrolliert über is_org_member(). Eine kompromittierte oder fehlerhafte Abfrage kann eine Mandantengrenze nicht überschreiten — Postgres verweigert die Zeile, bevor Ihr Code sie überhaupt sieht."
       },
       "finance": {
-        "role": "For finance & billing",
-        "headline": "Subscription state stays in sync with Stripe, automatically.",
-        "body": "Checkout, plan changes, and cancellations flow through signature-verified Stripe webhooks that write directly to each organization's subscription record — no manual reconciliation."
+        "role": "Für Finanzen & Abrechnung",
+        "headline": "Der Abonnementstatus bleibt automatisch mit Stripe synchron.",
+        "body": "Checkout, Plananpassungen und Kündigungen laufen über signaturgeprüfte Stripe-Webhooks, die direkt in den Abonnementdatensatz jeder Organisation schreiben — kein manueller Abgleich erforderlich."
       }
     },
     "homeCta": {
-      "title": "Set up your first organization in minutes.",
-      "subtitle": "Free to start — no card required for the Starter plan.",
-      "button": "Start free trial"
+      "title": "Richten Sie Ihre erste Organisation ein.",
+      "subtitle": "Kostenloser Start — für den Starter-Plan ist keine Karte erforderlich.",
+      "button": "Kostenlos testen"
     },
     "leadForm": {
-      "fullNameLabel": "Full name",
-      "emailLabel": "Email",
-      "phoneLabel": "Phone",
-      "categoryLabel": "Project type",
-      "categoryPlaceholder": "Select a category",
+      "fullNameLabel": "Vollständiger Name",
+      "emailLabel": "E-Mail",
+      "phoneLabel": "Telefon",
+      "categoryLabel": "Projektart",
+      "categoryPlaceholder": "Kategorie auswählen",
       "categoryOptions": {
-        "fullstack_saas": "Full-Stack & SaaS Development",
-        "ai_automation": "AI & Automation Integrations",
-        "architecture_security": "System Architecture & Security Review",
-        "payment_subscription": "Payments & Subscription Infrastructure"
+        "fullstack_saas": "Full-Stack- & SaaS-Entwicklung",
+        "ai_automation": "KI- & Automatisierungsintegrationen",
+        "architecture_security": "Systemarchitektur & Sicherheitsprüfung",
+        "payment_subscription": "Zahlungs- & Abonnement-Infrastruktur"
       },
-      "messageLabel": "Short description",
-      "messagePlaceholder": "What are you looking to build?",
-      "workingModeLabel": "Working mode",
+      "messageLabel": "Kurzbeschreibung",
+      "messagePlaceholder": "Was möchten Sie umsetzen?",
+      "workingModeLabel": "Arbeitsweise",
       "workingModeOptional": "(optional)",
-      "workingModePlaceholder": "Select one",
+      "workingModePlaceholder": "Bitte wählen",
       "workingModeOptions": {
-        "hourly": "Hourly",
-        "project": "Project-based",
-        "either": "Either works"
+        "hourly": "Stundenbasis",
+        "project": "Projektbasis",
+        "either": "Beides möglich"
       },
       "followUpQuestions": {
-        "fullstack_saas": "Is this a brand-new project, or an addition to an existing system?",
-        "ai_automation": "Which data or source will it work with?",
-        "architecture_security": "Is an existing system being reviewed, or is this a new setup?",
-        "payment_subscription": "Are you thinking one-time payment, or a subscription model?"
+        "fullstack_saas": "Handelt es sich um ein komplett neues Projekt oder eine Erweiterung eines bestehenden Systems?",
+        "ai_automation": "Mit welchen Daten oder Quellen soll gearbeitet werden?",
+        "architecture_security": "Wird ein bestehendes System geprüft, oder handelt es sich um eine Neueinrichtung?",
+        "payment_subscription": "Denken Sie an eine einmalige Zahlung oder ein Abonnementmodell?"
       },
-      "submitButton": "Send request",
-      "sending": "Sending...",
-      "successMessage": "Thanks — we've received your request and will be in touch shortly.",
-      "genericError": "Something went wrong. Please try again."
+      "submitButton": "Anfrage senden",
+      "sending": "Wird gesendet …",
+      "successMessage": "Vielen Dank — wir haben Ihre Anfrage erhalten und melden uns in Kürze bei Ihnen.",
+      "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
     },
     "saasPage": {
-      "heroTitle": "A system built around your business, that grows with you.",
-      "heroSubtitle": "Appointments, payments, customer tracking — choose what you need, add more as it grows. The system adapts to your business, not the other way around.",
-      "ctaPrimary": "Watch the Demo",
-      "ctaSecondary": "See Plans",
-      "featuresTitle": "Everything a SaaS launch needs on day one.",
+      "heroTitle": "Ein System, das auf Ihr Unternehmen zugeschnitten ist und mit Ihnen wächst.",
+      "heroSubtitle": "Termine, Zahlungen, Kundenverwaltung — wählen Sie, was Sie benötigen, und ergänzen Sie es bei Bedarf. Das System passt sich Ihrem Unternehmen an, nicht umgekehrt.",
+      "ctaPrimary": "Demo ansehen",
+      "ctaSecondary": "Pläne ansehen",
+      "featuresTitle": "Alles, was ein SaaS-Start vom ersten Tag an benötigt.",
       "features": {
-        "multiTenant": "Multi-tenant architecture with Postgres row-level security enforced at the database layer, not in application code.",
-        "payments": "Stripe and PayTR billing behind a single provider-agnostic adapter — swap providers without touching checkout logic.",
-        "rag": "An AI knowledge-base chatbot grounded in your own documentation via pgvector similarity search.",
-        "rls": "Every tenant table ships with matching row-level security policies, reviewed and battle-tested.",
-        "i18n": "Localized routing out of the box, ready for more locales beyond English and Turkish.",
-        "observability": "Sentry error tracking wired in across client, server, and edge runtimes from day one."
+        "multiTenant": "Mandantenfähige Architektur mit Postgres Row-Level Security, durchgesetzt auf Datenbankebene — nicht im Anwendungscode.",
+        "payments": "Stripe- und PayTR-Abrechnung hinter einem einzigen anbieterunabhängigen Adapter — Anbieter wechseln, ohne die Checkout-Logik anzufassen.",
+        "rag": "Ein KI-Wissensdatenbank-Chatbot, der über pgvector-Ähnlichkeitssuche in Ihrer eigenen Dokumentation verankert ist.",
+        "rls": "Jede Mandantentabelle wird mit passenden, geprüften und bewährten Row-Level-Security-Richtlinien ausgeliefert.",
+        "i18n": "Lokalisiertes Routing von Haus aus, bereit für weitere Sprachen über Englisch und Türkisch hinaus.",
+        "observability": "Sentry-Fehlerverfolgung vom ersten Tag an über Client-, Server- und Edge-Laufzeitumgebungen hinweg eingebunden."
       },
-      "pricingTitle": "Plans that scale with your product.",
-      "bridgeLink": "As your business grows, the same team grows with you"
+      "pricingTitle": "Pläne, die mit Ihrem Produkt wachsen.",
+      "bridgeLink": "Wenn Ihr Unternehmen wächst, wächst dasselbe Team mit Ihnen"
     },
     "servicesPage": {
-      "heroTitle": "Solutions designed for you, built together with you.",
-      "heroSubtitle": "From a small integration to an end-to-end project — we work hourly or project-based, depending on your needs.",
-      "ctaPrimary": "Get a Quote",
-      "ctaSecondary": "Explore Services",
-      "bridgeLink": "Looking for a ready-made starting point instead",
-      "categoriesTitle": "What we do",
+      "heroTitle": "Für Sie konzipierte, gemeinsam mit Ihnen umgesetzte Lösungen.",
+      "heroSubtitle": "Von einer kleinen Integration bis zu einem umfassenden Projekt — wir arbeiten je nach Bedarf auf Stunden- oder Projektbasis.",
+      "ctaPrimary": "Angebot anfordern",
+      "ctaSecondary": "Leistungen entdecken",
+      "bridgeLink": "Suchen Sie stattdessen einen fertigen Ausgangspunkt",
+      "categoriesTitle": "Was wir tun",
       "categories": {
         "fullstackSaas": {
-          "title": "Full-Stack & SaaS Development",
-          "description": "We turn your idea into a working product — production-ready web applications and MVPs built on Next.js and Supabase.",
+          "title": "Full-Stack- & SaaS-Entwicklung",
+          "description": "Wir verwandeln Ihre Idee in ein funktionierendes Produkt — produktionsreife Webanwendungen und MVPs auf Basis von Next.js und Supabase.",
           "bullets": [
-            "Building a product from the ground up",
-            "Adding new capabilities to an existing system",
-            "Setting up an architecture built to scale",
-            "Example: booking and pre-diagnosis system for repair shops"
+            "Produktentwicklung von Grund auf",
+            "Neue Funktionen für ein bestehendes System",
+            "Aufbau einer skalierbaren Architektur",
+            "Beispiel: Buchungs- und Vordiagnosesystem für Reparaturwerkstätten"
           ]
         },
         "aiAutomation": {
-          "title": "AI & Automation Integrations",
-          "description": "We build intelligent systems that speak with your business's own data and take repetitive work off your hands.",
+          "title": "KI- & Automatisierungsintegrationen",
+          "description": "Wir bauen intelligente Systeme, die mit den eigenen Daten Ihres Unternehmens arbeiten und Ihnen wiederkehrende Aufgaben abnehmen.",
           "bullets": [
-            "Assistants grounded in your own data",
-            "Process automation",
-            "AI integration into existing systems"
+            "Assistenten auf Basis Ihrer eigenen Daten",
+            "Prozessautomatisierung",
+            "KI-Integration in bestehende Systeme"
           ]
         },
         "architectureSecurity": {
-          "title": "System Architecture & Security Review",
-          "description": "We build the foundation correctly from the start, so your data stays locked in your own vault.",
+          "title": "Systemarchitektur & Sicherheitsprüfung",
+          "description": "Wir errichten das Fundament von Beginn an korrekt, damit Ihre Daten sicher in Ihrem eigenen Tresor bleiben.",
           "bullets": [
-            "Data isolation and access-control setup",
-            "Security review of an existing system",
-            "Multi-user / multi-branch architecture"
+            "Einrichtung von Datenisolation und Zugriffskontrolle",
+            "Sicherheitsprüfung eines bestehenden Systems",
+            "Mehrbenutzer-/Mehrstandort-Architektur"
           ]
         },
         "paymentSubscription": {
-          "title": "Payments & Subscription Infrastructure",
-          "description": "Taking payment matters — taking it correctly matters just as much. We build flexible billing and subscription systems.",
+          "title": "Zahlungs- & Abonnement-Infrastruktur",
+          "description": "Zahlungen entgegenzunehmen ist wichtig — sie korrekt entgegenzunehmen ebenso. Wir bauen flexible Abrechnungs- und Abonnementsysteme.",
           "bullets": [
-            "One-time and subscription-based payment setup",
-            "Invoicing / record automation",
-            "Troubleshooting an existing payment flow"
+            "Einrichtung von Einmal- und Abonnementzahlungen",
+            "Automatisierung von Rechnungsstellung und Buchführung",
+            "Fehlerbehebung in einem bestehenden Zahlungsablauf"
           ]
         }
       },
-      "portfolioTitle": "Recent work",
-      "portfolioViewAll": "View all work",
-      "formTitle": "Tell us about your project",
-      "formSubtitle": "Share a short description of what you need and we'll follow up."
+      "portfolioTitle": "Aktuelle Arbeiten",
+      "portfolioViewAll": "Alle Arbeiten ansehen",
+      "formTitle": "Erzählen Sie uns von Ihrem Projekt",
+      "formSubtitle": "Teilen Sie uns kurz mit, was Sie benötigen — wir melden uns bei Ihnen."
     },
     "portfolioPage": {
-      "backLink": "Back to services",
-      "stackLabel": "Stack",
-      "notFoundTitle": "Case study not found"
+      "backLink": "Zurück zu den Leistungen",
+      "stackLabel": "Technologie",
+      "notFoundTitle": "Fallstudie nicht gefunden"
     },
     "socialProof": {
-      "trustBadgesTitle": "Security and reliability",
+      "trustBadgesTitle": "Sicherheit und Zuverlässigkeit",
       "trustBadges": {
         "dataIsolation": {
-          "title": "Data isolation",
-          "body": "Every customer's data stays locked to its own database rows — no other account can reach it."
+          "title": "Datenisolation",
+          "body": "Die Daten jedes Kunden bleiben ausschließlich in dessen eigenen Datenbankzeilen — kein anderes Konto kann darauf zugreifen."
         },
         "securePayments": {
-          "title": "Secure payments",
-          "body": "Card details never touch our servers; payments are processed directly through Stripe or PayTR."
+          "title": "Sichere Zahlungen",
+          "body": "Kartendaten erreichen unsere Server nie; Zahlungen werden direkt über Stripe oder PayTR verarbeitet."
         },
         "noDoubleBooking": {
-          "title": "No double-bookings",
-          "body": "Two customers can never take the same slot — that rule is guaranteed at the database level."
+          "title": "Keine Doppelbuchungen",
+          "body": "Zwei Kunden können niemals denselben Termin erhalten — diese Regel ist auf Datenbankebene garantiert."
         }
       },
-      "howWeWorkTitle": "How we work",
+      "howWeWorkTitle": "So arbeiten wir",
       "howWeWork": {
         "meeting": {
           "step": "1",
-          "title": "Consultation",
-          "body": "We clarify what you need, together."
+          "title": "Gespräch",
+          "body": "Gemeinsam klären wir Ihren Bedarf."
         },
         "setup": {
           "step": "2",
-          "title": "Setup",
-          "body": "We build the foundation with the right architecture."
+          "title": "Einrichtung",
+          "body": "Wir errichten das Fundament mit der passenden Architektur."
         },
         "delivery": {
           "step": "3",
-          "title": "Delivery",
-          "body": "We hand off a working system, with care."
+          "title": "Übergabe",
+          "body": "Wir übergeben Ihnen ein funktionierendes System — mit Sorgfalt."
         }
       }
     }
   },
   "auth": {
     "login": {
-      "title": "Sign in",
-      "subtitle": "Use your Supabase credentials to continue.",
-      "emailLabel": "Email",
-      "passwordLabel": "Password",
-      "signInButton": "Sign in",
-      "signingIn": "Signing in...",
-      "forgotPassword": "Forgot password?",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign up"
+      "title": "Anmelden",
+      "subtitle": "Verwenden Sie Ihre Supabase-Zugangsdaten, um fortzufahren.",
+      "emailLabel": "E-Mail",
+      "passwordLabel": "Passwort",
+      "signInButton": "Anmelden",
+      "signingIn": "Anmeldung läuft …",
+      "forgotPassword": "Passwort vergessen?",
+      "noAccount": "Noch kein Konto?",
+      "signUp": "Registrieren"
     },
     "signup": {
-      "title": "Create your account",
-      "subtitle": "Set up your organization's booking workspace on Pasargad.",
-      "emailLabel": "Email",
-      "passwordLabel": "Password",
-      "confirmPasswordLabel": "Confirm password",
-      "createAccountButton": "Create account",
-      "creatingAccount": "Creating account...",
-      "alreadyHaveAccount": "Already have an account?",
-      "signIn": "Sign in",
-      "successMessage": "Account created. Check your email to confirm your account before signing in.",
+      "title": "Konto erstellen",
+      "subtitle": "Richten Sie den Buchungsarbeitsbereich Ihrer Organisation auf Pasargad ein.",
+      "emailLabel": "E-Mail",
+      "passwordLabel": "Passwort",
+      "confirmPasswordLabel": "Passwort bestätigen",
+      "createAccountButton": "Konto erstellen",
+      "creatingAccount": "Konto wird erstellt …",
+      "alreadyHaveAccount": "Bereits ein Konto?",
+      "signIn": "Anmelden",
+      "successMessage": "Konto erstellt. Bitte bestätigen Sie Ihr Konto über den Link in Ihrer E-Mail, bevor Sie sich anmelden.",
       "errors": {
-        "passwordTooShort": "Password must be at least 8 characters long.",
-        "passwordMismatch": "Passwords do not match."
+        "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+        "passwordMismatch": "Die Passwörter stimmen nicht überein."
       }
     },
     "forgotPassword": {
-      "title": "Reset your password",
-      "subtitle": "Enter the email associated with your account and we'll send you a reset link.",
-      "emailLabel": "Email",
-      "sendButton": "Send reset link",
-      "sending": "Sending...",
-      "successMessage": "If an account exists for this email, a password reset link has been sent.",
-      "rememberedPassword": "Remembered your password?",
-      "signIn": "Sign in",
+      "title": "Passwort zurücksetzen",
+      "subtitle": "Geben Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse ein — wir senden Ihnen einen Link zum Zurücksetzen.",
+      "emailLabel": "E-Mail",
+      "sendButton": "Link zum Zurücksetzen senden",
+      "sending": "Wird gesendet …",
+      "successMessage": "Falls für diese E-Mail-Adresse ein Konto existiert, wurde ein Link zum Zurücksetzen des Passworts gesendet.",
+      "rememberedPassword": "Passwort wieder eingefallen?",
+      "signIn": "Anmelden",
       "errors": {
-        "invalidEmail": "Please provide a valid email address."
+        "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse an."
       }
     },
     "resetPassword": {
-      "title": "Set a new password",
-      "subtitle": "Choose a new password for your account.",
-      "newPasswordLabel": "New password",
-      "confirmPasswordLabel": "Confirm new password",
-      "updateButton": "Update password",
-      "updating": "Updating...",
-      "successMessage": "Password updated successfully. Redirecting to sign in...",
+      "title": "Neues Passwort festlegen",
+      "subtitle": "Wählen Sie ein neues Passwort für Ihr Konto.",
+      "newPasswordLabel": "Neues Passwort",
+      "confirmPasswordLabel": "Neues Passwort bestätigen",
+      "updateButton": "Passwort aktualisieren",
+      "updating": "Wird aktualisiert …",
+      "successMessage": "Passwort erfolgreich aktualisiert. Sie werden zur Anmeldung weitergeleitet …",
       "errors": {
-        "passwordTooShort": "Password must be at least 8 characters long.",
-        "passwordMismatch": "Passwords do not match."
+        "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+        "passwordMismatch": "Die Passwörter stimmen nicht überein."
       }
     },
     "invite": {
-      "signInTitle": "Sign in to accept",
-      "signInSubtitle": "You need to sign in before accepting this invitation.",
-      "signInButton": "Sign in",
-      "invitedTitle": "You're invited",
-      "joinAs": "Join {name} as {role}.",
-      "sentTo": "This invitation was sent to {email}.",
-      "acceptButton": "Accept invitation",
-      "joining": "Joining...",
-      "unavailableTitle": "Invitation unavailable",
-      "goToDashboard": "Go to dashboard",
+      "signInTitle": "Zum Annehmen anmelden",
+      "signInSubtitle": "Sie müssen sich anmelden, bevor Sie diese Einladung annehmen können.",
+      "signInButton": "Anmelden",
+      "invitedTitle": "Sie sind eingeladen",
+      "joinAs": "Treten Sie {name} als {role} bei.",
+      "sentTo": "Diese Einladung wurde an {email} gesendet.",
+      "acceptButton": "Einladung annehmen",
+      "joining": "Wird beigetreten …",
+      "unavailableTitle": "Einladung nicht verfügbar",
+      "goToDashboard": "Zum Dashboard",
       "states": {
-        "notFound": "This invitation link is invalid or has been removed.",
-        "accepted": "This invitation has already been accepted.",
-        "revoked": "This invitation has been revoked.",
-        "expired": "This invitation has expired."
+        "notFound": "Dieser Einladungslink ist ungültig oder wurde entfernt.",
+        "accepted": "Diese Einladung wurde bereits angenommen.",
+        "revoked": "Diese Einladung wurde widerrufen.",
+        "expired": "Diese Einladung ist abgelaufen."
       }
     }
   },
