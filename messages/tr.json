@@ -11,6 +11,8 @@
   },
   "marketing": {
     "header": {
+      "features": "Özellikler",
+      "howItWorks": "Nasıl Çalışır?",
       "platform": "Platform",
       "security": "Güvenlik",
       "pricing": "Fiyatlandırma",

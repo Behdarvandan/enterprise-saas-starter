@@ -15,6 +15,12 @@ interface ThemeToggleProps {
  * Renders a placeholder icon until the component is mounted to avoid a
  * hydration mismatch: `resolvedTheme` is `undefined` during the first
  * server/client render pass.
+ *
+ * Cosmetic only: `[locale]/layout.tsx` sets `forcedTheme="dark"` on
+ * `ThemeProvider` app-wide, so `resolvedTheme` never actually changes —
+ * there is no light palette in `globals.css` to switch to. The icon still
+ * flips on click so the control doesn't look broken, but it does not
+ * change what's rendered.
  */
 export default function ThemeToggle({ className }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme();
@@ -35,7 +41,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
       aria-label={label}
       title={label}
       className={cn(
-        "flex h-9 w-9 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink-primary",
+        "flex h-9 w-9 items-center justify-center rounded-control text-zinc-400 transition-colors hover:text-zinc-100",
         className,
       )}
     >

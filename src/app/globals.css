@@ -84,6 +84,18 @@
   --color-status-warn: #e0a63f;
   --color-status-error: #e0574f;
 
+  /* Liquid Glass tokens — additive on top of the ink/gold palette above.
+     Namespaced `--color-glass-*`/`--color-glow-*` so nothing here collides
+     with or overrides an existing token; only components explicitly
+     migrated to the `.liquid-glass` utilities (see @layer utilities below)
+     opt into this look. Not every screen is migrated yet. */
+  --color-glass-canvas: #09090b;
+  --color-glass-surface: rgba(18, 18, 23, 0.65);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-highlight: rgba(255, 255, 255, 0.1);
+  --color-glow-indigo: #6366f1;
+  --color-glow-violet: #8b5cf6;
+
   /* Legacy control radii. */
   --radius-control: 6px;
   --radius-interactive: 8px;
@@ -176,6 +188,11 @@
   --sidebar-accent-foreground: #ede9e1;
   --sidebar-border: #33204a;
   --sidebar-ring: #b08d57;
+
+  /* Liquid Glass shadow recipe — layered outer drop-shadow + inner top
+     highlight, the two-part shadow a real frosted-glass panel needs. */
+  --glass-shadow-outer: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  --glass-shadow-inset: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 .dark {
@@ -213,6 +230,9 @@
   --sidebar-accent-foreground: #ede9e1;
   --sidebar-border: #33204a;
   --sidebar-ring: #b08d57;
+
+  --glass-shadow-outer: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  --glass-shadow-inset: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 @layer base {
@@ -261,6 +281,54 @@
     textarea {
       min-height: var(--touch-target-min);
     }
+  }
+}
+
+@layer utilities {
+  /* Liquid Glass panel — frosted surface for the redesigned navbar, hero
+     showcase, and dashboard/agent-builder screens. Blur+saturate is
+     expensive to composite when many panels stack (e.g. a node canvas with
+     several cards on screen at once); the @supports fallback below keeps
+     panels readable without backdrop-filter support. */
+  .liquid-glass {
+    background-color: var(--color-glass-surface);
+    border: 1px solid var(--color-glass-border);
+    box-shadow: var(--glass-shadow-outer), var(--glass-shadow-inset);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .liquid-glass {
+      background-color: rgba(18, 18, 23, 0.92);
+    }
+  }
+
+  /* Soft indigo/violet radial glow, meant for a section's background —
+     apply to a positioned ancestor (e.g. the hero <section>), not to a
+     `.liquid-glass` panel itself. */
+  .liquid-glass-glow {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .liquid-glass-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(
+        circle at 20% 0%,
+        color-mix(in srgb, var(--color-glow-indigo) 35%, transparent) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        circle at 80% 10%,
+        color-mix(in srgb, var(--color-glow-violet) 30%, transparent) 0%,
+        transparent 55%
+      );
   }
 }
 

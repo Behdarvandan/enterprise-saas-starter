@@ -11,6 +11,8 @@
   },
   "marketing": {
     "header": {
+      "features": "Features",
+      "howItWorks": "How it works",
       "platform": "Platform",
       "security": "Security",
       "pricing": "Pricing",

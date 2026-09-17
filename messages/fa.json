@@ -11,6 +11,8 @@
   },
   "marketing": {
     "header": {
+      "features": "امکانات",
+      "howItWorks": "نحوه کارکرد",
       "platform": "پلتفرم",
       "security": "امنیت",
       "pricing": "قیمت‌گذاری",
