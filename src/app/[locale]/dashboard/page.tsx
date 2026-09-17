@@ -237,7 +237,7 @@ export default async function DashboardPage() {
         <OnboardingChecklist userId={user.id} items={checklistItems} />
 
         {organization && (
-          <Card className="p-6">
+          <Card className="animate-reveal-up p-6">
             <div className="flex items-baseline justify-between">
               <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
                 Recent appointments
@@ -294,7 +294,7 @@ export default async function DashboardPage() {
           </Card>
         )}
 
-        <Card className="p-6">
+        <Card className="animate-reveal-up p-6" style={{ animationDelay: "60ms" }}>
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Authenticated user
           </h2>
@@ -316,7 +316,7 @@ export default async function DashboardPage() {
           </dl>
         </Card>
 
-        <Card className="p-6">
+        <Card className="animate-reveal-up p-6" style={{ animationDelay: "120ms" }}>
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Organization
           </h2>

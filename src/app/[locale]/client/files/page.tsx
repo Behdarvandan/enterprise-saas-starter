@@ -60,14 +60,14 @@ export default async function ClientFilesPage() {
           />
         </div>
       ) : (
-        <div className="mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
+        <div className="animate-reveal-up mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
           {deliverables.map((row) => (
             <a
               key={row.key}
               href={row.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-4 border-b border-subtle px-4 py-3 transition-colors last:border-0 hover:bg-surface-raised"
+              className="flex items-center justify-between gap-4 border-b border-subtle px-4 py-3 transition-colors last:border-0 hover:border-gold/50 hover:bg-surface-raised"
             >
               <div className="flex min-w-0 items-center gap-3">
                 <row.icon size={16} className="shrink-0 text-ink-muted" />

@@ -22,7 +22,7 @@ export default async function ProfileSettingsPage() {
       </p>
 
       <div className="mt-6">
-        <Card className="p-6">
+        <Card className="animate-reveal-up p-6">
           <ProfileForm email={email} fullName={fullName} />
         </Card>
       </div>

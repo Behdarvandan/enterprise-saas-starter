@@ -96,7 +96,7 @@ export default function TaskBoard({ tasks }: TaskBoardProps) {
                   return (
                     <div
                       key={task.id}
-                      className="rounded-control border border-subtle bg-canvas p-3"
+                      className="rounded-control border border-subtle bg-canvas p-3 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
                     >
                       <p className="text-sm font-medium text-ink-primary">{task.title}</p>
                       {task.description && (

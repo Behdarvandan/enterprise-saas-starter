@@ -69,7 +69,7 @@ export default function LeadPipelineBoard({ leads }: LeadPipelineBoardProps) {
                 return (
                   <div
                     key={lead.id}
-                    className="rounded-control border border-subtle bg-canvas p-3"
+                    className="rounded-control border border-subtle bg-canvas p-3 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <Link

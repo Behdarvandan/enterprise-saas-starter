@@ -1,18 +1,11 @@
 import { CalendarX2 } from "lucide-react";
 import { requireOperatorAdmin, getOperatorOrganizationId } from "@/lib/operator";
-import { formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
+import { appointmentStatusTone, formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 import type { Appointment, AppointmentStatus } from "@/types";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<AppointmentStatus, "warn" | "success" | "error" | "neutral"> = {
-  pending: "warn",
-  confirmed: "success",
-  cancelled: "error",
-  completed: "neutral",
-};
 
 /**
  * Reads the operator's own booking calendar (the same `appointments` table
@@ -52,7 +45,7 @@ export default async function AdminAppointmentsPage() {
       </p>
 
       <div className="mt-8 space-y-6">
-        <section>
+        <section className="animate-reveal-up">
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Yaklaşan ({upcoming.length})
           </h2>
@@ -77,7 +70,7 @@ export default async function AdminAppointmentsPage() {
           )}
         </section>
 
-        <section>
+        <section className="animate-reveal-up" style={{ animationDelay: "60ms" }}>
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Geçmiş ({past.length})
           </h2>
@@ -115,7 +108,7 @@ function AppointmentRow({
 }) {
   return (
     <div
-      className={`rounded-interactive border-l-2 border-subtle bg-surface p-4 sm:p-5 ${
+      className={`rounded-interactive border-l-2 border-subtle bg-surface p-4 transition-shadow duration-200 hover:shadow-md hover:shadow-gold/10 sm:p-5 ${
         appointment.status === "cancelled" ? "border-l-status-error" : "border-l-status-warn"
       }`}
     >
@@ -123,7 +116,7 @@ function AppointmentRow({
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-sm font-semibold text-ink-primary">{appointment.customer_name}</p>
-            <Badge tone={STATUS_TONE[appointment.status as AppointmentStatus]}>
+            <Badge tone={appointmentStatusTone[appointment.status as AppointmentStatus]}>
               {appointment.status}
             </Badge>
           </div>

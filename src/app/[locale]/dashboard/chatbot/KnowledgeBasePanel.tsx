@@ -5,6 +5,7 @@ import { FileText, Loader2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Document } from "@/types";
 
 type DocumentRow = Pick<
@@ -94,7 +95,7 @@ export default function KnowledgeBasePanel({
   }
 
   return (
-    <section className="border border-subtle bg-surface p-6">
+    <section className="animate-reveal-up border border-subtle bg-surface p-6">
       <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
         Knowledge base
       </h2>
@@ -164,9 +165,9 @@ export default function KnowledgeBasePanel({
         </h3>
 
         {loading ? (
-          <div className="mt-3 flex items-center gap-2 text-sm text-ink-muted">
-            <Loader2 size={16} className="animate-spin" />
-            Loading…
+          <div className="mt-3 space-y-2">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
           </div>
         ) : documents.length === 0 ? (
           <EmptyState

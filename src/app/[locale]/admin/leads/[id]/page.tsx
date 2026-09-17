@@ -48,7 +48,7 @@ export default async function AdminLeadDetailPage({ params }: LeadDetailPageProp
         <Badge tone={lead.kind === "saas" ? "neutral" : "warn"}>{lead.kind}</Badge>
       </div>
 
-      <div className="mt-8 rounded-interactive border border-subtle bg-surface p-6">
+      <div className="animate-reveal-up mt-8 rounded-interactive border border-subtle bg-surface p-6">
         <dl className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">

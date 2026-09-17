@@ -48,7 +48,7 @@ export default async function TeamPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6">
-        <Card className="p-6">
+        <Card className="animate-reveal-up p-6">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Members ({members?.length ?? 0})
           </h2>
@@ -70,7 +70,7 @@ export default async function TeamPage() {
           </ul>
         </Card>
 
-        <Card className="p-6">
+        <Card className="animate-reveal-up p-6" style={{ animationDelay: "60ms" }}>
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Invite member
           </h2>
@@ -83,7 +83,7 @@ export default async function TeamPage() {
           )}
         </Card>
 
-        <Card>
+        <Card className="animate-reveal-up" style={{ animationDelay: "120ms" }}>
           <div className="p-6 pb-0">
             <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
               Pending invitations ({invitations?.length ?? 0})

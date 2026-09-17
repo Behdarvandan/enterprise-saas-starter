@@ -33,7 +33,7 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <KnowledgeBasePanel organizationId={organizationId} />
 
-        <Card className="p-6">
+        <Card className="animate-reveal-up p-6" style={{ animationDelay: "60ms" }}>
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Embed the widget
           </h2>

@@ -58,7 +58,7 @@ export default async function AdminClientsPage() {
         Dönüştürülmüş her lead&apos;in proje takibi — teslim durumu ve son aktivite.
       </p>
 
-      <div className="mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
+      <div className="animate-reveal-up mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
         {rows.length === 0 ? (
           <EmptyState
             icon={Building2}
@@ -82,7 +82,10 @@ export default async function AdminClientsPage() {
                 const lead = project.lead_id ? leadById.get(project.lead_id) : undefined;
                 const status = clientStatus(project.stage);
                 return (
-                  <tr key={project.id} className="border-b border-subtle last:border-0">
+                  <tr
+                    key={project.id}
+                    className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
+                  >
                     <td className="px-4 py-3">
                       {project.lead_id ? (
                         <Link

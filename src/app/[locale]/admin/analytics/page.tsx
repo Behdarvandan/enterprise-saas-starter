@@ -1,5 +1,6 @@
 import { requireOperatorAdmin } from "@/lib/operator";
 import { getPlans } from "@/lib/plans";
+import CountUp from "@/components/ui/CountUp";
 import FreelanceRevenueChart, {
   type MonthlyRevenuePoint,
 } from "@/components/admin/FreelanceRevenueChart";
@@ -124,12 +125,12 @@ export default async function AdminAnalyticsPage() {
         Freelance and SaaS revenue, tracked separately.
       </p>
 
-      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-interactive border border-subtle bg-surface p-6">
+      <div className="animate-reveal-up mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10">
           <div className="flex items-baseline justify-between">
             <h2 className="text-sm font-semibold text-ink-primary">Freelance revenue</h2>
             <span className="font-mono text-lg font-semibold text-ink-primary">
-              ${freelanceTotal.toLocaleString()}
+              <CountUp value={freelanceTotal} format={(v) => `$${Math.round(v).toLocaleString()}`} />
             </span>
           </div>
           <p className="mt-1 text-xs text-ink-muted">Paid invoices, last {MONTHS_BACK} months</p>
@@ -138,11 +139,11 @@ export default async function AdminAnalyticsPage() {
           </div>
         </div>
 
-        <div className="rounded-interactive border border-subtle bg-surface p-6">
+        <div className="rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10">
           <div className="flex items-baseline justify-between">
             <h2 className="text-sm font-semibold text-ink-primary">SaaS revenue</h2>
             <span className="font-mono text-lg font-semibold text-ink-primary">
-              ${saasTotal.toLocaleString()}/mo
+              <CountUp value={saasTotal} format={(v) => `$${Math.round(v).toLocaleString()}/mo`} />
             </span>
           </div>
           <p className="mt-1 text-xs text-ink-muted">Live MRR by plan, active + trialing orgs</p>
@@ -152,7 +153,10 @@ export default async function AdminAnalyticsPage() {
         </div>
       </div>
 
-      <div className="mt-8 rounded-interactive border border-subtle bg-surface p-6">
+      <div
+        className="animate-reveal-up mt-8 rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
+        style={{ animationDelay: "60ms" }}
+      >
         <h2 className="text-sm font-semibold text-ink-primary">AI assistant token usage</h2>
         <p className="mt-1 text-xs text-ink-muted">
           Current period quota consumption, top 10 organizations by usage
@@ -168,7 +172,7 @@ export default async function AdminAnalyticsPage() {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="animate-reveal-up mt-8" style={{ animationDelay: "120ms" }}>
         <h2 className="text-lg font-semibold text-ink-primary">Audit log</h2>
         <div className="mt-4 overflow-hidden rounded-interactive border border-subtle bg-surface">
           {!auditLogs || auditLogs.length === 0 ? (
@@ -187,7 +191,10 @@ export default async function AdminAnalyticsPage() {
               </thead>
               <tbody>
                 {auditLogs.map((log) => (
-                  <tr key={log.id} className="border-b border-subtle last:border-0">
+                  <tr
+                    key={log.id}
+                    className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
+                  >
                     <td className="px-4 py-3 font-mono text-xs text-ink-primary">
                       {log.action}
                     </td>

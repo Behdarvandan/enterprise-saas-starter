@@ -18,7 +18,7 @@ export default async function AdminTasksPage() {
         Your own operational work — not visible to clients.
       </p>
 
-      <div className="mt-8">
+      <div className="animate-reveal-up mt-8">
         <TaskBoard tasks={tasks ?? []} />
       </div>
     </div>

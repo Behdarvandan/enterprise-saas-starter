@@ -54,7 +54,7 @@ export default async function ClientSettingsPage() {
         İletişim bilgileri, dil tercihi ve lisans yönetimi.
       </p>
 
-      <Tabs defaultValue="contact" className="mt-8">
+      <Tabs defaultValue="contact" className="animate-reveal-up mt-8">
         <TabsList>
           <TabsTrigger value="contact">İletişim</TabsTrigger>
           <TabsTrigger value="language">Dil</TabsTrigger>

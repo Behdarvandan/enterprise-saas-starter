@@ -18,7 +18,7 @@ export default async function AdminLeadsPage() {
         Track incoming SaaS and freelance requests through to conversion.
       </p>
 
-      <div className="mt-8">
+      <div className="animate-reveal-up mt-8">
         <LeadPipelineBoard leads={leads ?? []} />
       </div>
     </div>

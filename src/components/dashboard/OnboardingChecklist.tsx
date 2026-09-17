@@ -50,7 +50,7 @@ export default function OnboardingChecklist({ userId, items }: OnboardingCheckli
   }
 
   return (
-    <div className="border border-subtle bg-surface p-5">
+    <div className="animate-reveal-up border border-subtle bg-surface p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-ink-primary">
@@ -75,7 +75,7 @@ export default function OnboardingChecklist({ userId, items }: OnboardingCheckli
           <li key={item.id}>
             <Link
               href={item.href}
-              className="flex items-center gap-3 rounded-control border border-subtle bg-surface-raised px-3 py-2.5 text-sm transition-colors hover:border-violet-dim/60"
+              className="flex items-center gap-3 rounded-control border border-subtle bg-surface-raised px-3 py-2.5 text-sm transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
             >
               <span
                 className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${

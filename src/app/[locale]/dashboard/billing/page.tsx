@@ -38,7 +38,7 @@ export default async function BillingPage() {
 
       <div className="mt-6">
         {organization ? (
-          <Card className="p-6">
+          <Card className="animate-reveal-up p-6">
             <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
               <div className="border-b border-subtle pb-2">
                 <dt className="text-xs font-medium text-ink-muted">Plan</dt>
@@ -76,7 +76,7 @@ export default async function BillingPage() {
             </div>
           </Card>
         ) : (
-          <Card className="p-6">
+          <Card className="animate-reveal-up p-6">
             <p className="text-sm text-ink-muted">
               You don&apos;t belong to an organization yet.{" "}
               <Link

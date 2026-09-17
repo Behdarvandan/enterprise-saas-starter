@@ -58,7 +58,7 @@ export default async function ClientInvoicesPage() {
           />
         </div>
       ) : (
-        <div className="mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
+        <div className="animate-reveal-up mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
           <table className="w-full text-sm">
             <thead className="border-b border-subtle bg-surface-raised text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
               <tr>
@@ -76,7 +76,10 @@ export default async function ClientInvoicesPage() {
                   : undefined;
 
                 return (
-                  <tr key={invoice.id} className="border-b border-subtle last:border-0">
+                  <tr
+                    key={invoice.id}
+                    className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
+                  >
                     <td className="px-4 py-3 font-mono text-ink-primary">
                       {invoice.invoice_number}
                     </td>

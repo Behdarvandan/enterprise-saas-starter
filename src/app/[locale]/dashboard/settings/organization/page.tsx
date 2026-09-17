@@ -18,7 +18,7 @@ export default async function OrganizationSettingsPage() {
       </p>
 
       <div className="mt-6">
-        <Card className="p-6">
+        <Card className="animate-reveal-up p-6">
           {canManage ? (
             <OrganizationForm name={organizationName ?? ""} />
           ) : (

@@ -77,7 +77,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
         </p>
       </div>
 
-      <Card className="mb-6 p-6">
+      <Card className="animate-reveal-up mb-6 p-6">
         <form
           method="get"
           action="/dashboard/bookings"
@@ -131,7 +131,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
       </Card>
 
       <div className="space-y-6">
-        <section>
+        <section className="animate-reveal-up" style={{ animationDelay: "60ms" }}>
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Upcoming ({upcoming.length})
           </h2>
@@ -172,7 +172,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
           )}
         </section>
 
-        <section>
+        <section className="animate-reveal-up" style={{ animationDelay: "120ms" }}>
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Past ({past.length})
           </h2>

@@ -28,10 +28,13 @@ export default async function SettingsPage() {
         Manage your account and organization.
       </p>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="animate-reveal-up mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {SETTINGS.map((setting) => (
           <Link key={setting.href} href={setting.href}>
-            <Card className="p-6 transition hover:border-violet-dim/60 hover:shadow-md">
+            <Card
+              variant="item"
+              className="p-6"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet/10 text-violet-dim">
                   <setting.icon size={20} />

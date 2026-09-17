@@ -41,7 +41,7 @@ export default async function AdminSettingsPage() {
         İşletme bilgileri, ekip ve entegrasyon durumu.
       </p>
 
-      <Tabs defaultValue="general" className="mt-8">
+      <Tabs defaultValue="general" className="animate-reveal-up mt-8">
         <TabsList>
           <TabsTrigger value="general">Genel</TabsTrigger>
           <TabsTrigger value="team">Ekip</TabsTrigger>
@@ -88,7 +88,10 @@ export default async function AdminSettingsPage() {
                   {(members ?? []).map((member) => {
                     const profile = profileById.get(member.user_id);
                     return (
-                      <tr key={member.id} className="border-b border-subtle last:border-0">
+                      <tr
+                        key={member.id}
+                        className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
+                      >
                         <td className="px-4 py-3 text-ink-primary">
                           {profile?.full_name || profile?.email || member.user_id}
                         </td>
@@ -143,7 +146,7 @@ export default async function AdminSettingsPage() {
 
 function IntegrationRow({ label, connected }: { label: string; connected: boolean }) {
   return (
-    <div className="flex items-center justify-between rounded-interactive border border-subtle bg-surface px-4 py-3">
+    <div className="flex items-center justify-between rounded-interactive border border-subtle bg-surface px-4 py-3 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10">
       <span className="text-sm font-medium text-ink-primary">{label}</span>
       {connected ? (
         <span className="flex items-center gap-1.5 text-xs font-semibold text-status-success">

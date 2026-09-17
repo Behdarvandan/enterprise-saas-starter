@@ -84,7 +84,10 @@ export default async function AdminPaymentsPage() {
         ))}
       </div>
 
-      <div className="mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
+      <div
+        className="animate-reveal-up mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface"
+        style={{ animationDelay: "180ms" }}
+      >
         {rows.length === 0 ? (
           <EmptyState
             icon={Receipt}
@@ -104,7 +107,10 @@ export default async function AdminPaymentsPage() {
             </thead>
             <tbody>
               {rows.map((invoice) => (
-                <tr key={invoice.id} className="border-b border-subtle last:border-0">
+                <tr
+                  key={invoice.id}
+                  className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
+                >
                   <td className="px-4 py-3 font-mono text-xs text-ink-muted">
                     {new Date(invoice.created_at).toLocaleDateString()}
                   </td>
