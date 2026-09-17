@@ -1,5 +1,5 @@
 import { requireOperatorAdmin } from "@/lib/operator";
-import { getPlans } from "@/lib/plans";
+import { getAllPlans, type Plan, type PlanCheckout } from "@/lib/plans";
 import CountUp from "@/components/ui/CountUp";
 import FreelanceRevenueChart, {
   type MonthlyRevenuePoint,
@@ -23,8 +23,10 @@ function monthLabel(date: Date): string {
   return date.toLocaleDateString(undefined, { month: "short", year: "2-digit" });
 }
 
-function parsePriceToNumber(price: string): number {
-  return Number(price.replace(/[^0-9.]/g, "")) || 0;
+function isStripePlan(
+  plan: Plan,
+): plan is Plan & { checkout: Extract<PlanCheckout, { kind: "stripe" }> } {
+  return plan.checkout.kind === "stripe";
 }
 
 export default async function AdminAnalyticsPage() {
@@ -66,14 +68,19 @@ export default async function AdminAnalyticsPage() {
     .select("plan_id")
     .in("subscription_status", ["active", "trialing"]);
 
-  const plans = getPlans();
-  const saasRevenue: PlanRevenuePoint[] = plans.map((plan) => {
+  // Only Stripe-checkout plans (EU/Global) are matchable here — PayTR (TR
+  // region) activation never sets `organizations.plan_id`
+  // (`activateOrganizationById` in src/lib/payment/handlers.ts only flips
+  // `subscription_status`), and Enterprise is contact-only with no priceId
+  // anywhere. TR MRR isn't recoverable from this table today.
+  const stripePlans = getAllPlans().filter(isStripePlan);
+  const saasRevenue: PlanRevenuePoint[] = stripePlans.map((plan) => {
     const organizations = (activeOrganizations ?? []).filter(
-      (org) => plan.priceId && org.plan_id === plan.priceId,
+      (org) => plan.checkout.priceId && org.plan_id === plan.checkout.priceId,
     ).length;
     return {
-      plan: plan.name,
-      amount: organizations * parsePriceToNumber(plan.price),
+      plan: `${plan.name} (${plan.region.toUpperCase()})`,
+      amount: organizations * (plan.checkout.amount / 100),
       organizations,
     };
   });

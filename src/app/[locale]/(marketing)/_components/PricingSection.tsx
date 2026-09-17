@@ -1,11 +1,13 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Check } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { getPlans } from "@/lib/plans";
+import { getPricingRegion } from "@/lib/geo";
 
-export default function PricingSection() {
-  const t = useTranslations("marketing.pricingSection");
-  const plans = getPlans();
+export default async function PricingSection() {
+  const t = await getTranslations("marketing.pricingSection");
+  const region = await getPricingRegion();
+  const plans = getPlans(region);
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -17,8 +19,8 @@ export default function PricingSection() {
       <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
         {plans.map((plan) => (
           <div
-            key={plan.name}
-            id={plan.name === "Enterprise" ? "enterprise" : undefined}
+            key={plan.tier}
+            id={plan.tier === "enterprise" ? "enterprise" : undefined}
             className={`rounded-interactive border p-6 ${
               plan.highlight ? "border-violet-dim bg-surface-raised" : "border-subtle bg-surface"
             }`}

@@ -3,15 +3,18 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { getPlans } from "@/lib/plans";
+import { getPricingRegion } from "@/lib/geo";
 
-// Reads STRIPE_PRICE_PRO/_ENTERPRISE (via getPlans()) at request time, same
-// reason as /pricing: plan pricing must stay in sync with the configured
-// Stripe price id, never statically baked into the build.
+// Reads the visitor's geo-resolved region and region-specific Stripe price
+// ids (via getPlans()) at request time, same reason as /pricing: plan
+// pricing must stay in sync with the visitor's region, never statically
+// baked into the build.
 export const dynamic = "force-dynamic";
 
 export default async function SaasPage() {
   const t = await getTranslations("marketing.saasPage");
-  const plans = getPlans();
+  const region = await getPricingRegion();
+  const plans = getPlans(region);
 
   return (
     <div>

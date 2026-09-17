@@ -69,3 +69,22 @@ export function formatPrice(cents: number): string {
     currency: "USD",
   }).format(cents / 100);
 }
+
+const PLAN_CURRENCY_LOCALE: Record<"TRY" | "EUR" | "USD", string> = {
+  TRY: "tr-TR",
+  EUR: "de-DE",
+  USD: "en-US",
+};
+
+/**
+ * Formats a geo-pricing plan amount stored in minor units (kuruş/cents) for
+ * display, e.g. `formatPlanPrice(149900, "TRY")` -> "1.499 ₺". Whole-number
+ * plan prices only (no decimals), matching the brief's locked figures.
+ */
+export function formatPlanPrice(amount: number, currency: "TRY" | "EUR" | "USD"): string {
+  return new Intl.NumberFormat(PLAN_CURRENCY_LOCALE[currency], {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  }).format(amount / 100);
+}

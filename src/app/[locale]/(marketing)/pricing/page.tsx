@@ -2,13 +2,15 @@ import { Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import CheckoutButton from "@/components/billing/CheckoutButton";
 import { getPlans } from "@/lib/plans";
+import { getPricingRegion } from "@/lib/geo";
 
-// Read server env vars at request time so plan prices stay in sync with the
-// configured Stripe price IDs (never exposed to the client).
+// Read server env vars/geo headers at request time so plan prices stay in
+// sync with the visitor's region and the configured Stripe price IDs.
 export const dynamic = "force-dynamic";
 
-export default function PricingPage() {
-  const plans = getPlans();
+export default async function PricingPage() {
+  const region = await getPricingRegion();
+  const plans = getPlans(region);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -17,15 +19,15 @@ export default function PricingPage() {
           Simple, transparent pricing
         </h1>
         <p className="mt-4 text-lg text-ink-muted">
-          Start free and upgrade when your team is ready.
+          Straightforward monthly plans, priced for your region.
         </p>
       </div>
 
       <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {plans.map((plan) => (
           <Card
-            key={plan.name}
-            id={plan.name === "Enterprise" ? "enterprise" : undefined}
+            key={plan.tier}
+            id={plan.tier === "enterprise" ? "enterprise" : undefined}
             variant="item"
             className={plan.highlight ? "border-violet-dim" : undefined}
           >
@@ -51,12 +53,15 @@ export default function PricingPage() {
               </ul>
 
               <div className="mt-8">
-                {plan.priceId ? (
-                  <CheckoutButton priceId={plan.priceId} label={`Get ${plan.name}`} />
+                {plan.tier === "enterprise" || plan.checkout.kind === "contact" ? (
+                  <a
+                    href={plan.checkout.kind === "contact" ? plan.checkout.href : "/services#quote"}
+                    className="block rounded-interactive border border-subtle px-4 py-2 text-center text-sm font-semibold text-ink-primary transition-colors hover:border-gold/50"
+                  >
+                    Contact sales
+                  </a>
                 ) : (
-                  <p className="text-center text-sm font-semibold text-ink-muted">
-                    Current plan
-                  </p>
+                  <CheckoutButton tier={plan.tier} label={`Get ${plan.name}`} />
                 )}
               </div>
             </div>

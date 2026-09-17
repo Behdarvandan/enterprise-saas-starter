@@ -9,6 +9,7 @@ import {
   Menu,
   MessageSquareText,
   Settings,
+  Sparkles,
   Users,
   X,
 } from "lucide-react";
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { label: "Team", href: "/dashboard/team", icon: Users },
   { label: "Bookings", href: "/dashboard/bookings", icon: CalendarDays },
   { label: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageSquareText },
+  { label: "Preview Your AI Agent", href: "/dashboard/chatbot", icon: Sparkles },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
@@ -48,7 +50,7 @@ export default function DashboardSidebar({
         const active = isActive(item.href);
         return (
           <Link
-            key={item.href}
+            key={item.label}
             href={item.href}
             onClick={() => setOpen(false)}
             className={`flex items-center gap-3 rounded-control px-3 py-2 text-sm font-medium transition-colors ${

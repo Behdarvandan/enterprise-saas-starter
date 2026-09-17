@@ -5,12 +5,12 @@ import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 
 interface CheckoutButtonProps {
-  priceId: string;
+  tier: "starter" | "pro";
   label: string;
 }
 
 export default function CheckoutButton({
-  priceId,
+  tier,
   label,
 }: CheckoutButtonProps) {
   const router = useRouter();
@@ -25,14 +25,14 @@ export default function CheckoutButton({
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId }),
+        body: JSON.stringify({ tier }),
       });
 
       // Not signed in: send them to sign up instead of showing a dead-end
-      // error. The priceId is preserved in the query string for a future
+      // error. The tier is preserved in the query string for a future
       // "continue to checkout after signup" flow — nothing reads it yet.
       if (response.status === 401) {
-        router.push(`/signup?priceId=${encodeURIComponent(priceId)}`);
+        router.push(`/signup?tier=${encodeURIComponent(tier)}`);
         return;
       }
 

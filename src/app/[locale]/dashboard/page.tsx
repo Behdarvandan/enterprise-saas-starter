@@ -2,7 +2,7 @@ import { CalendarX2, Radio } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { getUserMembership } from "@/lib/team";
-import { getPlans } from "@/lib/plans";
+import { getAllPlans } from "@/lib/plans";
 import { checkQuota } from "@/lib/rag/quota";
 import {
   appointmentStatusTone,
@@ -40,6 +40,7 @@ export default async function DashboardPage() {
 
   let organization: {
     name: string;
+    slug: string;
     subscription_status: string;
     plan_id: string | null;
     current_period_end: string | null;
@@ -49,7 +50,7 @@ export default async function DashboardPage() {
   let documentCount = 0;
   let tokensUsed = 0;
   let tokensLimit = 0;
-  let upcomingCount = 0;
+  let answeredEnquiries = 0;
   let recentAppointments: {
     id: string;
     customer_name: string;
@@ -61,7 +62,6 @@ export default async function DashboardPage() {
 
   if (membership) {
     const organizationId = membership.organizationId;
-    const now = new Date().toISOString();
 
     const [
       { data: org },
@@ -69,12 +69,12 @@ export default async function DashboardPage() {
       { data: services },
       { count: documents },
       quota,
-      { count: upcoming },
+      { count: answered },
       { data: recent },
     ] = await Promise.all([
       supabase
         .from("organizations")
-        .select("name, subscription_status, plan_id, current_period_end")
+        .select("name, slug, subscription_status, plan_id, current_period_end")
         .eq("id", organizationId)
         .single(),
       supabase
@@ -90,12 +90,15 @@ export default async function DashboardPage() {
         .select("id", { count: "exact", head: true })
         .eq("organization_id", organizationId),
       checkQuota(organizationId),
+      // "Automated Enquiries" — every assistant reply the RAG chatbot has
+      // sent this org's visitors, i.e. an enquiry it answered without a
+      // human. Distinct from `upcomingCount`/appointments, which is a
+      // separate signal shown on the Bookings page.
       supabase
-        .from("appointments")
+        .from("chat_messages")
         .select("id", { count: "exact", head: true })
         .eq("organization_id", organizationId)
-        .in("status", ["pending", "confirmed"])
-        .gte("start_time", now),
+        .eq("role", "assistant"),
       supabase
         .from("appointments")
         .select("id, customer_name, service_id, start_time, status")
@@ -110,7 +113,7 @@ export default async function DashboardPage() {
     documentCount = documents ?? 0;
     tokensUsed = quota.tokensUsed;
     tokensLimit = quota.tokensLimit;
-    upcomingCount = upcoming ?? 0;
+    answeredEnquiries = answered ?? 0;
     recentAppointments = recent ?? [];
     serviceNameById = new Map((services ?? []).map((service) => [service.id, service.name]));
   }
@@ -142,10 +145,10 @@ export default async function DashboardPage() {
     },
   ];
 
-  const plans = getPlans();
   const planName =
-    plans.find((plan) => plan.priceId && plan.priceId === organization?.plan_id)?.name ??
-    "Starter";
+    getAllPlans().find(
+      (plan) => plan.checkout.kind === "stripe" && plan.checkout.priceId === organization?.plan_id,
+    )?.name ?? "Starter";
   const subscriptionTone = organization
     ? (SUBSCRIPTION_TONE[organization.subscription_status] ?? "neutral")
     : "neutral";
@@ -168,12 +171,20 @@ export default async function DashboardPage() {
             style={{ animationDelay: "0ms" }}
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Current plan
+              Business Status
             </p>
             <div className="mt-2 flex items-center gap-2">
+              <span
+                className={`h-2 w-2 rounded-full ${
+                  subscriptionTone === "success" ? "animate-pulse bg-status-success" : "bg-subtle"
+                }`}
+              />
               <span className="font-mono text-xl font-semibold text-ink-primary">
-                {planName}
+                {subscriptionTone === "success" ? "Live & Ready" : "Setup Needed"}
               </span>
+            </div>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="text-xs text-ink-muted">{planName} plan</span>
               <Badge tone={subscriptionTone}>{organization.subscription_status}</Badge>
             </div>
             <p className="mt-2 text-xs text-ink-muted">
@@ -194,23 +205,23 @@ export default async function DashboardPage() {
             style={{ animationDelay: "60ms" }}
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Live status
+              Automated Enquiries
             </p>
             <div className="mt-2 flex items-center gap-2">
               <Radio
                 size={14}
-                className={upcomingCount > 0 ? "text-status-success" : "text-ink-muted"}
+                className={answeredEnquiries > 0 ? "text-status-success" : "text-ink-muted"}
               />
               <span
                 className={`h-2 w-2 rounded-full ${
-                  upcomingCount > 0 ? "animate-pulse bg-status-success" : "bg-subtle"
+                  answeredEnquiries > 0 ? "animate-pulse bg-status-success" : "bg-subtle"
                 }`}
               />
               <span className="font-mono text-xl font-semibold text-ink-primary">
-                <CountUp value={upcomingCount} />
+                <CountUp value={answeredEnquiries} />
               </span>
             </div>
-            <p className="mt-2 text-xs text-ink-muted">Upcoming confirmed appointments</p>
+            <p className="mt-2 text-xs text-ink-muted">Yanıtlandı — handled by the AI assistant</p>
           </div>
 
           <div
@@ -218,10 +229,13 @@ export default async function DashboardPage() {
             style={{ animationDelay: "120ms" }}
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              AI token usage
+              AI Assistant Capacity
             </p>
             <p className="mt-2 font-mono text-xl font-semibold text-ink-primary">
               <CountUp value={tokensUsed} /> / {tokensLimit.toLocaleString()}
+            </p>
+            <p className="mt-1 text-xs text-ink-muted">
+              Aylık Görüşme (%{usagePercent} Kullanıldı)
             </p>
             <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-subtle">
               <div
@@ -254,8 +268,26 @@ export default async function DashboardPage() {
               <div className="mt-4">
                 <EmptyState
                   icon={CalendarX2}
-                  title="No appointments yet"
-                  description="Bookings will show up here as soon as customers start scheduling."
+                  title="İlk Otomasyonunuzu Test Edin"
+                  description="Bookings will show up here as soon as customers start scheduling — or try it yourself right now."
+                  action={
+                    <div className="flex flex-wrap justify-center gap-3">
+                      <Link
+                        href={`/book/${organization.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-interactive bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                      >
+                        Simulate Live Booking
+                      </Link>
+                      <Link
+                        href="/dashboard/chatbot"
+                        className="rounded-interactive border border-subtle px-4 py-2 text-sm font-semibold text-ink-primary transition-colors hover:border-gold/50"
+                      >
+                        Test AI Agent
+                      </Link>
+                    </div>
+                  }
                 />
               </div>
             ) : (

@@ -28,10 +28,21 @@
     },
     "hero": {
       "eyebrow": "Multi-tenant SaaS infrastructure",
-      "title": "Booking infrastructure that keeps every organization's data provably separate.",
-      "subtitle": "Pasargad runs scheduling, payments, and an AI assistant for multi-tenant teams on PostgreSQL row-level security — a database trigger blocks double-bookings before they're written, not after.",
-      "ctaPrimary": "Start free trial",
-      "ctaSecondary": "Book a demo"
+      "title": "The autonomous AI assistant that cuts your customers' call volume and booking overhead by 80%.",
+      "subtitle": "AI infrastructure for repair shops, clinics, and service businesses — checking device status, quoting prices, and collecting bookings around the clock.",
+      "ctaPrimary": "View pricing",
+      "ctaSecondary": "Book a demo",
+      "playground": {
+        "kicker": "Try it live",
+        "title": "See the assistant answer a real question",
+        "description": "Type your shop's name, hit try, and watch the assistant respond live — powered by the same knowledge-base engine every Pasargad tenant gets.",
+        "placeholder": "Enter your shop's name…",
+        "cta": "Try live demo",
+        "started": "Opening the assistant…",
+        "sampleQuestion": "Hi, what are your opening hours and how do I book an appointment?",
+        "sampleQuestionWithName": "Hi, I'm looking into {name} — what are your opening hours and how do I book an appointment?",
+        "widgetTitle": "Live demo assistant"
+      }
     },
     "pricingSection": {
       "title": "Plans that scale with your booking volume.",

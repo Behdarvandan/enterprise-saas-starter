@@ -28,10 +28,21 @@
     },
     "hero": {
       "eyebrow": "Çok kiracılı SaaS altyapısı",
-      "title": "Her organizasyonun verisini kanıtlanabilir şekilde ayrı tutan randevu altyapısı.",
-      "subtitle": "Pasargad, çok kiracılı ekipler için planlama, ödeme ve bir yapay zekâ asistanını PostgreSQL satır düzeyi güvenlik üzerinde çalıştırır — bir veritabanı tetikleyicisi, çift rezervasyonları yazılmadan önce engeller, sonrasında değil.",
-      "ctaPrimary": "Ücretsiz deneyin",
-      "ctaSecondary": "Demo isteyin"
+      "title": "Müşterilerinizin telefon trafiğini ve randevu süreçlerini %80 azaltan otonom AI asistanı.",
+      "subtitle": "Teknik servisler, klinikler ve işletmeler için 7/24 cihaz durumu sorgulayan, fiyat veren ve randevu toplayan yapay zeka altyapısı.",
+      "ctaPrimary": "Fiyatları görün",
+      "ctaSecondary": "Demo isteyin",
+      "playground": {
+        "kicker": "Canlı deneyin",
+        "title": "Asistanın gerçek bir soruyu yanıtlamasını izleyin",
+        "description": "Dükkanınızın adını yazın, deneyin butonuna basın ve asistanın canlı yanıt vermesini izleyin — her Pasargad müşterisinin kullandığı aynı bilgi tabanı motoruyla çalışır.",
+        "placeholder": "Dükkanınızın adını yazın…",
+        "cta": "Canlı Deneyin",
+        "started": "Asistan açılıyor…",
+        "sampleQuestion": "Merhaba, çalışma saatleriniz nedir ve nasıl randevu alabilirim?",
+        "sampleQuestionWithName": "Merhaba, {name} için bilgi almak istiyorum — çalışma saatleriniz nedir ve nasıl randevu alabilirim?",
+        "widgetTitle": "Canlı demo asistanı"
+      }
     },
     "pricingSection": {
       "title": "Rezervasyon hacminize göre ölçeklenen planlar.",

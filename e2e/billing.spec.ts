@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("POST /api/checkout requires an authenticated session", async ({ request }) => {
   const response = await request.post("/api/checkout", {
-    data: { priceId: "price_does_not_matter" },
+    data: { tier: "pro" },
   });
   expect(response.status()).toBe(401);
 

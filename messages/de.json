@@ -28,10 +28,21 @@
     },
     "hero": {
       "eyebrow": "Mandantenfähige SaaS-Infrastruktur",
-      "title": "Buchungsinfrastruktur, die die Daten jeder Organisation nachweislich getrennt hält.",
-      "subtitle": "Pasargad betreibt Terminplanung, Zahlungen und einen KI-Assistenten für mandantenfähige Teams auf PostgreSQL Row-Level Security — ein Datenbank-Trigger blockiert Doppelbuchungen vor dem Schreiben, nicht danach.",
-      "ctaPrimary": "Kostenlos testen",
-      "ctaSecondary": "Demo vereinbaren"
+      "title": "Der autonome KI-Assistent, der Anrufaufkommen und Terminaufwand Ihrer Kunden um 80 % senkt.",
+      "subtitle": "KI-Infrastruktur für Werkstätten, Kliniken und Dienstleistungsunternehmen — prüft rund um die Uhr Gerätestatus, nennt Preise und sammelt Termine.",
+      "ctaPrimary": "Preise ansehen",
+      "ctaSecondary": "Demo vereinbaren",
+      "playground": {
+        "kicker": "Live testen",
+        "title": "Sehen Sie, wie der Assistent eine echte Frage beantwortet",
+        "description": "Geben Sie den Namen Ihres Geschäfts ein, klicken Sie auf Testen, und sehen Sie den Assistenten live antworten — angetrieben von derselben Wissensdatenbank-Engine, die jeder Pasargad-Kunde erhält.",
+        "placeholder": "Geben Sie den Namen Ihres Geschäfts ein…",
+        "cta": "Live-Demo testen",
+        "started": "Assistent wird geöffnet…",
+        "sampleQuestion": "Hallo, wie sind Ihre Öffnungszeiten und wie kann ich einen Termin buchen?",
+        "sampleQuestionWithName": "Hallo, ich interessiere mich für {name} — wie sind Ihre Öffnungszeiten und wie kann ich einen Termin buchen?",
+        "widgetTitle": "Live-Demo-Assistent"
+      }
     },
     "pricingSection": {
       "title": "Pläne, die mit Ihrem Buchungsvolumen wachsen.",

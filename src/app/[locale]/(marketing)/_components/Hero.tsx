@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import BorderBeam from "@/components/ui/BorderBeam";
 import DashboardPreview from "./DashboardPreview";
+import HeroPlayground from "./HeroPlayground";
 
 export default function Hero() {
   const t = useTranslations("marketing.hero");
@@ -31,7 +32,7 @@ export default function Hero() {
             style={{ animationDelay: "160ms" }}
           >
             <Link
-              href="/signup"
+              href="/pricing"
               className="inline-flex items-center gap-2 rounded-interactive bg-violet px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-violet/90"
             >
               {t("ctaPrimary")}
@@ -51,6 +52,8 @@ export default function Hero() {
           </BorderBeam>
         </div>
       </div>
+
+      <HeroPlayground />
     </section>
   );
 }
