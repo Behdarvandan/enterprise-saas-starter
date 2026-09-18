@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FileText, Loader2, Upload } from "lucide-react";
+import { FileText, Loader2, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
@@ -25,6 +25,7 @@ export default function KnowledgeBasePanel({
   const [documents, setDocuments] = useState<DocumentRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [ingesting, setIngesting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -77,6 +78,31 @@ export default function KnowledgeBasePanel({
       setError(err instanceof Error ? err.message : "Ingestion failed");
     } finally {
       setIngesting(false);
+    }
+  }
+
+  async function handleDelete(documentId: string) {
+    setDeletingId(documentId);
+    setError(null);
+
+    try {
+      const res = await fetch(
+        `/api/rag/ingest?documentId=${encodeURIComponent(documentId)}`,
+        { method: "DELETE" },
+      );
+
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(data?.error ?? "Delete failed");
+      }
+
+      setDocuments((current) => current.filter((doc) => doc.id !== documentId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed");
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -187,17 +213,32 @@ export default function KnowledgeBasePanel({
                     {document.source_type} · {document.chunk_count} chunks
                   </p>
                 </div>
-                <Badge
-                  tone={
-                    document.status === "ready"
-                      ? "success"
-                      : document.status === "failed"
-                        ? "error"
-                        : "warn"
-                  }
-                >
-                  {document.status}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    tone={
+                      document.status === "ready"
+                        ? "success"
+                        : document.status === "failed"
+                          ? "error"
+                          : "warn"
+                    }
+                  >
+                    {document.status}
+                  </Badge>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(document.id)}
+                    disabled={deletingId === document.id}
+                    aria-label={`Delete ${document.title}`}
+                    className="rounded-control p-1.5 text-ink-muted transition-colors hover:bg-status-error/10 hover:text-status-error disabled:opacity-50"
+                  >
+                    {deletingId === document.id ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <Trash2 size={14} />
+                    )}
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

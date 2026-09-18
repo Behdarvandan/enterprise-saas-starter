@@ -153,3 +153,43 @@ export const POST = withApiErrorHandling(
     );
   },
 );
+
+/**
+ * DELETE /api/rag/ingest?documentId=...
+ * Removes a knowledge-base document (and, via `on delete cascade`, its
+ * chunks) scoped to the caller's organization.
+ */
+export const DELETE = withApiErrorHandling(
+  "RAG document delete error",
+  "Failed to delete the document.",
+  async (request: Request) => {
+    const auth = await requireMembershipOrResponse();
+    if ("response" in auth) return auth.response;
+    const { supabase, membership } = auth;
+
+    const documentId = new URL(request.url).searchParams.get("documentId");
+    if (!documentId) {
+      return NextResponse.json(
+        { error: "documentId is required." },
+        { status: 400 },
+      );
+    }
+
+    const { data: deleted, error } = await supabase
+      .from("documents")
+      .delete()
+      .eq("id", documentId)
+      .eq("organization_id", membership.organizationId)
+      .select("id");
+
+    if (error) throw error;
+    if (!deleted || deleted.length === 0) {
+      return NextResponse.json(
+        { error: "Document not found." },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ deleted: true });
+  },
+);
