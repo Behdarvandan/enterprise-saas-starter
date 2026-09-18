@@ -36,6 +36,10 @@ yarn-error.log*
 # vercel deployment target
 .vercel
 
+# local Supabase CLI runtime state (supabase start / stop)
+/supabase/.branches/
+/supabase/.temp/
+
 # typescript incremental build cache
 *.tsbuildinfo
 next-env.d.ts
