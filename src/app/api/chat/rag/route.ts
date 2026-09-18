@@ -4,7 +4,7 @@ import * as Sentry from "@sentry/nextjs";
 import { createAnonClient } from "@/lib/supabase/anon";
 import { isOrganizationServiceable } from "@/lib/billing";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { firstIssueMessage } from "@/lib/validation";
+import { firstIssueMessage, postgresUuid } from "@/lib/validation";
 import type { ChatRequestBody, ChatStreamEvent } from "@/types";
 
 /**
@@ -25,8 +25,8 @@ const FALLBACK_ANSWER =
 const MAX_MESSAGE_LENGTH = 4000;
 
 const chatRequestSchema = z.object({
-  organizationId: z.string().uuid("A valid organizationId is required."),
-  sessionId: z.string().uuid().nullable().optional(),
+  organizationId: postgresUuid("A valid organizationId is required."),
+  sessionId: postgresUuid().nullable().optional(),
   message: z.string().trim().min(1, "A message is required."),
 }) satisfies z.ZodType<ChatRequestBody>;
 
