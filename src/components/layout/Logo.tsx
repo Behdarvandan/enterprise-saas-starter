@@ -1,3 +1,6 @@
+"use client";
+
+import { useAgencyBranding } from "@/components/providers/agency-branding-provider";
 import { cn } from "@/lib/utils";
 
 /**
@@ -30,19 +33,44 @@ interface LogoProps {
   subtitle?: string;
 }
 
-/** Shared wordmark + motif — replaces the old per-file "Nimbus" markup. */
+/**
+ * Shared wordmark + motif — replaces the old per-file "Nimbus" markup. On an
+ * agency's custom domain (see AgencyBrandingProvider) it shows the agency's
+ * own logo/title instead; everywhere else it is the default Pasargad mark.
+ */
 export default function Logo({ className, subtitle }: LogoProps) {
+  const branding = useAgencyBranding();
+  const logoUrl = branding?.logo_url;
+  // A white-labelled logo must never sit next to the "Pasargad" wordmark: with
+  // a logo but no title, the logo stands alone.
+  const name = branding?.title ?? (logoUrl ? null : "Pasargad");
+
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-control bg-primary text-primary-foreground">
-        <LogoMark className="h-4 w-4" />
-      </div>
-      <div>
-        <span className="block font-serif text-sm font-semibold tracking-tight text-ink-primary">
-          Pasargad
-        </span>
-        {subtitle ? <span className="block text-xs text-ink-muted">{subtitle}</span> : null}
-      </div>
+      {logoUrl ? (
+        // Plain <img>: agency logos are hosted on arbitrary domains, which
+        // next/image's build-time remotePatterns allowlist can't enumerate.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={logoUrl}
+          alt={branding?.title ?? ""}
+          className="h-8 w-auto max-w-32 shrink-0 object-contain"
+        />
+      ) : (
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-control bg-primary text-primary-foreground">
+          <LogoMark className="h-4 w-4" />
+        </div>
+      )}
+      {name || subtitle ? (
+        <div>
+          {name ? (
+            <span className="block font-serif text-sm font-semibold tracking-tight text-ink-primary">
+              {name}
+            </span>
+          ) : null}
+          {subtitle ? <span className="block text-xs text-ink-muted">{subtitle}</span> : null}
+        </div>
+      ) : null}
     </div>
   );
 }

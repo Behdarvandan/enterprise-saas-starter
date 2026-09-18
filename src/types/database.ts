@@ -14,6 +14,121 @@ export type Database = {
   }
   public: {
     Tables: {
+      agencies: {
+        Row: {
+          branding: Json
+          cname_domain: string | null
+          cname_status: string
+          cname_verified_at: string | null
+          created_at: string
+          id: string
+          master_tenant_id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          branding?: Json
+          cname_domain?: string | null
+          cname_status?: string
+          cname_verified_at?: string | null
+          created_at?: string
+          id?: string
+          master_tenant_id: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          branding?: Json
+          cname_domain?: string | null
+          cname_status?: string
+          cname_verified_at?: string | null
+          created_at?: string
+          id?: string
+          master_tenant_id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agencies_master_tenant_id_fkey"
+            columns: ["master_tenant_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_llm_credentials: {
+        Row: {
+          agency_id: string
+          created_at: string
+          encrypted_key: string
+          provider: string
+          updated_at: string
+        }
+        Insert: {
+          agency_id: string
+          created_at?: string
+          encrypted_key: string
+          provider: string
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string
+          created_at?: string
+          encrypted_key?: string
+          provider?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_llm_credentials_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_tenants: {
+        Row: {
+          agency_id: string
+          created_at: string
+          quota_allocation: number
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          agency_id: string
+          created_at?: string
+          quota_allocation?: number
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string
+          created_at?: string
+          quota_allocation?: number
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_tenants_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agency_tenants_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           created_at: string
@@ -1212,6 +1327,26 @@ export type Database = {
       increment_token_usage: {
         Args: { p_organization_id: string; p_tokens: number }
         Returns: undefined
+      }
+      is_agency_admin: {
+        Args: { p_agency_id: string }
+        Returns: boolean
+      }
+      is_agency_admin_of_tenant: {
+        Args: { p_tenant_id: string }
+        Returns: boolean
+      }
+      consume_agency_quota: {
+        Args: { p_tenant_id: string; p_tokens: number }
+        Returns: number
+      }
+      get_agency_by_domain: {
+        Args: { p_domain: string }
+        Returns: {
+          id: string
+          master_tenant_id: string
+          branding: Json
+        }[]
       }
     }
     Enums: {

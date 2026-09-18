@@ -7,6 +7,14 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     include: ["src/**/*.test.{ts,tsx}"],
+    server: {
+      deps: {
+        // next-intl's ESM build imports "next/server" without an extension,
+        // which Node's resolver rejects; inlining lets Vite resolve it so the
+        // middleware can be tested against the real routing.
+        inline: ["next-intl"],
+      },
+    },
   },
   resolve: {
     alias: {

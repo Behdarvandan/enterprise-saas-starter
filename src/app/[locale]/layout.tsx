@@ -3,8 +3,12 @@ import { Fraunces, Geist_Mono, Inter } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import type { CSSProperties } from "react";
+import { AgencyBrandingProvider } from "@/components/providers/agency-branding-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { isRtlLocale, routing, type Locale } from "@/i18n/routing";
+import { getBrandingCssVars } from "@/lib/agency/branding";
+import { getAgencyContext } from "@/lib/agency/context";
 import "../globals.css";
 
 // Inter carries body/UI copy; Fraunces is reserved for headings and display
@@ -31,9 +35,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as Locale, namespace: "common.metadata" });
+  const agency = await getAgencyContext();
 
   return {
-    title: t("title"),
+    // White-label: an agency's custom domain shows the agency's own title.
+    title: agency?.branding.title ?? t("title"),
     description: t("description"),
     icons: {
       icon: "/favicon.svg",
@@ -54,6 +60,7 @@ export default async function RootLayout({
   // Enables static rendering for this locale (next-intl requirement).
   setRequestLocale(locale);
   const messages = await getMessages();
+  const agency = await getAgencyContext();
 
   return (
     <html
@@ -61,12 +68,17 @@ export default async function RootLayout({
       dir={isRtlLocale(locale) ? "rtl" : "ltr"}
       suppressHydrationWarning
       className={`${inter.variable} ${fraunces.variable} ${geistMono.variable}`}
+      // Agency palette as CSS variables on <html>, so the very first paint
+      // (and portaled dialogs under <body>) already use it.
+      style={agency ? (getBrandingCssVars(agency.branding) as CSSProperties) : undefined}
     >
       <body className="min-h-screen bg-canvas font-sans text-ink-primary antialiased">
         <NextIntlClientProvider messages={messages}>
-          <ThemeProvider attribute="class" forcedTheme="dark" enableSystem={false}>
-            {children}
-          </ThemeProvider>
+          <AgencyBrandingProvider agency={agency}>
+            <ThemeProvider attribute="class" forcedTheme="dark" enableSystem={false}>
+              {children}
+            </ThemeProvider>
+          </AgencyBrandingProvider>
         </NextIntlClientProvider>
       </body>
     </html>
