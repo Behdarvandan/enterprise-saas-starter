@@ -5,20 +5,8 @@ import { useRouter } from "@/i18n/navigation";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import FormStatus from "@/components/ui/FormStatus";
+import { getSkillLabel } from "@/lib/skills-catalog";
 import { updateEnabledSkills } from "./actions";
-
-const SKILL_LABELS: Record<string, { title: string; description: string }> = {
-  rag_search: {
-    title: "Knowledge base search (RAG)",
-    description:
-      "Let the assistant search your uploaded documents to ground its answers.",
-  },
-  calendar_booking: {
-    title: "Calendar booking assistant",
-    description:
-      "Let the assistant check appointment availability for your services.",
-  },
-};
 
 interface SkillsToggleFormProps {
   availableSkills: string[];
@@ -59,7 +47,7 @@ export default function SkillsToggleForm({
   return (
     <div className="space-y-1">
       {availableSkills.map((skill) => {
-        const label = SKILL_LABELS[skill] ?? { title: skill, description: "" };
+        const label = getSkillLabel(skill);
         return (
           <div
             key={skill}

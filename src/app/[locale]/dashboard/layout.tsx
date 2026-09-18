@@ -2,6 +2,7 @@ import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/server";
 import { getUserOrganizations } from "@/lib/team";
+import { getAdministeredAgency } from "@/lib/agency/admin";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import Topbar from "@/components/dashboard/Topbar";
 
@@ -35,7 +36,10 @@ export default async function DashboardLayout({
     return null;
   }
 
-  const organizations = await getUserOrganizations(user.id);
+  const [organizations, agency] = await Promise.all([
+    getUserOrganizations(user.id),
+    getAdministeredAgency(supabase),
+  ]);
   const activeOrganizationId = organizations[0]?.organizationId ?? "";
 
   return (
@@ -43,6 +47,7 @@ export default async function DashboardLayout({
       <DashboardSidebar
         organizations={organizations}
         activeOrganizationId={activeOrganizationId}
+        isAgencyAdmin={agency !== null}
       />
       <div className="flex min-h-screen flex-1 flex-col">
         <Topbar userEmail={user.email ?? ""} />

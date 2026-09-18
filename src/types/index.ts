@@ -28,6 +28,7 @@ export type AuditLog = Database["public"]["Tables"]["audit_logs"]["Row"];
 export type PlatformSettings = Database["public"]["Tables"]["platform_settings"]["Row"];
 export type Agency = Database["public"]["Tables"]["agencies"]["Row"];
 export type AgencyCnameStatus = Agency["cname_status"];
+export type AgencyTenant = Database["public"]["Tables"]["agency_tenants"]["Row"];
 // Named to match src/lib/sso/adapter.ts's SsoConnectionProvider, avoiding a
 // clash with that module's own (interface) SsoProvider export.
 export type SsoConnectionProviderKind = Database["public"]["Enums"]["sso_provider"];

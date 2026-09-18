@@ -24,6 +24,7 @@ export type Database = {
           id: string
           master_tenant_id: string
           name: string
+          quota_pool: number
           updated_at: string
         }
         Insert: {
@@ -35,6 +36,7 @@ export type Database = {
           id?: string
           master_tenant_id: string
           name: string
+          quota_pool?: number
           updated_at?: string
         }
         Update: {
@@ -46,6 +48,7 @@ export type Database = {
           id?: string
           master_tenant_id?: string
           name?: string
+          quota_pool?: number
           updated_at?: string
         }
         Relationships: [
@@ -95,6 +98,7 @@ export type Database = {
           agency_id: string
           created_at: string
           quota_allocation: number
+          quota_granted: number
           tenant_id: string
           updated_at: string
         }
@@ -102,6 +106,7 @@ export type Database = {
           agency_id: string
           created_at?: string
           quota_allocation?: number
+          quota_granted?: number
           tenant_id: string
           updated_at?: string
         }
@@ -109,6 +114,7 @@ export type Database = {
           agency_id?: string
           created_at?: string
           quota_allocation?: number
+          quota_granted?: number
           tenant_id?: string
           updated_at?: string
         }
@@ -1339,6 +1345,50 @@ export type Database = {
       consume_agency_quota: {
         Args: { p_tenant_id: string; p_tokens: number }
         Returns: number
+      }
+      get_my_agency: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          name: string
+          cname_domain: string | null
+          cname_status: string
+          cname_verified_at: string | null
+          branding: Json
+          master_tenant_id: string
+          quota_pool: number
+        }[]
+      }
+      allocate_agency_tenant_quota: {
+        Args: { p_agency_id: string; p_tenant_id: string; p_total: number }
+        Returns: number
+      }
+      link_agency_tenant: {
+        Args: { p_agency_id: string; p_tenant_id: string }
+        Returns: undefined
+      }
+      create_agency_tenant: {
+        Args: { p_agency_id: string; p_name: string; p_slug: string }
+        Returns: string
+      }
+      unlink_agency_tenant: {
+        Args: { p_agency_id: string; p_tenant_id: string }
+        Returns: undefined
+      }
+      get_agency_usage_summary: {
+        Args: { p_agency_id: string; p_days?: number }
+        Returns: {
+          tenant_id: string
+          tenant_name: string
+          tenant_slug: string
+          quota_granted: number
+          quota_allocation: number
+          rag_requests: number
+          completions: number
+          low_confidence: number
+          quota_exhausted: number
+          last_activity_at: string | null
+        }[]
       }
       get_agency_by_domain: {
         Args: { p_domain: string }

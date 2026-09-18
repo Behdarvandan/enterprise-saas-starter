@@ -2,43 +2,23 @@
 
 import { Link, usePathname } from "@/i18n/navigation";
 import { useState } from "react";
-import {
-  CalendarDays,
-  CreditCard,
-  LayoutDashboard,
-  Lightbulb,
-  Menu,
-  MessageSquareText,
-  Settings,
-  Sliders,
-  Sparkles,
-  Users,
-  X,
-} from "lucide-react";
+import { Menu, X } from "lucide-react";
 import type { UserOrganization } from "@/lib/team";
 import Logo from "@/components/layout/Logo";
+import { getDashboardNavItems } from "./nav-items";
 import OrgSwitcher from "./OrgSwitcher";
-
-const NAV_ITEMS = [
-  { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Team", href: "/dashboard/team", icon: Users },
-  { label: "Bookings", href: "/dashboard/bookings", icon: CalendarDays },
-  { label: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageSquareText },
-  { label: "Preview Your AI Agent", href: "/dashboard/chatbot", icon: Sparkles },
-  { label: "Skills", href: "/dashboard/skills", icon: Sliders },
-  { label: "Dev Crew Insights", href: "/dashboard/crew-insights", icon: Lightbulb },
-  { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
-];
 
 interface DashboardSidebarProps {
   organizations: UserOrganization[];
   activeOrganizationId: string;
+  /** Shows the "Agency Portal" entry; visibility only, the portal re-checks access itself. */
+  isAgencyAdmin?: boolean;
 }
 
 export default function DashboardSidebar({
   organizations,
   activeOrganizationId,
+  isAgencyAdmin = false,
 }: DashboardSidebarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -50,7 +30,7 @@ export default function DashboardSidebar({
 
   const nav = (
     <nav className="flex flex-col gap-0.5">
-      {NAV_ITEMS.map((item) => {
+      {getDashboardNavItems(isAgencyAdmin).map((item) => {
         const active = isActive(item.href);
         return (
           <Link
