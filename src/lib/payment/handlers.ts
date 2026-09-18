@@ -8,6 +8,85 @@ type AppointmentUpdate = Database["public"]["Tables"]["appointments"]["Update"];
 type OrganizationUpdate = Database["public"]["Tables"]["organizations"]["Update"];
 
 /**
+ * Which Ops Crew skills (see pasargad-core's packages/graph/tools.py /
+ * crew_config.enabled_skills) a plan unlocks. Unknown/missing plan ids fall
+ * back to the free "rag_search"-only tier.
+ */
+const PLAN_ENABLED_SKILLS: Record<string, string[]> = {
+  starter: ["rag_search"],
+  pro: ["rag_search", "calendar_booking"],
+  enterprise: ["rag_search", "calendar_booking"],
+};
+const DEFAULT_ENABLED_SKILLS = ["rag_search"];
+
+/**
+ * Idempotently syncs `tenant_configs.crew_config.enabled_skills` to match the
+ * organization's current plan. Versioned like pasargad-core expects
+ * (state.py::load_tenant_config reads the highest-version active row): a
+ * no-op when the skill set is already correct, otherwise deactivates the
+ * current row and inserts the next version with the rest of `config`
+ * preserved (system_prompt, rag_params, etc.).
+ */
+async function syncTenantConfigSkills(
+  organizationId: string,
+  planId: string | null,
+): Promise<void> {
+  const admin = createAdminClient();
+  const enabledSkills = (planId && PLAN_ENABLED_SKILLS[planId]) || DEFAULT_ENABLED_SKILLS;
+
+  const { data: current, error: readError } = await admin
+    .from("tenant_configs")
+    .select("id, version, config")
+    .eq("tenant_id", organizationId)
+    .eq("is_active", true)
+    .order("version", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (readError) {
+    console.error(
+      `[payment-webhook] Failed to read tenant_configs for ${organizationId}:`,
+      readError,
+    );
+    Sentry.captureException(readError, { extra: { organizationId } });
+    return;
+  }
+
+  const currentConfig = (current?.config as Record<string, unknown> | null) ?? {};
+  const currentCrewConfig = (currentConfig.crew_config as Record<string, unknown> | null) ?? {};
+  const currentSkills = (currentCrewConfig.enabled_skills as string[] | undefined) ?? null;
+
+  if (current && JSON.stringify(currentSkills) === JSON.stringify(enabledSkills)) {
+    return; // already in sync — idempotent no-op for duplicate webhook deliveries
+  }
+
+  const nextConfig = {
+    ...currentConfig,
+    crew_config: { ...currentCrewConfig, enabled_skills: enabledSkills },
+  };
+  const nextVersion = (current?.version ?? 0) + 1;
+
+  if (current) {
+    await admin.from("tenant_configs").update({ is_active: false }).eq("id", current.id);
+  }
+
+  const { error: insertError } = await admin.from("tenant_configs").insert({
+    tenant_id: organizationId,
+    version: nextVersion,
+    config: nextConfig,
+    is_active: true,
+  } satisfies Database["public"]["Tables"]["tenant_configs"]["Insert"]);
+
+  if (insertError) {
+    console.error(
+      `[payment-webhook] Failed to sync enabled_skills for ${organizationId}:`,
+      insertError,
+    );
+    Sentry.captureException(insertError, { extra: { organizationId, enabledSkills } });
+  }
+}
+
+/**
  * A provider-agnostic snapshot of a subscription. The Stripe adapter maps a
  * `Stripe.Subscription` onto this shape before persisting it so the shared
  * handler never has to depend on the Stripe SDK types.
@@ -191,15 +270,17 @@ export async function persistSubscriptionSnapshot(
     current_period_end: snapshot.currentPeriodEnd,
   };
 
-  const { error } = organizationId
+  const { error, data: updated } = organizationId
     ? await admin
         .from("organizations")
         .update(update)
         .eq("id", organizationId)
+        .select("id")
     : await admin
         .from("organizations")
         .update(update)
-        .eq("provider_subscription_id", snapshot.subscriptionId);
+        .eq("provider_subscription_id", snapshot.subscriptionId)
+        .select("id");
 
   if (error) {
     console.error(
@@ -210,5 +291,14 @@ export async function persistSubscriptionSnapshot(
       extra: { subscriptionId: snapshot.subscriptionId, organizationId },
     });
     throw new Error(error.message);
+  }
+
+  // Best-effort: keep the Ops Crew's bindable skills in sync with the new
+  // plan. Never fails the webhook — a sync miss self-heals on the tenant's
+  // next billing event, whereas a 500 here would make the payment provider
+  // retry a subscription update that already succeeded.
+  const resolvedOrganizationId = organizationId ?? updated?.[0]?.id;
+  if (resolvedOrganizationId) {
+    await syncTenantConfigSkills(resolvedOrganizationId, snapshot.planId);
   }
 }
