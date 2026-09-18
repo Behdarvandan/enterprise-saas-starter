@@ -9,10 +9,12 @@
 //
 // This is NOT a migration and does not go through /api/rag/ingest (which
 // requires authenticated org membership, unusable for a one-time operator
-// seed). It calls the OpenAI embeddings API directly with the service-role
-// key, mirroring the same chunk/embed pipeline as src/lib/rag/embeddings.ts.
+// seed). It calls the Gemini embeddings API directly with the service-role
+// key, mirroring the same chunk/embed pipeline pasargad-core's Ops Crew uses
+// (packages/graph/nodes/ops.py::_embed_query) so seeded and query-time
+// embeddings come from the same model/dimensionality.
 //
-// Requires OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_URL and
+// Requires GOOGLE_API_KEY (or GEMINI_API_KEY), NEXT_PUBLIC_SUPABASE_URL and
 // SUPABASE_SERVICE_ROLE_KEY to be set. Run once, against a project where
 // supabase/seed-repair-shop-demo.sql has already been applied:
 //
@@ -25,7 +27,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 const DEMO_ORGANIZATION_ID = "aaaaaaaa-0000-0000-0000-000000000001";
-const EMBEDDING_MODEL = "text-embedding-3-small";
+const EMBEDDING_MODEL = "gemini-embedding-001";
 const EMBEDDING_DIMENSIONS = 1536;
 
 const DOCUMENTS = [
@@ -90,14 +92,20 @@ function chunkText(text, maxChunkSize = 1000, overlap = 200) {
 }
 
 async function getEmbedding(apiKey, text) {
-  const response = await fetch("https://api.openai.com/v1/embeddings", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey,
+      },
+      body: JSON.stringify({
+        content: { parts: [{ text }] },
+        output_dimensionality: EMBEDDING_DIMENSIONS,
+      }),
     },
-    body: JSON.stringify({ model: EMBEDDING_MODEL, input: text, dimensions: EMBEDDING_DIMENSIONS }),
-  });
+  );
 
   if (!response.ok) {
     const body = await response.text().catch(() => "");
@@ -105,21 +113,21 @@ async function getEmbedding(apiKey, text) {
   }
 
   const data = await response.json();
-  const embedding = data?.data?.[0]?.embedding;
+  const embedding = data?.embedding?.values ?? data?.embeddings?.[0]?.values;
   if (!Array.isArray(embedding) || embedding.length !== EMBEDDING_DIMENSIONS) {
-    throw new Error("Unexpected embedding response from OpenAI.");
+    throw new Error(`Unexpected embedding response from Gemini: ${JSON.stringify(data)}`);
   }
   return embedding;
 }
 
 async function main() {
-  const openaiKey = process.env.OPENAI_API_KEY;
+  const geminiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!openaiKey || !supabaseUrl || !serviceRoleKey) {
+  if (!geminiKey || !supabaseUrl || !serviceRoleKey) {
     console.error(
-      "Missing OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_URL, or SUPABASE_SERVICE_ROLE_KEY.",
+      "Missing GOOGLE_API_KEY (or GEMINI_API_KEY), NEXT_PUBLIC_SUPABASE_URL, or SUPABASE_SERVICE_ROLE_KEY.",
     );
     process.exit(1);
   }
@@ -169,7 +177,7 @@ async function main() {
     const chunks = chunkText(doc.content);
     const rows = [];
     for (const chunk of chunks) {
-      const embedding = await getEmbedding(openaiKey, chunk.content);
+      const embedding = await getEmbedding(geminiKey, chunk.content);
       rows.push({
         organization_id: DEMO_ORGANIZATION_ID,
         document_id: inserted.id,
