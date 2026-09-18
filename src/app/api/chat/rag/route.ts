@@ -3,16 +3,25 @@ import { z } from "zod";
 import * as Sentry from "@sentry/nextjs";
 import { createAnonClient } from "@/lib/supabase/anon";
 import { isOrganizationServiceable } from "@/lib/billing";
-import { getEmbedding } from "@/lib/rag/embeddings";
-import { streamChatCompletion, type LLMMessage } from "@/lib/rag/llm";
-import { checkQuota, incrementTokenUsage } from "@/lib/rag/quota";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { firstIssueMessage } from "@/lib/validation";
-import type { ChatMatchSource, ChatRequestBody, ChatStreamEvent, Json } from "@/types";
+import type { ChatRequestBody, ChatStreamEvent } from "@/types";
 
-const MATCH_COUNT = 5;
-const MATCH_THRESHOLD = 0.5;
-const HISTORY_LIMIT = 12;
+/**
+ * The Pasargad FastAPI backend now owns RAG retrieval + LLM generation. This
+ * route is a thin proxy: validate the anonymous chat request, forward it to
+ * `POST /api/v1/chat/completions` (organization_id -> tenant_id), and re-emit
+ * the answer as Server-Sent Events so the widget protocol stays unchanged.
+ * When the backend is unreachable it degrades to a safe fallback answer.
+ */
+const PASARGAD_API_URL =
+  process.env.PASARGAD_API_URL ?? "http://localhost:8000";
+const PASARGAD_COMPLETIONS_PATH = "/api/v1/chat/completions";
+const PASARGAD_TIMEOUT_MS = 30_000;
+
+const FALLBACK_ANSWER =
+  "Üzgünüm, şu anda talebinizi işleyemiyorum. Lütfen biraz sonra tekrar deneyin veya destek ekibimizle iletişime geçin.";
+
 const MAX_MESSAGE_LENGTH = 4000;
 
 const chatRequestSchema = z.object({
@@ -94,15 +103,69 @@ export async function GET(request: Request) {
   }
 }
 
+interface PasargadExecutionResult {
+  crew?: string;
+  status?: string;
+  answer?: string;
+  recommendation?: string;
+  [key: string]: unknown;
+}
+
+interface PasargadCompletionResponse {
+  tenant_id?: string;
+  session_id?: string;
+  assigned_crew?: string;
+  execution_result?: PasargadExecutionResult | null;
+}
+
+/**
+ * Forwards one chat turn to the Pasargad backend and extracts the answer.
+ * OPS turns return `execution_result.answer`; DEV turns (error reports) return
+ * a `recommendation` instead. Falls back to `FALLBACK_ANSWER` when neither is
+ * present. Throws on transport errors so the caller can apply the fallback.
+ */
+async function requestPasargadCompletion(payload: {
+  tenant_id: string;
+  session_id: string;
+  user_input: string;
+}): Promise<{ answer: string }> {
+  const response = await fetch(
+    `${PASARGAD_API_URL}${PASARGAD_COMPLETIONS_PATH}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(PASARGAD_TIMEOUT_MS),
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    throw new Error(`Pasargad API error (${response.status}): ${body}`);
+  }
+
+  const data = (await response.json()) as PasargadCompletionResponse;
+  const result: PasargadExecutionResult = data.execution_result ?? {};
+
+  const answer =
+    typeof result.answer === "string" && result.answer.trim()
+      ? result.answer
+      : typeof result.recommendation === "string" && result.recommendation.trim()
+        ? result.recommendation
+        : FALLBACK_ANSWER;
+
+  return { answer };
+}
+
 /**
  * POST /api/chat/rag
- * Receives a visitor prompt, retrieves the tenant's most relevant knowledge
- * chunks via the `match_document_chunks` RPC, and streams an LLM answer back
- * as Server-Sent Events. Runs on the anon-key client because visitors are
- * anonymous; tenant isolation is enforced inside each `SECURITY DEFINER` RPC
- * (`get_chat_session_for_org`, `create_chat_session`, `get_chat_history`,
- * `insert_chat_message`, `match_document_chunks`), not by TypeScript filters
- * alone.
+ * Thin proxy to the Pasargad FastAPI backend. This route validates the
+ * anonymous chat request, forwards it to `POST /api/v1/chat/completions`
+ * (mapping `organization_id -> tenant_id`), and re-emits the backend's answer
+ * as Server-Sent Events so the widget's wire protocol is unchanged. When the
+ * backend is unreachable the route degrades to a safe fallback answer instead
+ * of failing the synchronous user flow.
  */
 export async function POST(request: Request) {
   const parsedBody = chatRequestSchema.safeParse(
@@ -145,16 +208,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const quota = await checkQuota(organizationId);
-    if (!quota.allowed) {
-      return NextResponse.json(
-        {
-          error: `This organization has reached its AI assistant token quota (${quota.tokensUsed}/${quota.tokensLimit}). Contact support to increase the limit.`,
-        },
-        { status: 429 },
-      );
-    }
-
     // Resolve or create a session scoped strictly to the tenant.
     let sessionId = parsedBody.data.sessionId ?? null;
 
@@ -180,7 +233,7 @@ export async function POST(request: Request) {
       sessionId = created.id;
     }
 
-    // Persist the visitor's message.
+    // Persist the visitor's message so GET history restore keeps working.
     const { error: userMessageError } = await anon.rpc("insert_chat_message", {
       p_organization_id: organizationId,
       p_session_id: sessionId,
@@ -190,93 +243,30 @@ export async function POST(request: Request) {
 
     if (userMessageError) throw userMessageError;
 
-    // Recent conversation history (newest first) for context.
-    const { data: historyRows } = await anon
-      .rpc("get_chat_history", {
-        p_organization_id: organizationId,
-        p_session_id: sessionId,
-      })
-      .order("created_at", { ascending: false })
-      .limit(HISTORY_LIMIT);
-
-    const history = (historyRows ?? []).map((entry) => ({
-      role: entry.role,
-      content: entry.content,
-    }));
-
-    // Retrieve the most relevant knowledge chunks for the tenant.
-    const queryEmbedding = await getEmbedding(message);
-    const { data: matches, error: matchError } = await anon.rpc(
-      "match_document_chunks",
-      {
-        query_embedding: queryEmbedding,
-        match_organization_id: organizationId,
-        match_count: MATCH_COUNT,
-        match_threshold: MATCH_THRESHOLD,
-      },
-    );
-
-    if (matchError) throw matchError;
-
-    const sources: ChatMatchSource[] = (matches ?? []).map((match) => ({
-      documentId: match.document_id,
-      chunkIndex: match.chunk_index,
-      content: match.content,
-      similarity: match.similarity,
-    }));
-
-    // Build the prompt: system instructions + knowledge context + history.
-    const context = sources.map((source) => source.content).join("\n\n---\n\n");
-
-    const messages: LLMMessage[] = [
-      {
-        role: "system",
-        content: [
-          "You are a helpful knowledge-base assistant.",
-          "Answer the visitor's question using only the provided context.",
-          "If the context does not contain the answer, say you do not know and",
-          "suggest that the visitor contact support. Never invent information.",
-          "Keep responses concise and professional.",
-          "",
-          "CONTEXT:",
-          context || "(no relevant context found)",
-        ].join("\n"),
-      },
-    ];
-
-    // Append history in chronological order (it was fetched newest-first).
-    for (const entry of history.slice().reverse()) {
-      if (entry.role === "system") continue;
-      messages.push({
-        role: entry.role as "user" | "assistant",
-        content: entry.content,
-      });
+    // Strict tenant mapping: the organization_id resolved above is forwarded
+    // to Pasargad as tenant_id. The backend is the single source of truth for
+    // RAG retrieval + LLM generation.
+    let answer: string;
+    try {
+      answer = (
+        await requestPasargadCompletion({
+          tenant_id: organizationId,
+          session_id: sessionId,
+          user_input: message,
+        })
+      ).answer;
+    } catch (error) {
+      console.error("Pasargad backend unreachable; using fallback answer:", error);
+      Sentry.captureException(error, { extra: { organizationId, sessionId } });
+      answer = FALLBACK_ANSWER;
     }
 
-    messages.push({ role: "user", content: message });
-
-    // Stream the answer back to the widget.
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
-        let fullText = "";
-        let usage: Awaited<ReturnType<typeof streamChatCompletion>>["usage"] = null;
-
         try {
           controller.enqueue(encoder.encode(toSSE({ type: "session", sessionId })));
-
-          if (sources.length) {
-            controller.enqueue(encoder.encode(toSSE({ type: "sources", sources })));
-          }
-
-          const result = await streamChatCompletion(messages, (token) => {
-            controller.enqueue(
-              encoder.encode(toSSE({ type: "delta", content: token })),
-            );
-          });
-          fullText = result.text;
-          usage = result.usage;
-
+          controller.enqueue(encoder.encode(toSSE({ type: "delta", content: answer })));
           controller.enqueue(encoder.encode(toSSE({ type: "done" })));
         } catch (error) {
           console.error("RAG stream error:", error);
@@ -287,23 +277,15 @@ export async function POST(request: Request) {
             ),
           );
         } finally {
-          // Persist the assistant reply (when non-empty) with citations.
-          if (fullText.trim()) {
+          // Persist the assistant reply (when non-empty).
+          if (answer.trim()) {
             await anon.rpc("insert_chat_message", {
               p_organization_id: organizationId,
               p_session_id: sessionId,
               p_role: "assistant",
-              p_content: fullText,
-              p_sources: sources.length ? (sources as unknown as Json) : null,
+              p_content: answer,
+              p_sources: null,
             });
-          }
-          // Best-effort — a missing usage chunk (some providers/configs)
-          // just means this exchange isn't metered, not a hard failure.
-          if (usage) {
-            await incrementTokenUsage(
-              organizationId,
-              usage.promptTokens + usage.completionTokens,
-            );
           }
           controller.close();
         }
