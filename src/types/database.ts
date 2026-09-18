@@ -146,10 +146,10 @@ export type Database = {
           id: string
           issue_description: string | null
           organization_id: string
+          provider_payment_intent_id: string | null
           service_id: string
           start_time: string
           status: string
-          provider_payment_intent_id: string | null
         }
         Insert: {
           created_at?: string
@@ -161,10 +161,10 @@ export type Database = {
           id?: string
           issue_description?: string | null
           organization_id: string
+          provider_payment_intent_id?: string | null
           service_id: string
           start_time: string
           status?: string
-          provider_payment_intent_id?: string | null
         }
         Update: {
           created_at?: string
@@ -176,10 +176,10 @@ export type Database = {
           id?: string
           issue_description?: string | null
           organization_id?: string
+          provider_payment_intent_id?: string | null
           service_id?: string
           start_time?: string
           status?: string
-          provider_payment_intent_id?: string | null
         }
         Relationships: [
           {
@@ -484,7 +484,7 @@ export type Database = {
           content: string
           created_at: string
           document_id: string
-          embedding: string
+          embedding: string | number[]
           id: string
           metadata: Json
           organization_id: string
@@ -782,9 +782,9 @@ export type Database = {
           id: string
           name: string
           plan_id: string | null
-          slug: string
           provider_customer_id: string | null
           provider_subscription_id: string | null
+          slug: string
           subscription_status: string
           updated_at: string
         }
@@ -794,9 +794,9 @@ export type Database = {
           id?: string
           name: string
           plan_id?: string | null
-          slug: string
           provider_customer_id?: string | null
           provider_subscription_id?: string | null
+          slug: string
           subscription_status?: string
           updated_at?: string
         }
@@ -806,9 +806,9 @@ export type Database = {
           id?: string
           name?: string
           plan_id?: string | null
-          slug?: string
           provider_customer_id?: string | null
           provider_subscription_id?: string | null
+          slug?: string
           subscription_status?: string
           updated_at?: string
         }
@@ -961,6 +961,44 @@ export type Database = {
           },
         ]
       }
+      sso_connections: {
+        Row: {
+          config: Json
+          created_at: string
+          enabled: boolean
+          id: string
+          organization_id: string
+          provider: Database["public"]["Enums"]["sso_provider"]
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          organization_id: string
+          provider: Database["public"]["Enums"]["sso_provider"]
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          organization_id?: string
+          provider?: Database["public"]["Enums"]["sso_provider"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sso_connections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenant_configs: {
         Row: {
           config: Json
@@ -996,39 +1034,39 @@ export type Database = {
           },
         ]
       }
-      sso_connections: {
+      tenant_configs_legacy: {
         Row: {
-          config: Json
-          created_at: string
-          enabled: boolean
+          allowed_tools: Json | null
+          created_at: string | null
           id: string
-          organization_id: string
-          provider: Database["public"]["Enums"]["sso_provider"]
-          updated_at: string
+          rag_k_value: number | null
+          system_prompt: string | null
+          tenant_id: string
+          updated_at: string | null
         }
         Insert: {
-          config?: Json
-          created_at?: string
-          enabled?: boolean
+          allowed_tools?: Json | null
+          created_at?: string | null
           id?: string
-          organization_id: string
-          provider: Database["public"]["Enums"]["sso_provider"]
-          updated_at?: string
+          rag_k_value?: number | null
+          system_prompt?: string | null
+          tenant_id: string
+          updated_at?: string | null
         }
         Update: {
-          config?: Json
-          created_at?: string
-          enabled?: boolean
+          allowed_tools?: Json | null
+          created_at?: string | null
           id?: string
-          organization_id?: string
-          provider?: Database["public"]["Enums"]["sso_provider"]
-          updated_at?: string
+          rag_k_value?: number | null
+          system_prompt?: string | null
+          tenant_id?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "sso_connections_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
+            foreignKeyName: "tenant_configs_legacy_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: true
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
@@ -1072,6 +1110,33 @@ export type Database = {
           },
         ]
       }
+      vectors: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          embedding: string | null
+          id: string
+          metadata: Json | null
+          tenant_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          tenant_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          tenant_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -1098,6 +1163,47 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      allocate_agency_tenant_quota: {
+        Args: { p_agency_id: string; p_tenant_id: string; p_total: number }
+        Returns: number
+      }
+      confirm_pending_appointment: {
+        Args: { p_organization_id: string; p_appointment_id: string }
+        Returns: {
+          id: string
+          organization_id: string
+          service_id: string
+          customer_name: string
+          customer_email: string
+          customer_phone: string | null
+          device_info: string | null
+          issue_description: string | null
+          start_time: string
+          end_time: string
+          status: string
+          provider_payment_intent_id: string | null
+          created_at: string
+        }
+      }
+      consume_agency_quota: {
+        Args: { p_tenant_id: string; p_tokens: number }
+        Returns: number
+      }
+      create_agency_tenant: {
+        Args: { p_agency_id: string; p_name: string; p_slug: string }
+        Returns: string
+      }
+      create_chat_session: {
+        Args: { p_organization_id: string }
+        Returns: {
+          id: string
+          organization_id: string
+          visitor_id: string | null
+          title: string | null
+          created_at: string
+          updated_at: string
+        }
+      }
       create_organization: {
         Args: { org_name: string; org_slug: string }
         Returns: {
@@ -1118,68 +1224,6 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
-      }
-      current_user_role: {
-        Args: { org_id: string }
-        Returns: Database["public"]["Enums"]["membership_role"]
-      }
-      is_org_member: { Args: { org_id: string }; Returns: boolean }
-      match_document_chunks: {
-        Args: {
-          match_count?: number
-          match_organization_id: string
-          match_threshold?: number
-          query_embedding: string | number[]
-        }
-        Returns: {
-          chunk_index: number
-          content: string
-          document_id: string
-          id: string
-          similarity: number
-        }[]
-      }
-      get_bookable_service: {
-        Args: { p_organization_id: string; p_service_id: string }
-        Returns: {
-          id: string
-          organization_id: string
-          name: string
-          description: string | null
-          duration_minutes: number
-          price: number
-          is_active: boolean
-          created_at: string
-          updated_at: string
-        }
-      }
-      get_organization_booking_info: {
-        Args: { p_organization_id: string }
-        Returns: { name: string; slug: string }[]
-      }
-      is_organization_serviceable: {
-        Args: { p_organization_id: string }
-        Returns: boolean
-      }
-      get_availability_windows: {
-        Args: { p_organization_id: string; p_day_of_week: number }
-        Returns: {
-          id: string
-          organization_id: string
-          day_of_week: number
-          start_time: string
-          end_time: string
-          is_active: boolean
-          created_at: string
-        }[]
-      }
-      get_appointment_conflicts: {
-        Args: {
-          p_organization_id: string
-          p_range_start: string
-          p_range_end: string
-        }
-        Returns: { start_time: string; end_time: string }[]
       }
       create_pending_appointment: {
         Args: {
@@ -1208,23 +1252,40 @@ export type Database = {
           created_at: string
         }
       }
-      confirm_pending_appointment: {
-        Args: { p_organization_id: string; p_appointment_id: string }
+      current_user_role: {
+        Args: { org_id: string }
+        Returns: Database["public"]["Enums"]["membership_role"]
+      }
+      get_agency_by_domain: {
+        Args: { p_domain: string }
         Returns: {
           id: string
-          organization_id: string
-          service_id: string
-          customer_name: string
-          customer_email: string
-          customer_phone: string | null
-          device_info: string | null
-          issue_description: string | null
-          start_time: string
-          end_time: string
-          status: string
-          provider_payment_intent_id: string | null
-          created_at: string
+          master_tenant_id: string
+          branding: Json
+        }[]
+      }
+      get_agency_usage_summary: {
+        Args: { p_agency_id: string; p_days?: number }
+        Returns: {
+          tenant_id: string
+          tenant_name: string
+          tenant_slug: string
+          quota_granted: number
+          quota_allocation: number
+          rag_requests: number
+          completions: number
+          low_confidence: number
+          quota_exhausted: number
+          last_activity_at: string | null
+        }[]
+      }
+      get_appointment_conflicts: {
+        Args: {
+          p_organization_id: string
+          p_range_start: string
+          p_range_end: string
         }
+        Returns: { start_time: string; end_time: string }[]
       }
       get_appointment_details: {
         Args: { p_appointment_id: string; p_organization_id: string }
@@ -1248,24 +1309,28 @@ export type Database = {
           organization_name: string
         }[]
       }
-      get_chat_session_for_org: {
-        Args: { p_organization_id: string; p_session_id: string }
+      get_availability_windows: {
+        Args: { p_organization_id: string; p_day_of_week: number }
         Returns: {
           id: string
           organization_id: string
-          visitor_id: string | null
-          title: string | null
+          day_of_week: number
+          start_time: string
+          end_time: string
+          is_active: boolean
           created_at: string
-          updated_at: string
-        }
+        }[]
       }
-      create_chat_session: {
-        Args: { p_organization_id: string }
+      get_bookable_service: {
+        Args: { p_organization_id: string; p_service_id: string }
         Returns: {
           id: string
           organization_id: string
-          visitor_id: string | null
-          title: string | null
+          name: string
+          description: string | null
+          duration_minutes: number
+          price: number
+          is_active: boolean
           created_at: string
           updated_at: string
         }
@@ -1281,6 +1346,38 @@ export type Database = {
           sources: Json | null
           created_at: string
         }[]
+      }
+      get_chat_session_for_org: {
+        Args: { p_organization_id: string; p_session_id: string }
+        Returns: {
+          id: string
+          organization_id: string
+          visitor_id: string | null
+          title: string | null
+          created_at: string
+          updated_at: string
+        }
+      }
+      get_my_agency: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          name: string
+          cname_domain: string | null
+          cname_status: string
+          cname_verified_at: string | null
+          branding: Json
+          master_tenant_id: string
+          quota_pool: number
+        }[]
+      }
+      get_organization_booking_info: {
+        Args: { p_organization_id: string }
+        Returns: { name: string; slug: string }[]
+      }
+      increment_token_usage: {
+        Args: { p_organization_id: string; p_tokens: number }
+        Returns: undefined
       }
       insert_chat_message: {
         Args: {
@@ -1300,9 +1397,55 @@ export type Database = {
           created_at: string
         }
       }
+      is_agency_admin: {
+        Args: { p_agency_id: string }
+        Returns: boolean
+      }
+      is_agency_admin_of_tenant: {
+        Args: { p_tenant_id: string }
+        Returns: boolean
+      }
       is_operator_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      is_organization_serviceable: {
+        Args: { p_organization_id: string }
+        Returns: boolean
+      }
+      link_agency_tenant: {
+        Args: { p_agency_id: string; p_tenant_id: string }
+        Returns: undefined
+      }
+      match_document_chunks: {
+        Args: {
+          match_count?: number
+          match_organization_id: string
+          match_threshold?: number
+          query_embedding: string | number[]
+        }
+        Returns: {
+          chunk_index: number
+          content: string
+          document_id: string
+          id: string
+          similarity: number
+        }[]
+      }
+      match_vectors: {
+        Args: {
+          filter_tenant_id: string
+          match_count?: number
+          query_embedding: string
+          similarity_threshold?: number
+        }
+        Returns: {
+          chunk_index: number
+          content: string
+          document_id: string
+          id: string
+          similarity: number
+        }[]
       }
       submit_lead: {
         Args: {
@@ -1319,6 +1462,10 @@ export type Database = {
         }
         Returns: string
       }
+      unlink_agency_tenant: {
+        Args: { p_agency_id: string; p_tenant_id: string }
+        Returns: undefined
+      }
       write_audit_log: {
         Args: {
           p_action: string
@@ -1329,74 +1476,6 @@ export type Database = {
           p_metadata: Json | null
         }
         Returns: string
-      }
-      increment_token_usage: {
-        Args: { p_organization_id: string; p_tokens: number }
-        Returns: undefined
-      }
-      is_agency_admin: {
-        Args: { p_agency_id: string }
-        Returns: boolean
-      }
-      is_agency_admin_of_tenant: {
-        Args: { p_tenant_id: string }
-        Returns: boolean
-      }
-      consume_agency_quota: {
-        Args: { p_tenant_id: string; p_tokens: number }
-        Returns: number
-      }
-      get_my_agency: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          id: string
-          name: string
-          cname_domain: string | null
-          cname_status: string
-          cname_verified_at: string | null
-          branding: Json
-          master_tenant_id: string
-          quota_pool: number
-        }[]
-      }
-      allocate_agency_tenant_quota: {
-        Args: { p_agency_id: string; p_tenant_id: string; p_total: number }
-        Returns: number
-      }
-      link_agency_tenant: {
-        Args: { p_agency_id: string; p_tenant_id: string }
-        Returns: undefined
-      }
-      create_agency_tenant: {
-        Args: { p_agency_id: string; p_name: string; p_slug: string }
-        Returns: string
-      }
-      unlink_agency_tenant: {
-        Args: { p_agency_id: string; p_tenant_id: string }
-        Returns: undefined
-      }
-      get_agency_usage_summary: {
-        Args: { p_agency_id: string; p_days?: number }
-        Returns: {
-          tenant_id: string
-          tenant_name: string
-          tenant_slug: string
-          quota_granted: number
-          quota_allocation: number
-          rag_requests: number
-          completions: number
-          low_confidence: number
-          quota_exhausted: number
-          last_activity_at: string | null
-        }[]
-      }
-      get_agency_by_domain: {
-        Args: { p_domain: string }
-        Returns: {
-          id: string
-          master_tenant_id: string
-          branding: Json
-        }[]
       }
     }
     Enums: {

@@ -17,6 +17,12 @@
 -- enabled with no policies so no anon/authenticated client can read them.
 -- ============================================================================
 
+-- pgvector lives in the `extensions` schema on Supabase, and the session the
+-- CLI applies migrations with only has `public` on its search_path, so the
+-- `vector` type (and the `<=>` operator used below) would not resolve. Same
+-- convention as 20261109000000_ai_rag_chatbot.sql.
+set search_path to public, extensions;
+
 -- ----------------------------------------------------------------------------
 -- TENANT_CONFIGS
 -- Versioned, tenant-scoped LangGraph runtime config (system prompt, RAG
