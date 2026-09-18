@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { decodeAgencyContext, type AgencyContext } from "@/lib/agency/branding";
 
 const getAgencyByDomainMock = vi.fn();
+const updateSessionMock = vi.fn(async (_request: NextRequest, response?: NextResponse) => response);
 
 vi.mock("@/lib/agency/cname", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/agency/cname")>()),
@@ -12,7 +13,7 @@ vi.mock("@/lib/agency/cname", async (importOriginal) => ({
 
 // The Supabase session refresh isn't under test; pass the response through.
 vi.mock("@/lib/supabase/middleware", () => ({
-  updateSession: async (_request: NextRequest, response?: NextResponse) => response,
+  updateSession: updateSessionMock,
 }));
 
 // Real next-intl routing is used on purpose: the agency header only reaches
@@ -36,6 +37,7 @@ async function run(host: string, path = "/pricing", headers: Record<string, stri
 describe("middleware white-label routing", () => {
   beforeEach(() => {
     getAgencyByDomainMock.mockReset();
+    updateSessionMock.mockClear();
   });
 
   it("forwards the resolved agency to downstream routes on a custom domain", async () => {
@@ -105,5 +107,54 @@ describe("middleware white-label routing", () => {
     expect(prefixed.headers.get("x-middleware-rewrite")).toBeNull();
     expect(decodeAgencyContext(prefixed.headers.get(FORWARDED))).toEqual(AGENCY);
     expect(prefixed.headers.get("x-middleware-request-x-next-intl-locale")).toBe("tr");
+  });
+});
+
+describe("middleware safe fallback", () => {
+  beforeEach(() => {
+    getAgencyByDomainMock.mockReset();
+    updateSessionMock.mockReset();
+    updateSessionMock.mockRejectedValue(new Error("boom"));
+  });
+
+  it("rewrites an unprefixed path under the default locale instead of failing", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const response = await run("pasargad.app", "/pricing");
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-middleware-rewrite")).toContain("/en/pricing");
+    expect(error).toHaveBeenCalled();
+    error.mockRestore();
+  });
+
+  it("rewrites the root path to the default locale root", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const response = await run("pasargad.app", "/");
+
+    const rewrite = new URL(response.headers.get("x-middleware-rewrite") ?? "");
+    expect(rewrite.pathname).toBe("/en");
+    error.mockRestore();
+  });
+
+  it("passes an already-prefixed locale path through without redirecting", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const response = await run("pasargad.app", "/tr/pricing");
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("location")).toBeNull();
+    expect(response.headers.get("x-middleware-rewrite")).toBeNull();
+    error.mockRestore();
+  });
+
+  it("still strips a spoofed agency header when falling back", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const response = await run("pasargad.app", "/tr/pricing", { "x-agency-context": "spoofed" });
+
+    expect(response.headers.get(FORWARDED)).toBeNull();
+    error.mockRestore();
   });
 });

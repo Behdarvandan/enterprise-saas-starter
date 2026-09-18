@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Geist_Mono, Inter } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import type { CSSProperties } from "react";
 import { AgencyBrandingProvider } from "@/components/providers/agency-branding-provider";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -24,6 +24,9 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+// Shown only when the metadata translations can't be loaded.
+const FALLBACK_TITLE = "Pasargad";
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -34,17 +37,39 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as Locale, namespace: "common.metadata" });
   const agency = await getAgencyContext();
 
-  return {
-    // White-label: an agency's custom domain shows the agency's own title.
-    title: agency?.branding.title ?? t("title"),
-    description: t("description"),
-    icons: {
-      icon: "/favicon.svg",
-    },
-  };
+  try {
+    const t = await getTranslations({ locale: locale as Locale, namespace: "common.metadata" });
+
+    return {
+      // White-label: an agency's custom domain shows the agency's own title.
+      title: agency?.branding.title ?? t("title"),
+      description: t("description"),
+      icons: {
+        icon: "/favicon.svg",
+      },
+    };
+  } catch (error) {
+    unstable_rethrow(error);
+    console.error("[layout] metadata translations failed, using static fallback:", error);
+    return {
+      title: agency?.branding.title ?? FALLBACK_TITLE,
+      icons: { icon: "/favicon.svg" },
+    };
+  }
+}
+
+// The catalog is already guarded in i18n/request.ts; this is the last line
+// of defence so an i18n failure renders untranslated keys instead of a 500.
+async function loadMessagesSafely() {
+  try {
+    return await getMessages();
+  } catch (error) {
+    unstable_rethrow(error);
+    console.error("[layout] getMessages failed, rendering without translations:", error);
+    return {};
+  }
 }
 
 export default async function RootLayout({
@@ -59,7 +84,7 @@ export default async function RootLayout({
 
   // Enables static rendering for this locale (next-intl requirement).
   setRequestLocale(locale);
-  const messages = await getMessages();
+  const messages = await loadMessagesSafely();
   const agency = await getAgencyContext();
 
   return (

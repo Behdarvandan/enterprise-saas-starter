@@ -10,8 +10,18 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? requested
     : routing.defaultLocale;
 
-  return {
-    locale,
-    messages: (await import(`../../messages/${locale}.json`)).default,
-  };
+  try {
+    return {
+      locale,
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    };
+  } catch (error) {
+    // A broken/missing catalog must not 500 the page: fall back to the
+    // default locale's copy (same language as the URL's routing default).
+    console.error(`[i18n] failed to load messages for "${locale}", using default locale:`, error);
+    return {
+      locale: routing.defaultLocale,
+      messages: (await import(`../../messages/${routing.defaultLocale}.json`)).default,
+    };
+  }
 });

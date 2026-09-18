@@ -1,15 +1,15 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getSupabaseEnv } from "@/lib/supabase/env";
 import type { Database } from "@/types/database";
-
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
-const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key";
 
 /**
  * Refresh the authenticated session on each request by re-reading the
  * cookies and refreshing expired tokens when needed.
+ *
+ * Never throws: if Supabase is misconfigured or unreachable the request
+ * continues with the response as-is (no refreshed cookies), so a Supabase
+ * outage can't turn every page into a 500.
  */
 export async function updateSession(request: NextRequest, response?: NextResponse) {
   // Build on top of the response passed in (e.g. next-intl's locale
@@ -17,10 +17,9 @@ export async function updateSession(request: NextRequest, response?: NextRespons
   // below don't discard a redirect decided upstream.
   let supabaseResponse = response ?? NextResponse.next({ request });
 
-  const supabase = createServerClient<Database>(
-    supabaseUrl,
-    supabaseAnonKey,
-    {
+  try {
+    const { url, anonKey } = getSupabaseEnv();
+    const supabase = createServerClient<Database>(url, anonKey, {
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -41,11 +40,13 @@ export async function updateSession(request: NextRequest, response?: NextRespons
           );
         },
       },
-    },
-  );
+    });
 
-  // IMPORTANT: keep this call to refresh the session on every request.
-  await supabase.auth.getUser();
+    // IMPORTANT: keep this call to refresh the session on every request.
+    await supabase.auth.getUser();
+  } catch (error) {
+    console.error("[middleware] Supabase session refresh failed, continuing without it:", error);
+  }
 
   return supabaseResponse;
 }
