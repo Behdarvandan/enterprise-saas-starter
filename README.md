@@ -121,7 +121,8 @@ flowchart LR
    | `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_ENTERPRISE` | Stripe billing and checkout |
    | `NEXT_PUBLIC_PAYMENT_PROVIDER`, `PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`, `PAYTR_MERCHANT_SALT` | Payment provider routing and PayTR credentials |
    | `RESEND_API_KEY`, `EMAIL_FROM` (optional) | Transactional email |
-   | `OPENAI_API_KEY`, `GROQ_API_KEY` | Document embeddings and AI chat completions |
+   | `GOOGLE_API_KEY` | Document embeddings (Gemini `gemini-embedding-001`, 1536d) |
+   | `OPENAI_API_KEY`, `GROQ_API_KEY` | AI chat completions |
    | `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | Error tracking and source map upload |
    | `CRON_SECRET` | Authorizes the pending-appointment cleanup cron endpoint |
    | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Rate limiting for public API routes |
