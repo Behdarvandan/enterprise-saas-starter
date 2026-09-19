@@ -26,7 +26,7 @@ export default function HeroPlayground() {
 
   return (
     <div
-      className="animate-reveal-up mt-16 rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10 sm:p-8"
+      className="animate-reveal-up mt-16 rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-primary/50 hover:shadow-md hover:shadow-primary/10 sm:p-8"
       style={{ animationDelay: "280ms" }}
     >
       <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary">
@@ -44,7 +44,7 @@ export default function HeroPlayground() {
             value={shopName}
             onChange={(event) => setShopName(event.target.value)}
             placeholder={t("placeholder")}
-            className="flex-1 rounded-control border border-subtle bg-surface-raised px-4 py-2.5 text-sm text-ink-primary outline-none transition-colors focus:border-gold/50"
+            className="flex-1 rounded-control border border-subtle bg-surface-raised px-4 py-2.5 text-sm text-ink-primary outline-none transition-colors focus:border-primary/50"
           />
           <button
             type="submit"

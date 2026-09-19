@@ -1,15 +1,20 @@
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import FreelanceRevenueChart, { type MonthlyRevenuePoint } from "@/components/admin/FreelanceRevenueChart";
+import SaasRevenueChart, { type PlanRevenuePoint } from "@/components/admin/SaasRevenueChart";
+import TokenUsageChart, { type OrgTokenUsagePoint } from "@/components/admin/TokenUsageChart";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import { Card } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { formatMoney } from "@/lib/format";
 import { requireOperatorAdmin } from "@/lib/operator";
 import { getAllPlans, type Plan, type PlanCheckout } from "@/lib/plans";
-import CountUp from "@/components/ui/CountUp";
-import FreelanceRevenueChart, {
-  type MonthlyRevenuePoint,
-} from "@/components/admin/FreelanceRevenueChart";
-import SaasRevenueChart, {
-  type PlanRevenuePoint,
-} from "@/components/admin/SaasRevenueChart";
-import TokenUsageChart, {
-  type OrgTokenUsagePoint,
-} from "@/components/admin/TokenUsageChart";
 
 export const dynamic = "force-dynamic";
 
@@ -19,18 +24,18 @@ function monthKey(date: Date): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
-function monthLabel(date: Date): string {
-  return date.toLocaleDateString(undefined, { month: "short", year: "2-digit" });
-}
-
-function isStripePlan(
-  plan: Plan,
-): plan is Plan & { checkout: Extract<PlanCheckout, { kind: "stripe" }> } {
+function isStripePlan(plan: Plan): plan is Plan & { checkout: Extract<PlanCheckout, { kind: "stripe" }> } {
   return plan.checkout.kind === "stripe";
 }
 
 export default async function AdminAnalyticsPage() {
   const { supabase } = await requireOperatorAdmin();
+  const [t, tTiers, locale, format] = await Promise.all([
+    getTranslations("admin.analytics"),
+    getTranslations("common.tiers"),
+    getLocale(),
+    getFormatter(),
+  ]);
 
   // --- Freelance revenue: real monthly trend from paid client invoices ----
   const { data: paidInvoices } = await supabase
@@ -42,16 +47,16 @@ export default async function AdminAnalyticsPage() {
   const now = new Date();
   for (let i = MONTHS_BACK - 1; i >= 0; i -= 1) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    months.push({ key: monthKey(d), label: monthLabel(d) });
+    months.push({
+      key: monthKey(d),
+      label: format.dateTime(d, { month: "short", year: "2-digit", numberingSystem: "latn" }),
+    });
   }
 
   const totalsByMonth = new Map<string, number>(months.map((m) => [m.key, 0]));
   for (const invoice of paidInvoices ?? []) {
-    const bucketDate = new Date(invoice.paid_at ?? invoice.created_at);
-    const key = monthKey(bucketDate);
-    if (totalsByMonth.has(key)) {
-      totalsByMonth.set(key, (totalsByMonth.get(key) ?? 0) + invoice.amount / 100);
-    }
+    const key = monthKey(new Date(invoice.paid_at ?? invoice.created_at));
+    if (totalsByMonth.has(key)) totalsByMonth.set(key, (totalsByMonth.get(key) ?? 0) + invoice.amount / 100);
   }
 
   const freelanceRevenue: MonthlyRevenuePoint[] = months.map((m) => ({
@@ -60,34 +65,32 @@ export default async function AdminAnalyticsPage() {
   }));
   const freelanceTotal = freelanceRevenue.reduce((sum, point) => sum + point.amount, 0);
 
-  // --- SaaS revenue: live MRR snapshot by plan (no local billing-history --
-  // ledger exists to build a real historical trend from — see
-  // SaasRevenueChart's doc comment).
+  // --- SaaS revenue: live MRR snapshot by plan (no local billing-history
+  // ledger exists to build a real historical trend from).
   const { data: activeOrganizations } = await supabase
     .from("organizations")
     .select("plan_id")
     .in("subscription_status", ["active", "trialing"]);
 
   // Only Stripe-checkout plans (EU/Global) are matchable here — PayTR (TR
-  // region) activation never sets `organizations.plan_id`
-  // (`activateOrganizationById` in src/lib/payment/handlers.ts only flips
-  // `subscription_status`), and Enterprise is contact-only with no priceId
-  // anywhere. TR MRR isn't recoverable from this table today.
-  const stripePlans = getAllPlans().filter(isStripePlan);
-  const saasRevenue: PlanRevenuePoint[] = stripePlans.map((plan) => {
-    const organizations = (activeOrganizations ?? []).filter(
-      (org) => plan.checkout.priceId && org.plan_id === plan.checkout.priceId,
-    ).length;
-    return {
-      plan: `${plan.name} (${plan.region.toUpperCase()})`,
-      amount: organizations * (plan.checkout.amount / 100),
-      organizations,
-    };
-  });
+  // region) activation never sets `organizations.plan_id`, and Enterprise is
+  // contact-only with no priceId anywhere. TR MRR isn't recoverable from this
+  // table today.
+  const saasRevenue: PlanRevenuePoint[] = getAllPlans()
+    .filter(isStripePlan)
+    .map((plan) => {
+      const organizations = (activeOrganizations ?? []).filter(
+        (org) => plan.checkout.priceId && org.plan_id === plan.checkout.priceId,
+      ).length;
+      return {
+        plan: `${tTiers(plan.tier)} (${plan.region.toUpperCase()})`,
+        amount: organizations * (plan.checkout.amount / 100),
+        organizations,
+      };
+    });
   const saasTotal = saasRevenue.reduce((sum, point) => sum + point.amount, 0);
 
-  // --- Token usage: live per-org quota snapshot, top 10 by usage (see -----
-  // TokenUsageChart's doc comment for why this isn't a historical trend).
+  // --- Token usage: live per-org quota snapshot, top 10 by usage ------------
   const { data: quotas } = await supabase
     .from("usage_quotas")
     .select("organization_id, tokens_used, tokens_limit")
@@ -101,11 +104,8 @@ export default async function AdminAnalyticsPage() {
   const orgNameById = new Map((quotaOrganizations ?? []).map((org) => [org.id, org.name]));
 
   const tokenUsage: OrgTokenUsagePoint[] = (quotas ?? []).map((quota) => ({
-    organization: orgNameById.get(quota.organization_id) ?? "Unknown",
-    percentUsed:
-      quota.tokens_limit > 0
-        ? Math.min(100, (quota.tokens_used / quota.tokens_limit) * 100)
-        : 0,
+    organization: orgNameById.get(quota.organization_id) ?? t("tokens.unknown"),
+    percentUsed: quota.tokens_limit > 0 ? Math.min(100, (quota.tokens_used / quota.tokens_limit) * 100) : 0,
     tokensUsed: quota.tokens_used,
     tokensLimit: quota.tokens_limit,
   }));
@@ -126,101 +126,88 @@ export default async function AdminAnalyticsPage() {
   const actorById = new Map((actors ?? []).map((actor) => [actor.id, actor.email]));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-semibold text-ink-primary">Revenue analytics</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Freelance and SaaS revenue, tracked separately.
-      </p>
+    <PageContainer className="max-w-6xl">
+      <PageHeader title={t("title")} description={t("description")} />
 
-      <div className="animate-reveal-up mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10">
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold text-ink-primary">Freelance revenue</h2>
-            <span className="font-mono text-lg font-semibold text-ink-primary">
-              <CountUp value={freelanceTotal} format={(v) => `$${Math.round(v).toLocaleString()}`} />
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card className="p-6">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("freelance.title")}</h2>
+            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-violet-400">
+              {formatMoney(locale, freelanceTotal * 100)}
             </span>
           </div>
-          <p className="mt-1 text-xs text-ink-muted">Paid invoices, last {MONTHS_BACK} months</p>
+          <p className="mt-1 text-xs text-slate-400">{t("freelance.subtitle", { months: MONTHS_BACK })}</p>
           <div className="mt-4">
             <FreelanceRevenueChart data={freelanceRevenue} />
           </div>
-        </div>
+        </Card>
 
-        <div className="rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10">
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold text-ink-primary">SaaS revenue</h2>
-            <span className="font-mono text-lg font-semibold text-ink-primary">
-              <CountUp value={saasTotal} format={(v) => `$${Math.round(v).toLocaleString()}/mo`} />
+        <Card className="p-6">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("saas.title")}</h2>
+            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-violet-400">
+              {formatMoney(locale, saasTotal * 100)}
             </span>
           </div>
-          <p className="mt-1 text-xs text-ink-muted">Live MRR by plan, active + trialing orgs</p>
+          <p className="mt-1 text-xs text-slate-400">{t("saas.subtitle")}</p>
           <div className="mt-4">
             <SaasRevenueChart data={saasRevenue} />
           </div>
-        </div>
+        </Card>
       </div>
 
-      <div
-        className="animate-reveal-up mt-8 rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
-        style={{ animationDelay: "60ms" }}
-      >
-        <h2 className="text-sm font-semibold text-ink-primary">AI assistant token usage</h2>
-        <p className="mt-1 text-xs text-ink-muted">
-          Current period quota consumption, top 10 organizations by usage
-        </p>
+      <Card className="p-6">
+        <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("tokens.title")}</h2>
+        <p className="mt-1 text-xs text-slate-400">{t("tokens.subtitle")}</p>
         <div className="mt-4">
           {tokenUsage.length === 0 ? (
-            <p className="py-8 text-center text-sm text-ink-muted">
-              No RAG chat usage recorded yet.
-            </p>
+            <p className="py-8 text-center text-sm text-slate-400">{t("tokens.empty")}</p>
           ) : (
             <TokenUsageChart data={tokenUsage} />
           )}
         </div>
-      </div>
+      </Card>
 
-      <div className="animate-reveal-up mt-8" style={{ animationDelay: "120ms" }}>
-        <h2 className="text-lg font-semibold text-ink-primary">Audit log</h2>
-        <div className="mt-4 overflow-hidden rounded-interactive border border-subtle bg-surface">
+      <section>
+        <h2 className="text-lg font-semibold tracking-tight text-slate-100">{t("audit.title")}</h2>
+        <Card className="mt-4 overflow-hidden">
           {!auditLogs || auditLogs.length === 0 ? (
-            <p className="px-4 py-8 text-center text-sm text-ink-muted">
-              No audited actions yet.
-            </p>
+            <p className="px-4 py-8 text-center text-sm text-slate-400">{t("audit.empty")}</p>
           ) : (
-            <table className="w-full text-sm">
-              <thead className="border-b border-subtle bg-surface-raised text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                <tr>
-                  <th className="px-4 py-3">Action</th>
-                  <th className="px-4 py-3">Actor</th>
-                  <th className="px-4 py-3">Target</th>
-                  <th className="px-4 py-3">When</th>
-                </tr>
-              </thead>
-              <tbody>
-                {auditLogs.map((log) => (
-                  <tr
-                    key={log.id}
-                    className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
-                  >
-                    <td className="px-4 py-3 font-mono text-xs text-ink-primary">
-                      {log.action}
-                    </td>
-                    <td className="px-4 py-3 text-ink-muted">
-                      {log.actor_id ? (actorById.get(log.actor_id) ?? log.actor_id) : "system"}
-                    </td>
-                    <td className="px-4 py-3 text-ink-muted">
-                      {log.target_table ?? "—"}
-                    </td>
-                    <td className="px-4 py-3 text-ink-muted">
-                      {new Date(log.created_at).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t("audit.action")}</TableHead>
+                    <TableHead>{t("audit.actor")}</TableHead>
+                    <TableHead>{t("audit.target")}</TableHead>
+                    <TableHead>{t("audit.when")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {auditLogs.map((log) => (
+                    <TableRow key={log.id}>
+                      <TableCell dir="ltr" className="text-start font-mono text-xs text-slate-100">
+                        {log.action}
+                      </TableCell>
+                      <TableCell className="text-slate-400">
+                        {log.actor_id ? (actorById.get(log.actor_id) ?? log.actor_id) : t("audit.system")}
+                      </TableCell>
+                      <TableCell dir="ltr" className="text-start font-mono text-xs text-slate-400">
+                        {log.target_table ?? "—"}
+                      </TableCell>
+                      <TableCell className="text-slate-400">
+                        {format.dateTime(new Date(log.created_at), { dateStyle: "medium", timeStyle: "short", numberingSystem: "latn" })}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
-        </div>
-      </div>
-    </div>
+        </Card>
+      </section>
+    </PageContainer>
   );
 }

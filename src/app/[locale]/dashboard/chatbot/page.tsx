@@ -1,8 +1,8 @@
-import { MessageSquareText } from "lucide-react";
-import { requireMembership } from "@/lib/auth";
+import { getTranslations } from "next-intl/server";
+import ChatSimulator from "@/components/chat-widget/ChatSimulator";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import { Card } from "@/components/ui/card";
-import KnowledgeBasePanel from "./KnowledgeBasePanel";
-import ChatWidget from "@/components/chat-widget/ChatWidget";
+import { requireMembership } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -12,60 +12,45 @@ interface ChatbotPageProps {
 
 export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
   const { q } = await searchParams;
-
   const { membership } = await requireMembership();
   const organizationId = membership.organizationId;
+  const t = await getTranslations("dashboard.chatbot");
+
+  const steps = [t("how.step1"), t("how.step2"), t("how.step3"), t("how.step4")];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-control bg-violet/10 text-violet-dim">
-          <MessageSquareText size={20} />
-        </div>
-        <div>
-          <h1 className="text-2xl font-semibold text-ink-primary">AI Chatbot</h1>
-          <p className="text-sm text-ink-muted">
-            Manage your RAG knowledge base and test the embeddable assistant.
-          </p>
-        </div>
-      </div>
+    <PageContainer>
+      <PageHeader title={t("title")} description={t("description")} />
 
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <KnowledgeBasePanel organizationId={organizationId} />
+      <div className="grid gap-6 lg:grid-cols-2">
+        <ChatSimulator organizationId={organizationId} initialQuery={q} />
 
-        <Card className="animate-reveal-up p-6" style={{ animationDelay: "60ms" }}>
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-            Embed the widget
-          </h2>
-          <p className="mt-2 text-sm text-ink-muted">
-            Drop the widget into any React page. It is already live in the
-            bottom-right corner of this screen — try asking a question about an
-            ingested document.
-          </p>
-
-          <pre className="mt-4 overflow-x-auto rounded-control border border-subtle bg-canvas p-4 font-mono text-xs leading-relaxed text-ink-muted">
-            <code>{`import { ChatWidget } from "@/components/chat-widget";
+        <div className="grid content-start gap-6">
+          <Card className="p-5">
+            <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("embed.title")}</h2>
+            <p className="mt-1 text-sm text-slate-400">{t("embed.description")}</p>
+            <pre
+              dir="ltr"
+              className="mt-4 overflow-x-auto rounded-lg border border-slate-800 bg-slate-950 p-4 text-start font-mono text-xs leading-relaxed text-violet-300"
+            >
+              <code>{`import { ChatWidget } from "@/components/chat-widget";
 
 <ChatWidget
   organizationId="${organizationId}"
-  title="AI Assistant"
 />`}</code>
-          </pre>
+            </pre>
+          </Card>
 
-          <div className="mt-4 rounded-control border border-subtle bg-canvas p-4 text-xs text-ink-muted">
-            <p className="font-semibold text-ink-primary">How it works</p>
-            <ol className="mt-2 list-inside list-decimal space-y-1">
-              <li>Ingest documents in the knowledge base panel.</li>
-              <li>The visitor sends a prompt through the widget.</li>
-              <li>Relevant chunks are retrieved via cosine similarity.</li>
-              <li>The LLM streams a grounded answer in real time.</li>
+          <Card className="p-5">
+            <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("how.title")}</h2>
+            <ol className="mt-3 list-decimal space-y-1.5 ps-5 text-sm text-slate-400 marker:text-violet-400">
+              {steps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
             </ol>
-          </div>
-        </Card>
+          </Card>
+        </div>
       </div>
-
-      {/* Floating playground widget scoped to this tenant. */}
-      <ChatWidget organizationId={organizationId} initialQuery={q} />
-    </div>
+    </PageContainer>
   );
 }

@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import LanguageSelector from "@/components/language-selector";
-import ThemeToggle from "@/components/theme-toggle";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import Logo from "@/components/layout/Logo";
 
 export default async function Header() {
@@ -14,22 +13,21 @@ export default async function Header() {
           <Logo />
         </Link>
 
-        <nav className="flex items-center gap-6 text-sm font-medium text-zinc-400">
-          <Link href="/#platform" className="transition-colors hover:text-zinc-100">
+        <nav className="flex items-center gap-6 text-sm font-medium text-slate-400">
+          <Link href="/#platform" className="transition-colors hover:text-slate-100">
             {t("features")}
           </Link>
-          <Link href="/#how-it-works" className="transition-colors hover:text-zinc-100">
+          <Link href="/#how-it-works" className="transition-colors hover:text-slate-100">
             {t("howItWorks")}
           </Link>
-          <Link href="/pricing" className="transition-colors hover:text-zinc-100">
+          <Link href="/pricing" className="transition-colors hover:text-slate-100">
             {t("pricing")}
           </Link>
         </nav>
 
         <div className="flex items-center gap-4">
-          <ThemeToggle />
-          <LanguageSelector />
-          <Link href="/login" className="text-sm font-medium text-zinc-400 transition-colors hover:text-zinc-100">
+          <LocaleSwitcher />
+          <Link href="/login" className="text-sm font-medium text-slate-400 transition-colors hover:text-slate-100">
             {t("signIn")}
           </Link>
           <Link

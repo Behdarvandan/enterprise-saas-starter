@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import * as Sentry from "@sentry/nextjs";
 import { Button } from "@/components/ui/button";
 
@@ -18,22 +19,24 @@ export default function PageError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations("ui");
+
   useEffect(() => {
     Sentry.captureException(error);
   }, [error]);
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col items-center px-4 py-24 text-center sm:px-6 lg:px-8">
-      <AlertTriangle className="text-status-error" size={32} />
-      <h1 className="mt-4 font-serif text-xl font-semibold text-ink-primary">
-        Something went wrong
+    <div
+      role="alert"
+      className="mx-auto flex max-w-5xl flex-col items-center px-4 py-24 text-center sm:px-6 lg:px-8"
+    >
+      <AlertTriangle aria-hidden className="text-status-error" size={32} />
+      <h1 className="mt-4 text-xl font-semibold tracking-tight text-slate-100">
+        {t("errorTitle")}
       </h1>
-      <p className="mt-2 max-w-sm text-sm text-ink-muted">
-        An unexpected error occurred while loading this page. You can try
-        again, or come back later if the problem persists.
-      </p>
+      <p className="mt-2 max-w-sm text-sm text-slate-400">{t("errorDescription")}</p>
       <Button className="mt-6" onClick={() => reset()}>
-        Try again
+        {t("tryAgain")}
       </Button>
     </div>
   );

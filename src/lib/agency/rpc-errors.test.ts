@@ -15,10 +15,8 @@ describe("mapAgencyRpcError", () => {
     "invalid_name",
     "invalid_slug",
     "slug_taken",
-  ])("maps %s to specific copy", (key) => {
-    const message = mapAgencyRpcError({ message: key });
-    expect(message).not.toBe(GENERIC_AGENCY_ERROR);
-    expect(message).not.toContain(key);
+  ])("maps %s to its own message key", (key) => {
+    expect(mapAgencyRpcError({ message: key })).toBe(key);
     expect(isKnownAgencyRpcError({ message: key })).toBe(true);
   });
 

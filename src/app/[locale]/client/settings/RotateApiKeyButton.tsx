@@ -1,35 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "@/i18n/navigation";
 import { KeyRound } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/navigation";
 
 export default function RotateApiKeyButton() {
+  const t = useTranslations("client.settings.license");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
   const [newKey, setNewKey] = useState<string | null>(null);
 
   async function handleRotate() {
     setLoading(true);
-    setError(null);
+    setFailed(false);
     setNewKey(null);
 
-    const response = await fetch("/api/client/license/rotate", {
-      method: "POST",
-    }).catch(() => null);
+    const response = await fetch("/api/client/license/rotate", { method: "POST" }).catch((error: unknown) => {
+      console.error("[license] rotate request failed:", error);
+      return null;
+    });
+    const data: { apiKey?: string; error?: string } = response ? await response.json().catch(() => ({})) : {};
 
-    if (!response) {
-      setError("Something went wrong.");
-      setLoading(false);
-      return;
-    }
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok || data.error) {
-      setError(data.error ?? "Something went wrong.");
+    if (!response || !response.ok || data.error || !data.apiKey) {
+      setFailed(true);
       setLoading(false);
       return;
     }
@@ -41,21 +37,23 @@ export default function RotateApiKeyButton() {
 
   return (
     <div>
-      <Button type="button" variant="secondary" onClick={handleRotate} disabled={loading}>
-        <KeyRound size={16} />
-        {loading ? "Rotating..." : "Regenerate API key"}
+      <Button type="button" variant="secondary" onClick={handleRotate} loading={loading}>
+        {loading ? null : <KeyRound aria-hidden />}
+        {loading ? t("rotating") : t("rotate")}
       </Button>
-
-      {newKey && (
-        <div className="mt-3 rounded-control border border-status-success/30 bg-status-success/10 p-3">
-          <p className="text-xs font-semibold text-status-success">
-            Copy this key now — it won&apos;t be shown again.
+      {newKey ? (
+        <div role="status" className="mt-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3">
+          <p className="text-xs font-semibold text-emerald-300">{t("copyNow")}</p>
+          <p dir="ltr" className="mt-1 text-start font-mono text-xs break-all text-slate-100">
+            {newKey}
           </p>
-          <p className="mt-1 break-all font-mono text-xs text-ink-primary">{newKey}</p>
         </div>
-      )}
-
-      {error && <p className="mt-2 text-xs font-medium text-status-error">{error}</p>}
+      ) : null}
+      {failed ? (
+        <p role="alert" className="mt-2 text-xs font-medium text-status-error">
+          {t("error")}
+        </p>
+      ) : null}
     </div>
   );
 }

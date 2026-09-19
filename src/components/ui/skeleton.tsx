@@ -1,15 +1,16 @@
 import { cn } from "cn"
 
 /**
- * Gold-tinted shimmer, not a generic gray pulse (brief §7) — a moving
- * gradient sweep across the muted surface color, tinted with `--color-gold`.
+ * Loading placeholder — a slate shimmer sweep instead of a flat pulse, so a
+ * page waiting on data reads as "working" without competing with content.
  */
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="skeleton"
+      aria-hidden
       className={cn(
-        "animate-shimmer bg-size-[200%_100%] rounded-md bg-[linear-gradient(110deg,var(--color-muted)_8%,color-mix(in_oklab,var(--color-gold)_20%,var(--color-muted))_18%,var(--color-muted)_33%)]",
+        "animate-shimmer bg-size-[200%_100%] rounded-md bg-[linear-gradient(110deg,var(--color-slate-800)_8%,var(--color-slate-700)_18%,var(--color-slate-800)_33%)] opacity-60",
         className,
       )}
       {...props}

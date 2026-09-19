@@ -1,22 +1,32 @@
 import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
-import { requireOperatorAdmin, getOperatorOrganizationId } from "@/lib/operator";
+import { getTranslations } from "next-intl/server";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import { Card } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { requireOperatorAdmin, getOperatorOrganizationId } from "@/lib/operator";
+import { asMembershipRole } from "@/lib/status";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
   const { supabase } = await requireOperatorAdmin();
   const operatorOrgId = await getOperatorOrganizationId();
+  const [t, tRoles] = await Promise.all([getTranslations("admin.settings"), getTranslations("shell.roles")]);
 
   const { data: organization } = operatorOrgId
     ? await supabase.from("organizations").select("name, slug").eq("id", operatorOrgId).maybeSingle()
     : { data: null };
 
   const { data: members } = operatorOrgId
-    ? await supabase
-        .from("memberships")
-        .select("id, role, user_id")
-        .eq("organization_id", operatorOrgId)
+    ? await supabase.from("memberships").select("id, role, user_id").eq("organization_id", operatorOrgId)
     : { data: [] };
 
   const userIds = (members ?? []).map((m) => m.user_id);
@@ -30,135 +40,116 @@ export default async function AdminSettingsPage() {
   const stripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY);
   const payTrConfigured = Boolean(process.env.PAYTR_MERCHANT_ID);
   const resendConfigured = Boolean(process.env.RESEND_API_KEY);
-  const customDomainConfigured = Boolean(
-    process.env.EMAIL_FROM && !process.env.EMAIL_FROM.includes("resend.dev"),
-  );
+  const customDomainConfigured = Boolean(process.env.EMAIL_FROM && !process.env.EMAIL_FROM.includes("resend.dev"));
+
+  const connected = t("integrations.connected");
+  const notConfigured = t("integrations.notConfigured");
+
+  function IntegrationRow({ label, isConnected }: { label: string; isConnected: boolean }) {
+    return (
+      <Card variant="item" className="flex items-center justify-between px-4 py-3">
+        <span className="text-sm font-medium text-slate-100">{label}</span>
+        {isConnected ? (
+          <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-400">
+            <CheckCircle2 aria-hidden size={14} />
+            {connected}
+          </span>
+        ) : (
+          <span className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
+            <XCircle aria-hidden size={14} />
+            {notConfigured}
+          </span>
+        )}
+      </Card>
+    );
+  }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="font-serif text-2xl font-semibold text-ink-primary">Ayarlar</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        İşletme bilgileri, ekip ve entegrasyon durumu.
-      </p>
+    <PageContainer className="max-w-4xl">
+      <PageHeader title={t("title")} description={t("description")} />
 
-      <Tabs defaultValue="general" className="animate-reveal-up mt-8">
+      <Tabs defaultValue="general">
         <TabsList>
-          <TabsTrigger value="general">Genel</TabsTrigger>
-          <TabsTrigger value="team">Ekip</TabsTrigger>
-          <TabsTrigger value="notifications">Bildirimler</TabsTrigger>
-          <TabsTrigger value="integrations">Entegrasyonlar</TabsTrigger>
+          <TabsTrigger value="general">{t("tabs.general")}</TabsTrigger>
+          <TabsTrigger value="team">{t("tabs.team")}</TabsTrigger>
+          <TabsTrigger value="notifications">{t("tabs.notifications")}</TabsTrigger>
+          <TabsTrigger value="integrations">{t("tabs.integrations")}</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="general">
-          <div className="mt-4 rounded-interactive border border-subtle bg-surface p-6">
+        <TabsContent value="general" className="mt-4">
+          <Card className="p-6">
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                  İşletme adı
-                </dt>
-                <dd className="mt-1 text-sm text-ink-primary">{organization?.name ?? "—"}</dd>
+                <dt className="text-xs font-medium text-slate-400">{t("general.name")}</dt>
+                <dd className="mt-1 text-sm text-slate-100">{organization?.name ?? "—"}</dd>
               </div>
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                  Slug
-                </dt>
-                <dd className="mt-1 font-mono text-sm text-ink-primary">
+                <dt className="text-xs font-medium text-slate-400">{t("general.slug")}</dt>
+                <dd dir="ltr" className="mt-1 text-start font-mono text-sm text-slate-100">
                   {organization?.slug ?? "—"}
                 </dd>
               </div>
             </dl>
-          </div>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="team">
-          <div className="mt-4 overflow-hidden rounded-interactive border border-subtle bg-surface">
+        <TabsContent value="team" className="mt-4">
+          <Card className="overflow-hidden">
             {(members ?? []).length === 0 ? (
-              <p className="px-6 py-8 text-center text-sm text-ink-muted">
-                Ekip üyesi bulunamadı.
-              </p>
+              <p className="px-6 py-8 text-center text-sm text-slate-400">{t("team.empty")}</p>
             ) : (
-              <table className="w-full text-left text-sm">
-                <thead className="border-b border-subtle bg-surface-raised text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                  <tr>
-                    <th className="px-4 py-3">Kullanıcı</th>
-                    <th className="px-4 py-3">Rol</th>
-                  </tr>
-                </thead>
-                <tbody>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t("team.user")}</TableHead>
+                    <TableHead>{t("team.role")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {(members ?? []).map((member) => {
                     const profile = profileById.get(member.user_id);
+                    const role = asMembershipRole(member.role);
                     return (
-                      <tr
-                        key={member.id}
-                        className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
-                      >
-                        <td className="px-4 py-3 text-ink-primary">
-                          {profile?.full_name || profile?.email || member.user_id}
-                        </td>
-                        <td className="px-4 py-3 capitalize text-ink-muted">{member.role}</td>
-                      </tr>
+                      <TableRow key={member.id}>
+                        <TableCell className="text-slate-100">{profile?.full_name || profile?.email || member.user_id}</TableCell>
+                        <TableCell className="text-slate-400">{role ? tRoles(role) : member.role}</TableCell>
+                      </TableRow>
                     );
                   })}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             )}
-            <p className="border-t border-subtle px-4 py-3 text-xs text-ink-muted">
-              Bugün tek kullanıcı — çoklu ekip/rol yönetimi ilerideki bir sürüm için ayrılmıştır.
-            </p>
-          </div>
+            <p className="border-t border-slate-800 px-4 py-3 text-xs text-slate-400">{t("team.note")}</p>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="notifications">
-          <div className="mt-4 rounded-interactive border border-dashed border-subtle bg-surface p-6 text-center">
-            <p className="text-sm font-medium text-ink-primary">Yakında</p>
-            <p className="mt-1 text-sm text-ink-muted">
-              Bildirim tercihleri henüz yapılandırılabilir değil.
-            </p>
-          </div>
+        <TabsContent value="notifications" className="mt-4">
+          <Card className="border-dashed p-6 text-center">
+            <p className="text-sm font-medium text-slate-100">{t("notifications.title")}</p>
+            <p className="mt-1 text-sm text-slate-400">{t("notifications.description")}</p>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="integrations">
-          <div className="mt-4 space-y-3">
+        <TabsContent value="integrations" className="mt-4">
+          <div className="space-y-3">
             <IntegrationRow
-              label={`Ödeme sağlayıcı (${provider})`}
-              connected={provider === "paytr" ? payTrConfigured : stripeConfigured}
+              label={t("integrations.payment", { provider })}
+              isConnected={provider === "paytr" ? payTrConfigured : stripeConfigured}
             />
-            <IntegrationRow label="Resend (e-posta)" connected={resendConfigured} />
-
-            {resendConfigured && !customDomainConfigured && (
-              <div className="flex items-start gap-2.5 rounded-interactive border border-status-warn/30 bg-status-warn/10 p-4 text-sm text-status-warn">
-                <AlertTriangle size={16} className="mt-0.5 shrink-0" />
+            <IntegrationRow label={t("integrations.email")} isConnected={resendConfigured} />
+            {resendConfigured && !customDomainConfigured ? (
+              <div role="note" className="flex items-start gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-300">
+                <AlertTriangle aria-hidden size={16} className="mt-0.5 shrink-0" />
                 <p>
-                  Özel bir gönderim alan adı yapılandırılmamış — üretim e-postaları Resend&apos;in
-                  sandbox göndericisinden (<code className="font-mono">resend.dev</code>) gidiyor
-                  ve yalnızca hesabın kendi doğrulanmış adresine ulaşıyor, gerçek müşterilere
-                  değil. <code className="font-mono">EMAIL_FROM</code> ortam değişkenini
-                  doğrulanmış bir alan adıyla ayarlayın.
+                  {t.rich("integrations.sandboxWarning", {
+                    code: (chunks) => <code className="font-mono">{chunks}</code>,
+                  })}
                 </p>
               </div>
-            )}
+            ) : null}
           </div>
         </TabsContent>
       </Tabs>
-    </div>
-  );
-}
-
-function IntegrationRow({ label, connected }: { label: string; connected: boolean }) {
-  return (
-    <div className="flex items-center justify-between rounded-interactive border border-subtle bg-surface px-4 py-3 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10">
-      <span className="text-sm font-medium text-ink-primary">{label}</span>
-      {connected ? (
-        <span className="flex items-center gap-1.5 text-xs font-semibold text-status-success">
-          <CheckCircle2 size={14} />
-          Bağlı
-        </span>
-      ) : (
-        <span className="flex items-center gap-1.5 text-xs font-semibold text-ink-muted">
-          <XCircle size={14} />
-          Yapılandırılmadı
-        </span>
-      )}
-    </div>
+    </PageContainer>
   );
 }

@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { requireAgencyAdminResult } from "@/lib/agency/admin";
 import { logAgencyAudit } from "@/lib/agency/audit";
-import { GENERIC_AGENCY_ERROR, isKnownAgencyRpcError, mapAgencyRpcError } from "@/lib/agency/rpc-errors";
+import { getAgencyTranslators } from "@/lib/agency/messages";
+import { isKnownAgencyRpcError, mapAgencyRpcError } from "@/lib/agency/rpc-errors";
 import {
   quotaTotalSchema,
   skillListSchema,
@@ -12,7 +13,8 @@ import {
   tenantSlugSchema,
 } from "@/lib/agency/schemas";
 import { findDisallowedSkills, getAllowedAgencySkills } from "@/lib/agency/skills";
-import { applyTenantEnabledSkills, DEFAULT_ENABLED_SKILLS } from "@/lib/payment/handlers";
+import { applyTenantEnabledSkills } from "@/lib/payment/handlers";
+import { DEFAULT_ENABLED_SKILLS } from "@/lib/skills-catalog";
 import { firstIssueMessage } from "@/lib/validation";
 
 export type AgencyActionResult = { error?: string; success?: boolean };
@@ -26,37 +28,41 @@ const TENANTS_PATH = "/agency/tenants";
  * each RPC, so a tampered request cannot act on someone else's agency.
  */
 
+type Translators = Awaited<ReturnType<typeof getAgencyTranslators>>;
+
 /** Logs unexpected RPC failures (known, user-facing errors are expected noise). */
-function rpcFailure(label: string, error: { message?: string }): AgencyActionResult {
+function rpcFailure(tr: Translators, label: string, error: { message?: string }): AgencyActionResult {
   if (!isKnownAgencyRpcError(error)) console.error(`${label}:`, error);
-  return { error: mapAgencyRpcError(error) };
+  return { error: tr.error(mapAgencyRpcError(error)) };
 }
 
 export async function linkTenant(formData: FormData): Promise<AgencyActionResult> {
+  const tr = await getAgencyTranslators();
   const auth = await requireAgencyAdminResult();
   if ("error" in auth) return auth;
   const { supabase, user, agency } = auth;
 
-  const slug = tenantSlugSchema.safeParse(formData.get("slug"));
-  if (!slug.success) return { error: firstIssueMessage(slug.error) };
+  const organizationId = tenantIdSchema.safeParse(formData.get("organizationId"));
+  if (!organizationId.success) {
+    return { error: tr.validation(firstIssueMessage(organizationId.error)) };
+  }
 
   // Resolved under the caller's own RLS: only organizations they are a member
-  // of are visible, so an unknown slug and someone else's organization are
-  // indistinguishable (no probing for which slugs exist).
+  // of are visible, so an unknown id and someone else's organization are
+  // indistinguishable (no probing for which organizations exist). Ownership
+  // itself is enforced by the RPC.
   const { data: organization } = await supabase
     .from("organizations")
     .select("id")
-    .eq("slug", slug.data)
+    .eq("id", organizationId.data)
     .maybeSingle();
-  if (!organization) {
-    return { error: "No organization with that slug was found among the ones you own." };
-  }
+  if (!organization) return { error: tr.error("org_not_found") };
 
   const { error } = await supabase.rpc("link_agency_tenant", {
     p_agency_id: agency.id,
     p_tenant_id: organization.id,
   });
-  if (error) return rpcFailure("linkTenant", error);
+  if (error) return rpcFailure(tr, "linkTenant", error);
 
   await logAgencyAudit({
     action: "agency.tenant_linked",
@@ -71,21 +77,22 @@ export async function linkTenant(formData: FormData): Promise<AgencyActionResult
 }
 
 export async function createTenant(formData: FormData): Promise<AgencyActionResult> {
+  const tr = await getAgencyTranslators();
   const auth = await requireAgencyAdminResult();
   if ("error" in auth) return auth;
   const { supabase, user, agency } = auth;
 
   const name = tenantNameSchema.safeParse(formData.get("name"));
-  if (!name.success) return { error: firstIssueMessage(name.error) };
+  if (!name.success) return { error: tr.validation(firstIssueMessage(name.error)) };
   const slug = tenantSlugSchema.safeParse(formData.get("slug"));
-  if (!slug.success) return { error: firstIssueMessage(slug.error) };
+  if (!slug.success) return { error: tr.validation(firstIssueMessage(slug.error)) };
 
   const { data: tenantId, error } = await supabase.rpc("create_agency_tenant", {
     p_agency_id: agency.id,
     p_name: name.data,
     p_slug: slug.data,
   });
-  if (error || !tenantId) return rpcFailure("createTenant", error ?? {});
+  if (error || !tenantId) return rpcFailure(tr, "createTenant", error ?? {});
 
   // A brand-new tenant needs an active tenant_configs row or pasargad-core
   // answers its chats with a 404. Best-effort: the tenant exists either way,
@@ -107,18 +114,19 @@ export async function createTenant(formData: FormData): Promise<AgencyActionResu
 }
 
 export async function unlinkTenant(tenantId: string): Promise<AgencyActionResult> {
+  const tr = await getAgencyTranslators();
   const auth = await requireAgencyAdminResult();
   if ("error" in auth) return auth;
   const { supabase, user, agency } = auth;
 
   const id = tenantIdSchema.safeParse(tenantId);
-  if (!id.success) return { error: firstIssueMessage(id.error) };
+  if (!id.success) return { error: tr.validation(firstIssueMessage(id.error)) };
 
   const { error } = await supabase.rpc("unlink_agency_tenant", {
     p_agency_id: agency.id,
     p_tenant_id: id.data,
   });
-  if (error) return rpcFailure("unlinkTenant", error);
+  if (error) return rpcFailure(tr, "unlinkTenant", error);
 
   await logAgencyAudit({
     action: "agency.tenant_unlinked",
@@ -137,21 +145,22 @@ export async function allocateQuota(
   tenantId: string,
   total: string,
 ): Promise<AgencyActionResult> {
+  const tr = await getAgencyTranslators();
   const auth = await requireAgencyAdminResult();
   if ("error" in auth) return auth;
   const { supabase, user, agency } = auth;
 
   const id = tenantIdSchema.safeParse(tenantId);
-  if (!id.success) return { error: firstIssueMessage(id.error) };
+  if (!id.success) return { error: tr.validation(firstIssueMessage(id.error)) };
   const amount = quotaTotalSchema.safeParse(total);
-  if (!amount.success) return { error: firstIssueMessage(amount.error) };
+  if (!amount.success) return { error: tr.validation(firstIssueMessage(amount.error)) };
 
   const { error } = await supabase.rpc("allocate_agency_tenant_quota", {
     p_agency_id: agency.id,
     p_tenant_id: id.data,
     p_total: amount.data,
   });
-  if (error) return rpcFailure("allocateQuota", error);
+  if (error) return rpcFailure(tr, "allocateQuota", error);
 
   await logAgencyAudit({
     action: "agency.quota_allocated",
@@ -176,14 +185,15 @@ export async function updateTenantSkills(
   tenantId: string,
   skills: string[],
 ): Promise<AgencyActionResult> {
+  const tr = await getAgencyTranslators();
   const auth = await requireAgencyAdminResult();
   if ("error" in auth) return auth;
   const { supabase, user, agency } = auth;
 
   const id = tenantIdSchema.safeParse(tenantId);
-  if (!id.success) return { error: firstIssueMessage(id.error) };
+  if (!id.success) return { error: tr.validation(firstIssueMessage(id.error)) };
   const parsedSkills = skillListSchema.safeParse(skills);
-  if (!parsedSkills.success) return { error: "Invalid skill selection." };
+  if (!parsedSkills.success) return { error: tr.error("invalid_skills") };
 
   // Ownership check under RLS: rows outside the caller's agency are invisible.
   const { data: link, error: linkError } = await supabase
@@ -194,18 +204,18 @@ export async function updateTenantSkills(
     .maybeSingle();
   if (linkError) {
     console.error("updateTenantSkills: tenant lookup failed:", linkError);
-    return { error: GENERIC_AGENCY_ERROR };
+    return { error: tr.error("generic") };
   }
-  if (!link) return { error: mapAgencyRpcError({ message: "tenant_not_in_agency" }) };
+  if (!link) return { error: tr.error("tenant_not_in_agency") };
 
   const allowed = await getAllowedAgencySkills(supabase, agency);
   const disallowed = findDisallowedSkills(parsedSkills.data, allowed);
   if (disallowed.length > 0) {
-    return { error: `Your agency plan doesn't include: ${disallowed.join(", ")}.` };
+    return { error: tr.error("plan_limit", { skills: disallowed.join(", ") }) };
   }
 
   const { error } = await applyTenantEnabledSkills(id.data, parsedSkills.data);
-  if (error) return { error: GENERIC_AGENCY_ERROR };
+  if (error) return { error: tr.error("generic") };
 
   await logAgencyAudit({
     action: "agency.tenant_skills_updated",

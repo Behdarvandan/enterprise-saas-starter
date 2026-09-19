@@ -3,6 +3,10 @@ import { isPlatformHost, isValidHostname } from "@/lib/agency/cname";
 import { postgresUuid } from "@/lib/validation";
 
 /**
+ * Validation failures are reported as stable keys (`agency.validation.<key>`)
+ * rather than English text: the Server Actions translate them per request
+ * locale, and the client never sees raw zod messages.
+ *
  * Input schemas for the agency portal's Server Actions. Server-side only:
  * `cname.ts` pulls in the Edge lookup stack, which the browser bundle should
  * never carry (client forms validate with plain HTML attributes and rely on
@@ -20,34 +24,31 @@ function optional<T extends z.ZodTypeAny>(schema: T) {
   );
 }
 
-export const agencyIdSchema = postgresUuid("A valid agency id is required.");
-export const tenantIdSchema = postgresUuid("A valid tenant id is required.");
+export const agencyIdSchema = postgresUuid("agency_id_invalid");
+export const tenantIdSchema = postgresUuid("tenant_id_invalid");
 
 export const tenantNameSchema = z
   .string()
   .trim()
-  .min(1, "Enter a name for the tenant.")
-  .max(80, "The name can be at most 80 characters.");
+  .min(1, "tenant_name_required")
+  .max(80, "tenant_name_max");
 
 // Mirrors the create_agency_tenant() check: lowercase words joined by hyphens.
 export const tenantSlugSchema = z
   .string()
   .trim()
   .toLowerCase()
-  .min(3, "The slug needs at least 3 characters.")
-  .max(48, "The slug can be at most 48 characters.")
-  .regex(
-    /^[a-z0-9]+(-[a-z0-9]+)*$/,
-    "Use lowercase letters, numbers and single hyphens, e.g. acme-repairs.",
-  );
+  .min(3, "slug_min")
+  .max(48, "slug_max")
+  .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "slug_format");
 
 /** Whole, non-negative token count from a form field. */
 export const quotaTotalSchema = z
   .string()
   .trim()
-  .regex(/^\d+$/, "Enter a whole number of tokens (0 or more).")
+  .regex(/^\d+$/, "quota_digits")
   .transform(Number)
-  .pipe(z.number().max(MAX_QUOTA, "That amount is too large."));
+  .pipe(z.number().max(MAX_QUOTA, "quota_max"));
 
 export const skillListSchema = z.array(z.string().min(1).max(64)).max(32);
 
@@ -63,7 +64,7 @@ function toHostname(value: unknown): unknown {
     .replace(/\.$/, "");
 }
 
-const HTTPS_ONLY = "Must start with https://";
+const HTTPS_ONLY = "https_only";
 
 export const brandingFormSchema = z.object({
   title: optional(
@@ -71,7 +72,7 @@ export const brandingFormSchema = z.object({
       .string()
       .trim()
       .min(1)
-      .max(80, "The brand title can be at most 80 characters."),
+      .max(80, "brand_title_max"),
   ),
   // https only: the value is rendered as an <img src> on every page of the
   // agency's white-labelled domain.
@@ -79,14 +80,14 @@ export const brandingFormSchema = z.object({
     z
       .string()
       .trim()
-      .url("Enter a valid URL, e.g. https://cdn.youragency.com/logo.svg")
+      .url("logo_url_invalid")
       .refine((value) => value.startsWith("https://"), HTTPS_ONLY),
   ),
   primary_color: optional(
     z
       .string()
       .trim()
-      .regex(/^#[0-9a-f]{6}$/i, "Use a 6-digit hex color such as #7c3aed.")
+      .regex(/^#[0-9a-f]{6}$/i, "color_hex")
       .transform((value) => value.toLowerCase()),
   ),
   cname_domain: z.preprocess(
@@ -96,10 +97,38 @@ export const brandingFormSchema = z.object({
     },
     z
       .string()
-      .refine(isValidHostname, "Enter a valid domain such as ai.youragency.com.")
-      .refine((host) => !isPlatformHost(host), "That domain belongs to the platform.")
+      .refine(isValidHostname, "domain_invalid")
+      .refine((host) => !isPlatformHost(host), "domain_platform")
       .optional(),
   ),
 });
 
 export type BrandingFormInput = z.infer<typeof brandingFormSchema>;
+
+/** Every message key the schemas above can emit (`agency.validation.<key>`). */
+export const VALIDATION_KEYS = [
+  "agency_id_invalid",
+  "tenant_id_invalid",
+  "tenant_name_required",
+  "tenant_name_max",
+  "slug_min",
+  "slug_max",
+  "slug_format",
+  "quota_digits",
+  "quota_max",
+  "brand_title_max",
+  "logo_url_invalid",
+  "https_only",
+  "color_hex",
+  "domain_invalid",
+  "domain_platform",
+] as const;
+
+export type ValidationKey = (typeof VALIDATION_KEYS)[number];
+
+/** Narrows an issue message to a known key; anything else (e.g. a zod default) is unknown. */
+export function asValidationKey(message: string | undefined): ValidationKey | null {
+  return (VALIDATION_KEYS as readonly (string | undefined)[]).includes(message)
+    ? (message as ValidationKey)
+    : null;
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import {
   Bar,
   BarChart,
@@ -26,34 +27,39 @@ interface FreelanceRevenueChartProps {
  * links throughout the app) rather than a one-off color.
  */
 export default function FreelanceRevenueChart({ data }: FreelanceRevenueChartProps) {
+  const t = useTranslations("ui.charts");
+  const locale = useLocale();
+  const money = (value: number) =>
+    new Intl.NumberFormat(locale, { style: "currency", currency: "USD", maximumFractionDigits: 0, numberingSystem: "latn" }).format(value);
+
   return (
     <ResponsiveContainer width="100%" height={280}>
       <BarChart data={data} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
-        <CartesianGrid vertical={false} stroke="var(--color-subtle)" />
+        <CartesianGrid vertical={false} stroke="var(--color-border)" />
         <XAxis
           dataKey="month"
-          tick={{ fill: "var(--color-ink-muted)", fontSize: 12 }}
-          axisLine={{ stroke: "var(--color-subtle)" }}
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
+          axisLine={{ stroke: "var(--color-border)" }}
           tickLine={false}
         />
         <YAxis
-          tick={{ fill: "var(--color-ink-muted)", fontSize: 12 }}
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
           axisLine={false}
           tickLine={false}
           tickFormatter={(value: number) =>
-            value >= 1000 ? `$${(value / 1000).toFixed(1)}k` : `$${value}`
+            value >= 1000 ? `${money(value / 1000)}k` : money(value)
           }
         />
         <Tooltip
-          cursor={{ fill: "var(--color-surface-raised)" }}
+          cursor={{ fill: "var(--color-popover)" }}
           contentStyle={{
-            backgroundColor: "var(--color-surface-raised)",
-            border: "1px solid var(--color-subtle)",
+            backgroundColor: "var(--color-popover)",
+            border: "1px solid var(--color-border)",
             borderRadius: 8,
             fontSize: 12,
-            color: "var(--color-ink-primary)",
+            color: "var(--color-foreground)",
           }}
-          formatter={(value) => [`$${Number(value ?? 0).toLocaleString()}`, "Revenue"]}
+          formatter={(value) => [money(Number(value ?? 0)), t("revenue")]}
         />
         <Bar dataKey="amount" fill="var(--color-chart-1)" radius={[4, 4, 0, 0]} />
       </BarChart>

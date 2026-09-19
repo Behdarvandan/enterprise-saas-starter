@@ -1,31 +1,42 @@
-import { requireOperatorAdmin } from "@/lib/operator";
-import { formatPrice } from "@/lib/utils";
-import Badge from "@/components/ui/Badge";
-import EmptyState from "@/components/ui/EmptyState";
-import CountUp from "@/components/ui/CountUp";
 import { Receipt } from "lucide-react";
-import type { ClientInvoice, InvoiceStatus } from "@/types";
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/card";
+import EmptyState from "@/components/ui/EmptyState";
+import MetricCard from "@/components/ui/MetricCard";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { formatMoney } from "@/lib/format";
+import { requireOperatorAdmin } from "@/lib/operator";
+import type { ClientInvoice } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_LABEL: Record<InvoiceStatus, string> = {
-  paid: "Ödendi",
-  draft: "Bekliyor",
-  sent: "Bekliyor",
-  overdue: "Başarısız",
-  void: "Başarısız",
-};
+type PaymentState = "paid" | "pending" | "failed";
 
-const STATUS_TONE: Record<InvoiceStatus, "success" | "warn" | "error"> = {
-  paid: "success",
-  draft: "warn",
-  sent: "warn",
-  overdue: "error",
-  void: "error",
-};
+/** Groups the five invoice statuses into the three states the operator cares about. */
+function paymentState(status: string): PaymentState {
+  if (status === "paid") return "paid";
+  if (status === "draft" || status === "sent") return "pending";
+  return "failed";
+}
+
+const STATE_TONE: Record<PaymentState, BadgeTone> = { paid: "success", pending: "warn", failed: "error" };
 
 export default async function AdminPaymentsPage() {
   const { supabase } = await requireOperatorAdmin();
+  const [t, locale, format] = await Promise.all([
+    getTranslations("admin.payments"),
+    getLocale(),
+    getFormatter(),
+  ]);
 
   const { data: invoices } = await supabase
     .from("client_invoices")
@@ -43,97 +54,64 @@ export default async function AdminPaymentsPage() {
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const sumBy = (predicate: (invoice: ClientInvoice) => boolean) =>
+    rows.filter(predicate).reduce((sum, invoice) => sum + invoice.amount, 0);
 
-  const thisMonthTotal = rows
-    .filter((i) => i.status === "paid" && i.paid_at && new Date(i.paid_at) >= monthStart)
-    .reduce((sum, i) => sum + i.amount, 0);
-  const pendingTotal = rows
-    .filter((i) => i.status === "draft" || i.status === "sent")
-    .reduce((sum, i) => sum + i.amount, 0);
-  const failedTotal = rows
-    .filter((i) => i.status === "overdue" || i.status === "void")
-    .reduce((sum, i) => sum + i.amount, 0);
-
-  const summary = [
-    { label: "Bu Ay Toplam", value: thisMonthTotal },
-    { label: "Bekleyen Tutar", value: pendingTotal },
-    { label: "Başarısız", value: failedTotal },
-  ];
+  const thisMonthTotal = sumBy((i) => i.status === "paid" && Boolean(i.paid_at) && new Date(i.paid_at as string) >= monthStart);
+  const pendingTotal = sumBy((i) => paymentState(i.status) === "pending");
+  const failedTotal = sumBy((i) => paymentState(i.status) === "failed");
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="font-serif text-2xl font-semibold text-ink-primary">Ödemeler</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Tüm müşteri faturaları — freelance/hizmet gelir akışı tek yerde.
-      </p>
+    <PageContainer className="max-w-7xl">
+      <PageHeader title={t("title")} description={t("description")} />
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {summary.map((item, index) => (
-          <div
-            key={item.label}
-            className="animate-reveal-up rounded-interactive border border-subtle bg-surface p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
-            style={{ animationDelay: `${index * 60}ms` }}
-          >
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              {item.label}
-            </p>
-            <p className="mt-2 font-mono text-2xl font-semibold text-ink-primary">
-              <CountUp value={item.value} format={formatPrice} />
-            </p>
-          </div>
-        ))}
-      </div>
+      <section aria-label={t("title")} className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <MetricCard label={t("summary.thisMonth")} value={formatMoney(locale, thisMonthTotal)} />
+        <MetricCard label={t("summary.pending")} value={formatMoney(locale, pendingTotal)} />
+        <MetricCard label={t("summary.failed")} value={formatMoney(locale, failedTotal)} />
+      </section>
 
-      <div
-        className="animate-reveal-up mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface"
-        style={{ animationDelay: "180ms" }}
-      >
+      <Card className="overflow-hidden">
         {rows.length === 0 ? (
-          <EmptyState
-            icon={Receipt}
-            title="Henüz fatura yok"
-            description="Bir müşteri projesine fatura eklendiğinde burada listelenecek."
-          />
+          <EmptyState icon={Receipt} title={t("emptyTitle")} description={t("emptyDescription")} />
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-subtle bg-surface-raised text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              <tr>
-                <th className="px-4 py-3">Tarih</th>
-                <th className="px-4 py-3">Müşteri</th>
-                <th className="px-4 py-3">Fatura No</th>
-                <th className="px-4 py-3">Tutar</th>
-                <th className="px-4 py-3">Durum</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((invoice) => (
-                <tr
-                  key={invoice.id}
-                  className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
-                >
-                  <td className="px-4 py-3 font-mono text-xs text-ink-muted">
-                    {new Date(invoice.created_at).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-3 font-medium text-ink-primary">
-                    {orgNameById.get(invoice.organization_id) ?? "—"}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-ink-muted">
-                    {invoice.invoice_number}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-ink-primary">
-                    {formatPrice(invoice.amount)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge tone={STATUS_TONE[invoice.status as InvoiceStatus]}>
-                      {STATUS_LABEL[invoice.status as InvoiceStatus]}
-                    </Badge>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t("columns.date")}</TableHead>
+                  <TableHead>{t("columns.client")}</TableHead>
+                  <TableHead>{t("columns.number")}</TableHead>
+                  <TableHead>{t("columns.amount")}</TableHead>
+                  <TableHead>{t("columns.status")}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {rows.map((invoice) => {
+                  const state = paymentState(invoice.status);
+                  return (
+                    <TableRow key={invoice.id}>
+                      <TableCell className="text-xs text-slate-400">
+                        {format.dateTime(new Date(invoice.created_at), { dateStyle: "medium" })}
+                      </TableCell>
+                      <TableCell className="font-medium text-slate-100">{orgNameById.get(invoice.organization_id) ?? "—"}</TableCell>
+                      <TableCell dir="ltr" className="text-start font-mono text-xs text-slate-400">
+                        {invoice.invoice_number}
+                      </TableCell>
+                      <TableCell dir="ltr" className="text-start font-mono text-slate-100">
+                        {formatMoney(locale, invoice.amount)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge tone={STATE_TONE[state]}>{t(`status.${state}`)}</Badge>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
         )}
-      </div>
-    </div>
+      </Card>
+    </PageContainer>
   );
 }

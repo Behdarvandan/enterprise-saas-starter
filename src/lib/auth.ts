@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getUserMembership, type UserMembership } from "@/lib/team";
 import type { Database } from "@/types/database";
@@ -62,7 +63,7 @@ export async function requireUserResult(): Promise<AuthResult> {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { error: "You must be signed in." };
+  if (!user) return { error: (await getTranslations("errors"))("unauthorized") };
 
   return { supabase, user };
 }
@@ -76,7 +77,7 @@ export async function requireMembershipResult(): Promise<MembershipResult> {
   if ("error" in result) return result;
 
   const membership = await getUserMembership(result.user.id);
-  if (!membership) return { error: "You do not belong to an organization." };
+  if (!membership) return { error: (await getTranslations("errors"))("noMembership") };
 
   return { ...result, membership };
 }
@@ -96,7 +97,7 @@ export async function requireUserOrResponse(): Promise<AuthResponse> {
   if (!user) {
     return {
       response: NextResponse.json(
-        { error: "You must be signed in." },
+        { error: "You must be signed in.", code: "unauthorized" },
         { status: 401 },
       ),
     };
@@ -117,7 +118,7 @@ export async function requireMembershipOrResponse(): Promise<MembershipResponse>
   if (!membership) {
     return {
       response: NextResponse.json(
-        { error: "You do not belong to an organization." },
+        { error: "You do not belong to an organization.", code: "noMembership" },
         { status: 403 },
       ),
     };

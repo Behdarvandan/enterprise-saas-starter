@@ -5,7 +5,7 @@ import { requireAgencyAdminResult } from "@/lib/agency/admin";
 import { logAgencyAudit } from "@/lib/agency/audit";
 import { invalidateAgencyDomainCache } from "@/lib/agency/cname";
 import { brandingFormSchema } from "@/lib/agency/schemas";
-import { GENERIC_AGENCY_ERROR } from "@/lib/agency/rpc-errors";
+import { getAgencyTranslators } from "@/lib/agency/messages";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Json } from "@/types";
 
@@ -46,6 +46,7 @@ function asJsonObject(value: Json): Record<string, Json | undefined> {
 export async function updateAgencyBranding(
   formData: FormData,
 ): Promise<BrandingActionResult> {
+  const tr = await getAgencyTranslators();
   const auth = await requireAgencyAdminResult();
   if ("error" in auth) return auth;
   const { user, agency } = auth;
@@ -60,9 +61,9 @@ export async function updateAgencyBranding(
     const fieldErrors: BrandingActionResult["fieldErrors"] = {};
     for (const issue of parsed.error.issues) {
       const field = issue.path[0];
-      if (isBrandingField(field) && !fieldErrors[field]) fieldErrors[field] = issue.message;
+      if (isBrandingField(field) && !fieldErrors[field]) fieldErrors[field] = tr.validation(issue.message);
     }
-    return { error: "Please fix the highlighted fields.", fieldErrors };
+    return { error: tr.error("form_invalid"), fieldErrors };
   }
 
   const next = asJsonObject(agency.branding);
@@ -87,12 +88,12 @@ export async function updateAgencyBranding(
   if (error) {
     if (error.code === UNIQUE_VIOLATION) {
       return {
-        error: "Please fix the highlighted fields.",
-        fieldErrors: { cname_domain: "That domain is already connected to another agency." },
+        error: tr.error("form_invalid"),
+        fieldErrors: { cname_domain: tr.error("domain_taken") },
       };
     }
     console.error("updateAgencyBranding failed:", error);
-    return { error: GENERIC_AGENCY_ERROR };
+    return { error: tr.error("generic") };
   }
 
   // Drop both cached lookups so the middleware stops serving stale branding

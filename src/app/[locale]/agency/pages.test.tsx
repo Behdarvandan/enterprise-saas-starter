@@ -4,14 +4,20 @@
 // with a fake session/data and server-rendered to HTML. Unit tests cover the
 // logic; this catches what they can't — a page or component that throws while
 // rendering real-shaped data, or drops content the UI is supposed to show.
+import { NextIntlClientProvider } from "next-intl";
 import type { ReactElement } from "react";
 import { renderToString } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { englishMessages } from "@/test/intl";
 
 // React's SSR separates adjacent text nodes with `<!-- -->`; strip them so
 // assertions read like the text a user sees.
 function render(element: ReactElement): string {
-  return renderToString(element).replace(/<!-- -->/g, "");
+  return renderToString(
+    <NextIntlClientProvider locale="en" timeZone="UTC" messages={englishMessages}>
+      {element}
+    </NextIntlClientProvider>,
+  ).replace(/<!-- -->/g, "");
 }
 
 const AGENCY = {
@@ -30,11 +36,8 @@ const adminFromMock = vi.fn();
 
 vi.mock("@/lib/agency/admin", () => ({ requireAgencyAdmin: requireAgencyAdminMock }));
 vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: () => ({ from: adminFromMock }) }));
-vi.mock("@/lib/payment/handlers", () => ({
-  DEFAULT_ENABLED_SKILLS: ["rag_search"],
-  PLAN_ENABLED_SKILLS: { pro: ["rag_search", "calendar_booking"] },
-  applyTenantEnabledSkills: vi.fn(),
-}));
+vi.mock("@/lib/payment/handlers", () => ({ applyTenantEnabledSkills: vi.fn() }));
+vi.mock("next-intl/server", async () => (await import("@/test/intl")).nextIntlServerMock());
 vi.mock("@/i18n/navigation", async () => {
   const React = await import("react");
   return {
@@ -147,7 +150,7 @@ describe("agency pages (server-rendered)", () => {
       expect(html).toContain("No tokens allocated"); // unallocated tenant
       expect(html).toContain("500 left of 5,000"); // remaining / granted, formatted
       expect(html).toContain("90% used");
-      expect(html).toContain("calendar booking"); // enabled skill badge
+      expect(html).toContain("Calendar booking assistant"); // enabled skill badge
       expect(html).toContain("10,000"); // pool
       expect(html).toContain("Add tenant");
       expect(html).toContain('role="progressbar"');
@@ -201,7 +204,7 @@ describe("agency pages (server-rendered)", () => {
 
     it("asks for a domain first when none is saved", async () => {
       requireAgencyAdminMock.mockResolvedValue({
-        supabase: {},
+        supabase: { from: () => builder({ data: null }) },
         user: { id: "u" },
         agency: { ...AGENCY, cname_domain: null, cname_status: "pending", cname_verified_at: null, branding: {} },
       });
@@ -215,7 +218,7 @@ describe("agency pages (server-rendered)", () => {
 
     it("shows the failed state with the expected target", async () => {
       requireAgencyAdminMock.mockResolvedValue({
-        supabase: {},
+        supabase: { from: () => builder({ data: null }) },
         user: { id: "u" },
         agency: { ...AGENCY, cname_status: "failed", cname_verified_at: null },
       });
@@ -254,7 +257,7 @@ describe("agency pages (server-rendered)", () => {
       expect(html).toContain("Fix-It Repairs");
       expect(html).toContain("Bright Dental");
       expect(html).toContain("Add refund policy to the knowledge base.");
-      expect(html).toContain("3 signals");
+      expect(html).toContain("3 negative signals");
       expect(html).toContain("Need attention");
       expect(html).toContain('aria-current="true"'); // active window link
     });

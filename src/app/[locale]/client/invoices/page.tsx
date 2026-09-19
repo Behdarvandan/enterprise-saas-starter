@@ -1,13 +1,23 @@
 import { Download, FileText, Receipt } from "lucide-react";
-import { getTranslations } from "next-intl/server";
-import { requireMembership } from "@/lib/auth";
-import Badge from "@/components/ui/Badge";
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/card";
 import EmptyState from "@/components/ui/EmptyState";
-import type { ClientProject, InvoiceStatus } from "@/types";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { requireMembership } from "@/lib/auth";
+import type { ClientProject } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_TONE: Record<InvoiceStatus, "success" | "warn" | "error" | "neutral"> = {
+const STATUS_TONE: Record<KnownInvoiceStatus, BadgeTone> = {
   draft: "neutral",
   sent: "warn",
   paid: "success",
@@ -15,9 +25,23 @@ const STATUS_TONE: Record<InvoiceStatus, "success" | "warn" | "error" | "neutral
   void: "neutral",
 };
 
+const INVOICE_STATUSES = ["draft", "sent", "paid", "overdue", "void"] as const;
+type KnownInvoiceStatus = (typeof INVOICE_STATUSES)[number];
+
+function asInvoiceStatus(value: string): KnownInvoiceStatus | null {
+  return (INVOICE_STATUSES as readonly string[]).includes(value) ? (value as KnownInvoiceStatus) : null;
+}
+
+const linkClass = "inline-flex items-center gap-1 text-sm font-medium text-violet-300 hover:text-violet-200";
+
 export default async function ClientInvoicesPage() {
   const { supabase, membership } = await requireMembership();
-  const t = await getTranslations("client.nav");
+  const [t, tNav, locale, format] = await Promise.all([
+    getTranslations("client.invoices"),
+    getTranslations("client.nav"),
+    getLocale(),
+    getFormatter(),
+  ]);
 
   const { data: invoices } = await supabase
     .from("client_invoices")
@@ -26,122 +50,91 @@ export default async function ClientInvoicesPage() {
     .order("created_at", { ascending: false });
 
   const projectIds = Array.from(
-    new Set(
-      (invoices ?? [])
-        .map((invoice) => invoice.project_id)
-        .filter((id): id is string => Boolean(id)),
-    ),
+    new Set((invoices ?? []).map((invoice) => invoice.project_id).filter((id): id is string => Boolean(id))),
   );
 
   const { data: projects } = projectIds.length
-    ? await supabase
-        .from("client_projects")
-        .select("id, repo_url, live_url")
-        .in("id", projectIds)
+    ? await supabase.from("client_projects").select("id, repo_url, live_url").in("id", projectIds)
     : { data: [] as Pick<ClientProject, "id" | "repo_url" | "live_url">[] };
 
   const projectById = new Map((projects ?? []).map((project) => [project.id, project]));
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="font-serif text-2xl font-semibold text-ink-primary">{t("payments")}</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Download your invoices and access delivery links.
-      </p>
+    <PageContainer className="max-w-5xl">
+      <PageHeader title={tNav("payments")} description={t("description")} />
 
       {!invoices || invoices.length === 0 ? (
-        <div className="mt-8">
-          <EmptyState
-            icon={Receipt}
-            title="No invoices yet"
-            description="Invoices will appear here once one is issued."
-          />
-        </div>
+        <EmptyState icon={Receipt} title={t("emptyTitle")} description={t("emptyDescription")} />
       ) : (
-        <div className="animate-reveal-up mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
-          <table className="w-full text-sm">
-            <thead className="border-b border-subtle bg-surface-raised text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              <tr>
-                <th className="px-4 py-3">Invoice</th>
-                <th className="px-4 py-3">Amount</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Due date</th>
-                <th className="px-4 py-3 text-right">Links</th>
-              </tr>
-            </thead>
-            <tbody>
-              {invoices.map((invoice) => {
-                const project = invoice.project_id
-                  ? projectById.get(invoice.project_id)
-                  : undefined;
-
-                return (
-                  <tr
-                    key={invoice.id}
-                    className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
-                  >
-                    <td className="px-4 py-3 font-mono text-ink-primary">
-                      {invoice.invoice_number}
-                    </td>
-                    <td className="px-4 py-3 font-mono text-ink-primary">
-                      {(invoice.amount / 100).toLocaleString(undefined, {
-                        style: "currency",
-                        currency: invoice.currency.toUpperCase(),
-                      })}
-                    </td>
-                    <td className="px-4 py-3">
-                      <Badge tone={STATUS_TONE[invoice.status as InvoiceStatus]}>
-                        {invoice.status}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-3 text-ink-muted">{invoice.due_date ?? "—"}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-wrap justify-end gap-3">
-                        <a
-                          href={`/api/client/invoices/${invoice.id}/pdf`}
-                          className="inline-flex items-center gap-1 text-sm font-semibold text-ink-primary hover:text-primary"
-                        >
-                          <Download size={14} /> PDF
-                        </a>
-                        {invoice.contract_url && (
-                          <a
-                            href={invoice.contract_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-sm font-semibold text-ink-primary hover:text-primary"
-                          >
-                            <FileText size={14} /> Contract
+        <Card className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <caption className="sr-only">{t("caption")}</caption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t("columns.invoice")}</TableHead>
+                  <TableHead>{t("columns.amount")}</TableHead>
+                  <TableHead>{t("columns.status")}</TableHead>
+                  <TableHead>{t("columns.due")}</TableHead>
+                  <TableHead className="text-end">{t("columns.links")}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {invoices.map((invoice) => {
+                  const project = invoice.project_id ? projectById.get(invoice.project_id) : undefined;
+                  const status = asInvoiceStatus(invoice.status);
+                  return (
+                    <TableRow key={invoice.id}>
+                      <TableCell dir="ltr" className="text-start font-mono text-slate-100">
+                        {invoice.invoice_number}
+                      </TableCell>
+                      <TableCell dir="ltr" className="text-start font-mono text-slate-100">
+                        {new Intl.NumberFormat(locale, {
+                          style: "currency",
+                          currency: invoice.currency.toUpperCase(),
+                          numberingSystem: "latn",
+                        }).format(invoice.amount / 100)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge tone={status ? STATUS_TONE[status] : "neutral"}>
+                          {status ? t(`status.${status}`) : invoice.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-slate-400">
+                        {invoice.due_date
+                          ? format.dateTime(new Date(`${invoice.due_date}T00:00:00Z`), { dateStyle: "medium" })
+                          : "—"}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-wrap justify-end gap-3">
+                          <a href={`/api/client/invoices/${invoice.id}/pdf`} className={linkClass}>
+                            <Download aria-hidden size={14} /> {t("pdf")}
                           </a>
-                        )}
-                        {project?.repo_url && (
-                          <a
-                            href={project.repo_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm font-semibold text-ink-primary hover:text-primary"
-                          >
-                            Repo
-                          </a>
-                        )}
-                        {project?.live_url && (
-                          <a
-                            href={project.live_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm font-semibold text-ink-primary hover:text-primary"
-                          >
-                            Live
-                          </a>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                          {invoice.contract_url ? (
+                            <a href={invoice.contract_url} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                              <FileText aria-hidden size={14} /> {t("contract")}
+                            </a>
+                          ) : null}
+                          {project?.repo_url ? (
+                            <a href={project.repo_url} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                              {t("repo")}
+                            </a>
+                          ) : null}
+                          {project?.live_url ? (
+                            <a href={project.live_url} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                              {t("live")}
+                            </a>
+                          ) : null}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

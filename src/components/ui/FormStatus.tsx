@@ -8,7 +8,10 @@ interface FormStatusProps {
 export default function FormStatus({ error, success, successMessage }: FormStatusProps) {
   if (error) {
     return (
-      <p className="rounded-lg bg-status-error/10 px-3 py-2 text-xs font-medium text-status-error">
+      <p
+        role="alert"
+        className="rounded-lg border border-red-400/20 bg-red-400/10 px-3 py-2 text-xs font-medium text-status-error"
+      >
         {error}
       </p>
     );
@@ -16,7 +19,10 @@ export default function FormStatus({ error, success, successMessage }: FormStatu
 
   if (success) {
     return (
-      <p className="rounded-lg bg-status-success/10 px-3 py-2 text-xs font-medium text-status-success">
+      <p
+        role="status"
+        className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs font-medium text-emerald-400"
+      >
         {successMessage}
       </p>
     );

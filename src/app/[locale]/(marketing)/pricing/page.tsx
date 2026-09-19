@@ -56,7 +56,7 @@ export default async function PricingPage() {
                 {plan.tier === "enterprise" || plan.checkout.kind === "contact" ? (
                   <a
                     href={plan.checkout.kind === "contact" ? plan.checkout.href : "/services#quote"}
-                    className="block rounded-interactive border border-subtle px-4 py-2 text-center text-sm font-semibold text-ink-primary transition-colors hover:border-gold/50"
+                    className="block rounded-interactive border border-subtle px-4 py-2 text-center text-sm font-semibold text-ink-primary transition-colors hover:border-primary/50"
                   >
                     Contact sales
                   </a>

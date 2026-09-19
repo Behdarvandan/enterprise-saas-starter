@@ -7,6 +7,12 @@
     "notFound": {
       "title": "Seite nicht gefunden",
       "body": "Die gesuchte Seite existiert nicht oder wurde verschoben."
+    },
+    "tiers": {
+      "free": "Kostenlos",
+      "starter": "Starter",
+      "pro": "Pro",
+      "enterprise": "Enterprise"
     }
   },
   "marketing": {
@@ -325,6 +331,1136 @@
       "backend": "Entwicklung",
       "test": "Test",
       "live": "Geliefert"
+    },
+    "topbar": {
+      "navLabel": "Kundenportal-Navigation"
+    },
+    "projects": {
+      "description": "Verfolgen Sie den Stand Ihres Projekts von Anfang bis Ende.",
+      "emptyTitle": "Noch keine Projekte",
+      "emptyDescription": "Ihr Projekt erscheint hier, sobald es gestartet wurde.",
+      "viewRepo": "Repository ansehen",
+      "viewLive": "Live-Version ansehen",
+      "stage": "Phase {index} von {total}: {name}"
+    },
+    "invoices": {
+      "description": "Laden Sie Ihre Rechnungen herunter und greifen Sie auf Lieferlinks zu.",
+      "emptyTitle": "Noch keine Rechnungen",
+      "emptyDescription": "Rechnungen erscheinen hier, sobald eine ausgestellt wurde.",
+      "caption": "Rechnungen",
+      "columns": {
+        "invoice": "Rechnung",
+        "amount": "Betrag",
+        "status": "Status",
+        "due": "Fälligkeitsdatum",
+        "links": "Links"
+      },
+      "pdf": "PDF",
+      "contract": "Vertrag",
+      "repo": "Repo",
+      "live": "Live",
+      "status": {
+        "draft": "Entwurf",
+        "sent": "Gesendet",
+        "paid": "Bezahlt",
+        "overdue": "Überfällig",
+        "void": "Storniert"
+      }
+    },
+    "files": {
+      "description": "Lieferlinks für Ihr Projekt – Repository-Zugriff und Live-Umgebungen.",
+      "emptyTitle": "Noch keine Lieferungen",
+      "emptyDescription": "Repository- und Live-Links erscheinen hier, sobald Ihr Projekt sie hat.",
+      "repository": "{name} – Repository",
+      "live": "{name} – Live"
+    },
+    "settings": {
+      "description": "Kontaktdaten, Spracheinstellung und Lizenzverwaltung.",
+      "tabs": {
+        "contact": "Kontakt",
+        "language": "Sprache",
+        "notifications": "Benachrichtigungen",
+        "license": "Lizenz"
+      },
+      "language": {
+        "title": "Oberflächensprache",
+        "description": "Ändern Sie die Sprache, in der das Portal angezeigt wird."
+      },
+      "notifications": {
+        "title": "Demnächst",
+        "description": "Benachrichtigungseinstellungen sind noch nicht konfigurierbar."
+      },
+      "license": {
+        "emptyTitle": "Keine SaaS-Lizenz",
+        "emptyDescription": "Diese Organisation hat noch keine aktive SaaS-Lizenz.",
+        "tier": "Stufe",
+        "seats": "Plätze",
+        "key": "Lizenzschlüssel",
+        "rotate": "API-Schlüssel neu erzeugen",
+        "rotating": "Wird erneuert …",
+        "copyNow": "Kopieren Sie diesen Schlüssel jetzt – er wird nicht erneut angezeigt.",
+        "error": "Der Schlüssel konnte nicht neu erzeugt werden. Bitte versuchen Sie es erneut.",
+        "status": {
+          "active": "Aktiv",
+          "suspended": "Gesperrt",
+          "cancelled": "Gekündigt"
+        }
+      }
+    }
+  },
+  "ui": {
+    "close": "Schließen",
+    "dismiss": "Ausblenden",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Gespeichert",
+    "delete": "Löschen",
+    "retry": "Erneut versuchen",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "loading": "Wird geladen…",
+    "back": "Zurück",
+    "viewAll": "Alle anzeigen",
+    "errorTitle": "Etwas ist schiefgelaufen",
+    "errorDescription": "Beim Laden dieser Seite ist ein unerwarteter Fehler aufgetreten. Versuchen Sie es erneut oder kommen Sie später wieder, falls das Problem bestehen bleibt.",
+    "tryAgain": "Erneut versuchen",
+    "signOut": "Abmelden",
+    "signingOut": "Abmeldung läuft…",
+    "charts": {
+      "quotaUsed": "Verbrauchtes Kontingent",
+      "quotaValue": "{percent} % ({used} / {limit} Tokens)",
+      "revenue": "Umsatz",
+      "mrr": "MRR",
+      "mrrValue": "{amount}/Monat · {count, plural, one {# Org.} other {# Orgs.}}",
+      "perMonth": "{amount}/Monat"
+    }
+  },
+  "errors": {
+    "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "unauthorized": "Bitte melden Sie sich an, um fortzufahren.",
+    "forbidden": "Dafür fehlt Ihnen die Berechtigung.",
+    "notFound": "Der gesuchte Eintrag wurde nicht gefunden.",
+    "rateLimited": "Zu viele Anfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+    "validation": "Einige der eingegebenen Werte sind ungültig.",
+    "network": "Netzwerkfehler. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    "noMembership": "Sie gehören keiner Organisation an."
+  },
+  "shell": {
+    "skipToContent": "Zum Inhalt springen",
+    "navigation": "Navigation",
+    "navigationDescription": "Hauptnavigationsmenü",
+    "openMenu": "Navigationsmenü öffnen",
+    "changeLanguage": "Sprache ändern",
+    "userMenu": "Benutzermenü",
+    "signedInAs": "Angemeldet als",
+    "backToDashboard": "Zurück zum Dashboard",
+    "adminBadge": "Operator-Administration",
+    "groups": {
+      "agent": "KI-Agent",
+      "business": "Geschäft",
+      "agency": "Agentur",
+      "operations": "Betrieb"
+    },
+    "nav": {
+      "dashboardLabel": "Dashboard-Navigation",
+      "agencyLabel": "Agenturportal-Navigation",
+      "adminLabel": "Admin-Navigation",
+      "overview": "Übersicht",
+      "knowledgeBase": "Wissensdatenbank",
+      "testAgent": "Agent testen",
+      "skills": "Fähigkeiten",
+      "crewInsights": "Dev-Crew-Einblicke",
+      "bookings": "Buchungen",
+      "team": "Team",
+      "billing": "Abrechnung",
+      "settings": "Einstellungen",
+      "agencyPortal": "Agenturportal",
+      "adminDashboard": "Dashboard",
+      "adminLeads": "Leads / CRM",
+      "adminClients": "Kunden",
+      "adminAppointments": "Termine",
+      "adminPayments": "Zahlungen",
+      "adminSettings": "Einstellungen",
+      "adminAnalytics": "Analysen",
+      "adminTasks": "Aufgaben",
+      "agencyTenants": "Mandanten",
+      "agencyBranding": "Branding & Domain",
+      "agencyAnalytics": "Analysen"
+    },
+    "organization": {
+      "label": "Organisationen",
+      "active": "Aktive Organisation",
+      "switch": "Organisation wechseln",
+      "untitled": "Unbenannte Organisation",
+      "switchFailed": "Organisation konnte nicht gewechselt werden"
+    },
+    "roles": {
+      "owner": "Inhaber",
+      "admin": "Administrator",
+      "member": "Mitglied"
+    },
+    "agent": {
+      "live": "Agent aktiv",
+      "quotaLow": "Kontingent wird knapp",
+      "quotaExhausted": "Kontingent aufgebraucht",
+      "inactive": "Agent pausiert",
+      "hint": {
+        "live": "Ihr Agent beantwortet Besucheranfragen. {percent} % des Token-Kontingents verbraucht.",
+        "quotaLow": "{percent} % des Token-Kontingents sind verbraucht – Tarif upgraden oder Zurücksetzung abwarten.",
+        "quotaExhausted": "Das Token-Kontingent ist aufgebraucht; der Agent antwortet erst nach der Zurücksetzung.",
+        "inactive": "Das Abonnement ist nicht aktiv, daher bedient der Agent keine Besucher."
+      }
+    },
+    "search": {
+      "placeholder": "Wissensdatenbank fragen…",
+      "label": "Wissensdatenbank durchsuchen"
+    },
+    "notifications": {
+      "label": "Benachrichtigungen",
+      "labelUnread": "Benachrichtigungen (neu)",
+      "title": "Neueste Dev-Crew-Empfehlungen",
+      "empty": "Noch keine Empfehlungen.",
+      "viewAll": "Alle Einblicke anzeigen"
+    }
+  },
+  "chatWidget": {
+    "defaultTitle": "KI-Assistent",
+    "online": "Online · KI-Wissensdatenbank",
+    "open": "Chat öffnen",
+    "close": "Chat schließen",
+    "transcript": "Unterhaltung",
+    "greeting": "Hallo! Fragen Sie mich alles zu unseren Produkten und Leistungen.",
+    "placeholder": "Nachricht eingeben …",
+    "send": "Nachricht senden",
+    "thinking": "Denkt nach …",
+    "errorGeneric": "Entschuldigung, etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "errorEmpty": "Ich konnte keine Antwort erzeugen.",
+    "simulatorTitle": "Schnelltest",
+    "simulatorHint": "Chatten Sie wie ein Besucher – die Antworten stammen aus Ihrer Wissensdatenbank.",
+    "newConversation": "Neue Unterhaltung",
+    "suggestion1": "Wie sind Ihre Öffnungszeiten?",
+    "suggestion2": "Wie buche ich einen Termin?",
+    "suggestion3": "Wie lautet Ihre Rückerstattungsrichtlinie?"
+  },
+  "status": {
+    "appointment": {
+      "pending": "Ausstehend",
+      "confirmed": "Bestätigt",
+      "cancelled": "Storniert",
+      "completed": "Abgeschlossen"
+    },
+    "subscription": {
+      "active": "Aktiv",
+      "trialing": "Testphase",
+      "past_due": "Überfällig",
+      "canceled": "Gekündigt",
+      "inactive": "Inaktiv"
+    }
+  },
+  "dashboard": {
+    "overview": {
+      "title": "Übersicht",
+      "welcome": "Willkommen zurück, {email}.",
+      "welcomeAnonymous": "Willkommen zurück.",
+      "plan": "{plan}-Tarif",
+      "manageBilling": "Abrechnung verwalten",
+      "metrics": {
+        "liveChats": {
+          "label": "Live-Chats",
+          "hint": "Aktiv in den letzten {minutes} Minuten"
+        },
+        "ragSuccess": {
+          "label": "RAG-Antworterfolg",
+          "hint": "{count, plural, one {# Antwort} other {# Antworten}} in den letzten {days} Tagen",
+          "empty": "Noch keine Antworten",
+          "tooltip": "Anteil der Chat-Antworten, die auf Ihrer Wissensdatenbank beruhen – ohne Fallback bei geringer Sicherheit und ohne durch das Token-Kontingent blockierte Antworten."
+        },
+        "quota": {
+          "label": "Monatliches Token-Kontingent",
+          "hint": "von {limit} Tokens · Zurücksetzung am {date}",
+          "hintNoReset": "von {limit} Tokens",
+          "usage": "Verbrauchtes Token-Kontingent"
+        },
+        "bookings": {
+          "label": "Buchungen diese Woche",
+          "hint": "In den letzten 7 Tagen erstellt"
+        }
+      },
+      "checklist": {
+        "title": "Richten Sie Ihre Organisation fertig ein",
+        "remaining": "{count, plural, one {# Schritt} other {# Schritte}} bis zum vollständigen Start.",
+        "dismiss": "Einrichtungsliste ausblenden",
+        "org": "Organisation erstellen",
+        "team": "Teammitglied einladen",
+        "service": "Buchbaren Service hinzufügen",
+        "kb": "Dokument zur Wissensdatenbank hinzufügen"
+      },
+      "recent": {
+        "title": "Letzte Termine",
+        "viewAll": "Alle anzeigen",
+        "customer": "Kunde",
+        "service": "Leistung",
+        "date": "Datum",
+        "status": "Status",
+        "fallbackService": "Leistung",
+        "emptyTitle": "Noch keine Buchungen",
+        "emptyDescription": "Buchungen erscheinen hier, sobald Kunden Termine vereinbaren – oder testen Sie den Ablauf selbst.",
+        "simulate": "Buchungsseite testen",
+        "testAgent": "Agent testen"
+      },
+      "crewWidget": {
+        "title": "Neueste Dev-Crew-Warnung",
+        "emptyTitle": "Alles in Ordnung",
+        "emptyDescription": "Die Dev Crew hat an Ihrem Agent noch nichts markiert.",
+        "viewAll": "Einblicke-Feed öffnen",
+        "signals": "{count, plural, one {# negatives Signal} other {# negative Signale}}"
+      }
+    },
+    "crewInsights": {
+      "severity": {
+        "critical": "Kritisch",
+        "warning": "Warnung",
+        "info": "Info"
+      },
+      "title": "Dev-Crew-Einblicke",
+      "description": "Live-Telemetrie und autonome Empfehlungen der Dev Crew, die die Unterhaltungen Ihres Agents überwacht.",
+      "connection": {
+        "live": "Live",
+        "paused": "Pausiert, solange dieser Tab verborgen ist",
+        "reconnecting": "Verbindung wird wiederhergestellt …"
+      },
+      "updated": "aktualisiert {time}",
+      "refresh": "Aktualisieren",
+      "stats": {
+        "label": "Feed-Zusammenfassung",
+        "total": "Verschiedene Empfehlungen",
+        "totalHint": "Wiederholungen werden zusammengeführt",
+        "critical": "Kritisch",
+        "warning": "Warnungen"
+      },
+      "filters": {
+        "all": "Alle",
+        "critical": "Kritisch",
+        "warning": "Warnung",
+        "info": "Info"
+      },
+      "derivedNote": "Der Schweregrad wird aus der Anzahl negativer Signale geschätzt – die Dev Crew bewertet ihn nicht selbst.",
+      "emptyTitle": "Noch keine Empfehlungen",
+      "emptyDescription": "Sobald die Dev Crew ein Problem in den Unterhaltungen Ihres Agents erkennt, erscheint die Empfehlung hier in Echtzeit.",
+      "emptyFilteredTitle": "Nichts mit diesem Schweregrad",
+      "emptyFilteredDescription": "Versuchen Sie einen anderen Filter.",
+      "loadMore": "Ältere laden",
+      "loadFailed": "Ältere Empfehlungen konnten nicht geladen werden.",
+      "card": {
+        "signals": "{count, plural, one {# negatives Signal} other {# negative Signale}}",
+        "repeated": "{count}× wiederholt",
+        "new": "Neu",
+        "actions": "Häufigste Aktionen",
+        "resources": "Am stärksten betroffene Ressourcen",
+        "analyzed": "Basiert auf {count, plural, one {# analysiertem Ereignis} other {# analysierten Ereignissen}}",
+        "noText": "(kein Empfehlungstext)"
+      }
+    },
+    "skills": {
+      "title": "Fähigkeiten",
+      "description": "Legen Sie fest, welche Fähigkeiten Ihr KI-Agent in Unterhaltungen nutzen darf.",
+      "currentPlan": "Ihr Tarif: {plan}",
+      "readOnly": "Nur Inhaber und Administratoren können Fähigkeiten ändern. Die aktuelle Konfiguration sehen Sie unten.",
+      "matrixLabel": "Fähigkeitsmatrix",
+      "tiers": {
+        "starter": "Starter",
+        "pro": "Pro",
+        "enterprise": "Enterprise"
+      },
+      "catalog": {
+        "rag_search": {
+          "title": "Wissensdatenbank-Suche (RAG)",
+          "description": "Der Agent durchsucht Ihre hochgeladenen Dokumente, um Antworten zu fundieren."
+        },
+        "calendar_booking": {
+          "title": "Kalender-Buchungsassistent",
+          "description": "Der Agent prüft die Verfügbarkeit und bucht Termine für Ihre Leistungen."
+        }
+      },
+      "toggle": "{skill} aktivieren",
+      "requires": "Erfordert {tier}",
+      "upgrade": "Auf {tier} upgraden",
+      "locked": "Gesperrt",
+      "configure": "Konfigurieren",
+      "updated": "Fähigkeiten aktualisiert",
+      "updateFailed": "Fähigkeiten konnten nicht aktualisiert werden",
+      "config": {
+        "title": "{skill} konfigurieren",
+        "description": "Passen Sie das Verhalten dieser Fähigkeit an. Änderungen gelten für neue Unterhaltungen.",
+        "reset": "Auf Standard zurücksetzen",
+        "save": "Einstellungen speichern",
+        "saved": "Einstellungen gespeichert",
+        "saveFailed": "Einstellungen konnten nicht gespeichert werden",
+        "range": "Zulässiger Bereich: {min}–{max}. Standard: {default}.",
+        "invalid": "Geben Sie einen Wert zwischen {min} und {max} ein.",
+        "fields": {
+          "top_k": {
+            "label": "Abgerufene Passagen",
+            "description": "Wie viele Dokumentpassagen der Agent vor der Antwort liest. Mehr Kontext kann helfen, kostet aber mehr Tokens."
+          },
+          "similarity_threshold": {
+            "label": "Übereinstimmungsstrenge",
+            "description": "Mindestähnlichkeit, ab der eine Passage als relevant gilt. Höher ist strenger – weniger, präzisere Quellen."
+          }
+        }
+      },
+      "enterprise": {
+        "title": "Individuelle Fähigkeiten & eigenes LLM",
+        "description": "Sie brauchen eine Fähigkeit für Ihren Workflow oder möchten mit eigenen Modell-Schlüsseln arbeiten? Enterprise umfasst beides.",
+        "cta": "Vertrieb kontaktieren"
+      },
+      "errors": {
+        "forbidden": "Nur Inhaber und Administratoren können Fähigkeiten verwalten.",
+        "invalid": "Die Fähigkeitenliste ist ungültig.",
+        "planLimit": "Ihr aktueller Tarif enthält nicht: {skills}.",
+        "saveFailed": "Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen.",
+        "unknownSkill": "Unbekannte Fähigkeit.",
+        "notConfigurable": "Diese Fähigkeit hat keine Einstellungen.",
+        "invalidConfig": "Einige Einstellungen liegen außerhalb des zulässigen Bereichs."
+      }
+    },
+    "chatbot": {
+      "title": "Agent testen",
+      "description": "Chatten Sie mit Ihrem Agent genau wie ein Besucher und kopieren Sie das Einbettungs-Snippet.",
+      "embed": {
+        "title": "Widget einbetten",
+        "description": "Fügen Sie das Widget in eine beliebige React-Seite ein. Es antwortet aus der Wissensdatenbank dieser Organisation."
+      },
+      "how": {
+        "title": "So funktioniert es",
+        "step1": "Fügen Sie Dokumente zur Wissensdatenbank hinzu.",
+        "step2": "Ein Besucher sendet eine Nachricht über das Widget.",
+        "step3": "Die relevantesten Passagen werden per Ähnlichkeit abgerufen.",
+        "step4": "Der Agent streamt in Echtzeit eine fundierte Antwort."
+      }
+    },
+    "knowledgeBase": {
+      "title": "Wissensdatenbank",
+      "description": "Laden Sie die Dokumente hoch, aus denen Ihr Agent antwortet. Dateien werden in Chunks zerlegt und für die Suche eingebettet.",
+      "tabs": {
+        "files": "Dateien hochladen",
+        "text": "Text einfügen"
+      },
+      "dropzone": {
+        "label": "Dateien zur Wissensdatenbank hochladen",
+        "title": "Dateien hierher ziehen oder zum Durchsuchen klicken",
+        "dragActive": "Zum Hochladen loslassen",
+        "hint": "PDF, TXT, MD, CSV, JSON oder HTML · bis zu {size} MB pro Datei"
+      },
+      "queue": {
+        "title": "Uploads",
+        "queued": "Wartet …",
+        "uploading": "Wird hochgeladen {percent} %",
+        "processing": "Wird zerlegt und eingebettet …",
+        "ready": "Bereit – der Agent kann es jetzt nutzen",
+        "failed": "Fehlgeschlagen",
+        "retry": "Upload wiederholen",
+        "dismiss": "Schließen"
+      },
+      "text": {
+        "titleLabel": "Titel",
+        "titlePlaceholder": "z. B. Rückerstattungsrichtlinie",
+        "contentLabel": "Inhalt",
+        "contentPlaceholder": "Fügen Sie den Text ein, den Ihr Agent kennen soll …",
+        "tooLong": "Dieser Text ist zu lang. Teilen Sie ihn in mehrere Dokumente auf.",
+        "submit": "Zur Wissensdatenbank hinzufügen",
+        "preview": {
+          "title": "Chunk-Vorschau",
+          "summary": "{count, plural, one {# Chunk} other {# Chunks}} · ~{tokens} Tokens",
+          "empty": "Beginnen Sie zu tippen, um zu sehen, wie Ihr Text zerlegt wird.",
+          "chunk": "Chunk {index}",
+          "tokens": "{count} Tokens",
+          "more": "+ {count} weitere Chunks"
+        }
+      },
+      "list": {
+        "title": "Dokumente",
+        "count": "{count} von {limit} Dokumenten in Ihrem Tarif",
+        "countUnlimited": "{count, plural, one {# Dokument} other {# Dokumente}}",
+        "emptyTitle": "Noch keine Dokumente",
+        "emptyDescription": "Laden Sie oben eine Datei hoch oder fügen Sie Text ein – Ihr Agent antwortet sofort daraus.",
+        "loadFailedTitle": "Dokumente konnten nicht geladen werden",
+        "loadFailedDescription": "Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "reload": "Neu laden",
+        "columns": {
+          "name": "Name",
+          "status": "Status",
+          "chunks": "Chunks",
+          "size": "Größe",
+          "added": "Hinzugefügt",
+          "actions": "Aktionen"
+        },
+        "status": {
+          "processing": "Wird verarbeitet",
+          "ready": "Bereit",
+          "failed": "Fehlgeschlagen"
+        },
+        "bulkActions": "Sammelaktionen",
+        "selectAll": "Alle Dokumente auswählen",
+        "select": "{title} auswählen",
+        "selected": "{count} ausgewählt",
+        "clearSelection": "Aufheben",
+        "deleteSelected": "Auswahl löschen",
+        "deleteOne": "{title} löschen",
+        "viewChunks": "Chunks von {title} anzeigen",
+        "confirmTitle": "{count, plural, one {# Dokument} other {# Dokumente}} löschen?",
+        "confirmDescription": "Die Dokumente und alle ihre Chunks werden dauerhaft entfernt. Ihr Agent antwortet nicht mehr daraus.",
+        "confirmDelete": "Löschen",
+        "cancel": "Abbrechen",
+        "deleted": "{count, plural, one {# Dokument} other {# Dokumente}} gelöscht",
+        "deleteFailed": "Dokumente konnten nicht gelöscht werden"
+      },
+      "chunks": {
+        "title": "Chunks – {title}",
+        "description": "{count, plural, one {# Chunk} other {# Chunks}} gespeichert. Das kann der Agent abrufen.",
+        "chunk": "Chunk {index}",
+        "tokens": "{count} Tokens",
+        "empty": "Dieses Dokument hat keine gespeicherten Chunks.",
+        "loadFailed": "Chunks konnten nicht geladen werden.",
+        "loadMore": "Mehr laden"
+      },
+      "simulator": {
+        "title": "Retrieval-Test",
+        "description": "Stellen Sie eine Frage und sehen Sie, welche Passagen der Agent liest – nach Ähnlichkeit sortiert.",
+        "placeholder": "z. B. Wie lautet Ihre Rückerstattungsrichtlinie?",
+        "run": "Suchen",
+        "summary": "{count, plural, one {# Passage} other {# Passagen}} mit mindestens {threshold} Ähnlichkeit (Top {topK})",
+        "none": "Keine Passage erreicht {threshold} Ähnlichkeit. Formulieren Sie die Frage um, ergänzen Sie Inhalte oder senken Sie die Übereinstimmungsstrenge unter Fähigkeiten.",
+        "similarity": "Ähnlichkeit",
+        "untitled": "Unbenanntes Dokument"
+      },
+      "errors": {
+        "unsupported_type": "Dieser Dateityp wird nicht unterstützt.",
+        "too_large": "Diese Datei ist zu groß.",
+        "empty": "Diese Datei ist leer.",
+        "extract_failed": "Diese Datei konnte nicht gelesen werden. Ist es ein gültiges, ungeschütztes Dokument?",
+        "empty_document": "In dieser Datei wurde kein lesbarer Text gefunden.",
+        "content_required": "Fügen Sie zuerst Inhalt hinzu.",
+        "invalid_body": "Die Anfrage war ungültig.",
+        "not_found": "Dokument nicht gefunden.",
+        "rate_limited": "Zu viele Anfragen. Bitte warten Sie einen Moment.",
+        "ingest_failed": "Die Verarbeitung ist fehlgeschlagen. Versuchen Sie es gleich erneut.",
+        "server_error": "Auf unserer Seite ist etwas schiefgelaufen.",
+        "network": "Netzwerkfehler. Prüfen Sie Ihre Verbindung.",
+        "unauthorized": "Bitte melden Sie sich erneut an.",
+        "noMembership": "Sie gehören keiner Organisation an."
+      }
+    },
+    "team": {
+      "title": "Team",
+      "yourOrganization": "Ihre Organisation",
+      "members": "Mitglieder ({count})",
+      "unknownMember": "Unbekannt",
+      "you": "(Sie)",
+      "remove": "Entfernen",
+      "removeAria": "{name} entfernen",
+      "roleAria": "Rolle von {name}",
+      "invite": {
+        "title": "Mitglied einladen",
+        "onlyAdmins": "Nur Inhaber und Administratoren können neue Mitglieder einladen.",
+        "emailLabel": "E-Mail-Adresse",
+        "emailPlaceholder": "kollege@beispiel.de",
+        "roleLabel": "Rolle",
+        "send": "Einladung senden",
+        "sending": "Wird gesendet …",
+        "sent": "Einladung gesendet."
+      },
+      "pending": {
+        "title": "Ausstehende Einladungen ({count})",
+        "emptyTitle": "Keine ausstehenden Einladungen",
+        "emptyDescription": "Gesendete Einladungen erscheinen hier, bis sie angenommen oder widerrufen werden.",
+        "expires": "{role} · läuft ab am {date}",
+        "revoke": "Widerrufen",
+        "revoking": "Wird widerrufen …"
+      },
+      "errors": {
+        "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+        "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse an.",
+        "invalidRole": "Ungültige Rolle.",
+        "cannotInvite": "Nur Inhaber und Administratoren können Mitglieder einladen.",
+        "alreadyMember": "Diese Person ist bereits Mitglied.",
+        "alreadyInvited": "Für diese E-Mail existiert bereits eine Einladung.",
+        "cannotRevoke": "Nur Inhaber und Administratoren können Einladungen widerrufen.",
+        "cannotRemove": "Nur Inhaber und Administratoren können Mitglieder entfernen.",
+        "memberNotFound": "Mitglied nicht gefunden.",
+        "cannotRemoveOwner": "Sie können den Inhaber der Organisation nicht entfernen.",
+        "cannotChangeRoles": "Nur Inhaber und Administratoren können Rollen ändern.",
+        "cannotChangeOwner": "Sie können die Rolle des Inhabers nicht ändern."
+      }
+    },
+    "bookings": {
+      "title": "Buchungen",
+      "description": "Zeigen und verwalten Sie kommende und vergangene Termine.",
+      "filter": {
+        "status": "Status",
+        "allStatuses": "Alle Status",
+        "date": "Datum",
+        "apply": "Filtern",
+        "reset": "Zurücksetzen",
+        "resetFilter": "Filter zurücksetzen"
+      },
+      "upcoming": "Anstehend ({count})",
+      "past": "Vergangen ({count})",
+      "emptyFilteredTitle": "Keine Termine passen zu diesem Filter",
+      "emptyFilteredDescription": "Versuchen Sie einen anderen Status oder ein anderes Datum oder setzen Sie den Filter zurück.",
+      "emptyUpcomingTitle": "Keine anstehenden Termine",
+      "emptyUpcomingWithServices": "Teilen Sie Ihren Buchungslink, damit Kunden sich selbst in den Kalender eintragen können.",
+      "emptyUpcomingNoServices": "Für diese Organisation sind noch keine buchbaren Leistungen eingerichtet, daher kann nichts gebucht werden.",
+      "emptyPastTitle": "Keine vergangenen Termine",
+      "emptyPastDescription": "Abgeschlossene und stornierte Buchungen erscheinen hier, sobald sie stattgefunden haben.",
+      "fallbackService": "Leistung",
+      "when": "{date} · {start} – {end}",
+      "actions": {
+        "reschedule": "Verschieben",
+        "cancel": "Stornieren",
+        "working": "Wird bearbeitet …",
+        "save": "Speichern",
+        "newTime": "Neues Datum und neue Uhrzeit"
+      },
+      "errors": {
+        "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+        "invalidId": "Eine gültige Termin-ID ist erforderlich.",
+        "invalidDate": "Bitte geben Sie ein gültiges Datum und eine gültige Uhrzeit an.",
+        "notFound": "Termin nicht gefunden.",
+        "alreadyCancelled": "Dieser Termin ist bereits storniert.",
+        "mustBeFuture": "Die neue Zeit muss in der Zukunft liegen.",
+        "cannotReschedule": "Dieser Termin kann nicht mehr verschoben werden.",
+        "serviceNotFound": "Leistung nicht gefunden.",
+        "conflict": "Die gewählte Zeit kollidiert mit einer bestehenden Buchung."
+      }
+    },
+    "billing": {
+      "title": "Abrechnung",
+      "description": "Verwalten Sie Ihr Abonnement und Ihre Zahlungsdaten.",
+      "plan": "Tarif",
+      "status": "Status",
+      "renews": "Verlängerung",
+      "notAvailable": "k. A.",
+      "choosePlan": "Tarif wählen",
+      "manage": "Abrechnung verwalten",
+      "loading": "Wird geladen …",
+      "noOrganization": "Sie gehören noch keiner Organisation an. <link>Wählen Sie einen Tarif</link>, um zu beginnen.",
+      "error": "Die Abrechnung konnte nicht geöffnet werden. Bitte versuchen Sie es erneut."
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "description": "Verwalten Sie Ihr Konto und Ihre Organisation.",
+      "profile": {
+        "label": "Profil",
+        "description": "Aktualisieren Sie Ihren Namen und sehen Sie Ihre E-Mail-Adresse.",
+        "pageDescription": "Aktualisieren Sie Ihre persönlichen Daten.",
+        "email": "E-Mail",
+        "emailHint": "Die E-Mail wird von Ihrem Authentifizierungsanbieter verwaltet und kann hier nicht geändert werden.",
+        "fullName": "Vollständiger Name",
+        "fullNamePlaceholder": "Ihr Name",
+        "updated": "Profil aktualisiert.",
+        "tooLong": "Der vollständige Name ist zu lang."
+      },
+      "organization": {
+        "label": "Organisation",
+        "description": "Verwalten Sie die Einstellungen Ihrer Organisation.",
+        "name": "Name der Organisation",
+        "onlyAdmins": "Nur Inhaber und Administratoren können die Einstellungen der Organisation bearbeiten.",
+        "updated": "Organisation aktualisiert.",
+        "nameRequired": "Der Name der Organisation ist erforderlich.",
+        "nameTooLong": "Der Name der Organisation ist zu lang."
+      },
+      "save": "Änderungen speichern",
+      "saving": "Wird gespeichert …",
+      "errors": {
+        "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+        "forbidden": "Nur Inhaber und Administratoren können die Einstellungen der Organisation bearbeiten."
+      }
+    }
+  },
+  "agency": {
+    "errors": {
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "not_agency_admin": "Sie sind nicht berechtigt, diese Agentur zu verwalten.",
+      "not_tenant_owner": "Sie können nur Organisationen verknüpfen, die Ihnen gehören.",
+      "tenant_is_master": "Die eigene Organisation Ihrer Agentur kann nicht als Mandant hinzugefügt werden.",
+      "tenant_already_linked": "Diese Organisation ist bereits mit einer Agentur verknüpft.",
+      "tenant_not_in_agency": "Dieser Mandant ist nicht mit Ihrer Agentur verknüpft.",
+      "quota_pool_exceeded": "Das würde Ihren Token-Pool überschreiten. Geben Sie einen kleineren Betrag ein oder fordern Sie einen größeren Pool an.",
+      "quota_below_consumed": "Das liegt unter dem, was dieser Mandant bereits verbraucht hat. Geben Sie mindestens den verbrauchten Betrag ein.",
+      "invalid_quota": "Geben Sie eine gültige Token-Anzahl ein.",
+      "invalid_name": "Geben Sie einen Namen für den Mandanten ein.",
+      "invalid_slug": "Verwenden Sie Kleinbuchstaben, Ziffern und einzelne Bindestriche, z. B. acme-repairs.",
+      "slug_taken": "Dieser Slug ist bereits vergeben. Versuchen Sie einen anderen.",
+      "org_not_found": "Diese Organisation wurde unter Ihren eigenen nicht gefunden.",
+      "invalid_skills": "Ungültige Fähigkeitenauswahl.",
+      "plan_limit": "Ihr Agenturtarif enthält nicht: {skills}.",
+      "form_invalid": "Bitte korrigieren Sie die markierten Felder.",
+      "domain_taken": "Diese Domain ist bereits mit einer anderen Agentur verbunden."
+    },
+    "validation": {
+      "agency_id_invalid": "Eine gültige Agentur-ID ist erforderlich.",
+      "tenant_id_invalid": "Eine gültige Mandanten-ID ist erforderlich.",
+      "tenant_name_required": "Geben Sie einen Namen für den Mandanten ein.",
+      "tenant_name_max": "Der Name darf höchstens 80 Zeichen lang sein.",
+      "slug_min": "Der Slug benötigt mindestens 3 Zeichen.",
+      "slug_max": "Der Slug darf höchstens 48 Zeichen lang sein.",
+      "slug_format": "Verwenden Sie Kleinbuchstaben, Ziffern und einzelne Bindestriche, z. B. acme-repairs.",
+      "quota_digits": "Geben Sie eine ganze Zahl an Tokens ein (0 oder mehr).",
+      "quota_max": "Dieser Betrag ist zu groß.",
+      "brand_title_max": "Der Markentitel darf höchstens 80 Zeichen lang sein.",
+      "logo_url_invalid": "Geben Sie eine gültige URL ein, z. B. https://cdn.youragency.com/logo.svg",
+      "https_only": "Muss mit https:// beginnen",
+      "color_hex": "Verwenden Sie eine 6-stellige Hex-Farbe wie #7c3aed.",
+      "domain_invalid": "Geben Sie eine gültige Domain wie ai.youragency.com ein.",
+      "domain_platform": "Diese Domain gehört zur Plattform."
+    },
+    "tenants": {
+      "title": "Mandanten",
+      "description": "Die Kundenorganisationen, die Sie verwalten. Weisen Sie Tokens aus Ihrem Pool zu und wählen Sie die Fähigkeiten jedes Assistenten.",
+      "untitled": "Unbenannte Organisation",
+      "emptyTitle": "Noch keine Mandanten",
+      "emptyDescription": "Erstellen Sie eine neue Kundenorganisation oder verknüpfen Sie eine eigene, um sie hier zu verwalten.",
+      "pool": {
+        "title": "Token-Pool",
+        "pool": "Pool",
+        "allocated": "Zugewiesen",
+        "available": "Verfügbar",
+        "meter": "Anteil des Token-Pools, der Mandanten zugewiesen ist",
+        "allocatedShare": "{percent} Ihres Pools sind Mandanten zugewiesen.",
+        "empty": "Ihr Token-Pool ist leer, daher können noch keine Tokens zugewiesen werden. Kontaktieren Sie das Plattform-Team, um einen Pool zu erhalten."
+      },
+      "add": {
+        "trigger": "Mandant hinzufügen",
+        "triggerFirst": "Ersten Mandanten hinzufügen",
+        "title": "Mandanten hinzufügen",
+        "description": "Mandanten sind die Kundenorganisationen, die Sie verwalten. Jeder bezieht Tokens aus Ihrem Pool.",
+        "tabCreate": "Neu erstellen",
+        "tabLink": "Bestehende verknüpfen",
+        "nameLabel": "Mandantenname",
+        "slugLabel": "Slug",
+        "slugHint": "Kleinbuchstaben, Ziffern und Bindestriche. Sie werden Inhaber der neuen Organisation.",
+        "creating": "Wird erstellt …",
+        "create": "Mandant erstellen",
+        "created": "Mandant erstellt",
+        "linkHint": "Nur Organisationen, die Ihnen gehören, können verknüpft werden. So sehen Sie Nutzung, Chats und Einblicke.",
+        "linking": "Wird verknüpft …",
+        "link": "Mandant verknüpfen",
+        "linked": "Mandant verknüpft"
+      },
+      "picker": {
+        "label": "Organisationen, die Sie verknüpfen können",
+        "search": "Ihre Organisationen durchsuchen …",
+        "noMatches": "Keine Organisation entspricht Ihrer Suche.",
+        "emptyTitle": "Noch nichts zu verknüpfen",
+        "emptyDescription": "Sie können Organisationen verknüpfen, die Ihnen gehören und noch zu keiner Agentur gehören. Erstellen Sie stattdessen einen neuen Mandanten oder bitten Sie den Kunden, Sie zum Inhaber zu machen."
+      },
+      "table": {
+        "tenant": "Mandant",
+        "usage": "Token-Nutzung",
+        "skills": "Fähigkeiten",
+        "actions": "Aktionen",
+        "noAllocation": "Keine Tokens zugewiesen",
+        "consumption": "Token-Verbrauch von {name}",
+        "remaining": "{remaining} von {granted} übrig ({percent} verbraucht)",
+        "outOfTokens": "Keine Tokens mehr",
+        "noSkills": "Keine",
+        "tokens": "Tokens",
+        "allocateAria": "Tokens für {name} zuweisen",
+        "skillsAria": "Fähigkeiten für {name} verwalten",
+        "removeAria": "{name} entfernen",
+        "remove": "Entfernen"
+      },
+      "quota": {
+        "title": "Tokens für {name} zuweisen",
+        "description": "Legen Sie das gesamte Token-Budget dieses Mandanten für den aktuellen Zeitraum fest. Bereits verbrauchte Tokens bleiben angerechnet.",
+        "label": "Tokens gesamt",
+        "hint": "Bisher verbraucht: {used} · Maximal einstellbar: {max}",
+        "errors": {
+          "digits": "Geben Sie eine ganze Zahl an Tokens ein (0 oder mehr).",
+          "min": "Geben Sie mindestens {min} ein – so viele hat dieser Mandant bereits verbraucht.",
+          "max": "Geben Sie höchstens {max} ein – mehr kann Ihr Pool für diesen Mandanten nicht abdecken."
+        },
+        "cancel": "Abbrechen",
+        "saving": "Wird gespeichert …",
+        "save": "Zuweisung speichern",
+        "saved": "Tokens für {name} aktualisiert"
+      },
+      "remove": {
+        "title": "{name} aus Ihrer Agentur entfernen?",
+        "description": "Die Organisation und ihre Daten werden nicht gelöscht. Sie wird nur nicht mehr von Ihrer Agentur verwaltet.",
+        "loseAccess": "Sie verlieren den Zugriff auf Nutzung, Chats und Einblicke.",
+        "returnsTokens": "Die Zuweisung von {tokens} Tokens geht zurück in Ihren Pool, und sein Assistent bezieht nichts mehr daraus.",
+        "relink": "Sie können es später erneut verknüpfen, wenn Sie der Inhaber sind.",
+        "keep": "Mandant behalten",
+        "removing": "Wird entfernt …",
+        "confirm": "Mandant entfernen",
+        "removed": "{name} entfernt"
+      },
+      "skills": {
+        "title": "Fähigkeiten für {name}",
+        "description": "Legen Sie fest, was der KI-Assistent dieses Mandanten kann. Die verfügbaren Fähigkeiten hängen von Ihrem Agenturtarif ab.",
+        "toggle": "{skill} umschalten",
+        "upgradeHint": "Upgraden Sie Ihren Agenturtarif, um weitere Fähigkeiten wie die Kalenderbuchung zu vergeben.",
+        "cancel": "Abbrechen",
+        "saving": "Wird gespeichert …",
+        "save": "Fähigkeiten speichern",
+        "saved": "Fähigkeiten für {name} aktualisiert"
+      }
+    },
+    "branding": {
+      "title": "Branding & Domain",
+      "description": "Lassen Sie die Plattform wie Ihre aussehen: Ihr Logo, Ihre Farben und Ihr Titel, ausgeliefert von Ihrer eigenen Domain.",
+      "saving": "Wird gespeichert …",
+      "save": "Branding speichern",
+      "saved": "Branding gespeichert.",
+      "savedDomainChanged": "Branding gespeichert. Ihre Domain hat sich geändert – prüfen Sie unten den DNS-Eintrag.",
+      "fields": {
+        "title": "Markentitel",
+        "titleHint": "Wird neben Ihrem Logo und als Seitentitel auf Ihrer Domain angezeigt.",
+        "logo": "Logo-URL",
+        "logoHint": "Ein öffentliches https://-Bild. Etwa 32 px Höhe ist ideal; SVG oder PNG mit transparentem Hintergrund passt gut zum dunklen Design.",
+        "logoBroken": "Dieses Bild konnte nicht geladen werden. Prüfen Sie die URL und die öffentliche Erreichbarkeit.",
+        "color": "Primärfarbe",
+        "colorPicker": "Primärfarbe wählen",
+        "domain": "Eigene Domain",
+        "domainHint": "Die Domain, die Ihre Kunden besuchen. Eine Änderung erfordert eine erneute Prüfung des DNS-Eintrags."
+      },
+      "palette": {
+        "title": "Abgeleitete Palette",
+        "base": "Primär",
+        "hover": "Hover",
+        "text": "Schaltflächentext",
+        "contrastOk": "Kontrast des Schaltflächentexts {ratio}:1 – erfüllt WCAG AA.",
+        "contrastLow": "Der Kontrast des Schaltflächentexts ({ratio}:1) liegt unter WCAG AA (4,5:1). Wählen Sie eine dunklere oder hellere Farbe."
+      },
+      "preview": {
+        "title": "Live-Vorschau",
+        "device": "Vorschaugröße",
+        "desktop": "Desktop",
+        "mobile": "Mobil",
+        "brandFallback": "Ihre Marke",
+        "domainFallback": "ihre-domain.de",
+        "navOverview": "Übersicht",
+        "navKnowledge": "Wissensdatenbank",
+        "navSkills": "Fähigkeiten",
+        "metricLabel": "RAG-Antworterfolg",
+        "chatAgent": "Hallo! Wie kann ich Ihnen heute helfen?",
+        "chatUser": "Wie sind Ihre Öffnungszeiten?",
+        "button": "Loslegen",
+        "buttonSecondary": "Mehr erfahren"
+      },
+      "dns": {
+        "title": "Domain-Verifizierung",
+        "description": "Ihr Branding wird erst ausgeliefert, wenn der CNAME-Eintrag der Domain verifiziert ist.",
+        "noDomain": "Speichern Sie oben zuerst eine eigene Domain und prüfen Sie hier anschließend den DNS-Eintrag.",
+        "stepsLabel": "Verifizierungsfortschritt",
+        "steps": {
+          "add": "Eintrag hinzufügen",
+          "propagate": "Auf DNS warten",
+          "verified": "Verifiziert"
+        },
+        "addRecord": "Fügen Sie diesen DNS-Eintrag bei Ihrem Anbieter hinzu",
+        "record": {
+          "type": "Typ",
+          "name": "Name",
+          "value": "Wert"
+        },
+        "copyAria": "{label} kopieren",
+        "copyFailed": "Kopieren in die Zwischenablage fehlgeschlagen",
+        "cloudflareHint": "Sie nutzen Cloudflare? Stellen Sie den Eintrag auf „Nur DNS“ (graue Wolke) – ein Proxy-Eintrag verbirgt den CNAME und kann nicht verifiziert werden.",
+        "verify": "DNS prüfen",
+        "checking": "DNS wird geprüft …",
+        "startWatching": "Automatisch überwachen",
+        "stopWatching": "Überwachung beenden",
+        "watching": "Automatische Prüfung alle 30 s · endet in {time}",
+        "verifiedToast": "{domain} ist verifiziert",
+        "status": {
+          "pending": "Ausstehend",
+          "active": "Verifiziert",
+          "failed": "Handlungsbedarf"
+        },
+        "message": {
+          "active": "Verifiziert. Besucher auf {domain} sehen Ihr Branding.",
+          "failed": "{domain} hat einen CNAME-Eintrag, der aber nicht auf {target} zeigt. Aktualisieren Sie ihn und prüfen Sie erneut.",
+          "pending": "Für {domain} sehen wir noch keinen CNAME-Eintrag. DNS-Änderungen brauchen einige Minuten bis Stunden."
+        },
+        "dnsReturns": "DNS liefert aktuell",
+        "noRecordFound": "Kein CNAME-Eintrag gefunden",
+        "lastChecked": "Zuletzt geprüft",
+        "neverChecked": "Noch nicht geprüft",
+        "errors": {
+          "rate_limited": "Zu viele Versuche. Bitte warten Sie eine Minute und versuchen Sie es erneut.",
+          "dns_unreachable": "Der DNS-Resolver war nicht erreichbar. Bitte versuchen Sie es erneut.",
+          "not_found": "Agentur nicht gefunden.",
+          "no_domain": "Für diese Agentur ist keine eigene Domain konfiguriert.",
+          "generic": "Die Domain konnte gerade nicht geprüft werden. Bitte versuchen Sie es erneut."
+        }
+      }
+    },
+    "analytics": {
+      "title": "Analysen",
+      "description": "Nutzung der KI-Assistenten über alle Ihre Mandanten.",
+      "window": "Zeitraum",
+      "days": "{count} Tage",
+      "emptyTitle": "Noch nichts zu analysieren",
+      "emptyDescription": "Fügen Sie auf der Mandanten-Seite Mandanten hinzu und weisen Sie Tokens zu. Die Nutzung ihrer KI-Assistenten erscheint hier.",
+      "requests": "KI-Anfragen",
+      "requestsHint": "Besuchernachrichten, letzte {days} Tage",
+      "consumption": "Token-Verbrauch",
+      "consumptionHint": "{used} von {granted} zugewiesen",
+      "lowConfidence": "Antworten mit geringer Sicherheit",
+      "lowConfidenceHint": "{low} von {total} Antworten, letzte {days} Tage",
+      "attention": "Handlungsbedarf",
+      "attentionNone": "Kein Mandant nähert sich seinem Limit",
+      "attentionSome": "{out} ohne Tokens · {near} nahe am Limit",
+      "tokenNote": "Die Token-Werte beschreiben die aktuelle Zuweisung jedes Mandanten und ändern sich nicht mit dem Zeitraum.",
+      "chartTitle": "Token-Verbrauch nach Mandant",
+      "chartDescription": "Bisher genutzter Anteil der Zuweisung jedes Mandanten, meistgenutzte zuerst",
+      "chartEmpty": "Den Mandanten wurden noch keine Tokens zugewiesen.",
+      "table": {
+        "caption": "Nutzung pro Mandant",
+        "tenant": "Mandant",
+        "requests": "Anfragen",
+        "lowConfidence": "Geringe Sicherheit",
+        "blocked": "Durch Kontingent blockiert",
+        "tokens": "Verbrauchte Tokens",
+        "lastActivity": "Letzte Aktivität"
+      },
+      "crew": {
+        "title": "Dev-Crew-Empfehlungen",
+        "description": "Muster, die die Dev Crew in den letzten Chats Ihrer Mandanten erkannt hat.",
+        "emptyTitle": "Noch keine Empfehlungen",
+        "emptyDescription": "Die Dev Crew prüft nach jeder Unterhaltung die Chat-Aktivität und meldet sich hier, wenn sie etwas Handlungsrelevantes findet.",
+        "unknownTenant": "Unbekannter Mandant"
+      }
+    }
+  },
+  "pricing": {
+    "checkout": {
+      "redirecting": "Weiterleitung …",
+      "error": "Der Checkout konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Ihr Geschäft auf einen Blick – Umsatz, Leads und offene Aufgaben in einer Ansicht.",
+      "kpis": {
+        "collected": "Diesen Monat eingenommen",
+        "activeClients": "Aktive Kunden",
+        "pendingLeads": "Offene Leads",
+        "pendingAppointments": "Offene Termine"
+      },
+      "revenue": {
+        "title": "Umsatzentwicklung",
+        "subtitle": "Letzte {months} Monate, eingegangene Zahlungen"
+      },
+      "actions": {
+        "title": "Handlungsbedarf",
+        "empty": "Aktuell wartet nichts auf eine Aktion.",
+        "fallbackClient": "Kunde",
+        "overdue": "Überfällige Zahlung – {name}",
+        "hotLead": "Neuer Lead – {name}",
+        "hotLeadDetail": "In den letzten 24 Stunden eingegangen, noch nicht beantwortet",
+        "appointment": "Termin wartet auf Bestätigung – {name}",
+        "risk": "Abo-Risiko – {name}",
+        "riskCanceled": "Gekündigt",
+        "riskPastDue": "Zahlung überfällig",
+        "cold": "Abkühlender Lead – {name}",
+        "coldDetail": "Wartet seit mehr als 48 Stunden auf eine Antwort"
+      },
+      "activity": {
+        "title": "Aktivitätsfeed",
+        "empty": "Noch keine Aktivität."
+      }
+    },
+    "leads": {
+      "title": "Lead-Pipeline",
+      "description": "Verfolgen Sie eingehende SaaS- und Freelance-Anfragen bis zur Konvertierung.",
+      "noLeads": "Keine Leads",
+      "reject": "Ablehnen",
+      "status": {
+        "new": "Neu",
+        "contacted": "Kontaktiert",
+        "quoted": "Angebot gesendet",
+        "accepted": "Angenommen",
+        "rejected": "Abgelehnt"
+      },
+      "kind": {
+        "saas": "SaaS",
+        "freelance": "Freelance"
+      },
+      "categories": {
+        "fullstack_saas": "Full-Stack-SaaS",
+        "ai_automation": "KI-Automatisierung",
+        "architecture_security": "Architektur & Sicherheit",
+        "payment_subscription": "Zahlungen & Abonnements"
+      },
+      "modes": {
+        "hourly": "Stundenbasis",
+        "project": "Pro Projekt",
+        "either": "Beides"
+      },
+      "detail": {
+        "back": "Zurück zur Pipeline",
+        "phone": "Telefon",
+        "projectType": "Projekttyp",
+        "workingMode": "Arbeitsmodus",
+        "source": "Quelle",
+        "submitted": "Eingereicht",
+        "message": "Kurzbeschreibung",
+        "scope": "Antwort auf Rückfrage"
+      },
+      "actions": {
+        "status": "Status",
+        "convert": "In Kunden umwandeln",
+        "converting": "Wird umgewandelt …",
+        "converted": "In eine Kundenorganisation umgewandelt.",
+        "askInvite": "Kunde erstellt. Einladungs-E-Mail jetzt senden?",
+        "yes": "Ja",
+        "notNow": "Jetzt nicht",
+        "sending": "Wird gesendet …",
+        "sendInvite": "Einladung senden",
+        "resendInvite": "Einladung erneut senden",
+        "sent": "Gesendet",
+        "errors": {
+          "status": "Der Status konnte nicht aktualisiert werden.",
+          "convert": "Der Lead konnte nicht umgewandelt werden.",
+          "invite": "Die Einladungs-E-Mail konnte nicht gesendet werden."
+        }
+      }
+    },
+    "clients": {
+      "title": "Kunden",
+      "description": "Projektverfolgung für jeden konvertierten Lead – Lieferstatus und letzte Aktivität.",
+      "emptyTitle": "Noch keine Kunden",
+      "emptyDescription": "Ein Lead erscheint hier, sobald er in der Phase „Angenommen“ in einen Kunden umgewandelt wird.",
+      "columns": {
+        "client": "Kunde",
+        "projectType": "Projekttyp",
+        "workingMode": "Arbeitsmodus",
+        "status": "Status",
+        "lastActivity": "Letzte Aktivität"
+      },
+      "stage": {
+        "design": "Design",
+        "backend": "Entwicklung",
+        "test": "Test",
+        "live": "Live"
+      },
+      "state": {
+        "active": "Aktiv",
+        "dormant": "Ruhend"
+      }
+    },
+    "payments": {
+      "title": "Zahlungen",
+      "description": "Alle Kundenrechnungen – der Freelance-/Dienstleistungsumsatz an einem Ort.",
+      "summary": {
+        "thisMonth": "Summe diesen Monat",
+        "pending": "Ausstehender Betrag",
+        "failed": "Fehlgeschlagen"
+      },
+      "emptyTitle": "Noch keine Rechnungen",
+      "emptyDescription": "Rechnungen werden hier aufgeführt, sobald sie einem Kundenprojekt hinzugefügt wurden.",
+      "columns": {
+        "date": "Datum",
+        "client": "Kunde",
+        "number": "Rechnungsnr.",
+        "amount": "Betrag",
+        "status": "Status"
+      },
+      "status": {
+        "paid": "Bezahlt",
+        "pending": "Ausstehend",
+        "failed": "Fehlgeschlagen"
+      }
+    },
+    "appointments": {
+      "title": "Termine",
+      "description": "Ihr eigener Buchungskalender – Beratungsgespräche und Übergabetermine.",
+      "upcoming": "Anstehend ({count})",
+      "past": "Vergangen ({count})",
+      "emptyUpcomingTitle": "Keine anstehenden Termine",
+      "emptyUpcomingDescription": "Neue Buchungen erscheinen hier.",
+      "emptyPastTitle": "Keine vergangenen Termine",
+      "emptyPastDescription": "Abgeschlossene und stornierte Termine werden hier aufgeführt.",
+      "fallbackService": "Leistung",
+      "when": "{date} · {start}–{end}"
+    },
+    "tasks": {
+      "title": "Interne Aufgaben",
+      "description": "Ihre eigene operative Arbeit – für Kunden nicht sichtbar.",
+      "newTitle": "Titel der neuen Aufgabe …",
+      "add": "Aufgabe hinzufügen",
+      "noTasks": "Keine Aufgaben",
+      "moveTo": "Nach {column} verschieben",
+      "columns": {
+        "todo": "Zu erledigen",
+        "in_progress": "In Arbeit",
+        "review": "Prüfung",
+        "done": "Erledigt"
+      }
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "description": "Geschäftsdaten, Team und Integrationsstatus.",
+      "tabs": {
+        "general": "Allgemein",
+        "team": "Team",
+        "notifications": "Benachrichtigungen",
+        "integrations": "Integrationen"
+      },
+      "general": {
+        "name": "Firmenname",
+        "slug": "Slug"
+      },
+      "team": {
+        "empty": "Keine Teammitglieder gefunden.",
+        "user": "Benutzer",
+        "role": "Rolle",
+        "note": "Derzeit ein Benutzer – Mehrbenutzer- und Rollenverwaltung ist einer späteren Version vorbehalten."
+      },
+      "notifications": {
+        "title": "Demnächst",
+        "description": "Benachrichtigungseinstellungen sind noch nicht konfigurierbar."
+      },
+      "integrations": {
+        "payment": "Zahlungsanbieter ({provider})",
+        "email": "Resend (E-Mail)",
+        "connected": "Verbunden",
+        "notConfigured": "Nicht konfiguriert",
+        "sandboxWarning": "Es ist keine eigene Versanddomain konfiguriert – Produktions-E-Mails gehen über den Sandbox-Absender von Resend (<code>resend.dev</code>) und erreichen nur die verifizierte Adresse des Kontos, nicht echte Kunden. Setzen Sie die Umgebungsvariable <code>EMAIL_FROM</code> auf eine verifizierte Domain."
+      }
+    },
+    "analytics": {
+      "title": "Umsatzanalyse",
+      "description": "Freelance- und SaaS-Umsatz, getrennt erfasst.",
+      "freelance": {
+        "title": "Freelance-Umsatz",
+        "subtitle": "Bezahlte Rechnungen, letzte {months} Monate"
+      },
+      "saas": {
+        "title": "SaaS-Umsatz",
+        "subtitle": "Live-MRR nach Tarif, aktive + Test-Organisationen"
+      },
+      "tokens": {
+        "title": "Token-Nutzung der KI-Assistenten",
+        "subtitle": "Kontingentverbrauch im aktuellen Zeitraum, Top-10-Organisationen nach Nutzung",
+        "empty": "Noch keine RAG-Chat-Nutzung erfasst.",
+        "unknown": "Unbekannt"
+      },
+      "audit": {
+        "title": "Audit-Protokoll",
+        "empty": "Noch keine protokollierten Aktionen.",
+        "action": "Aktion",
+        "actor": "Akteur",
+        "target": "Ziel",
+        "when": "Zeitpunkt",
+        "system": "System"
+      }
     }
   }
 }

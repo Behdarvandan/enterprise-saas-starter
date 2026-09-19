@@ -1,7 +1,7 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { useRouter } from "@/i18n/navigation";
 import { unlinkTenant } from "@/app/[locale]/agency/tenants/actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +13,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import FormStatus from "@/components/ui/FormStatus";
+import { useRouter } from "@/i18n/navigation";
 import { formatTokens } from "@/lib/agency/format";
+import { toast } from "@/lib/toast";
 import type { TenantRowData } from "./TenantTable";
 
 interface RemoveTenantDialogProps {
@@ -23,6 +25,8 @@ interface RemoveTenantDialogProps {
 
 /** Destructive confirmation: spells out exactly what removing a tenant does and doesn't do. */
 export default function RemoveTenantDialog({ tenant, onClose }: RemoveTenantDialogProps) {
+  const t = useTranslations("agency.tenants.remove");
+  const locale = useLocale();
   const router = useRouter();
   const [error, setError] = useState<string | undefined>();
   const [pending, startTransition] = useTransition();
@@ -32,6 +36,7 @@ export default function RemoveTenantDialog({ tenant, onClose }: RemoveTenantDial
     startTransition(async () => {
       const outcome = await unlinkTenant(tenant.tenantId);
       if (outcome.success) {
+        toast({ tone: "success", title: t("removed", { name: tenant.name }) });
         router.refresh();
         onClose();
       } else {
@@ -44,30 +49,24 @@ export default function RemoveTenantDialog({ tenant, onClose }: RemoveTenantDial
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Remove {tenant.name} from your agency?</DialogTitle>
-          <DialogDescription>
-            The organization and its data are not deleted. It simply stops being managed by your
-            agency.
-          </DialogDescription>
+          <DialogTitle>{t("title", { name: tenant.name })}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <ul className="list-disc space-y-1 pl-5 text-sm text-ink-muted">
-          <li>You lose access to its usage, chats and insights.</li>
-          <li>
-            Its {formatTokens(tenant.granted)}-token allocation returns to your pool, and its
-            assistant stops drawing from it.
-          </li>
-          <li>You can link it again later, if its owner is you.</li>
+        <ul className="list-disc space-y-1 ps-5 text-sm text-slate-400">
+          <li>{t("loseAccess")}</li>
+          <li>{t("returnsTokens", { tokens: formatTokens(locale, tenant.granted) })}</li>
+          <li>{t("relink")}</li>
         </ul>
 
         <FormStatus error={error} successMessage="" />
 
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={onClose} disabled={pending}>
-            Keep tenant
+            {t("keep")}
           </Button>
-          <Button type="button" variant="destructive" onClick={handleRemove} disabled={pending}>
-            {pending ? "Removing…" : "Remove tenant"}
+          <Button type="button" variant="destructive" onClick={handleRemove} loading={pending}>
+            {pending ? t("removing") : t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

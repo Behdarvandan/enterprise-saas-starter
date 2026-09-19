@@ -3,6 +3,14 @@ import type { PricingRegion } from "@/lib/geo";
 
 export type PlanTier = "starter" | "pro" | "enterprise";
 
+/** Ascending order; a tier includes everything at or below its rank. */
+export const PLAN_TIERS: readonly PlanTier[] = ["starter", "pro", "enterprise"];
+
+/** Whether `current` unlocks features gated at `required`. */
+export function tierIncludes(current: PlanTier, required: PlanTier): boolean {
+  return PLAN_TIERS.indexOf(current) >= PLAN_TIERS.indexOf(required);
+}
+
 export type PlanCheckout =
   | { kind: "stripe"; priceId: string; amount: number; currency: "EUR" | "USD" }
   | { kind: "paytr"; amount: number; currency: "TRY" }
@@ -183,3 +191,35 @@ function enterprisePlan(region: PricingRegion, priceLabel: string): Plan {
 export function getAllPlans(): Plan[] {
   return [...getPlans("tr"), ...getPlans("eu"), ...getPlans("global")];
 }
+
+/**
+ * Resolves `organizations.plan_id` to a tier. The column stores a Stripe
+ * price id (matched against the configured price ids), a literal tier name,
+ * or nothing — PayTR activation never sets it. Anything unrecognised is the
+ * entry tier, so an unmapped plan can never unlock more than it paid for.
+ */
+export function resolvePlanTier(planId: string | null | undefined): PlanTier {
+  if (!planId) return "starter";
+
+  const literal = PLAN_TIERS.find((tier) => tier === planId);
+  if (literal) return literal;
+
+  const match = getAllPlans().find(
+    (plan) =>
+      plan.checkout.kind === "stripe" &&
+      plan.checkout.priceId !== "" &&
+      plan.checkout.priceId === planId,
+  );
+  return match?.tier ?? "starter";
+}
+
+/**
+ * Knowledge-base documents each tier advertises (see the plan feature lists
+ * above; Enterprise has no stated cap). Display-only for now — the ingest
+ * route does not enforce it.
+ */
+export const KNOWLEDGE_BASE_DOCUMENT_LIMITS: Record<PlanTier, number | null> = {
+  starter: 1,
+  pro: 5,
+  enterprise: null,
+};

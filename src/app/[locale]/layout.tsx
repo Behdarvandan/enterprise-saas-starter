@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist_Mono, Inter } from "next/font/google";
+import { Fraunces, Geist_Mono, Inter, Vazirmatn } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound, unstable_rethrow } from "next/navigation";
@@ -11,9 +11,16 @@ import { getBrandingCssVars } from "@/lib/agency/branding";
 import { getAgencyContext } from "@/lib/agency/context";
 import "../globals.css";
 
-// Inter carries body/UI copy; Fraunces is reserved for headings and display
-// text only — see CLAUDE.md §1.2. Geist Mono stays for code/mono contexts.
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+// Inter carries body/UI copy; Fraunces is reserved for the marketing site's
+// display headings. Geist Mono carries metrics/code. Vazirmatn supplies the
+// Persian glyphs Inter lacks (per-glyph fallback via unicode-range, so the
+// file is only fetched when Persian text actually renders).
+const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter" });
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic"],
+  variable: "--font-vazirmatn",
+  preload: false,
+});
 const fraunces = Fraunces({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -92,7 +99,7 @@ export default async function RootLayout({
       lang={locale}
       dir={isRtlLocale(locale) ? "rtl" : "ltr"}
       suppressHydrationWarning
-      className={`${inter.variable} ${fraunces.variable} ${geistMono.variable}`}
+      className={`${inter.variable} ${vazirmatn.variable} ${fraunces.variable} ${geistMono.variable}`}
       // Agency palette as CSS variables on <html>, so the very first paint
       // (and portaled dialogs under <body>) already use it.
       style={agency ? (getBrandingCssVars(agency.branding) as CSSProperties) : undefined}

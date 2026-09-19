@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { requireMembershipResult } from "@/lib/auth";
 import { canManageMembers } from "@/lib/team";
@@ -11,26 +12,34 @@ const updateOrganizationSchema = z.object({
     z
       .string()
       .trim()
-      .min(1, "Organization name is required.")
-      .max(100, "Organization name is too long."),
+      .min(1, "name_required")
+      .max(100, "name_too_long"),
   ),
 });
 
 export async function updateOrganization(
   formData: FormData,
 ): Promise<{ error?: string; success?: boolean }> {
+  const t = await getTranslations("dashboard.settings");
   const auth = await requireMembershipResult();
   if ("error" in auth) return auth;
   const { supabase, membership } = auth;
 
   if (!canManageMembers(membership.role)) {
-    return { error: "Only owners and admins can edit organization settings." };
+    return { error: t("errors.forbidden") };
   }
 
   const parsed = updateOrganizationSchema.safeParse({
     name: formData.get("name"),
   });
-  if (!parsed.success) return { error: firstIssueMessage(parsed.error) };
+  if (!parsed.success) {
+    return {
+      error:
+        firstIssueMessage(parsed.error) === "name_required"
+          ? t("organization.nameRequired")
+          : t("organization.nameTooLong"),
+    };
+  }
   const { name } = parsed.data;
 
   const { error } = await supabase
@@ -38,7 +47,7 @@ export async function updateOrganization(
     .update({ name })
     .eq("id", membership.organizationId);
 
-  if (error) return { error: error.message };
+  if (error) return { error: t("errors.generic") };
 
   revalidatePath("/dashboard/settings/organization");
   revalidatePath("/dashboard");

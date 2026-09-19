@@ -100,7 +100,7 @@ export default function LoginPage() {
           <p className="text-center text-sm text-ink-muted">
             <Link
               href="/forgot-password"
-              className="font-semibold text-violet-dim hover:text-violet"
+              className="font-semibold text-violet-dim hover:text-violet-400"
             >
               {t("forgotPassword")}
             </Link>
@@ -111,7 +111,7 @@ export default function LoginPage() {
           {t("noAccount")}{" "}
           <Link
             href="/signup"
-            className="font-semibold text-violet-dim hover:text-violet"
+            className="font-semibold text-violet-dim hover:text-violet-400"
           >
             {t("signUp")}
           </Link>

@@ -20,7 +20,7 @@ export default function BorderBeam({
         className="animate-border-beam absolute inset-[-100%]"
         style={{
           background:
-            "conic-gradient(from 0deg, transparent 0%, var(--color-gold) 8%, transparent 18%)",
+            "conic-gradient(from 0deg, transparent 0%, var(--color-primary) 8%, transparent 18%)",
         }}
       />
       <div className="relative rounded-[calc(var(--radius-interactive)-1px)]">{children}</div>

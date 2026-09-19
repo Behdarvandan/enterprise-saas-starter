@@ -46,7 +46,7 @@ export default async function PricingSection() {
       <div className="mt-8">
         <Link
           href="/pricing"
-          className="text-sm font-semibold text-violet-dim hover:text-violet"
+          className="text-sm font-semibold text-violet-dim hover:text-violet-400"
         >
           {t("compareLink")}
         </Link>

@@ -7,6 +7,12 @@
     "notFound": {
       "title": "Sayfa bulunamadı",
       "body": "Aradığınız sayfa mevcut değil veya taşınmış."
+    },
+    "tiers": {
+      "free": "Ücretsiz",
+      "starter": "Starter",
+      "pro": "Pro",
+      "enterprise": "Enterprise"
     }
   },
   "marketing": {
@@ -325,6 +331,1136 @@
       "backend": "Geliştirme",
       "test": "Test",
       "live": "Teslim"
+    },
+    "topbar": {
+      "navLabel": "Müşteri portalı gezinmesi"
+    },
+    "projects": {
+      "description": "Projenizin başından sonuna nerede olduğunu takip edin.",
+      "emptyTitle": "Henüz proje yok",
+      "emptyDescription": "Projeniz başlatıldığında burada görünecek.",
+      "viewRepo": "Depoyu görüntüle",
+      "viewLive": "Canlı sürümü görüntüle",
+      "stage": "Aşama {index}/{total}: {name}"
+    },
+    "invoices": {
+      "description": "Faturalarınızı indirin ve teslimat bağlantılarına erişin.",
+      "emptyTitle": "Henüz fatura yok",
+      "emptyDescription": "Fatura düzenlendiğinde burada görünecek.",
+      "caption": "Faturalar",
+      "columns": {
+        "invoice": "Fatura",
+        "amount": "Tutar",
+        "status": "Durum",
+        "due": "Vade tarihi",
+        "links": "Bağlantılar"
+      },
+      "pdf": "PDF",
+      "contract": "Sözleşme",
+      "repo": "Depo",
+      "live": "Canlı",
+      "status": {
+        "draft": "Taslak",
+        "sent": "Gönderildi",
+        "paid": "Ödendi",
+        "overdue": "Gecikmiş",
+        "void": "Geçersiz"
+      }
+    },
+    "files": {
+      "description": "Projeniz için teslimat bağlantıları — depo erişimi ve canlı ortamlar.",
+      "emptyTitle": "Henüz teslimat yok",
+      "emptyDescription": "Depo ve canlı bağlantılar, projenizde oluştuğunda burada görünecek.",
+      "repository": "{name} — Depo",
+      "live": "{name} — Canlı"
+    },
+    "settings": {
+      "description": "İletişim bilgileri, dil tercihi ve lisans yönetimi.",
+      "tabs": {
+        "contact": "İletişim",
+        "language": "Dil",
+        "notifications": "Bildirimler",
+        "license": "Lisans"
+      },
+      "language": {
+        "title": "Arayüz dili",
+        "description": "Portalın görüntülendiği dili değiştirin."
+      },
+      "notifications": {
+        "title": "Yakında",
+        "description": "Bildirim tercihleri henüz yapılandırılamıyor."
+      },
+      "license": {
+        "emptyTitle": "SaaS lisansı yok",
+        "emptyDescription": "Bu kuruluşun henüz etkin bir SaaS lisansı yok.",
+        "tier": "Seviye",
+        "seats": "Koltuk",
+        "key": "Lisans anahtarı",
+        "rotate": "API anahtarını yeniden oluştur",
+        "rotating": "Yenileniyor…",
+        "copyNow": "Bu anahtarı şimdi kopyalayın — bir daha gösterilmeyecek.",
+        "error": "Anahtar yeniden oluşturulamadı. Lütfen tekrar deneyin.",
+        "status": {
+          "active": "Aktif",
+          "suspended": "Askıya alındı",
+          "cancelled": "İptal edildi"
+        }
+      }
+    }
+  },
+  "ui": {
+    "close": "Kapat",
+    "dismiss": "Gizle",
+    "cancel": "Vazgeç",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "saved": "Kaydedildi",
+    "delete": "Sil",
+    "retry": "Tekrar dene",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı",
+    "loading": "Yükleniyor…",
+    "back": "Geri",
+    "viewAll": "Tümünü gör",
+    "errorTitle": "Bir şeyler ters gitti",
+    "errorDescription": "Bu sayfa yüklenirken beklenmeyen bir hata oluştu. Tekrar deneyebilir veya sorun sürerse daha sonra dönebilirsiniz.",
+    "tryAgain": "Tekrar dene",
+    "signOut": "Çıkış yap",
+    "signingOut": "Çıkış yapılıyor…",
+    "charts": {
+      "quotaUsed": "Kullanılan kota",
+      "quotaValue": "%{percent} ({used} / {limit} token)",
+      "revenue": "Gelir",
+      "mrr": "MRR",
+      "mrrValue": "{amount}/ay · {count} kuruluş",
+      "perMonth": "{amount}/ay"
+    }
+  },
+  "errors": {
+    "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "unauthorized": "Devam etmek için giriş yapmalısınız.",
+    "forbidden": "Bu işlem için yetkiniz yok.",
+    "notFound": "Aradığınız kayıt bulunamadı.",
+    "rateLimited": "Çok fazla istek gönderildi. Lütfen biraz bekleyip tekrar deneyin.",
+    "validation": "Girdiğiniz bazı değerler geçerli değil.",
+    "network": "Ağ hatası. Bağlantınızı kontrol edip tekrar deneyin.",
+    "noMembership": "Herhangi bir kuruluşa üye değilsiniz."
+  },
+  "shell": {
+    "skipToContent": "İçeriğe geç",
+    "navigation": "Gezinme",
+    "navigationDescription": "Ana gezinme menüsü",
+    "openMenu": "Gezinme menüsünü aç",
+    "changeLanguage": "Dili değiştir",
+    "userMenu": "Kullanıcı menüsü",
+    "signedInAs": "Oturum açan hesap",
+    "backToDashboard": "Panele dön",
+    "adminBadge": "Operatör yönetimi",
+    "groups": {
+      "agent": "Yapay zekâ ajanı",
+      "business": "İşletme",
+      "agency": "Ajans",
+      "operations": "Operasyon"
+    },
+    "nav": {
+      "dashboardLabel": "Panel gezinmesi",
+      "agencyLabel": "Ajans portalı gezinmesi",
+      "adminLabel": "Yönetim gezinmesi",
+      "overview": "Genel bakış",
+      "knowledgeBase": "Bilgi tabanı",
+      "testAgent": "Ajanı test et",
+      "skills": "Yetenekler",
+      "crewInsights": "Dev Crew içgörüleri",
+      "bookings": "Randevular",
+      "team": "Ekip",
+      "billing": "Faturalama",
+      "settings": "Ayarlar",
+      "agencyPortal": "Ajans portalı",
+      "adminDashboard": "Panel",
+      "adminLeads": "Adaylar / CRM",
+      "adminClients": "Müşteriler",
+      "adminAppointments": "Randevular",
+      "adminPayments": "Ödemeler",
+      "adminSettings": "Ayarlar",
+      "adminAnalytics": "Analitik",
+      "adminTasks": "Görevler",
+      "agencyTenants": "Kiracılar",
+      "agencyBranding": "Marka ve alan adı",
+      "agencyAnalytics": "Analitik"
+    },
+    "organization": {
+      "label": "Kuruluşlar",
+      "active": "Aktif kuruluş",
+      "switch": "Kuruluş değiştir",
+      "untitled": "Adsız kuruluş",
+      "switchFailed": "Kuruluş değiştirilemedi"
+    },
+    "roles": {
+      "owner": "Sahip",
+      "admin": "Yönetici",
+      "member": "Üye"
+    },
+    "agent": {
+      "live": "Ajan canlı",
+      "quotaLow": "Kota azalıyor",
+      "quotaExhausted": "Kota doldu",
+      "inactive": "Ajan duraklatıldı",
+      "hint": {
+        "live": "Ajanınız ziyaretçileri yanıtlıyor. Token kotasının %{percent}'i kullanıldı.",
+        "quotaLow": "Token kotasının %{percent}'i kullanıldı — planı yükseltin veya sıfırlanmayı bekleyin.",
+        "quotaExhausted": "Token kotası bitti; sıfırlanana kadar ajan yanıt veremez.",
+        "inactive": "Abonelik aktif değil; ajan ziyaretçilere hizmet vermiyor."
+      }
+    },
+    "search": {
+      "placeholder": "Bilgi tabanına sorun…",
+      "label": "Bilgi tabanında ara"
+    },
+    "notifications": {
+      "label": "Bildirimler",
+      "labelUnread": "Bildirimler (yeni)",
+      "title": "Son Dev Crew önerileri",
+      "empty": "Henüz öneri yok.",
+      "viewAll": "Tüm içgörüleri gör"
+    }
+  },
+  "chatWidget": {
+    "defaultTitle": "Yapay zekâ asistanı",
+    "online": "Çevrimiçi · Yapay zekâ bilgi tabanı",
+    "open": "Sohbeti aç",
+    "close": "Sohbeti kapat",
+    "transcript": "Konuşma",
+    "greeting": "Merhaba! Ürün ve hizmetlerimiz hakkında bana her şeyi sorabilirsiniz.",
+    "placeholder": "Mesajınızı yazın…",
+    "send": "Mesaj gönder",
+    "thinking": "Düşünüyor…",
+    "errorGeneric": "Üzgünüz, bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "errorEmpty": "Bir yanıt oluşturamadım.",
+    "simulatorTitle": "Hızlı test",
+    "simulatorHint": "Ziyaretçi gibi sohbet edin — yanıtlar bilgi tabanınızdan gelir.",
+    "newConversation": "Yeni konuşma",
+    "suggestion1": "Çalışma saatleriniz nedir?",
+    "suggestion2": "Nasıl randevu alabilirim?",
+    "suggestion3": "İade politikanız nedir?"
+  },
+  "status": {
+    "appointment": {
+      "pending": "Beklemede",
+      "confirmed": "Onaylandı",
+      "cancelled": "İptal edildi",
+      "completed": "Tamamlandı"
+    },
+    "subscription": {
+      "active": "Aktif",
+      "trialing": "Deneme",
+      "past_due": "Ödemesi gecikmiş",
+      "canceled": "İptal edildi",
+      "inactive": "Pasif"
+    }
+  },
+  "dashboard": {
+    "overview": {
+      "title": "Genel bakış",
+      "welcome": "Tekrar hoş geldiniz, {email}.",
+      "welcomeAnonymous": "Tekrar hoş geldiniz.",
+      "plan": "{plan} planı",
+      "manageBilling": "Faturalamayı yönet",
+      "metrics": {
+        "liveChats": {
+          "label": "Canlı sohbetler",
+          "hint": "Son {minutes} dakikada aktif"
+        },
+        "ragSuccess": {
+          "label": "RAG yanıt başarısı",
+          "hint": "Son {days} günde {count} yanıt",
+          "empty": "Henüz yanıt yok",
+          "tooltip": "Sohbet yanıtlarının bilgi tabanınıza dayanan payı — düşük güvenli yedek yanıt veya token kotası nedeniyle engellenen yanıtlar hariç."
+        },
+        "quota": {
+          "label": "Aylık token kotası",
+          "hint": "{limit} tokenin · {date} tarihinde sıfırlanır",
+          "hintNoReset": "{limit} tokenin",
+          "usage": "Kullanılan token kotası"
+        },
+        "bookings": {
+          "label": "Bu haftaki randevular",
+          "hint": "Son 7 günde oluşturuldu"
+        }
+      },
+      "checklist": {
+        "title": "Kuruluşunuzun kurulumunu tamamlayın",
+        "remaining": "Tamamen yayına almadan önce {count} adım kaldı.",
+        "dismiss": "Kurulum listesini gizle",
+        "org": "Kuruluşunuzu oluşturun",
+        "team": "Bir ekip arkadaşı davet edin",
+        "service": "Rezerve edilebilir bir hizmet ekleyin",
+        "kb": "Bilgi tabanına belge ekleyin"
+      },
+      "recent": {
+        "title": "Son randevular",
+        "viewAll": "Tümünü gör",
+        "customer": "Müşteri",
+        "service": "Hizmet",
+        "date": "Tarih",
+        "status": "Durum",
+        "fallbackService": "Hizmet",
+        "emptyTitle": "Henüz randevu yok",
+        "emptyDescription": "Müşteriler randevu almaya başlar başlamaz burada görünür — ya da akışı kendiniz deneyin.",
+        "simulate": "Rezervasyon sayfasını dene",
+        "testAgent": "Ajanı test et"
+      },
+      "crewWidget": {
+        "title": "Son Dev Crew uyarısı",
+        "emptyTitle": "Her şey yolunda",
+        "emptyDescription": "Dev Crew ajanınızda henüz bir sorun işaretlemedi.",
+        "viewAll": "İçgörü akışını aç",
+        "signals": "{count} olumsuz sinyal"
+      }
+    },
+    "crewInsights": {
+      "severity": {
+        "critical": "Kritik",
+        "warning": "Uyarı",
+        "info": "Bilgi"
+      },
+      "title": "Dev Crew içgörüleri",
+      "description": "Ajanınızın konuşmalarını izleyen Dev Crew'dan canlı telemetri ve otonom öneriler.",
+      "connection": {
+        "live": "Canlı",
+        "paused": "Bu sekme gizliyken duraklatıldı",
+        "reconnecting": "Yeniden bağlanılıyor…"
+      },
+      "updated": "{time} güncellendi",
+      "refresh": "Yenile",
+      "stats": {
+        "label": "Akış özeti",
+        "total": "Benzersiz öneriler",
+        "totalHint": "Tekrarlar birleştirilir",
+        "critical": "Kritik",
+        "warning": "Uyarılar"
+      },
+      "filters": {
+        "all": "Tümü",
+        "critical": "Kritik",
+        "warning": "Uyarı",
+        "info": "Bilgi"
+      },
+      "derivedNote": "Önem derecesi olumsuz sinyal sayısından tahmin edilir — Dev Crew kendisi derecelendirmez.",
+      "emptyTitle": "Henüz öneri yok",
+      "emptyDescription": "Dev Crew, ajanınızın konuşmalarında bir sorun tespit ettiğinde önerisi burada gerçek zamanlı görünür.",
+      "emptyFilteredTitle": "Bu önem derecesinde kayıt yok",
+      "emptyFilteredDescription": "Başka bir filtre deneyin.",
+      "loadMore": "Eskileri yükle",
+      "loadFailed": "Eski öneriler yüklenemedi.",
+      "card": {
+        "signals": "{count} olumsuz sinyal",
+        "repeated": "{count} kez tekrarlandı",
+        "new": "Yeni",
+        "actions": "En sık eylemler",
+        "resources": "En çok etkilenen kaynaklar",
+        "analyzed": "Analiz edilen {count} olaya dayanır",
+        "noText": "(öneri metni yok)"
+      }
+    },
+    "skills": {
+      "title": "Yetenekler",
+      "description": "Yapay zekâ ajanınızın sohbetlerde hangi yetenekleri kullanabileceğini seçin.",
+      "currentPlan": "Planınız: {plan}",
+      "readOnly": "Yetenekleri yalnızca sahipler ve yöneticiler değiştirebilir. Mevcut yapılandırmayı aşağıda inceleyebilirsiniz.",
+      "matrixLabel": "Yetenek matrisi",
+      "tiers": {
+        "starter": "Starter",
+        "pro": "Pro",
+        "enterprise": "Enterprise"
+      },
+      "catalog": {
+        "rag_search": {
+          "title": "Bilgi tabanı araması (RAG)",
+          "description": "Ajanın yanıtlarını dayandırmak için yüklediğiniz belgelerde arama yapmasına izin verin."
+        },
+        "calendar_booking": {
+          "title": "Takvim randevu asistanı",
+          "description": "Ajanın hizmetleriniz için müsaitliği kontrol etmesine ve randevu oluşturmasına izin verin."
+        }
+      },
+      "toggle": "{skill} yeteneğini etkinleştir",
+      "requires": "{tier} gerektirir",
+      "upgrade": "{tier} planına yükselt",
+      "locked": "Kilitli",
+      "configure": "Yapılandır",
+      "updated": "Yetenekler güncellendi",
+      "updateFailed": "Yetenekler güncellenemedi",
+      "config": {
+        "title": "{skill} yapılandırması",
+        "description": "Bu yeteneğin davranışını ayarlayın. Değişiklikler yeni konuşmalara uygulanır.",
+        "reset": "Varsayılanlara dön",
+        "save": "Ayarları kaydet",
+        "saved": "Ayarlar kaydedildi",
+        "saveFailed": "Ayarlar kaydedilemedi",
+        "range": "İzin verilen aralık: {min}–{max}. Varsayılan: {default}.",
+        "invalid": "{min} ile {max} arasında bir değer girin.",
+        "fields": {
+          "top_k": {
+            "label": "Getirilen pasaj sayısı",
+            "description": "Ajanın yanıtlamadan önce okuduğu belge pasajı sayısı. Daha fazla bağlam yardımcı olabilir ancak daha çok token harcar."
+          },
+          "similarity_threshold": {
+            "label": "Eşleşme sıkılığı",
+            "description": "Bir pasajın ilgili sayılması için gereken en düşük benzerlik. Yüksek değer daha sıkıdır — daha az ama daha isabetli kaynak."
+          }
+        }
+      },
+      "enterprise": {
+        "title": "Özel yetenekler ve kendi LLM'inizi getirin",
+        "description": "İş akışınıza özel bir yetenek mi gerekiyor ya da kendi model sağlayıcı anahtarlarınızla mı çalışmak istiyorsunuz? Enterprise ikisini de içerir.",
+        "cta": "Satış ekibiyle görüşün"
+      },
+      "errors": {
+        "forbidden": "Yetenekleri yalnızca sahipler ve yöneticiler yönetebilir.",
+        "invalid": "Yetenek listesi geçerli değil.",
+        "planLimit": "Mevcut planınız şunları içermiyor: {skills}.",
+        "saveFailed": "Değişiklikler kaydedilemedi. Lütfen tekrar deneyin.",
+        "unknownSkill": "Bilinmeyen yetenek.",
+        "notConfigurable": "Bu yeteneğin ayarı yok.",
+        "invalidConfig": "Bazı ayarlar izin verilen aralığın dışında."
+      }
+    },
+    "chatbot": {
+      "title": "Ajanı test et",
+      "description": "Ajanınızla tam bir ziyaretçi gibi sohbet edin ve gömme kodunu alın.",
+      "embed": {
+        "title": "Widget'ı sitenize gömün",
+        "description": "Widget'ı herhangi bir React sayfasına ekleyin. Bu kuruluşun bilgi tabanından yanıt verir."
+      },
+      "how": {
+        "title": "Nasıl çalışır",
+        "step1": "Bilgi tabanına belge ekleyin.",
+        "step2": "Ziyaretçi widget üzerinden mesaj gönderir.",
+        "step3": "En ilgili pasajlar benzerliğe göre getirilir.",
+        "step4": "Ajan, kaynaklara dayalı bir yanıtı gerçek zamanlı aktarır."
+      }
+    },
+    "knowledgeBase": {
+      "title": "Bilgi tabanı",
+      "description": "Ajanınızın yanıtlarını dayandırdığı belgeleri yükleyin. Dosyalar parçalara ayrılır ve arama için vektörleştirilir.",
+      "tabs": {
+        "files": "Dosya yükle",
+        "text": "Metin yapıştır"
+      },
+      "dropzone": {
+        "label": "Bilgi tabanına dosya yükle",
+        "title": "Dosyaları buraya sürükleyin veya göz atmak için tıklayın",
+        "dragActive": "Yüklemek için bırakın",
+        "hint": "PDF, TXT, MD, CSV, JSON veya HTML · dosya başına en fazla {size} MB"
+      },
+      "queue": {
+        "title": "Yüklemeler",
+        "queued": "Sırada…",
+        "uploading": "Yükleniyor %{percent}",
+        "processing": "Parçalanıyor ve vektörleştiriliyor…",
+        "ready": "Hazır — ajan artık kullanabilir",
+        "failed": "Başarısız",
+        "retry": "Yüklemeyi tekrar dene",
+        "dismiss": "Kapat"
+      },
+      "text": {
+        "titleLabel": "Başlık",
+        "titlePlaceholder": "örn. İade politikası",
+        "contentLabel": "İçerik",
+        "contentPlaceholder": "Ajanınızın bilmesi gereken metni yapıştırın…",
+        "tooLong": "Bu metin çok uzun. Birkaç belgeye bölün.",
+        "submit": "Bilgi tabanına ekle",
+        "preview": {
+          "title": "Parça önizlemesi",
+          "summary": "{count} parça · ~{tokens} token",
+          "empty": "Metninizin nasıl bölüneceğini görmek için yazmaya başlayın.",
+          "chunk": "Parça {index}",
+          "tokens": "{count} token",
+          "more": "+ {count} parça daha"
+        }
+      },
+      "list": {
+        "title": "Belgeler",
+        "count": "Planınızdaki {limit} belgeden {count} tanesi",
+        "countUnlimited": "{count} belge",
+        "emptyTitle": "Henüz belge yok",
+        "emptyDescription": "Yukarıdan bir dosya yükleyin veya metin yapıştırın — ajanınız hemen bundan yanıt vermeye başlar.",
+        "loadFailedTitle": "Belgeler yüklenemedi",
+        "loadFailedDescription": "Bağlantınızı kontrol edip tekrar deneyin.",
+        "reload": "Yeniden yükle",
+        "columns": {
+          "name": "Ad",
+          "status": "Durum",
+          "chunks": "Parça",
+          "size": "Boyut",
+          "added": "Eklendi",
+          "actions": "İşlemler"
+        },
+        "status": {
+          "processing": "İşleniyor",
+          "ready": "Hazır",
+          "failed": "Başarısız"
+        },
+        "bulkActions": "Toplu işlemler",
+        "selectAll": "Tüm belgeleri seç",
+        "select": "{title} belgesini seç",
+        "selected": "{count} seçili",
+        "clearSelection": "Temizle",
+        "deleteSelected": "Seçilenleri sil",
+        "deleteOne": "{title} belgesini sil",
+        "viewChunks": "{title} parçalarını gör",
+        "confirmTitle": "{count} belge silinsin mi?",
+        "confirmDescription": "Belgeler ve tüm parçaları kalıcı olarak silinir. Ajanınız artık bunlardan yanıt vermez.",
+        "confirmDelete": "Sil",
+        "cancel": "Vazgeç",
+        "deleted": "{count} belge silindi",
+        "deleteFailed": "Belgeler silinemedi"
+      },
+      "chunks": {
+        "title": "Parçalar — {title}",
+        "description": "{count} parça saklandı. Ajanın getirebildiği içerik budur.",
+        "chunk": "Parça {index}",
+        "tokens": "{count} token",
+        "empty": "Bu belgenin saklanmış parçası yok.",
+        "loadFailed": "Parçalar yüklenemedi.",
+        "loadMore": "Daha fazla yükle"
+      },
+      "simulator": {
+        "title": "Getirme testi",
+        "description": "Bir soru sorun ve ajanın hangi pasajları okuyacağını benzerliğe göre sıralı görün.",
+        "placeholder": "örn. İade politikanız nedir?",
+        "run": "Ara",
+        "summary": "{threshold} benzerlik ve üzerinde {count} pasaj (en fazla {topK})",
+        "none": "Hiçbir pasaj {threshold} benzerliğe ulaşmıyor. Soruyu yeniden ifade edin, içerik ekleyin veya Yetenekler'de eşleşme sıkılığını düşürün.",
+        "similarity": "Benzerlik",
+        "untitled": "Adsız belge"
+      },
+      "errors": {
+        "unsupported_type": "Bu dosya türü desteklenmiyor.",
+        "too_large": "Bu dosya çok büyük.",
+        "empty": "Bu dosya boş.",
+        "extract_failed": "Bu dosya okunamadı. Geçerli ve korumasız bir belge mi?",
+        "empty_document": "Bu dosyada okunabilir metin bulunamadı.",
+        "content_required": "Önce biraz içerik ekleyin.",
+        "invalid_body": "İstek geçerli değildi.",
+        "not_found": "Belge bulunamadı.",
+        "rate_limited": "Çok fazla istek. Lütfen biraz bekleyin.",
+        "ingest_failed": "İşleme başarısız oldu. Biraz sonra tekrar deneyin.",
+        "server_error": "Bizim tarafımızda bir sorun oluştu.",
+        "network": "Ağ hatası. Bağlantınızı kontrol edin.",
+        "unauthorized": "Lütfen yeniden giriş yapın.",
+        "noMembership": "Herhangi bir kuruluşa üye değilsiniz."
+      }
+    },
+    "team": {
+      "title": "Ekip",
+      "yourOrganization": "Kuruluşunuz",
+      "members": "Üyeler ({count})",
+      "unknownMember": "Bilinmiyor",
+      "you": "(siz)",
+      "remove": "Kaldır",
+      "removeAria": "{name} üyesini kaldır",
+      "roleAria": "{name} rolü",
+      "invite": {
+        "title": "Üye davet et",
+        "onlyAdmins": "Yeni üyeleri yalnızca sahipler ve yöneticiler davet edebilir.",
+        "emailLabel": "E-posta adresi",
+        "emailPlaceholder": "meslektasiniz@ornek.com",
+        "roleLabel": "Rol",
+        "send": "Davet gönder",
+        "sending": "Gönderiliyor…",
+        "sent": "Davet gönderildi."
+      },
+      "pending": {
+        "title": "Bekleyen davetler ({count})",
+        "emptyTitle": "Bekleyen davet yok",
+        "emptyDescription": "Gönderdiğiniz davetler kabul edilene veya iptal edilene kadar burada görünür.",
+        "expires": "{role} · {date} tarihinde sona erer",
+        "revoke": "İptal et",
+        "revoking": "İptal ediliyor…"
+      },
+      "errors": {
+        "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+        "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
+        "invalidRole": "Geçersiz rol.",
+        "cannotInvite": "Üyeleri yalnızca sahipler ve yöneticiler davet edebilir.",
+        "alreadyMember": "Bu kişi zaten üye.",
+        "alreadyInvited": "Bu e-posta için zaten bir davet var.",
+        "cannotRevoke": "Davetleri yalnızca sahipler ve yöneticiler iptal edebilir.",
+        "cannotRemove": "Üyeleri yalnızca sahipler ve yöneticiler kaldırabilir.",
+        "memberNotFound": "Üye bulunamadı.",
+        "cannotRemoveOwner": "Kuruluş sahibini kaldıramazsınız.",
+        "cannotChangeRoles": "Rolleri yalnızca sahipler ve yöneticiler değiştirebilir.",
+        "cannotChangeOwner": "Sahibin rolünü değiştiremezsiniz."
+      }
+    },
+    "bookings": {
+      "title": "Randevular",
+      "description": "Yaklaşan ve geçmiş randevuları görüntüleyin ve yönetin.",
+      "filter": {
+        "status": "Durum",
+        "allStatuses": "Tüm durumlar",
+        "date": "Tarih",
+        "apply": "Filtrele",
+        "reset": "Sıfırla",
+        "resetFilter": "Filtreyi sıfırla"
+      },
+      "upcoming": "Yaklaşan ({count})",
+      "past": "Geçmiş ({count})",
+      "emptyFilteredTitle": "Bu filtreyle eşleşen randevu yok",
+      "emptyFilteredDescription": "Farklı bir durum veya tarih deneyin ya da filtreyi sıfırlayın.",
+      "emptyUpcomingTitle": "Yaklaşan randevu yok",
+      "emptyUpcomingWithServices": "Müşterilerin kendilerini takvime ekleyebilmesi için rezervasyon bağlantınızı paylaşın.",
+      "emptyUpcomingNoServices": "Bu kuruluşta henüz rezerve edilebilir hizmet yapılandırılmamış, bu yüzden randevu alınamaz.",
+      "emptyPastTitle": "Geçmiş randevu yok",
+      "emptyPastDescription": "Tamamlanan ve iptal edilen randevular gerçekleştiğinde burada görünür.",
+      "fallbackService": "Hizmet",
+      "when": "{date} · {start} – {end}",
+      "actions": {
+        "reschedule": "Yeniden planla",
+        "cancel": "İptal et",
+        "working": "İşleniyor…",
+        "save": "Kaydet",
+        "newTime": "Yeni tarih ve saat"
+      },
+      "errors": {
+        "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+        "invalidId": "Geçerli bir randevu kimliği gerekli.",
+        "invalidDate": "Lütfen geçerli bir tarih ve saat girin.",
+        "notFound": "Randevu bulunamadı.",
+        "alreadyCancelled": "Bu randevu zaten iptal edilmiş.",
+        "mustBeFuture": "Yeni zaman gelecekte olmalı.",
+        "cannotReschedule": "Bu randevu artık yeniden planlanamaz.",
+        "serviceNotFound": "Hizmet bulunamadı.",
+        "conflict": "Seçilen zaman mevcut bir randevuyla çakışıyor."
+      }
+    },
+    "billing": {
+      "title": "Faturalama",
+      "description": "Aboneliğinizi ve ödeme bilgilerinizi yönetin.",
+      "plan": "Plan",
+      "status": "Durum",
+      "renews": "Yenilenme",
+      "notAvailable": "Yok",
+      "choosePlan": "Bir plan seçin",
+      "manage": "Faturalamayı yönet",
+      "loading": "Yükleniyor…",
+      "noOrganization": "Henüz bir kuruluşa üye değilsiniz. Başlamak için <link>bir plan seçin</link>.",
+      "error": "Faturalama açılamadı. Lütfen tekrar deneyin."
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "description": "Hesabınızı ve kuruluşunuzu yönetin.",
+      "profile": {
+        "label": "Profil",
+        "description": "Adınızı güncelleyin ve e-postanızı görüntüleyin.",
+        "pageDescription": "Kişisel bilgilerinizi güncelleyin.",
+        "email": "E-posta",
+        "emailHint": "E-posta kimlik doğrulama sağlayıcınız tarafından yönetilir ve buradan değiştirilemez.",
+        "fullName": "Ad soyad",
+        "fullNamePlaceholder": "Adınız",
+        "updated": "Profil güncellendi.",
+        "tooLong": "Ad soyad çok uzun."
+      },
+      "organization": {
+        "label": "Kuruluş",
+        "description": "Kuruluş ayarlarınızı yönetin.",
+        "name": "Kuruluş adı",
+        "onlyAdmins": "Kuruluş ayarlarını yalnızca sahipler ve yöneticiler düzenleyebilir.",
+        "updated": "Kuruluş güncellendi.",
+        "nameRequired": "Kuruluş adı gerekli.",
+        "nameTooLong": "Kuruluş adı çok uzun."
+      },
+      "save": "Değişiklikleri kaydet",
+      "saving": "Kaydediliyor…",
+      "errors": {
+        "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+        "forbidden": "Kuruluş ayarlarını yalnızca sahipler ve yöneticiler düzenleyebilir."
+      }
+    }
+  },
+  "agency": {
+    "errors": {
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+      "not_agency_admin": "Bu ajansı yönetme yetkiniz yok.",
+      "not_tenant_owner": "Yalnızca sahibi olduğunuz kuruluşları bağlayabilirsiniz.",
+      "tenant_is_master": "Ajansınızın kendi kuruluşu kiracı olarak eklenemez.",
+      "tenant_already_linked": "Bu kuruluş zaten bir ajansa bağlı.",
+      "tenant_not_in_agency": "Bu kiracı ajansınıza bağlı değil.",
+      "quota_pool_exceeded": "Bu, token havuzunuzu aşar. Daha düşük bir miktar girin veya daha büyük bir havuz isteyin.",
+      "quota_below_consumed": "Bu değer, kiracının şimdiye kadar kullandığından düşük. En az kullanılan miktarı girin.",
+      "invalid_quota": "Geçerli bir token sayısı girin.",
+      "invalid_name": "Kiracı için bir ad girin.",
+      "invalid_slug": "Küçük harf, rakam ve tekli tire kullanın, örn. acme-repairs.",
+      "slug_taken": "Bu kısa ad zaten alınmış. Başka bir tane deneyin.",
+      "org_not_found": "Bu kuruluş sahibi olduklarınız arasında bulunamadı.",
+      "invalid_skills": "Geçersiz yetenek seçimi.",
+      "plan_limit": "Ajans planınız şunları içermiyor: {skills}.",
+      "form_invalid": "Lütfen işaretli alanları düzeltin.",
+      "domain_taken": "Bu alan adı zaten başka bir ajansa bağlı."
+    },
+    "validation": {
+      "agency_id_invalid": "Geçerli bir ajans kimliği gerekli.",
+      "tenant_id_invalid": "Geçerli bir kiracı kimliği gerekli.",
+      "tenant_name_required": "Kiracı için bir ad girin.",
+      "tenant_name_max": "Ad en fazla 80 karakter olabilir.",
+      "slug_min": "Kısa ad en az 3 karakter olmalı.",
+      "slug_max": "Kısa ad en fazla 48 karakter olabilir.",
+      "slug_format": "Küçük harf, rakam ve tekli tire kullanın, örn. acme-repairs.",
+      "quota_digits": "Tam sayı olarak token girin (0 veya daha fazla).",
+      "quota_max": "Bu miktar çok büyük.",
+      "brand_title_max": "Marka başlığı en fazla 80 karakter olabilir.",
+      "logo_url_invalid": "Geçerli bir URL girin, örn. https://cdn.youragency.com/logo.svg",
+      "https_only": "https:// ile başlamalı",
+      "color_hex": "#7c3aed gibi 6 haneli bir hex renk kullanın.",
+      "domain_invalid": "ai.youragency.com gibi geçerli bir alan adı girin.",
+      "domain_platform": "Bu alan adı platforma ait."
+    },
+    "tenants": {
+      "title": "Kiracılar",
+      "description": "Yönettiğiniz müşteri kuruluşları. Havuzunuzdan token ayırın ve her asistanın kullanabileceği yetenekleri seçin.",
+      "untitled": "Adsız kuruluş",
+      "emptyTitle": "Henüz kiracı yok",
+      "emptyDescription": "Yeni bir müşteri kuruluşu oluşturun veya sahibi olduğunuz birini bağlayın; buradan yönetmeye başlayın.",
+      "pool": {
+        "title": "Token havuzu",
+        "pool": "Havuz",
+        "allocated": "Ayrılan",
+        "available": "Kullanılabilir",
+        "meter": "Token havuzunun kiracılara ayrılan payı",
+        "allocatedShare": "Havuzunuzun {percent} kadarı kiracılara ayrıldı.",
+        "empty": "Token havuzunuz boş, bu yüzden henüz token ayrılamaz. Havuz atanması için platform ekibiyle iletişime geçin."
+      },
+      "add": {
+        "trigger": "Kiracı ekle",
+        "triggerFirst": "İlk kiracınızı ekleyin",
+        "title": "Kiracı ekle",
+        "description": "Kiracılar yönettiğiniz müşteri kuruluşlarıdır. Her biri token havuzunuzdan beslenir.",
+        "tabCreate": "Yeni oluştur",
+        "tabLink": "Mevcut olanı bağla",
+        "nameLabel": "Kiracı adı",
+        "slugLabel": "Kısa ad",
+        "slugHint": "Küçük harf, rakam ve tire. Yeni kuruluşun sahibi siz olursunuz.",
+        "creating": "Oluşturuluyor…",
+        "create": "Kiracı oluştur",
+        "created": "Kiracı oluşturuldu",
+        "linkHint": "Yalnızca sahibi olduğunuz kuruluşlar bağlanabilir. Bağlamak, kullanımını, sohbetlerini ve içgörülerini görmenizi sağlar.",
+        "linking": "Bağlanıyor…",
+        "link": "Kiracıyı bağla",
+        "linked": "Kiracı bağlandı"
+      },
+      "picker": {
+        "label": "Bağlayabileceğiniz kuruluşlar",
+        "search": "Kuruluşlarınızda arayın…",
+        "noMatches": "Aramanızla eşleşen kuruluş yok.",
+        "emptyTitle": "Henüz bağlanacak bir şey yok",
+        "emptyDescription": "Sahibi olduğunuz ve henüz bir ajansa bağlı olmayan kuruluşları bağlayabilirsiniz. Bunun yerine yeni bir kiracı oluşturun veya müşteriden sizi sahip yapmasını isteyin."
+      },
+      "table": {
+        "tenant": "Kiracı",
+        "usage": "Token kullanımı",
+        "skills": "Yetenekler",
+        "actions": "İşlemler",
+        "noAllocation": "Token ayrılmadı",
+        "consumption": "{name} token tüketimi",
+        "remaining": "{granted} tokenin {remaining} kadarı kaldı ({percent} kullanıldı)",
+        "outOfTokens": "Token bitti",
+        "noSkills": "Yok",
+        "tokens": "Token",
+        "allocateAria": "{name} için token ayır",
+        "skillsAria": "{name} yeteneklerini yönet",
+        "removeAria": "{name} kiracısını kaldır",
+        "remove": "Kaldır"
+      },
+      "quota": {
+        "title": "{name} için token ayır",
+        "description": "Bu kiracının mevcut dönem için toplam token bütçesini belirleyin. Şimdiye kadar kullandığı tokenlar sayılmaya devam eder.",
+        "label": "Toplam token",
+        "hint": "Şimdiye kadar kullanılan: {used} · Belirleyebileceğiniz en yüksek: {max}",
+        "errors": {
+          "digits": "Tam sayı olarak token girin (0 veya daha fazla).",
+          "min": "En az {min} girin — bu kiracı şimdiden bu kadarını kullandı.",
+          "max": "En fazla {max} girin — havuzunuzun bu kiracı için karşılayabileceği en yüksek miktar bu."
+        },
+        "cancel": "Vazgeç",
+        "saving": "Kaydediliyor…",
+        "save": "Ayırmayı kaydet",
+        "saved": "{name} için token güncellendi"
+      },
+      "remove": {
+        "title": "{name} ajansınızdan kaldırılsın mı?",
+        "description": "Kuruluş ve verileri silinmez. Yalnızca ajansınız tarafından yönetilmeyi bırakır.",
+        "loseAccess": "Kullanımına, sohbetlerine ve içgörülerine erişimi kaybedersiniz.",
+        "returnsTokens": "{tokens} tokenlik ayrımı havuzunuza döner ve asistanı artık bundan yararlanmaz.",
+        "relink": "Sahibi siz iseniz daha sonra tekrar bağlayabilirsiniz.",
+        "keep": "Kiracıyı koru",
+        "removing": "Kaldırılıyor…",
+        "confirm": "Kiracıyı kaldır",
+        "removed": "{name} kaldırıldı"
+      },
+      "skills": {
+        "title": "{name} yetenekleri",
+        "description": "Bu kiracının yapay zekâ asistanının neler yapabileceğini seçin. Kullanılabilir yetenekler ajans planınıza bağlıdır.",
+        "toggle": "{skill} yeteneğini aç/kapat",
+        "upgradeHint": "Takvim randevusu gibi daha fazla yetenek dağıtmak için ajans planınızı yükseltin.",
+        "cancel": "Vazgeç",
+        "saving": "Kaydediliyor…",
+        "save": "Yetenekleri kaydet",
+        "saved": "{name} yetenekleri güncellendi"
+      }
+    },
+    "branding": {
+      "title": "Marka ve alan adı",
+      "description": "Platformu size ait gösterin: logonuz, renkleriniz ve başlığınız kendi alan adınızdan sunulur.",
+      "saving": "Kaydediliyor…",
+      "save": "Markayı kaydet",
+      "saved": "Marka kaydedildi.",
+      "savedDomainChanged": "Marka kaydedildi. Alan adınız değiştiği için aşağıdan DNS kaydını doğrulayın.",
+      "fields": {
+        "title": "Marka başlığı",
+        "titleHint": "Logonuzun yanında ve alan adınızda sayfa başlığı olarak gösterilir.",
+        "logo": "Logo URL'si",
+        "logoHint": "Herkese açık bir https:// görseli. Yaklaşık 32 px yükseklik en iyi okunur; koyu temada şeffaf arka planlı SVG veya PNG iyi çalışır.",
+        "logoBroken": "Bu görsel yüklenemedi. URL'yi ve herkese açık olduğunu kontrol edin.",
+        "color": "Ana renk",
+        "colorPicker": "Ana rengi seçin",
+        "domain": "Özel alan adı",
+        "domainHint": "Müşterilerinizin ziyaret ettiği alan adı. Değiştirmek, DNS kaydının yeniden doğrulanması anlamına gelir."
+      },
+      "palette": {
+        "title": "Türetilen palet",
+        "base": "Ana",
+        "hover": "Üzerine gelince",
+        "text": "Düğme metni",
+        "contrastOk": "Düğme metni kontrastı {ratio}:1 — WCAG AA'yı karşılıyor.",
+        "contrastLow": "Düğme metni kontrastı {ratio}:1, WCAG AA'nın (4,5:1) altında. Düğmelerin okunabilir kalması için daha koyu veya daha açık bir renk seçin."
+      },
+      "preview": {
+        "title": "Canlı önizleme",
+        "device": "Önizleme boyutu",
+        "desktop": "Masaüstü",
+        "mobile": "Mobil",
+        "brandFallback": "Markanız",
+        "domainFallback": "alan-adiniz.com",
+        "navOverview": "Genel bakış",
+        "navKnowledge": "Bilgi tabanı",
+        "navSkills": "Yetenekler",
+        "metricLabel": "RAG yanıt başarısı",
+        "chatAgent": "Merhaba! Bugün size nasıl yardımcı olabilirim?",
+        "chatUser": "Çalışma saatleriniz nedir?",
+        "button": "Başlayın",
+        "buttonSecondary": "Daha fazla bilgi"
+      },
+      "dns": {
+        "title": "Alan adı doğrulama",
+        "description": "Markanız yalnızca CNAME kaydı doğrulandıktan sonra bir alan adında sunulur.",
+        "noDomain": "Önce yukarıda bir özel alan adı kaydedin, sonra DNS kaydını doğrulamak için buraya dönün.",
+        "stepsLabel": "Doğrulama ilerlemesi",
+        "steps": {
+          "add": "Kaydı ekleyin",
+          "propagate": "DNS'i bekleyin",
+          "verified": "Doğrulandı"
+        },
+        "addRecord": "Bu DNS kaydını sağlayıcınızda ekleyin",
+        "record": {
+          "type": "Tür",
+          "name": "Ad",
+          "value": "Değer"
+        },
+        "copyAria": "{label} değerini kopyala",
+        "copyFailed": "Panoya kopyalanamadı",
+        "cloudflareHint": "Cloudflare mi kullanıyorsunuz? Kaydı yalnızca DNS (gri bulut) olarak ayarlayın — proxy'li kayıt CNAME'i gizler ve doğrulanamaz.",
+        "verify": "DNS'i doğrula",
+        "checking": "DNS kontrol ediliyor…",
+        "startWatching": "Otomatik izle",
+        "stopWatching": "İzlemeyi durdur",
+        "watching": "Her 30 sn'de otomatik kontrol · {time} sonra durur",
+        "verifiedToast": "{domain} doğrulandı",
+        "status": {
+          "pending": "Beklemede",
+          "active": "Doğrulandı",
+          "failed": "İlgi gerekiyor"
+        },
+        "message": {
+          "active": "Doğrulandı. {domain} ziyaretçileri markanızı görür.",
+          "failed": "{domain} için bir CNAME kaydı var ancak {target} adresine işaret etmiyor. Güncelleyip tekrar kontrol edin.",
+          "pending": "{domain} için henüz bir CNAME kaydı görmüyoruz. DNS değişikliklerinin yayılması birkaç dakikadan birkaç saate kadar sürebilir."
+        },
+        "dnsReturns": "DNS şu anda şunu döndürüyor",
+        "noRecordFound": "CNAME kaydı bulunamadı",
+        "lastChecked": "Son kontrol",
+        "neverChecked": "Henüz kontrol edilmedi",
+        "errors": {
+          "rate_limited": "Çok fazla deneme. Lütfen bir dakika bekleyip tekrar deneyin.",
+          "dns_unreachable": "DNS çözümleyiciye ulaşılamadı. Lütfen tekrar deneyin.",
+          "not_found": "Ajans bulunamadı.",
+          "no_domain": "Bu ajans için özel alan adı yapılandırılmamış.",
+          "generic": "Alan adı şu anda doğrulanamadı. Lütfen tekrar deneyin."
+        }
+      }
+    },
+    "analytics": {
+      "title": "Analitik",
+      "description": "Tüm kiracılarınızdaki yapay zekâ asistanı kullanımı.",
+      "window": "Zaman aralığı",
+      "days": "{count} gün",
+      "emptyTitle": "Henüz analiz edilecek bir şey yok",
+      "emptyDescription": "Kiracılar sayfasında kiracı ekleyin ve token ayırın. Yapay zekâ asistanlarının kullanımı burada görünür.",
+      "requests": "Yapay zekâ istekleri",
+      "requestsHint": "Ziyaretçi mesajları, son {days} gün",
+      "consumption": "Token tüketimi",
+      "consumptionHint": "Ayrılan {granted} tokenin {used} kadarı",
+      "lowConfidence": "Düşük güvenli yanıtlar",
+      "lowConfidenceHint": "Son {days} günde {total} yanıtın {low} tanesi",
+      "attention": "İlgi gerekenler",
+      "attentionNone": "Limitine yaklaşan kiracı yok",
+      "attentionSome": "{out} tokeni bitti · {near} limite yakın",
+      "tokenNote": "Token değerleri her kiracının mevcut ayrımını gösterir ve zaman aralığıyla değişmez.",
+      "chartTitle": "Kiracıya göre token tüketimi",
+      "chartDescription": "Her kiracının ayrımının şimdiye kadar kullanılan payı, en çok kullanan başta",
+      "chartEmpty": "Kiracılara henüz token ayrılmadı.",
+      "table": {
+        "caption": "Kiracı başına kullanım",
+        "tenant": "Kiracı",
+        "requests": "İstekler",
+        "lowConfidence": "Düşük güven",
+        "blocked": "Kota nedeniyle engellenen",
+        "tokens": "Kullanılan token",
+        "lastActivity": "Son etkinlik"
+      },
+      "crew": {
+        "title": "Dev Crew önerileri",
+        "description": "Dev Crew'un kiracılarınızın son sohbetlerinde fark ettiği örüntüler.",
+        "emptyTitle": "Henüz öneri yok",
+        "emptyDescription": "Dev Crew her konuşmadan sonra sohbet etkinliğini inceler ve harekete geçmeye değer bir şey bulduğunda burada paylaşır.",
+        "unknownTenant": "Bilinmeyen kiracı"
+      }
+    }
+  },
+  "pricing": {
+    "checkout": {
+      "redirecting": "Yönlendiriliyor…",
+      "error": "Ödeme başlatılamadı. Lütfen tekrar deneyin."
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "İşletmenizin genel durumu — gelir, lead'ler ve bekleyen işler tek bakışta.",
+      "kpis": {
+        "collected": "Bu ay tahsilat",
+        "activeClients": "Aktif müşteri",
+        "pendingLeads": "Bekleyen lead",
+        "pendingAppointments": "Bekleyen randevu"
+      },
+      "revenue": {
+        "title": "Gelir eğilimi",
+        "subtitle": "Son {months} ay, tahsil edilen ödemeler"
+      },
+      "actions": {
+        "title": "Aksiyon gerekiyor",
+        "empty": "Şu an bekleyen bir aksiyon yok.",
+        "fallbackClient": "Müşteri",
+        "overdue": "Gecikmiş ödeme — {name}",
+        "hotLead": "Yeni lead — {name}",
+        "hotLeadDetail": "Son 24 saat içinde geldi, henüz yanıtlanmadı",
+        "appointment": "Onay bekleyen randevu — {name}",
+        "risk": "Abonelik riski — {name}",
+        "riskCanceled": "İptal edildi",
+        "riskPastDue": "Ödeme gecikti",
+        "cold": "Soğuyan lead — {name}",
+        "coldDetail": "48 saatten uzun süredir yanıt bekliyor"
+      },
+      "activity": {
+        "title": "Aktivite akışı",
+        "empty": "Henüz aktivite yok."
+      }
+    },
+    "leads": {
+      "title": "Lead hattı",
+      "description": "Gelen SaaS ve freelance taleplerini dönüşüme kadar takip edin.",
+      "noLeads": "Lead yok",
+      "reject": "Reddet",
+      "status": {
+        "new": "Yeni",
+        "contacted": "İletişime geçildi",
+        "quoted": "Teklif gönderildi",
+        "accepted": "Kabul edildi",
+        "rejected": "Reddedildi"
+      },
+      "kind": {
+        "saas": "SaaS",
+        "freelance": "Freelance"
+      },
+      "categories": {
+        "fullstack_saas": "Full-stack SaaS",
+        "ai_automation": "Yapay zekâ otomasyonu",
+        "architecture_security": "Mimari ve güvenlik",
+        "payment_subscription": "Ödeme ve abonelik"
+      },
+      "modes": {
+        "hourly": "Saatlik",
+        "project": "Proje bazlı",
+        "either": "Fark etmez"
+      },
+      "detail": {
+        "back": "Hatta dön",
+        "phone": "Telefon",
+        "projectType": "Proje tipi",
+        "workingMode": "Çalışma şekli",
+        "source": "Kaynak",
+        "submitted": "Gönderilme",
+        "message": "Kısa açıklama",
+        "scope": "Takip yanıtı"
+      },
+      "actions": {
+        "status": "Durum",
+        "convert": "Client'a dönüştür",
+        "converting": "Dönüştürülüyor…",
+        "converted": "Client kuruluşuna dönüştürüldü.",
+        "askInvite": "Client oluşturuldu. Davet e-postası gönderilsin mi?",
+        "yes": "Evet",
+        "notNow": "Şimdi değil",
+        "sending": "Gönderiliyor…",
+        "sendInvite": "Daveti gönder",
+        "resendInvite": "Daveti yeniden gönder",
+        "sent": "Gönderildi",
+        "errors": {
+          "status": "Durum güncellenemedi.",
+          "convert": "Lead dönüştürülemedi.",
+          "invite": "Davet e-postası gönderilemedi."
+        }
+      }
+    },
+    "clients": {
+      "title": "Müşteriler",
+      "description": "Dönüştürülmüş her lead'in proje takibi — teslim durumu ve son aktivite.",
+      "emptyTitle": "Henüz müşteri yok",
+      "emptyDescription": "Bir lead 'Kabul edildi' aşamasında müşteriye dönüştürüldüğünde burada görünecek.",
+      "columns": {
+        "client": "Müşteri",
+        "projectType": "Proje tipi",
+        "workingMode": "Çalışma şekli",
+        "status": "Durum",
+        "lastActivity": "Son aktivite"
+      },
+      "stage": {
+        "design": "Tasarım",
+        "backend": "Geliştirme",
+        "test": "Test",
+        "live": "Yayında"
+      },
+      "state": {
+        "active": "Aktif",
+        "dormant": "Beklemede"
+      }
+    },
+    "payments": {
+      "title": "Ödemeler",
+      "description": "Tüm müşteri faturaları — freelance/hizmet gelir akışı tek yerde.",
+      "summary": {
+        "thisMonth": "Bu ay toplam",
+        "pending": "Bekleyen tutar",
+        "failed": "Başarısız"
+      },
+      "emptyTitle": "Henüz fatura yok",
+      "emptyDescription": "Bir müşteri projesine fatura eklendiğinde burada listelenecek.",
+      "columns": {
+        "date": "Tarih",
+        "client": "Müşteri",
+        "number": "Fatura no",
+        "amount": "Tutar",
+        "status": "Durum"
+      },
+      "status": {
+        "paid": "Ödendi",
+        "pending": "Bekliyor",
+        "failed": "Başarısız"
+      }
+    },
+    "appointments": {
+      "title": "Randevular",
+      "description": "İşletmenizin kendi rezervasyon takvimi — danışma görüşmeleri ve teslim toplantıları.",
+      "upcoming": "Yaklaşan ({count})",
+      "past": "Geçmiş ({count})",
+      "emptyUpcomingTitle": "Yaklaşan randevu yok",
+      "emptyUpcomingDescription": "Yeni bir randevu alındığında burada görünecek.",
+      "emptyPastTitle": "Geçmiş randevu yok",
+      "emptyPastDescription": "Tamamlanan ve iptal edilen randevular burada listelenecek.",
+      "fallbackService": "Hizmet",
+      "when": "{date} · {start}–{end}"
+    },
+    "tasks": {
+      "title": "Dahili görevler",
+      "description": "Kendi operasyonel işleriniz — müşterilere görünmez.",
+      "newTitle": "Yeni görev başlığı…",
+      "add": "Görev ekle",
+      "noTasks": "Görev yok",
+      "moveTo": "{column} sütununa taşı",
+      "columns": {
+        "todo": "Yapılacak",
+        "in_progress": "Devam ediyor",
+        "review": "İnceleme",
+        "done": "Tamamlandı"
+      }
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "description": "İşletme bilgileri, ekip ve entegrasyon durumu.",
+      "tabs": {
+        "general": "Genel",
+        "team": "Ekip",
+        "notifications": "Bildirimler",
+        "integrations": "Entegrasyonlar"
+      },
+      "general": {
+        "name": "İşletme adı",
+        "slug": "Kısa ad"
+      },
+      "team": {
+        "empty": "Ekip üyesi bulunamadı.",
+        "user": "Kullanıcı",
+        "role": "Rol",
+        "note": "Bugün tek kullanıcı — çoklu ekip/rol yönetimi ilerideki bir sürüm için ayrılmıştır."
+      },
+      "notifications": {
+        "title": "Yakında",
+        "description": "Bildirim tercihleri henüz yapılandırılamıyor."
+      },
+      "integrations": {
+        "payment": "Ödeme sağlayıcı ({provider})",
+        "email": "Resend (e-posta)",
+        "connected": "Bağlı",
+        "notConfigured": "Yapılandırılmadı",
+        "sandboxWarning": "Özel bir gönderim alan adı yapılandırılmamış — üretim e-postaları Resend'in sandbox göndericisinden (<code>resend.dev</code>) gidiyor ve yalnızca hesabın kendi doğrulanmış adresine ulaşıyor, gerçek müşterilere değil. <code>EMAIL_FROM</code> ortam değişkenini doğrulanmış bir alan adıyla ayarlayın."
+      }
+    },
+    "analytics": {
+      "title": "Gelir analitiği",
+      "description": "Freelance ve SaaS geliri ayrı ayrı izlenir.",
+      "freelance": {
+        "title": "Freelance geliri",
+        "subtitle": "Ödenen faturalar, son {months} ay"
+      },
+      "saas": {
+        "title": "SaaS geliri",
+        "subtitle": "Plana göre canlı MRR, aktif + deneme kuruluşlar"
+      },
+      "tokens": {
+        "title": "Yapay zekâ asistanı token kullanımı",
+        "subtitle": "Mevcut dönem kota tüketimi, kullanıma göre ilk 10 kuruluş",
+        "empty": "Henüz RAG sohbet kullanımı kaydedilmedi.",
+        "unknown": "Bilinmiyor"
+      },
+      "audit": {
+        "title": "Denetim günlüğü",
+        "empty": "Henüz denetlenen işlem yok.",
+        "action": "İşlem",
+        "actor": "Yapan",
+        "target": "Hedef",
+        "when": "Zaman",
+        "system": "sistem"
+      }
     }
   }
 }

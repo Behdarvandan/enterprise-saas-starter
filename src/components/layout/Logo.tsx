@@ -57,18 +57,18 @@ export default function Logo({ className, subtitle }: LogoProps) {
           className="h-8 w-auto max-w-32 shrink-0 object-contain"
         />
       ) : (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-control bg-primary text-primary-foreground">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-violet-950/50">
           <LogoMark className="h-4 w-4" />
         </div>
       )}
       {name || subtitle ? (
         <div>
           {name ? (
-            <span className="block font-serif text-sm font-semibold tracking-tight text-ink-primary">
+            <span className="block text-sm font-semibold tracking-tight text-slate-100">
               {name}
             </span>
           ) : null}
-          {subtitle ? <span className="block text-xs text-ink-muted">{subtitle}</span> : null}
+          {subtitle ? <span className="block text-xs text-slate-400">{subtitle}</span> : null}
         </div>
       ) : null}
     </div>

@@ -11,12 +11,11 @@ const logAgencyAuditMock = vi.fn();
 const applyTenantEnabledSkillsMock = vi.fn();
 
 vi.mock("next/cache", () => ({ revalidatePath: revalidatePathMock }));
+vi.mock("next-intl/server", async () => (await import("@/test/intl")).nextIntlServerMock());
 vi.mock("@/lib/agency/admin", () => ({ requireAgencyAdminResult: requireAgencyAdminResultMock }));
 vi.mock("@/lib/agency/audit", () => ({ logAgencyAudit: logAgencyAuditMock }));
 vi.mock("@/lib/payment/handlers", () => ({
   applyTenantEnabledSkills: applyTenantEnabledSkillsMock,
-  DEFAULT_ENABLED_SKILLS: ["rag_search"],
-  PLAN_ENABLED_SKILLS: { pro: ["rag_search", "calendar_booking"] },
 }));
 
 const { allocateQuota, createTenant, linkTenant, unlinkTenant, updateTenantSkills } = await import("./actions");
@@ -71,7 +70,7 @@ describe("agency tenant actions", () => {
 
   describe("authorization (every action)", () => {
     const attempts: [string, () => Promise<unknown>][] = [
-      ["linkTenant", () => linkTenant(form({ slug: "acme-shop" }))],
+      ["linkTenant", () => linkTenant(form({ organizationId: TENANT_ID }))],
       ["createTenant", () => createTenant(form({ name: "Acme", slug: "acme-shop" }))],
       ["unlinkTenant", () => unlinkTenant(TENANT_ID)],
       ["allocateQuota", () => allocateQuota(TENANT_ID, "100")],
@@ -89,20 +88,20 @@ describe("agency tenant actions", () => {
   });
 
   describe("linkTenant", () => {
-    it("rejects an invalid slug before touching the database", async () => {
+    it("rejects a malformed organization id before touching the database", async () => {
       const { rpc, from } = signInAsAgencyAdmin({});
 
-      const result = await linkTenant(form({ slug: "Not A Slug!" }));
+      const result = await linkTenant(form({ organizationId: "not-a-uuid" }));
 
-      expect(result.error).toMatch(/lowercase/i);
+      expect(result.error).toMatch(/valid tenant id/i);
       expect(from).not.toHaveBeenCalled();
       expect(rpc).not.toHaveBeenCalled();
     });
 
-    it("gives the same answer for an unknown slug and someone else's organization (RLS hides it)", async () => {
+    it("gives the same answer for an unknown id and someone else's organization (RLS hides it)", async () => {
       const { rpc } = signInAsAgencyAdmin({ tables: { organizations: { data: null } } });
 
-      const result = await linkTenant(form({ slug: "not-mine" }));
+      const result = await linkTenant(form({ organizationId: TENANT_ID }));
 
       expect(result.error).toMatch(/among the ones you own/i);
       expect(rpc).not.toHaveBeenCalled();
@@ -111,7 +110,7 @@ describe("agency tenant actions", () => {
     it("links using the agency resolved server-side, then audits and revalidates", async () => {
       const { rpc } = signInAsAgencyAdmin({ tables: { organizations: { data: { id: TENANT_ID } } } });
 
-      const result = await linkTenant(form({ slug: "Acme-Shop", agency_id: "attacker-agency" }));
+      const result = await linkTenant(form({ organizationId: TENANT_ID, agency_id: "attacker-agency" }));
 
       expect(result).toEqual({ success: true });
       expect(rpc).toHaveBeenCalledWith("link_agency_tenant", {
@@ -134,7 +133,7 @@ describe("agency tenant actions", () => {
         rpc: { data: null, error: { message: key } },
       });
 
-      const result = await linkTenant(form({ slug: "acme-shop" }));
+      const result = await linkTenant(form({ organizationId: TENANT_ID }));
 
       expect(result.error).toMatch(pattern);
       expect(logAgencyAuditMock).not.toHaveBeenCalled();

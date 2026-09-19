@@ -58,7 +58,7 @@ export default async function ServicesPage() {
               return (
                 <div
                   key={key}
-                  className="rounded-interactive border border-subtle bg-canvas p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
+                  className="rounded-interactive border border-subtle bg-canvas p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-primary/50 hover:shadow-md hover:shadow-primary/10"
                 >
                   <Icon size={20} className="text-primary" />
                   <h3 className="mt-4 text-base font-semibold text-ink-primary">
@@ -99,7 +99,7 @@ export default async function ServicesPage() {
             <Link
               key={item.slug}
               href={`/services/portfolio/${item.slug}`}
-              className="rounded-interactive border border-subtle bg-surface p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
+              className="rounded-interactive border border-subtle bg-surface p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-primary/50 hover:shadow-md hover:shadow-primary/10"
             >
               <h3 className="text-base font-semibold text-ink-primary">
                 {item.title}

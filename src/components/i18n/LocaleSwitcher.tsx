@@ -1,7 +1,7 @@
 "use client";
 
 import { Globe } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { isRtlLocale, routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,7 @@ const LOCALE_NAMES: Record<(typeof routing.locales)[number], string> = {
  */
 export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
   const locale = useLocale();
+  const t = useTranslations("shell");
   const pathname = usePathname();
   const router = useRouter();
 
@@ -46,22 +47,22 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "flex h-9 items-center gap-1.5 rounded-control px-2.5 text-xs font-semibold text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink-primary",
+          "flex h-9 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-slate-400 transition-colors outline-none hover:bg-slate-800/60 hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-ring/60",
           className,
         )}
-        aria-label="Change language"
+        aria-label={t("changeLanguage")}
       >
-        <Globe size={15} />
+        <Globe aria-hidden size={15} />
         {LOCALE_CODES[locale]}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-40">
         {routing.locales.map((candidate) => (
           <DropdownMenuItem
             key={candidate}
             dir={isRtlLocale(candidate) ? "rtl" : "ltr"}
             className={cn(
               "justify-between",
-              candidate === locale && "font-semibold text-ink-primary",
+              candidate === locale && "font-semibold text-slate-100",
             )}
             onSelect={() => router.replace(pathname, { locale: candidate })}
           >

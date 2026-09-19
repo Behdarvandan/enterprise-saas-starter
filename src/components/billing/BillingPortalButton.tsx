@@ -1,31 +1,32 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function BillingPortalButton() {
+  const t = useTranslations("dashboard.billing");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
 
   async function handleOpenPortal() {
     setLoading(true);
-    setError(null);
+    setFailed(false);
 
     try {
-      const response = await fetch("/api/billing-portal", {
-        method: "POST",
-      });
+      const response = await fetch("/api/billing-portal", { method: "POST" });
+      const data: { url?: string; error?: string } = await response.json();
 
-      const data = await response.json();
-
-      if (!response.ok || data.error) {
-        setError(data.error ?? "Something went wrong.");
+      if (!response.ok || data.error || !data.url) {
+        console.error("[billing] portal request failed:", data.error);
+        setFailed(true);
         return;
       }
 
       window.location.assign(data.url);
-    } catch {
-      setError("Something went wrong.");
+    } catch (error) {
+      console.error("[billing] portal request failed:", error);
+      setFailed(true);
     } finally {
       setLoading(false);
     }
@@ -33,17 +34,14 @@ export default function BillingPortalButton() {
 
   return (
     <div>
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={handleOpenPortal}
-        disabled={loading}
-      >
-        {loading ? "Loading..." : "Manage billing"}
+      <Button type="button" variant="secondary" onClick={handleOpenPortal} loading={loading}>
+        {loading ? t("loading") : t("manage")}
       </Button>
-      {error && (
-        <p className="mt-2 text-xs font-medium text-status-error">{error}</p>
-      )}
+      {failed ? (
+        <p role="alert" className="mt-2 text-xs font-medium text-status-error">
+          {t("error")}
+        </p>
+      ) : null}
     </div>
   );
 }

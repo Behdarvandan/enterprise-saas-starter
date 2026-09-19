@@ -19,7 +19,7 @@ export function withApiErrorHandling<Args extends unknown[]>(
     } catch (error) {
       console.error(`${label}:`, error);
       Sentry.captureException(error, { tags: { route: label } });
-      return NextResponse.json({ error: message }, { status: 500 });
+      return NextResponse.json({ error: message, code: "server_error" }, { status: 500 });
     }
   };
 }

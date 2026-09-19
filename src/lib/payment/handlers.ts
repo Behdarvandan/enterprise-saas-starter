@@ -1,41 +1,29 @@
+import { isDeepStrictEqual } from "node:util";
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getAppointmentDetails } from "@/lib/booking";
 import { sendBookingConfirmationEmail } from "@/lib/email";
+import { getPlanSkills } from "@/lib/skills-catalog";
+import { withEnabledSkills } from "@/lib/skills/tenant-config";
+import type { Json } from "@/types";
 import type { Database } from "@/types/database";
 
 type AppointmentUpdate = Database["public"]["Tables"]["appointments"]["Update"];
 type OrganizationUpdate = Database["public"]["Tables"]["organizations"]["Update"];
 
 /**
- * Which Ops Crew skills (see pasargad-core's packages/graph/tools.py /
- * crew_config.enabled_skills) a plan unlocks. Unknown/missing plan ids fall
- * back to the free "rag_search"-only tier. Exported as the single source of
- * truth for the plan's skill ceiling — the dashboard skills page
- * (dashboard/skills/page.tsx) reads this to know which skills a tenant is
- * even allowed to toggle on, so a tenant can never self-upgrade past what
- * their plan unlocked.
+ * Applies `mutate` to the tenant's active `tenant_configs.config` and stores
+ * the result as the next version, the way pasargad-core expects
+ * (state.py::load_tenant_config reads the highest-version active row): a
+ * no-op when the mutation changes nothing, otherwise deactivates the current
+ * row and inserts version+1. Old versions stay as the audit/rollback history.
+ * Returns `{ error }` on failure so callers that need to surface it to a
+ * user (the skills dashboard's Server Actions) can, while best-effort callers
+ * (the payment webhook) can ignore it.
  */
-export const PLAN_ENABLED_SKILLS: Record<string, string[]> = {
-  starter: ["rag_search"],
-  pro: ["rag_search", "calendar_booking"],
-  enterprise: ["rag_search", "calendar_booking"],
-};
-export const DEFAULT_ENABLED_SKILLS = ["rag_search"];
-
-/**
- * Writes `enabledSkills` as the tenant's active `crew_config.enabled_skills`,
- * versioned the way pasargad-core expects (state.py::load_tenant_config
- * reads the highest-version active row): a no-op when the skill set already
- * matches, otherwise deactivates the current row and inserts the next
- * version with the rest of `config` preserved (system_prompt, rag_params,
- * llm_provider, etc.). Returns `{ error }` on failure so callers that need
- * to surface it to a user (e.g. the skills dashboard's Server Action) can,
- * while best-effort callers (the payment webhook) can ignore it.
- */
-export async function applyTenantEnabledSkills(
+export async function applyTenantConfigUpdate(
   organizationId: string,
-  enabledSkills: string[],
+  mutate: (config: unknown) => Record<string, Json | undefined>,
 ): Promise<{ error?: string }> {
   const admin = createAdminClient();
 
@@ -57,18 +45,12 @@ export async function applyTenantEnabledSkills(
     return { error: readError.message };
   }
 
-  const currentConfig = (current?.config as Record<string, unknown> | null) ?? {};
-  const currentCrewConfig = (currentConfig.crew_config as Record<string, unknown> | null) ?? {};
-  const currentSkills = (currentCrewConfig.enabled_skills as string[] | undefined) ?? null;
+  const nextConfig = mutate(current?.config ?? null);
 
-  if (current && JSON.stringify(currentSkills) === JSON.stringify(enabledSkills)) {
-    return {}; // already in sync — idempotent no-op
+  if (current && isDeepStrictEqual(current.config, nextConfig)) {
+    return {}; // nothing changed — idempotent no-op
   }
 
-  const nextConfig = {
-    ...currentConfig,
-    crew_config: { ...currentCrewConfig, enabled_skills: enabledSkills },
-  };
   const nextVersion = (current?.version ?? 0) + 1;
 
   if (current) {
@@ -84,14 +66,22 @@ export async function applyTenantEnabledSkills(
 
   if (insertError) {
     console.error(
-      `[tenant-configs] Failed to write enabled_skills for ${organizationId}:`,
+      `[tenant-configs] Failed to write tenant config for ${organizationId}:`,
       insertError,
     );
-    Sentry.captureException(insertError, { extra: { organizationId, enabledSkills } });
+    Sentry.captureException(insertError, { extra: { organizationId } });
     return { error: insertError.message };
   }
 
   return {};
+}
+
+/** Writes `enabledSkills` as the tenant's active `crew_config.enabled_skills`. */
+export async function applyTenantEnabledSkills(
+  organizationId: string,
+  enabledSkills: string[],
+): Promise<{ error?: string }> {
+  return applyTenantConfigUpdate(organizationId, (config) => withEnabledSkills(config, enabledSkills));
 }
 
 /**
@@ -104,8 +94,7 @@ async function syncTenantConfigSkills(
   organizationId: string,
   planId: string | null,
 ): Promise<void> {
-  const enabledSkills = (planId && PLAN_ENABLED_SKILLS[planId]) || DEFAULT_ENABLED_SKILLS;
-  await applyTenantEnabledSkills(organizationId, enabledSkills);
+  await applyTenantEnabledSkills(organizationId, getPlanSkills(planId));
 }
 
 /**

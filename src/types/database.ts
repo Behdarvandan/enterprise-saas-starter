@@ -18,6 +18,8 @@ export type Database = {
         Row: {
           branding: Json
           cname_domain: string | null
+          cname_last_checked_at: string | null
+          cname_last_records: string[]
           cname_status: string
           cname_verified_at: string | null
           created_at: string
@@ -30,6 +32,8 @@ export type Database = {
         Insert: {
           branding?: Json
           cname_domain?: string | null
+          cname_last_checked_at?: string | null
+          cname_last_records?: string[]
           cname_status?: string
           cname_verified_at?: string | null
           created_at?: string
@@ -42,6 +46,8 @@ export type Database = {
         Update: {
           branding?: Json
           cname_domain?: string | null
+          cname_last_checked_at?: string | null
+          cname_last_records?: string[]
           cname_status?: string
           cname_verified_at?: string | null
           created_at?: string

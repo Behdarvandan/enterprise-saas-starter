@@ -77,3 +77,57 @@ export type ChatStreamEvent =
   | { type: "delta"; content: string }
   | { type: "done" }
   | { type: "error"; message: string };
+
+// Dev Crew insights — `audit_logs` rows with action `dev_crew.recommendation`,
+// written by pasargad-core. Only these two metadata keys are guaranteed.
+export interface DevCrewMetadata {
+  recommendation: string;
+  negative_count: number;
+}
+
+/** Client-facing severity, derived from `negative_count` (not stored upstream). */
+export type CrewSeverity = "critical" | "warning" | "info";
+
+/** One feed entry as served by `GET /api/crew-insights`. */
+export interface CrewInsight {
+  id: string;
+  createdAt: string;
+  recommendation: string;
+  negativeCount: number;
+}
+
+// Per-tenant Ops Crew configuration (versioned; the active row wins).
+export type TenantConfig = Database["public"]["Tables"]["tenant_configs"]["Row"];
+
+// Knowledge base (`/api/rag/*`) wire types.
+export type DocumentStatus = "processing" | "ready" | "failed";
+export type DocumentSourceType = "text" | "file" | "url";
+
+export interface DocumentListItem {
+  id: string;
+  title: string;
+  sourceType: DocumentSourceType;
+  status: DocumentStatus;
+  createdAt: string;
+  byteSize: number | null;
+  mimeType: string | null;
+  chunkCount: number;
+  /** Failure reason recorded by the ingest route, when `status` is `failed`. */
+  error: string | null;
+}
+
+export interface IngestChunk {
+  id: string;
+  chunkIndex: number;
+  content: string;
+  tokenCount: number | null;
+}
+
+export interface RagSearchHit {
+  chunkId: string;
+  documentId: string;
+  documentTitle: string;
+  chunkIndex: number;
+  content: string;
+  similarity: number;
+}

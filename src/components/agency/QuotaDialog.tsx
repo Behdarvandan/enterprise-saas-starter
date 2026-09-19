@@ -1,7 +1,7 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useId, useState, useTransition, type FormEvent } from "react";
-import { useRouter } from "@/i18n/navigation";
 import { allocateQuota } from "@/app/[locale]/agency/tenants/actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,9 @@ import {
 import FormStatus from "@/components/ui/FormStatus";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "@/i18n/navigation";
 import { formatTokens } from "@/lib/agency/format";
+import { toast } from "@/lib/toast";
 import type { TenantRowData } from "./TenantTable";
 
 interface QuotaDialogProps {
@@ -26,6 +28,8 @@ interface QuotaDialogProps {
 }
 
 export default function QuotaDialog({ tenant, poolUnallocated, onClose }: QuotaDialogProps) {
+  const t = useTranslations("agency.tenants.quota");
+  const locale = useLocale();
   const router = useRouter();
   const fieldId = useId();
   const [value, setValue] = useState(String(tenant.granted));
@@ -39,14 +43,10 @@ export default function QuotaDialog({ tenant, poolUnallocated, onClose }: QuotaD
   const max = tenant.granted + poolUnallocated;
 
   function validate(raw: string): string | undefined {
-    if (!/^\d+$/.test(raw.trim())) return "Enter a whole number of tokens (0 or more).";
+    if (!/^\d+$/.test(raw.trim())) return t("errors.digits");
     const amount = Number(raw);
-    if (amount < consumed) {
-      return `Enter at least ${formatTokens(consumed)} — this tenant has already used that many.`;
-    }
-    if (amount > max) {
-      return `Enter at most ${formatTokens(max)} — that's all your pool can cover for this tenant.`;
-    }
+    if (amount < consumed) return t("errors.min", { min: formatTokens(locale, consumed) });
+    if (amount > max) return t("errors.max", { max: formatTokens(locale, max) });
     return undefined;
   }
 
@@ -61,6 +61,7 @@ export default function QuotaDialog({ tenant, poolUnallocated, onClose }: QuotaD
     startTransition(async () => {
       const outcome = await allocateQuota(tenant.tenantId, value.trim());
       if (outcome.success) {
+        toast({ tone: "success", title: t("saved", { name: tenant.name }) });
         router.refresh();
         onClose();
       } else {
@@ -74,33 +75,31 @@ export default function QuotaDialog({ tenant, poolUnallocated, onClose }: QuotaD
       <DialogContent>
         <form onSubmit={handleSubmit} noValidate className="grid gap-4">
           <DialogHeader>
-            <DialogTitle>Allocate tokens to {tenant.name}</DialogTitle>
-            <DialogDescription>
-              Set this tenant&apos;s total token budget for the current period. Tokens it has
-              already used stay counted.
-            </DialogDescription>
+            <DialogTitle>{t("title", { name: tenant.name })}</DialogTitle>
+            <DialogDescription>{t("description")}</DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-1.5">
-            <Label htmlFor={fieldId}>Total tokens</Label>
+            <Label htmlFor={fieldId}>{t("label")}</Label>
             <Input
               id={fieldId}
               inputMode="numeric"
               autoComplete="off"
+              dir="ltr"
               value={value}
               onChange={(event) => setValue(event.target.value)}
               onBlur={() => setTouched(true)}
               aria-invalid={fieldError ? true : undefined}
               aria-describedby={`${fieldId}-hint`}
-              className="font-mono"
+              className="text-start font-mono tabular-nums"
             />
             {fieldError ? (
               <p role="alert" className="text-xs font-medium text-status-error">
                 {fieldError}
               </p>
             ) : null}
-            <p id={`${fieldId}-hint`} className="font-mono text-xs text-ink-muted">
-              Used so far: {formatTokens(consumed)} · Maximum you can set: {formatTokens(max)}
+            <p id={`${fieldId}-hint`} className="text-xs text-slate-400">
+              {t("hint", { used: formatTokens(locale, consumed), max: formatTokens(locale, max) })}
             </p>
           </div>
 
@@ -108,10 +107,10 @@ export default function QuotaDialog({ tenant, poolUnallocated, onClose }: QuotaD
 
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={onClose} disabled={pending}>
-              Cancel
+              {t("cancel")}
             </Button>
-            <Button type="submit" disabled={pending}>
-              {pending ? "Saving…" : "Save allocation"}
+            <Button type="submit" loading={pending}>
+              {pending ? t("saving") : t("save")}
             </Button>
           </DialogFooter>
         </form>

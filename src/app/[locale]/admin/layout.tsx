@@ -1,7 +1,9 @@
 import * as Sentry from "@sentry/nextjs";
 import { requireOperatorAdmin } from "@/lib/operator";
-import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminTopbar from "@/components/admin/AdminTopbar";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import AdminSidebar from "@/components/layout/AdminSidebar";
+import AppShell from "@/components/layout/AppShell";
+import UserMenu from "@/components/layout/UserMenu";
 
 export default async function AdminLayout({
   children,
@@ -10,7 +12,7 @@ export default async function AdminLayout({
 }>) {
   // requireOperatorAdmin() redirects to /login (signed out) or /dashboard
   // (signed in but not owner/admin of the operator organization) — see
-  // src/lib/operator.ts. This is that guard's first real call site.
+  // src/lib/operator.ts.
   const { user } = await requireOperatorAdmin();
 
   // Tags every error/transaction reported from within this portal so
@@ -18,12 +20,16 @@ export default async function AdminLayout({
   Sentry.setTag("portal", "admin");
 
   return (
-    <div className="min-h-screen bg-canvas lg:flex">
-      <AdminSidebar />
-      <div className="flex min-h-screen flex-1 flex-col">
-        <AdminTopbar userEmail={user.email ?? ""} />
-        <main className="flex-1">{children}</main>
-      </div>
-    </div>
+    <AppShell
+      sidebar={<AdminSidebar />}
+      headerEnd={
+        <>
+          <LocaleSwitcher />
+          <UserMenu email={user.email ?? ""} />
+        </>
+      }
+    >
+      {children}
+    </AppShell>
   );
 }

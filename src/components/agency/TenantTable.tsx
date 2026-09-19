@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Gauge, SlidersHorizontal, Trash2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
+import { useSkillLabel } from "@/components/dashboard/skills/useSkillLabel";
 import Badge from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +43,9 @@ interface TenantTableProps {
 type OpenDialog = { kind: "quota" | "skills" | "remove"; tenantId: string } | null;
 
 export default function TenantTable({ tenants, allowedSkills, poolUnallocated }: TenantTableProps) {
+  const t = useTranslations("agency.tenants.table");
+  const locale = useLocale();
+  const skillLabel = useSkillLabel();
   const [dialog, setDialog] = useState<OpenDialog>(null);
   const selected = dialog ? tenants.find((tenant) => tenant.tenantId === dialog.tenantId) : undefined;
 
@@ -54,10 +59,10 @@ export default function TenantTable({ tenants, allowedSkills, poolUnallocated }:
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tenant</TableHead>
-              <TableHead className="min-w-56">Token usage</TableHead>
-              <TableHead>Skills</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t("tenant")}</TableHead>
+              <TableHead className="min-w-56">{t("usage")}</TableHead>
+              <TableHead>{t("skills")}</TableHead>
+              <TableHead className="text-end">{t("actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -72,22 +77,27 @@ export default function TenantTable({ tenants, allowedSkills, poolUnallocated }:
               return (
                 <TableRow key={tenant.tenantId}>
                   <TableCell>
-                    <p className="text-sm font-medium text-ink-primary">{tenant.name}</p>
-                    <p className="font-mono text-xs text-ink-muted">{tenant.slug}</p>
+                    <p className="text-sm font-medium text-slate-100">{tenant.name}</p>
+                    <p dir="ltr" className="text-start font-mono text-xs text-slate-400">
+                      {tenant.slug}
+                    </p>
                   </TableCell>
                   <TableCell>
                     {noAllocation ? (
-                      <Badge tone="warn">No tokens allocated</Badge>
+                      <Badge tone="warn">{t("noAllocation")}</Badge>
                     ) : (
                       <div className="space-y-1.5">
-                        <QuotaMeter percent={percent} label={`${tenant.name} token consumption`} />
-                        <p className="font-mono text-xs text-ink-muted">
-                          {formatTokens(tenant.remaining)} left of {formatTokens(tenant.granted)} (
-                          {formatPercent(percent)} used)
+                        <QuotaMeter percent={percent} label={t("consumption", { name: tenant.name })} />
+                        <p className="text-xs text-slate-400">
+                          <span dir="ltr" className="font-mono tabular-nums">
+                            {t("remaining", {
+                              remaining: formatTokens(locale, tenant.remaining),
+                              granted: formatTokens(locale, tenant.granted),
+                              percent: formatPercent(locale, percent),
+                            })}
+                          </span>
                           {outOfTokens ? (
-                            <span className="ml-2 font-sans font-semibold text-status-error">
-                              Out of tokens
-                            </span>
+                            <span className="ms-2 font-semibold text-status-error">{t("outOfTokens")}</span>
                           ) : null}
                         </p>
                       </div>
@@ -95,13 +105,11 @@ export default function TenantTable({ tenants, allowedSkills, poolUnallocated }:
                   </TableCell>
                   <TableCell>
                     {tenant.enabledSkills.length === 0 ? (
-                      <span className="text-xs text-ink-muted">None</span>
+                      <span className="text-xs text-slate-400">{t("noSkills")}</span>
                     ) : (
                       <div className="flex flex-wrap gap-1">
                         {tenant.enabledSkills.map((skill) => (
-                          <Badge key={skill} className="normal-case">
-                            {skill.replace(/_/g, " ")}
-                          </Badge>
+                          <Badge key={skill}>{skillLabel(skill).title}</Badge>
                         ))}
                       </div>
                     )}
@@ -112,26 +120,26 @@ export default function TenantTable({ tenants, allowedSkills, poolUnallocated }:
                         variant="ghost"
                         size="sm"
                         onClick={() => setDialog({ kind: "quota", tenantId: tenant.tenantId })}
-                        aria-label={`Allocate tokens to ${tenant.name}`}
+                        aria-label={t("allocateAria", { name: tenant.name })}
                       >
-                        <Gauge /> Tokens
+                        <Gauge aria-hidden /> {t("tokens")}
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setDialog({ kind: "skills", tenantId: tenant.tenantId })}
-                        aria-label={`Manage skills for ${tenant.name}`}
+                        aria-label={t("skillsAria", { name: tenant.name })}
                       >
-                        <SlidersHorizontal /> Skills
+                        <SlidersHorizontal aria-hidden /> {t("skills")}
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
                         className="hover:text-status-error"
                         onClick={() => setDialog({ kind: "remove", tenantId: tenant.tenantId })}
-                        aria-label={`Remove ${tenant.name}`}
+                        aria-label={t("removeAria", { name: tenant.name })}
                       >
-                        <Trash2 /> Remove
+                        <Trash2 aria-hidden /> {t("remove")}
                       </Button>
                     </div>
                   </TableCell>
@@ -148,9 +156,7 @@ export default function TenantTable({ tenants, allowedSkills, poolUnallocated }:
       {selected && dialog?.kind === "skills" ? (
         <TenantSkillsDialog tenant={selected} allowedSkills={allowedSkills} onClose={close} />
       ) : null}
-      {selected && dialog?.kind === "remove" ? (
-        <RemoveTenantDialog tenant={selected} onClose={close} />
-      ) : null}
+      {selected && dialog?.kind === "remove" ? <RemoveTenantDialog tenant={selected} onClose={close} /> : null}
     </>
   );
 }

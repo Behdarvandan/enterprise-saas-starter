@@ -1,31 +1,34 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import FormStatus from "@/components/ui/FormStatus";
+import { Input } from "@/components/ui/input";
+import { NativeSelect } from "@/components/ui/native-select";
+import { useRouter } from "@/i18n/navigation";
 import { inviteMember } from "./actions";
 
 export default function InviteMemberForm() {
+  const t = useTranslations("dashboard.team.invite");
+  const tRoles = useTranslations("shell.roles");
   const router = useRouter();
-  const [result, setResult] = useState<{
-    error?: string;
-    success?: boolean;
-  } | null>(null);
+  const [result, setResult] = useState<{ error?: string; success?: boolean } | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setLoading(true);
     setResult(null);
 
-    const formData = new FormData(event.currentTarget);
-    const res = await inviteMember(formData);
+    const res = await inviteMember(new FormData(form));
 
     setResult(res);
     setLoading(false);
 
     if (res.success) {
-      event.currentTarget.reset();
+      form.reset();
       router.refresh();
     }
   }
@@ -33,35 +36,25 @@ export default function InviteMemberForm() {
   return (
     <form onSubmit={handleSubmit} className="mt-4 space-y-4">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_auto]">
-        <input
+        <Input
           name="email"
           type="email"
+          dir="ltr"
           required
-          placeholder="colleague@example.com"
-          className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
+          aria-label={t("emailLabel")}
+          placeholder={t("emailPlaceholder")}
+          className="text-start"
         />
-        <select
-          name="role"
-          className="rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
-        >
-          <option value="member">Member</option>
-          <option value="admin">Admin</option>
-        </select>
-        <Button type="submit" disabled={loading}>
-          {loading ? "Sending..." : "Send invite"}
+        <NativeSelect name="role" aria-label={t("roleLabel")} defaultValue="member">
+          <option value="member">{tRoles("member")}</option>
+          <option value="admin">{tRoles("admin")}</option>
+        </NativeSelect>
+        <Button type="submit" loading={loading}>
+          {loading ? t("sending") : t("send")}
         </Button>
       </div>
 
-      {result?.error && (
-        <p className="rounded-lg bg-status-error/10 px-3 py-2 text-xs font-medium text-status-error">
-          {result.error}
-        </p>
-      )}
-      {result?.success && (
-        <p className="rounded-lg bg-status-success/10 px-3 py-2 text-xs font-medium text-status-success">
-          Invitation sent.
-        </p>
-      )}
+      <FormStatus error={result?.error} success={result?.success} successMessage={t("sent")} />
     </form>
   );
 }

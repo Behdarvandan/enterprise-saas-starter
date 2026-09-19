@@ -143,7 +143,7 @@ export default function SignUpPage() {
 
         <p className="mt-6 text-center text-sm text-ink-muted">
           {t("alreadyHaveAccount")}{" "}
-          <Link href="/login" className="font-semibold text-violet-dim hover:text-violet">
+          <Link href="/login" className="font-semibold text-violet-dim hover:text-violet-400">
             {t("signIn")}
           </Link>
         </p>

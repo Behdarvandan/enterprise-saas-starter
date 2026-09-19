@@ -1,8 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { useRouter } from "@/i18n/navigation";
 import { updateTenantSkills } from "@/app/[locale]/agency/tenants/actions";
+import { useSkillLabel } from "@/components/dashboard/skills/useSkillLabel";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +15,8 @@ import {
 } from "@/components/ui/dialog";
 import FormStatus from "@/components/ui/FormStatus";
 import { Switch } from "@/components/ui/switch";
-import { getSkillLabel } from "@/lib/skills-catalog";
+import { useRouter } from "@/i18n/navigation";
+import { toast } from "@/lib/toast";
 import type { TenantRowData } from "./TenantTable";
 
 interface TenantSkillsDialogProps {
@@ -25,6 +27,8 @@ interface TenantSkillsDialogProps {
 }
 
 export default function TenantSkillsDialog({ tenant, allowedSkills, onClose }: TenantSkillsDialogProps) {
+  const t = useTranslations("agency.tenants.skills");
+  const skillLabel = useSkillLabel();
   const router = useRouter();
   const [enabled, setEnabled] = useState(
     () => new Set(tenant.enabledSkills.filter((skill) => allowedSkills.includes(skill))),
@@ -47,6 +51,7 @@ export default function TenantSkillsDialog({ tenant, allowedSkills, onClose }: T
     startTransition(async () => {
       const outcome = await updateTenantSkills(tenant.tenantId, Array.from(enabled));
       if (outcome.success) {
+        toast({ tone: "success", title: t("saved", { name: tenant.name }) });
         router.refresh();
         onClose();
       } else {
@@ -59,51 +64,42 @@ export default function TenantSkillsDialog({ tenant, allowedSkills, onClose }: T
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Skills for {tenant.name}</DialogTitle>
-          <DialogDescription>
-            Choose what this tenant&apos;s AI assistant can do. Available skills depend on your
-            agency plan.
-          </DialogDescription>
+          <DialogTitle>{t("title", { name: tenant.name })}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <div>
           {allowedSkills.map((skill) => {
-            const label = getSkillLabel(skill);
+            const label = skillLabel(skill);
             return (
               <div
                 key={skill}
-                className="flex items-center justify-between gap-4 border-b border-subtle py-3 last:border-0"
+                className="flex items-center justify-between gap-4 border-b border-slate-800 py-3 last:border-0"
               >
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-ink-primary">{label.title}</p>
-                  {label.description ? (
-                    <p className="mt-0.5 text-xs text-ink-muted">{label.description}</p>
-                  ) : null}
+                  <p className="text-sm font-medium text-slate-100">{label.title}</p>
+                  {label.description ? <p className="mt-0.5 text-xs text-slate-400">{label.description}</p> : null}
                 </div>
                 <Switch
                   checked={enabled.has(skill)}
                   onCheckedChange={() => toggle(skill)}
                   disabled={pending}
-                  aria-label={`Toggle ${label.title}`}
+                  aria-label={t("toggle", { skill: label.title })}
                 />
               </div>
             );
           })}
-          {allowedSkills.length <= 1 ? (
-            <p className="pt-3 text-xs text-ink-muted">
-              Upgrade your agency plan to hand out more skills, such as calendar booking.
-            </p>
-          ) : null}
+          {allowedSkills.length <= 1 ? <p className="pt-3 text-xs text-slate-400">{t("upgradeHint")}</p> : null}
         </div>
 
         <FormStatus error={error} successMessage="" />
 
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={onClose} disabled={pending}>
-            Cancel
+            {t("cancel")}
           </Button>
-          <Button type="button" onClick={handleSave} disabled={pending}>
-            {pending ? "Saving…" : "Save skills"}
+          <Button type="button" onClick={handleSave} loading={pending}>
+            {pending ? t("saving") : t("save")}
           </Button>
         </DialogFooter>
       </DialogContent>

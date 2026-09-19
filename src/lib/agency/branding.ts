@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { deriveBrandPalette } from "@/lib/agency/palette";
 import type { Json } from "@/types/database";
 
 /**
@@ -71,17 +72,6 @@ export function decodeAgencyContext(value: string | null | undefined): AgencyCon
   }
 }
 
-function relativeLuminance(hex: string): number {
-  const channels = [1, 3, 5].map((start) => {
-    const channel = parseInt(hex.slice(start, start + 2), 16) / 255;
-    return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
-}
-
-const LIGHT_FOREGROUND = "#ffffff";
-const DARK_FOREGROUND = "#1a1520";
-
 /**
  * CSS custom properties applied to `<html>` for the agency's palette.
  * `--primary`/`--ring` are what the design system's `--color-primary` /
@@ -93,13 +83,13 @@ export function getBrandingCssVars(branding: AgencyBranding): Record<string, str
   const color = branding.primary_color;
   if (!color) return {};
 
-  const foreground =
-    relativeLuminance(color) > 0.4 ? DARK_FOREGROUND : LIGHT_FOREGROUND;
+  const palette = deriveBrandPalette(color);
 
   return {
     "--primary-color": color,
-    "--primary": color,
-    "--ring": color,
-    "--primary-foreground": foreground,
+    "--primary": palette.base,
+    "--primary-hover": palette.hover,
+    "--ring": palette.base,
+    "--primary-foreground": palette.foreground,
   };
 }

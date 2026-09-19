@@ -1,66 +1,40 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import FormStatus from "@/components/ui/FormStatus";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useFormAction } from "@/hooks/useFormAction";
 import { updateProfile } from "./actions";
 
-export default function ProfileForm({
-  email,
-  fullName,
-}: {
-  email: string;
-  fullName: string;
-}) {
+export default function ProfileForm({ email, fullName }: { email: string; fullName: string }) {
+  const t = useTranslations("dashboard.settings");
   const { result, loading, handleSubmit } = useFormAction(updateProfile);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-1.5">
-        <label
-          htmlFor="email"
-          className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
-        >
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          disabled
-          className="w-full rounded-lg border border-subtle bg-canvas px-3 py-2 text-sm text-ink-muted"
-        />
-        <p className="text-xs text-ink-muted">
-          Email is managed by your authentication provider and cannot be changed
-          here.
-        </p>
+      <div className="grid gap-1.5">
+        <Label htmlFor="email">{t("profile.email")}</Label>
+        <Input id="email" type="email" dir="ltr" value={email} disabled readOnly className="text-start" />
+        <p className="text-xs text-slate-400">{t("profile.emailHint")}</p>
       </div>
 
-      <div className="space-y-1.5">
-        <label
-          htmlFor="full_name"
-          className="block text-xs font-semibold uppercase tracking-wide text-ink-muted"
-        >
-          Full name
-        </label>
-        <input
+      <div className="grid gap-1.5">
+        <Label htmlFor="full_name">{t("profile.fullName")}</Label>
+        <Input
           id="full_name"
           name="full_name"
           type="text"
           defaultValue={fullName}
-          placeholder="Your name"
-          className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
+          placeholder={t("profile.fullNamePlaceholder")}
         />
       </div>
 
-      <FormStatus
-        error={result?.error}
-        success={result?.success}
-        successMessage="Profile updated."
-      />
+      <FormStatus error={result?.error} success={result?.success} successMessage={t("profile.updated")} />
 
-      <Button type="submit" disabled={loading}>
-        {loading ? "Saving..." : "Save changes"}
+      <Button type="submit" loading={loading}>
+        {loading ? t("saving") : t("save")}
       </Button>
     </form>
   );

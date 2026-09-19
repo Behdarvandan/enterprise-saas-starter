@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import {
   Bar,
   BarChart,
@@ -31,37 +32,42 @@ interface SaasRevenueChartProps {
  * in," distinct from chart-1's freelance-invoice violet.
  */
 export default function SaasRevenueChart({ data }: SaasRevenueChartProps) {
+  const t = useTranslations("ui.charts");
+  const locale = useLocale();
+  const money = (value: number) =>
+    new Intl.NumberFormat(locale, { style: "currency", currency: "USD", maximumFractionDigits: 0, numberingSystem: "latn" }).format(value);
+
   return (
     <ResponsiveContainer width="100%" height={280}>
       <BarChart data={data} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
-        <CartesianGrid vertical={false} stroke="var(--color-subtle)" />
+        <CartesianGrid vertical={false} stroke="var(--color-border)" />
         <XAxis
           dataKey="plan"
-          tick={{ fill: "var(--color-ink-muted)", fontSize: 12 }}
-          axisLine={{ stroke: "var(--color-subtle)" }}
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
+          axisLine={{ stroke: "var(--color-border)" }}
           tickLine={false}
         />
         <YAxis
-          tick={{ fill: "var(--color-ink-muted)", fontSize: 12 }}
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
           axisLine={false}
           tickLine={false}
-          tickFormatter={(value: number) => `$${value}`}
+          tickFormatter={(value: number) => money(value)}
         />
         <Tooltip
-          cursor={{ fill: "var(--color-surface-raised)" }}
+          cursor={{ fill: "var(--color-popover)" }}
           contentStyle={{
-            backgroundColor: "var(--color-surface-raised)",
-            border: "1px solid var(--color-subtle)",
+            backgroundColor: "var(--color-popover)",
+            border: "1px solid var(--color-border)",
             borderRadius: 8,
             fontSize: 12,
-            color: "var(--color-ink-primary)",
+            color: "var(--color-foreground)",
           }}
           formatter={(value, _name, item) => {
             const organizations = (item.payload as unknown as PlanRevenuePoint)
               .organizations;
             return [
-              `$${Number(value ?? 0).toLocaleString()}/mo · ${organizations} org(s)`,
-              "MRR",
+              t("mrrValue", { amount: money(Number(value ?? 0)), count: organizations }),
+              t("mrr"),
             ];
           }}
         />

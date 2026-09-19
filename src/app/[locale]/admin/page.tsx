@@ -1,19 +1,19 @@
 import { AlertTriangle, CalendarClock, TrendingDown, UserPlus } from "lucide-react";
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import { Card } from "@/components/ui/card";
+import MetricCard from "@/components/ui/MetricCard";
 import { Link } from "@/i18n/navigation";
+import { formatMetricNumber, formatMoney } from "@/lib/format";
 import { requireOperatorAdmin, getOperatorOrganizationId } from "@/lib/operator";
-import { formatPrice } from "@/lib/utils";
 import FreelanceRevenueChart, {
   type MonthlyRevenuePoint,
 } from "@/components/admin/FreelanceRevenueChart";
-import CountUp from "@/components/ui/CountUp";
 
 export const dynamic = "force-dynamic";
 
 function monthKey(date: Date): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-}
-function monthLabel(date: Date): string {
-  return date.toLocaleDateString(undefined, { month: "short", year: "2-digit" });
 }
 
 const MONTHS_BACK = 6;
@@ -30,13 +30,20 @@ interface ActionItem {
 }
 
 const SEVERITY_BORDER: Record<ActionSeverity, string> = {
-  risk: "border-l-status-error",
-  urgent: "border-l-status-warn",
-  info: "border-l-subtle",
+  risk: "border-s-red-400",
+  urgent: "border-s-amber-500",
+  info: "border-s-slate-700",
 };
 
 export default async function AdminDashboardPage() {
   const { supabase } = await requireOperatorAdmin();
+  const [t, locale, format] = await Promise.all([
+    getTranslations("admin.dashboard"),
+    getLocale(),
+    getFormatter(),
+  ]);
+  const monthLabel = (date: Date) =>
+    format.dateTime(date, { month: "short", year: "2-digit", numberingSystem: "latn" });
   const operatorOrgId = await getOperatorOrganizationId();
   const now = new Date();
 
@@ -73,11 +80,11 @@ export default async function AdminDashboardPage() {
     0,
   );
 
-  const kpis: { label: string; value: number; format?: (value: number) => string }[] = [
-    { label: "Bu Ay Tahsilat", value: collectedThisMonth, format: formatPrice },
-    { label: "Aktif Müşteri", value: activeClients ?? 0 },
-    { label: "Bekleyen Lead", value: pendingLeads ?? 0 },
-    { label: "Bekleyen Randevu", value: pendingAppointments ?? 0 },
+  const kpis = [
+    { label: t("kpis.collected"), value: formatMoney(locale, collectedThisMonth) },
+    { label: t("kpis.activeClients"), value: formatMetricNumber(locale, activeClients ?? 0) },
+    { label: t("kpis.pendingLeads"), value: formatMetricNumber(locale, pendingLeads ?? 0) },
+    { label: t("kpis.pendingAppointments"), value: formatMetricNumber(locale, pendingAppointments ?? 0) },
   ];
 
   // --- Revenue trend chart ---------------------------------------------------
@@ -103,7 +110,7 @@ export default async function AdminDashboardPage() {
     amount: Math.round(totalsByMonth.get(m.key) ?? 0),
   }));
 
-  // --- Aksiyon Gerekiyor (priority order per brief §5.1) --------------------
+  // --- Needs action (priority order: overdue → hot leads → appointments → risk → cold leads)
   const in24h = new Date(now.getTime() - 24 * HOUR_MS).toISOString();
   const in48hAgo = new Date(now.getTime() - 48 * HOUR_MS).toISOString();
   const in48hAhead = new Date(now.getTime() + 48 * HOUR_MS).toISOString();
@@ -163,36 +170,36 @@ export default async function AdminDashboardPage() {
     ...(overdueInvoices ?? []).map((invoice) => ({
       id: `invoice-${invoice.id}`,
       severity: "risk" as const,
-      label: `Gecikmiş ödeme — ${orgNameById.get(invoice.organization_id) ?? "Müşteri"}`,
-      detail: `${invoice.invoice_number} · ${formatPrice(invoice.amount)}`,
+      label: t("actions.overdue", { name: orgNameById.get(invoice.organization_id) ?? t("actions.fallbackClient") }),
+      detail: `${invoice.invoice_number} · ${formatMoney(locale, invoice.amount)}`,
       href: "/admin/payments",
     })),
     ...(hotLeads ?? []).map((lead) => ({
       id: `hot-lead-${lead.id}`,
       severity: "urgent" as const,
-      label: `Yeni lead — ${lead.full_name}`,
-      detail: "Son 24 saat içinde geldi, henüz yanıtlanmadı",
+      label: t("actions.hotLead", { name: lead.full_name }),
+      detail: t("actions.hotLeadDetail"),
       href: `/admin/leads/${lead.id}`,
     })),
     ...(upcomingAppointments ?? []).map((appointment) => ({
       id: `appointment-${appointment.id}`,
       severity: "urgent" as const,
-      label: `Onay bekleyen randevu — ${appointment.customer_name}`,
-      detail: new Date(appointment.start_time).toLocaleString(),
+      label: t("actions.appointment", { name: appointment.customer_name }),
+      detail: format.dateTime(new Date(appointment.start_time), { dateStyle: "medium", timeStyle: "short", numberingSystem: "latn" }),
       href: "/admin/appointments",
     })),
     ...(atRiskOrgs ?? []).map((org) => ({
       id: `org-${org.id}`,
       severity: "urgent" as const,
-      label: `Abonelik riski — ${org.name}`,
-      detail: org.subscription_status === "canceled" ? "İptal edildi" : "Ödeme gecikti",
+      label: t("actions.risk", { name: org.name }),
+      detail: org.subscription_status === "canceled" ? t("actions.riskCanceled") : t("actions.riskPastDue"),
       href: "/admin/payments",
     })),
     ...(coldLeads ?? []).map((lead) => ({
       id: `cold-lead-${lead.id}`,
       severity: "info" as const,
-      label: `Soğuyan lead — ${lead.full_name}`,
-      detail: "48 saatten uzun süredir yanıt bekliyor",
+      label: t("actions.cold", { name: lead.full_name }),
+      detail: t("actions.coldDetail"),
       href: `/admin/leads/${lead.id}`,
     })),
   ];
@@ -204,107 +211,91 @@ export default async function AdminDashboardPage() {
     .order("created_at", { ascending: false })
     .limit(10);
 
+  const revenueTotal = revenuePoints.reduce((sum, p) => sum + p.amount * 100, 0);
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="font-serif text-2xl font-semibold text-ink-primary">Dashboard</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        İşletmenizin genel durumu — gelir, lead&apos;ler ve bekleyen işler tek bakışta.
-      </p>
+    <PageContainer className="max-w-7xl">
+      <PageHeader title={t("title")} description={t("description")} />
 
-      <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {kpis.map((kpi, index) => (
-          <div
-            key={kpi.label}
-            className="animate-reveal-up rounded-interactive border border-subtle bg-surface p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
-            style={{ animationDelay: `${index * 60}ms` }}
-          >
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              {kpi.label}
-            </p>
-            <p className="mt-2 font-mono text-2xl font-semibold text-ink-primary">
-              <CountUp value={kpi.value} format={kpi.format} />
-            </p>
-          </div>
+      <section aria-label={t("title")} className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {kpis.map((kpi) => (
+          <MetricCard key={kpi.label} label={kpi.label} value={kpi.value} />
         ))}
-      </div>
+      </section>
 
-      <div
-        className="animate-reveal-up mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3"
-        style={{ animationDelay: "120ms" }}
-      >
-        <div className="rounded-interactive border border-subtle bg-surface p-6 transition-[box-shadow,border-color] duration-200 hover:border-gold/50 hover:shadow-md hover:shadow-gold/10 lg:col-span-2">
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold text-ink-primary">Gelir eğilimi</h2>
-            <span className="font-mono text-lg font-semibold text-ink-primary">
-              {formatPrice(revenuePoints.reduce((sum, p) => sum + p.amount * 100, 0))}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <Card className="p-6 lg:col-span-2">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("revenue.title")}</h2>
+            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-violet-400">
+              {formatMoney(locale, revenueTotal)}
             </span>
           </div>
-          <p className="mt-1 text-xs text-ink-muted">Son {MONTHS_BACK} ay, tahsil edilen ödemeler</p>
+          <p className="mt-1 text-xs text-slate-400">{t("revenue.subtitle", { months: MONTHS_BACK })}</p>
           <div className="mt-4">
             <FreelanceRevenueChart data={revenuePoints} />
           </div>
-        </div>
+        </Card>
 
-        <div className="rounded-interactive border border-subtle bg-surface">
-          <div className="border-b border-subtle px-5 py-4">
-            <h2 className="flex items-center gap-2 text-sm font-semibold text-ink-primary">
-              <AlertTriangle size={15} className="text-status-warn" />
-              Aksiyon Gerekiyor
+        <Card>
+          <div className="border-b border-slate-800 px-5 py-4">
+            <h2 className="flex items-center gap-2 text-sm font-semibold tracking-tight text-slate-100">
+              <AlertTriangle aria-hidden size={15} className="text-amber-400" />
+              {t("actions.title")}
             </h2>
           </div>
-          <div className="flex flex-col divide-y divide-subtle">
-            {actionItems.length === 0 && (
-              <p className="px-5 py-8 text-center text-sm text-ink-muted">
-                Şu an bekleyen bir aksiyon yok.
-              </p>
-            )}
+          <div className="flex flex-col divide-y divide-slate-800">
+            {actionItems.length === 0 ? (
+              <p className="px-5 py-8 text-center text-sm text-slate-400">{t("actions.empty")}</p>
+            ) : null}
             {actionItems.slice(0, 8).map((item) => (
               <Link
                 key={item.id}
                 href={item.href}
-                className={`border-l-2 px-4 py-3 transition-colors hover:bg-surface-raised ${SEVERITY_BORDER[item.severity]}`}
+                className={`border-s-2 px-4 py-3 transition-colors hover:bg-slate-800/40 focus-visible:bg-slate-800/40 ${SEVERITY_BORDER[item.severity]}`}
               >
-                <p className="text-sm font-medium text-ink-primary">{item.label}</p>
-                <p className="mt-0.5 text-xs text-ink-muted">{item.detail}</p>
+                <p className="text-sm font-medium text-slate-100">{item.label}</p>
+                <p className="mt-0.5 text-xs text-slate-400">{item.detail}</p>
               </Link>
             ))}
           </div>
-        </div>
+        </Card>
       </div>
 
-      <div
-        className="animate-reveal-up mt-8 rounded-interactive border border-subtle bg-surface"
-        style={{ animationDelay: "180ms" }}
-      >
-        <div className="border-b border-subtle px-5 py-4">
-          <h2 className="text-sm font-semibold text-ink-primary">Aktivite akışı</h2>
+      <Card>
+        <div className="border-b border-slate-800 px-5 py-4">
+          <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("activity.title")}</h2>
         </div>
-        <div className="flex flex-col divide-y divide-subtle">
-          {(recentAudit ?? []).length === 0 && (
-            <p className="px-5 py-8 text-center text-sm text-ink-muted">Henüz aktivite yok.</p>
-          )}
+        <div className="flex flex-col divide-y divide-slate-800">
+          {(recentAudit ?? []).length === 0 ? (
+            <p className="px-5 py-8 text-center text-sm text-slate-400">{t("activity.empty")}</p>
+          ) : null}
           {(recentAudit ?? []).map((entry) => (
-            <div key={entry.id} className="flex items-center justify-between px-5 py-3">
-              <div className="flex items-center gap-2.5">
+            <div key={entry.id} className="flex items-center justify-between gap-3 px-5 py-3">
+              <div className="flex min-w-0 items-center gap-2.5">
                 {entry.action.startsWith("lead.") ? (
-                  <UserPlus size={14} className="text-ink-muted" />
+                  <UserPlus aria-hidden size={14} className="shrink-0 text-slate-500" />
                 ) : entry.action.includes("cancel") ? (
-                  <TrendingDown size={14} className="text-ink-muted" />
+                  <TrendingDown aria-hidden size={14} className="shrink-0 text-slate-500" />
                 ) : (
-                  <CalendarClock size={14} className="text-ink-muted" />
+                  <CalendarClock aria-hidden size={14} className="shrink-0 text-slate-500" />
                 )}
-                <span className="text-sm text-ink-primary">{entry.action}</span>
-                {entry.target_table && (
-                  <span className="text-xs text-ink-muted">· {entry.target_table}</span>
-                )}
+                <span dir="ltr" className="truncate font-mono text-sm text-slate-100">
+                  {entry.action}
+                </span>
+                {entry.target_table ? (
+                  <span dir="ltr" className="truncate font-mono text-xs text-slate-400">
+                    · {entry.target_table}
+                  </span>
+                ) : null}
               </div>
-              <span className="font-mono text-xs text-ink-muted">
-                {new Date(entry.created_at).toLocaleString()}
+              <span className="shrink-0 text-xs text-slate-400">
+                {format.dateTime(new Date(entry.created_at), { dateStyle: "medium", timeStyle: "short", numberingSystem: "latn" })}
               </span>
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </Card>
+    </PageContainer>
   );
 }

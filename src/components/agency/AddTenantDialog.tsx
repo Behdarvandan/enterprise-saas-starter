@@ -1,9 +1,10 @@
 "use client";
 
-import { useId, useState, useTransition, type FormEvent } from "react";
 import { Plus } from "lucide-react";
-import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
+import { useId, useState, useTransition, type FormEvent } from "react";
 import { createTenant, linkTenant, type AgencyActionResult } from "@/app/[locale]/agency/tenants/actions";
+import OwnedOrganizationPicker from "@/components/agency/OwnedOrganizationPicker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,6 +19,9 @@ import FormStatus from "@/components/ui/FormStatus";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRouter } from "@/i18n/navigation";
+import type { LinkableOrganization } from "@/lib/agency/linkable";
+import { toast } from "@/lib/toast";
 
 const SLUG_PATTERN = "[a-z0-9]+(-[a-z0-9]+)*";
 
@@ -32,8 +36,16 @@ function slugify(value: string): string {
     .slice(0, 48);
 }
 
-/** "Add tenant" button + dialog: link an organization you own, or create a new one. */
-export default function AddTenantDialog({ triggerLabel = "Add tenant" }: { triggerLabel?: string }) {
+interface AddTenantDialogProps {
+  /** Organizations the caller owns that can be attached. */
+  linkable: LinkableOrganization[];
+  /** `first` labels the trigger for the empty state. */
+  variant?: "default" | "first";
+}
+
+/** "Add tenant" button + dialog: create a new organization, or pick one you own to link. */
+export default function AddTenantDialog({ linkable, variant = "default" }: AddTenantDialogProps) {
+  const t = useTranslations("agency.tenants.add");
   const router = useRouter();
   const idPrefix = useId();
   const [open, setOpen] = useState(false);
@@ -42,12 +54,14 @@ export default function AddTenantDialog({ triggerLabel = "Add tenant" }: { trigg
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [slugEdited, setSlugEdited] = useState(false);
+  const [selectedOrg, setSelectedOrg] = useState<string | null>(null);
 
   function reset() {
     setError(undefined);
     setName("");
     setSlug("");
     setSlugEdited(false);
+    setSelectedOrg(null);
   }
 
   function handleOpenChange(next: boolean) {
@@ -55,13 +69,12 @@ export default function AddTenantDialog({ triggerLabel = "Add tenant" }: { trigg
     if (!next) reset();
   }
 
-  function submit(event: FormEvent<HTMLFormElement>, action: (data: FormData) => Promise<AgencyActionResult>) {
-    event.preventDefault();
+  function run(action: (data: FormData) => Promise<AgencyActionResult>, data: FormData, successTitle: string) {
     setError(undefined);
-    const data = new FormData(event.currentTarget);
     startTransition(async () => {
       const outcome = await action(data);
       if (outcome.success) {
+        toast({ tone: "success", title: successTitle });
         router.refresh();
         handleOpenChange(false);
       } else {
@@ -70,31 +83,42 @@ export default function AddTenantDialog({ triggerLabel = "Add tenant" }: { trigg
     });
   }
 
+  function handleCreate(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    run(createTenant, new FormData(event.currentTarget), t("created"));
+  }
+
+  function handleLink(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selectedOrg) return;
+    const data = new FormData();
+    data.set("organizationId", selectedOrg);
+    run(linkTenant, data, t("linked"));
+  }
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button>
-          <Plus /> {triggerLabel}
+          <Plus aria-hidden /> {variant === "first" ? t("triggerFirst") : t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add a tenant</DialogTitle>
-          <DialogDescription>
-            Tenants are the client organizations you manage. Each one draws from your token pool.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="create" onValueChange={() => setError(undefined)}>
           <TabsList className="w-full">
-            <TabsTrigger value="create">Create new</TabsTrigger>
-            <TabsTrigger value="link">Link existing</TabsTrigger>
+            <TabsTrigger value="create">{t("tabCreate")}</TabsTrigger>
+            <TabsTrigger value="link">{t("tabLink")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="create" className="pt-3">
-            <form onSubmit={(event) => submit(event, createTenant)} className="grid gap-4">
+            <form onSubmit={handleCreate} className="grid gap-4">
               <div className="grid gap-1.5">
-                <Label htmlFor={`${idPrefix}-name`}>Tenant name</Label>
+                <Label htmlFor={`${idPrefix}-name`}>{t("nameLabel")}</Label>
                 <Input
                   id={`${idPrefix}-name`}
                   name="name"
@@ -109,7 +133,7 @@ export default function AddTenantDialog({ triggerLabel = "Add tenant" }: { trigg
                 />
               </div>
               <div className="grid gap-1.5">
-                <Label htmlFor={`${idPrefix}-slug`}>Slug</Label>
+                <Label htmlFor={`${idPrefix}-slug`}>{t("slugLabel")}</Label>
                 <Input
                   id={`${idPrefix}-slug`}
                   name="slug"
@@ -118,7 +142,8 @@ export default function AddTenantDialog({ triggerLabel = "Add tenant" }: { trigg
                   maxLength={48}
                   pattern={SLUG_PATTERN}
                   autoComplete="off"
-                  className="font-mono"
+                  dir="ltr"
+                  className="text-start font-mono"
                   value={slug}
                   onChange={(event) => {
                     setSlugEdited(true);
@@ -126,42 +151,32 @@ export default function AddTenantDialog({ triggerLabel = "Add tenant" }: { trigg
                   }}
                   aria-describedby={`${idPrefix}-slug-hint`}
                 />
-                <p id={`${idPrefix}-slug-hint`} className="text-xs text-ink-muted">
-                  Lowercase letters, numbers and hyphens. You become the owner of the new
-                  organization.
+                <p id={`${idPrefix}-slug-hint`} className="text-xs text-slate-400">
+                  {t("slugHint")}
                 </p>
               </div>
               <FormStatus error={error} successMessage="" />
               <DialogFooter>
-                <Button type="submit" disabled={pending}>
-                  {pending ? "Creating…" : "Create tenant"}
+                <Button type="submit" loading={pending}>
+                  {pending ? t("creating") : t("create")}
                 </Button>
               </DialogFooter>
             </form>
           </TabsContent>
 
           <TabsContent value="link" className="pt-3">
-            <form onSubmit={(event) => submit(event, linkTenant)} className="grid gap-4">
-              <div className="grid gap-1.5">
-                <Label htmlFor={`${idPrefix}-link-slug`}>Organization slug</Label>
-                <Input
-                  id={`${idPrefix}-link-slug`}
-                  name="slug"
-                  required
-                  pattern={SLUG_PATTERN}
-                  autoComplete="off"
-                  className="font-mono"
-                  aria-describedby={`${idPrefix}-link-hint`}
-                />
-                <p id={`${idPrefix}-link-hint`} className="text-xs text-ink-muted">
-                  Only organizations you own can be linked. Linking lets you see its usage, chats
-                  and insights.
-                </p>
-              </div>
+            <form onSubmit={handleLink} className="grid gap-4">
+              <OwnedOrganizationPicker
+                organizations={linkable}
+                value={selectedOrg}
+                onChange={setSelectedOrg}
+                disabled={pending}
+              />
+              <p className="text-xs text-slate-400">{t("linkHint")}</p>
               <FormStatus error={error} successMessage="" />
               <DialogFooter>
-                <Button type="submit" disabled={pending}>
-                  {pending ? "Linking…" : "Link tenant"}
+                <Button type="submit" loading={pending} disabled={!selectedOrg}>
+                  {pending ? t("linking") : t("link")}
                 </Button>
               </DialogFooter>
             </form>

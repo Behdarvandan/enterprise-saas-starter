@@ -80,3 +80,6 @@ repomix-output.txt
 .cline/
 .clinerules
 .clineignore
+
+# local Claude Code guidance (never shared/committed)
+CLAUDE.local.md

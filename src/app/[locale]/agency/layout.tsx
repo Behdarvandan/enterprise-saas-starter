@@ -1,8 +1,10 @@
 import * as Sentry from "@sentry/nextjs";
 import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import AdminTopbar from "@/components/admin/AdminTopbar";
-import AgencySidebar from "@/components/agency/AgencySidebar";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import AgencySidebar from "@/components/layout/AgencySidebar";
+import AppShell from "@/components/layout/AppShell";
+import UserMenu from "@/components/layout/UserMenu";
 import { getAdministeredAgency } from "@/lib/agency/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -40,12 +42,16 @@ export default async function AgencyLayout({
   Sentry.setTag("portal", "agency");
 
   return (
-    <div className="min-h-screen bg-canvas lg:flex">
-      <AgencySidebar agencyName={agency.name} />
-      <div className="flex min-h-screen flex-1 flex-col">
-        <AdminTopbar userEmail={user.email ?? ""} />
-        <main className="flex-1">{children}</main>
-      </div>
-    </div>
+    <AppShell
+      sidebar={<AgencySidebar agencyName={agency.name} />}
+      headerEnd={
+        <>
+          <LocaleSwitcher />
+          <UserMenu email={user.email ?? ""} />
+        </>
+      }
+    >
+      {children}
+    </AppShell>
   );
 }

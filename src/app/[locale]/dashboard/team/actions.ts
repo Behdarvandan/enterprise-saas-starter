@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { requireMembershipResult } from "@/lib/auth";
@@ -44,33 +45,34 @@ async function logMembershipAudit(params: {
 export type TeamActionResult = { error?: string; success?: boolean };
 
 const inviteMemberSchema = z.object({
-  email: formField(
-    z.string().trim().toLowerCase().email("Please provide a valid email address."),
-  ),
+  email: formField(z.string().trim().toLowerCase().email("invalid_email")),
   // Defaults to "member" when omitted, matching the form's implicit default;
   // any other non-empty value must be a real role or validation fails.
   role: z.preprocess(
     (value) => (typeof value === "string" && value ? value : "member"),
-    z.enum(["owner", "admin", "member"], { message: "Invalid role." }),
+    z.enum(["owner", "admin", "member"], { message: "invalid_role" }),
   ),
 });
 
 export async function inviteMember(
   formData: FormData,
 ): Promise<TeamActionResult> {
+  const t = await getTranslations("dashboard.team.errors");
   const auth = await requireMembershipResult();
   if ("error" in auth) return auth;
   const { supabase, membership } = auth;
 
   if (!canManageMembers(membership.role)) {
-    return { error: "Only owners and admins can invite members." };
+    return { error: t("cannotInvite") };
   }
 
   const parsed = inviteMemberSchema.safeParse({
     email: formData.get("email"),
     role: formData.get("role"),
   });
-  if (!parsed.success) return { error: firstIssueMessage(parsed.error) };
+  if (!parsed.success) {
+    return { error: firstIssueMessage(parsed.error) === "invalid_email" ? t("invalidEmail") : t("invalidRole") };
+  }
   const { email, role } = parsed.data;
 
   // Prevent inviting someone who is already a member.
@@ -88,7 +90,7 @@ export async function inviteMember(
       .eq("user_id", profile.id)
       .maybeSingle();
 
-    if (existing) return { error: "That person is already a member." };
+    if (existing) return { error: t("alreadyMember") };
   }
 
   const token = randomBytes(32).toString("hex");
@@ -107,9 +109,9 @@ export async function inviteMember(
 
   if (error) {
     if (error.code === "23505") {
-      return { error: "An invitation for this email already exists." };
+      return { error: t("alreadyInvited") };
     }
-    return { error: error.message };
+    return { error: t("generic") };
   }
 
   // Best-effort: send the invitation email (the invitation is already saved).
@@ -141,12 +143,13 @@ export async function inviteMember(
 export async function revokeInvitation(
   invitationId: string,
 ): Promise<TeamActionResult> {
+  const t = await getTranslations("dashboard.team.errors");
   const auth = await requireMembershipResult();
   if ("error" in auth) return auth;
   const { supabase, membership } = auth;
 
   if (!canManageMembers(membership.role)) {
-    return { error: "Only owners and admins can revoke invitations." };
+    return { error: t("cannotRevoke") };
   }
 
   const { error } = await supabase
@@ -155,7 +158,7 @@ export async function revokeInvitation(
     .eq("id", invitationId)
     .eq("organization_id", membership.organizationId);
 
-  if (error) return { error: error.message };
+  if (error) return { error: t("generic") };
 
   revalidatePath("/dashboard/team");
   return { success: true };
@@ -164,12 +167,13 @@ export async function revokeInvitation(
 export async function removeMember(
   membershipId: string,
 ): Promise<TeamActionResult> {
+  const t = await getTranslations("dashboard.team.errors");
   const auth = await requireMembershipResult();
   if ("error" in auth) return auth;
   const { supabase, membership } = auth;
 
   if (!canManageMembers(membership.role)) {
-    return { error: "Only owners and admins can remove members." };
+    return { error: t("cannotRemove") };
   }
 
   const { data: target } = await supabase
@@ -179,9 +183,9 @@ export async function removeMember(
     .eq("organization_id", membership.organizationId)
     .maybeSingle();
 
-  if (!target) return { error: "Member not found." };
+  if (!target) return { error: t("memberNotFound") };
   if (target.role === "owner") {
-    return { error: "You cannot remove the organization owner." };
+    return { error: t("cannotRemoveOwner") };
   }
 
   const { error } = await supabase
@@ -190,7 +194,7 @@ export async function removeMember(
     .eq("id", membershipId)
     .eq("organization_id", membership.organizationId);
 
-  if (error) return { error: error.message };
+  if (error) return { error: t("generic") };
 
   await logMembershipAudit({
     action: "membership.removed",
@@ -208,15 +212,16 @@ export async function updateMemberRole(
   membershipId: string,
   role: MembershipRole,
 ): Promise<TeamActionResult> {
+  const t = await getTranslations("dashboard.team.errors");
   const auth = await requireMembershipResult();
   if ("error" in auth) return auth;
   const { supabase, membership } = auth;
 
   if (!canManageMembers(membership.role)) {
-    return { error: "Only owners and admins can change roles." };
+    return { error: t("cannotChangeRoles") };
   }
   if (role !== "admin" && role !== "member") {
-    return { error: "Invalid role." };
+    return { error: t("invalidRole") };
   }
 
   const { data: target } = await supabase
@@ -226,9 +231,9 @@ export async function updateMemberRole(
     .eq("organization_id", membership.organizationId)
     .maybeSingle();
 
-  if (!target) return { error: "Member not found." };
+  if (!target) return { error: t("memberNotFound") };
   if (target.role === "owner") {
-    return { error: "You cannot change the owner's role." };
+    return { error: t("cannotChangeOwner") };
   }
 
   const { error } = await supabase
@@ -237,7 +242,7 @@ export async function updateMemberRole(
     .eq("id", membershipId)
     .eq("organization_id", membership.organizationId);
 
-  if (error) return { error: error.message };
+  if (error) return { error: t("generic") };
 
   await logMembershipAudit({
     action: "membership.role_changed",

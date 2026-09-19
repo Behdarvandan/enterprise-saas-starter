@@ -51,18 +51,18 @@ export async function sendEmail({
 // ----------------------------------------------------------------------------
 // Pasargad email shell — hardcoded hex, not CSS custom properties: email
 // clients don't reliably support `:root`/`var()`, so these mirror
-// globals.css's dark-ink/gold tokens (§1.1) as literal values instead of
+// globals.css's slate/violet tokens as literal values instead of
 // referencing them. No inline SVG motif for the same reason (inconsistent
 // email-client support) — the wordmark is styled text.
 // ----------------------------------------------------------------------------
 const EMAIL_COLORS = {
-  canvas: "#14121b",
-  card: "#1d1a28",
-  foreground: "#ede9e1",
-  muted: "#94899e",
-  primary: "#b08d57",
-  primaryForeground: "#1a1520",
-  border: "#332f40",
+  canvas: "#020617",
+  card: "#0f172a",
+  foreground: "#f1f5f9",
+  muted: "#94a3b8",
+  primary: "#7c3aed",
+  primaryForeground: "#ffffff",
+  border: "#1e293b",
 };
 
 function emailButton(label: string, url: string): string {

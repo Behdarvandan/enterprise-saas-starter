@@ -1,12 +1,22 @@
 import { BarChart3, Lightbulb } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-import StatCard from "@/components/agency/StatCard";
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import TokenUsageChart from "@/components/admin/TokenUsageChart";
-import Badge from "@/components/ui/Badge";
-import { Card } from "@/components/ui/card";
+import CrewInsightCard from "@/components/dashboard/crew/CrewInsightCard";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import EmptyState from "@/components/ui/EmptyState";
+import MetricCard from "@/components/ui/MetricCard";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Link } from "@/i18n/navigation";
 import { requireAgencyAdmin } from "@/lib/agency/admin";
-import { formatPercent, formatRelativeTime, formatTokens } from "@/lib/agency/format";
+import { formatPercent, formatTokens } from "@/lib/agency/format";
 import {
   ANALYTICS_WINDOWS,
   consumptionPercent,
@@ -14,15 +24,12 @@ import {
   summarizeUsage,
   toTokenUsagePoints,
 } from "@/lib/agency/usage";
+import { readCrewMetadata } from "@/lib/dev-crew/recommendation";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
 const RECOMMENDATION_LIMIT = 20;
-
-interface DevCrewMetadata {
-  recommendation?: string;
-  negative_count?: number;
-}
 
 export default async function AgencyAnalyticsPage({
   searchParams,
@@ -31,6 +38,11 @@ export default async function AgencyAnalyticsPage({
 }) {
   const { supabase, agency } = await requireAgencyAdmin();
   const days = parseAnalyticsWindow((await searchParams).days);
+  const [t, locale, format] = await Promise.all([
+    getTranslations("agency.analytics"),
+    getLocale(),
+    getFormatter(),
+  ]);
 
   // Both reads run under the caller's own RLS (the agency-admin SELECT
   // policies), so no other agency's tenants can ever appear here.
@@ -58,193 +70,166 @@ export default async function AgencyAnalyticsPage({
   if (recommendationError) throw recommendationError;
 
   const attention = summary.tenantsNearLimit + summary.tenantsOutOfTokens;
+  const now = new Date();
+  const relative = (iso: string | null) => (iso ? format.relativeTime(new Date(iso), now) : "—");
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-ink-primary">Analytics</h1>
-          <p className="mt-1 text-sm text-ink-muted">
-            AI assistant usage across all of your tenants.
-          </p>
-        </div>
-        <nav aria-label="Time window" className="flex gap-1 rounded-control border border-subtle p-1">
-          {ANALYTICS_WINDOWS.map((option) => (
-            <Link
-              key={option}
-              href={`/agency/analytics?days=${option}`}
-              aria-current={option === days ? "true" : undefined}
-              className={`rounded-control px-3 py-1 text-xs font-semibold transition-colors ${
-                option === days
-                  ? "bg-violet/15 text-violet-dim"
-                  : "text-ink-muted hover:bg-surface-raised hover:text-ink-primary"
-              }`}
-            >
-              {option} days
-            </Link>
-          ))}
-        </nav>
-      </div>
+    <PageContainer>
+      <PageHeader
+        title={t("title")}
+        description={t("description")}
+        actions={
+          <nav aria-label={t("window")} className="flex gap-1 rounded-lg border border-slate-800 p-1">
+            {ANALYTICS_WINDOWS.map((option) => (
+              <Link
+                key={option}
+                href={`/agency/analytics?days=${option}`}
+                aria-current={option === days ? "true" : undefined}
+                className={cn(
+                  "rounded-md px-3 py-1 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring/60",
+                  option === days ? "bg-slate-800 text-slate-100" : "text-slate-400 hover:text-slate-100",
+                )}
+              >
+                {t("days", { count: option })}
+              </Link>
+            ))}
+          </nav>
+        }
+      />
 
       {usage.length === 0 ? (
-        <Card className="mt-8 rounded-interactive">
-          <EmptyState
-            icon={BarChart3}
-            title="Nothing to analyze yet"
-            description="Add tenants and allocate tokens on the Tenants page. Usage from their AI assistants will show up here."
-          />
+        <Card>
+          <EmptyState icon={BarChart3} title={t("emptyTitle")} description={t("emptyDescription")} />
         </Card>
       ) : (
         <>
-          <div className="animate-reveal-up mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <StatCard
-              label="AI requests"
-              value={formatTokens(summary.totalRequests)}
-              hint={`Visitor messages, last ${days} days`}
+          <section aria-label={t("title")} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              label={t("requests")}
+              value={formatTokens(locale, summary.totalRequests)}
+              hint={t("requestsHint", { days })}
             />
-            <StatCard
-              label="Token consumption"
-              value={formatPercent(summary.consumptionPercent)}
-              hint={`${formatTokens(summary.tokensConsumed)} of ${formatTokens(summary.tokensGranted)} allocated`}
+            <MetricCard
+              label={t("consumption")}
+              value={formatPercent(locale, summary.consumptionPercent)}
+              hint={t("consumptionHint", {
+                used: formatTokens(locale, summary.tokensConsumed),
+                granted: formatTokens(locale, summary.tokensGranted),
+              })}
             />
-            <StatCard
-              label="Low-confidence answers"
-              value={formatPercent(summary.lowConfidenceRate)}
-              hint={`${formatTokens(summary.lowConfidenceCount)} of ${formatTokens(summary.totalCompletions)} replies, last ${days} days`}
+            <MetricCard
+              label={t("lowConfidence")}
+              value={formatPercent(locale, summary.lowConfidenceRate)}
+              hint={t("lowConfidenceHint", {
+                low: formatTokens(locale, summary.lowConfidenceCount),
+                total: formatTokens(locale, summary.totalCompletions),
+                days,
+              })}
             />
-            <StatCard
-              label="Need attention"
-              value={attention}
+            <MetricCard
+              label={t("attention")}
+              value={formatTokens(locale, attention)}
               hint={
                 attention === 0
-                  ? "No tenant is close to its limit"
-                  : `${summary.tenantsOutOfTokens} out of tokens · ${summary.tenantsNearLimit} near limit`
+                  ? t("attentionNone")
+                  : t("attentionSome", { out: summary.tenantsOutOfTokens, near: summary.tenantsNearLimit })
               }
             />
-          </div>
-          <p className="mt-2 text-xs text-ink-muted">
-            Token figures describe each tenant&apos;s current allocation and don&apos;t change with
-            the time window.
-          </p>
+          </section>
+          <p className="-mt-2 text-xs text-slate-400">{t("tokenNote")}</p>
 
-          <Card
-            className="animate-reveal-up mt-8 rounded-interactive p-6"
-            style={{ animationDelay: "60ms" }}
-          >
-            <h2 className="text-sm font-semibold text-ink-primary">Token consumption by tenant</h2>
-            <p className="mt-1 text-xs text-ink-muted">
-              Share of each tenant&apos;s allocation used so far, most-used first
-            </p>
-            <div className="mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("chartTitle")}</CardTitle>
+              <CardDescription>{t("chartDescription")}</CardDescription>
+            </CardHeader>
+            <CardContent>
               {chartPoints.length === 0 ? (
-                <p className="py-8 text-center text-sm text-ink-muted">
-                  No tokens allocated to tenants yet.
-                </p>
+                <p className="py-8 text-center text-sm text-slate-400">{t("chartEmpty")}</p>
               ) : (
                 <TokenUsageChart data={chartPoints} />
               )}
-            </div>
+            </CardContent>
           </Card>
 
-          <Card
-            className="animate-reveal-up mt-8 overflow-hidden rounded-interactive"
-            style={{ animationDelay: "120ms" }}
-          >
+          <Card className="overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <caption className="sr-only">Usage per tenant</caption>
-                <thead className="border-b border-subtle bg-surface-raised text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                  <tr>
-                    <th className="px-4 py-3">Tenant</th>
-                    <th className="px-4 py-3 text-right">Requests</th>
-                    <th className="px-4 py-3 text-right">Low confidence</th>
-                    <th className="px-4 py-3 text-right">Blocked by quota</th>
-                    <th className="px-4 py-3 text-right">Tokens used</th>
-                    <th className="px-4 py-3">Last activity</th>
-                  </tr>
-                </thead>
-                <tbody>
+              <Table>
+                <caption className="sr-only">{t("table.caption")}</caption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t("table.tenant")}</TableHead>
+                    <TableHead className="text-end">{t("table.requests")}</TableHead>
+                    <TableHead className="text-end">{t("table.lowConfidence")}</TableHead>
+                    <TableHead className="text-end">{t("table.blocked")}</TableHead>
+                    <TableHead className="text-end">{t("table.tokens")}</TableHead>
+                    <TableHead>{t("table.lastActivity")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {usage.map((row) => (
-                    <tr
-                      key={row.tenant_id}
-                      className="border-b border-subtle transition-colors last:border-0 hover:bg-surface-raised"
-                    >
-                      <td className="px-4 py-3">
-                        <p className="font-medium text-ink-primary">{row.tenant_name}</p>
-                        <p className="font-mono text-xs text-ink-muted">{row.tenant_slug}</p>
-                      </td>
-                      <td className="px-4 py-3 text-right font-mono text-ink-primary">
-                        {formatTokens(row.rag_requests)}
-                      </td>
-                      <td className="px-4 py-3 text-right font-mono text-ink-primary">
-                        {formatTokens(row.low_confidence)}
-                      </td>
-                      <td className="px-4 py-3 text-right font-mono text-ink-primary">
+                    <TableRow key={row.tenant_id}>
+                      <TableCell>
+                        <p className="font-medium text-slate-100">{row.tenant_name}</p>
+                        <p dir="ltr" className="text-start font-mono text-xs text-slate-400">
+                          {row.tenant_slug}
+                        </p>
+                      </TableCell>
+                      <TableCell dir="ltr" className="text-end font-mono text-slate-100">
+                        {formatTokens(locale, row.rag_requests)}
+                      </TableCell>
+                      <TableCell dir="ltr" className="text-end font-mono text-slate-100">
+                        {formatTokens(locale, row.low_confidence)}
+                      </TableCell>
+                      <TableCell dir="ltr" className="text-end font-mono text-slate-100">
                         {row.quota_exhausted > 0 ? (
-                          <span className="text-status-error">{formatTokens(row.quota_exhausted)}</span>
+                          <span className="text-status-error">{formatTokens(locale, row.quota_exhausted)}</span>
                         ) : (
                           0
                         )}
-                      </td>
-                      <td className="px-4 py-3 text-right font-mono text-ink-primary">
-                        {row.quota_granted > 0
-                          ? formatPercent(consumptionPercent(row))
-                          : "—"}
-                      </td>
-                      <td className="px-4 py-3 text-ink-muted">
-                        {formatRelativeTime(row.last_activity_at)}
-                      </td>
-                    </tr>
+                      </TableCell>
+                      <TableCell dir="ltr" className="text-end font-mono text-slate-100">
+                        {row.quota_granted > 0 ? formatPercent(locale, consumptionPercent(row)) : "—"}
+                      </TableCell>
+                      <TableCell className="text-slate-400">{relative(row.last_activity_at)}</TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           </Card>
 
-          <section className="animate-reveal-up mt-8" style={{ animationDelay: "180ms" }}>
-            <h2 className="text-lg font-semibold text-ink-primary">Dev Crew recommendations</h2>
-            <p className="mt-1 text-sm text-ink-muted">
-              Patterns Dev Crew spotted in your tenants&apos; recent chats.
-            </p>
-            <div className="mt-4 space-y-3">
+          <section>
+            <h2 className="text-lg font-semibold tracking-tight text-slate-100">{t("crew.title")}</h2>
+            <p className="mt-1 text-sm text-slate-400">{t("crew.description")}</p>
+            <Card className="mt-4">
               {(recommendations ?? []).length === 0 ? (
-                <Card className="rounded-interactive">
-                  <EmptyState
-                    icon={Lightbulb}
-                    title="No recommendations yet"
-                    description="Dev Crew reviews chat activity after every conversation and posts here when it finds something worth acting on."
-                  />
-                </Card>
+                <EmptyState icon={Lightbulb} title={t("crew.emptyTitle")} description={t("crew.emptyDescription")} />
               ) : (
-                (recommendations ?? []).map((entry) => {
-                  const metadata = (entry.metadata ?? {}) as DevCrewMetadata;
-                  return (
-                    <Card key={entry.id} className="rounded-interactive p-5">
-                      <div className="flex flex-wrap items-start justify-between gap-3">
-                        <p className="min-w-0 flex-1 text-sm text-ink-primary">
-                          {metadata.recommendation ?? "No details available."}
-                        </p>
-                        {typeof metadata.negative_count === "number" ? (
-                          <Badge tone="warn" className="normal-case">
-                            {metadata.negative_count} signal{metadata.negative_count === 1 ? "" : "s"}
-                          </Badge>
-                        ) : null}
-                      </div>
-                      <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-muted">
-                        <Badge className="normal-case">
-                          {(entry.organization_id && tenantNameById.get(entry.organization_id)) ||
-                            "Unknown tenant"}
-                        </Badge>
-                        {formatRelativeTime(entry.created_at)}
-                      </p>
-                    </Card>
-                  );
-                })
+                <ol className="divide-y divide-slate-800">
+                  {(recommendations ?? []).map((entry) => {
+                    const { recommendation, negativeCount } = readCrewMetadata(entry.metadata);
+                    return (
+                      <CrewInsightCard
+                        key={entry.id}
+                        item={{
+                          id: entry.id,
+                          createdAt: entry.created_at,
+                          recommendation,
+                          negativeCount,
+                          repeats: 1,
+                        }}
+                        now={now}
+                        tenantName={(entry.organization_id && tenantNameById.get(entry.organization_id)) || t("crew.unknownTenant")}
+                      />
+                    );
+                  })}
+                </ol>
               )}
-            </div>
+            </Card>
           </section>
         </>
       )}
-    </div>
+    </PageContainer>
   );
 }

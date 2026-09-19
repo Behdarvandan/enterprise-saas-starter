@@ -1,57 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "@/i18n/navigation";
 import { ArrowUpRight, CheckCircle2, Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import type { LeadStatus } from "@/types";
-
-const STATUS_OPTIONS: LeadStatus[] = [
-  "new",
-  "contacted",
-  "quoted",
-  "accepted",
-  "rejected",
-];
+import { NativeSelect } from "@/components/ui/native-select";
+import { useRouter } from "@/i18n/navigation";
+import { asLeadStatus, LEAD_STATUSES, type KnownLeadStatus } from "@/lib/admin/enums";
 
 interface LeadActionsProps {
   leadId: string;
-  status: LeadStatus;
+  status: KnownLeadStatus;
   convertedOrganizationId: string | null;
 }
 
-export default function LeadActions({
-  leadId,
-  status,
-  convertedOrganizationId,
-}: LeadActionsProps) {
+type ErrorKey = "status" | "convert" | "invite";
+
+export default function LeadActions({ leadId, status, convertedOrganizationId }: LeadActionsProps) {
+  const t = useTranslations("admin.leads");
+  const tActions = useTranslations("admin.leads.actions");
   const router = useRouter();
   const [statusLoading, setStatusLoading] = useState(false);
   const [convertLoading, setConvertLoading] = useState(false);
-  // Transient, this-session-only: true right after a successful convert
-  // call, before the post-creation "send invite?" choice has been made.
-  // `convertedOrganizationId` (server data) doesn't reflect the new
-  // conversion until the next `router.refresh()`, so this bridges the gap.
+  // Transient, this-session-only: true right after a successful convert call,
+  // before the "send invite?" choice has been made. `convertedOrganizationId`
+  // (server data) doesn't reflect the new conversion until the next
+  // `router.refresh()`, so this bridges the gap.
   const [justConverted, setJustConverted] = useState(false);
-  const [inviteStatus, setInviteStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle",
-  );
-  const [error, setError] = useState<string | null>(null);
+  const [inviteStatus, setInviteStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [error, setError] = useState<ErrorKey | null>(null);
 
-  async function handleStatusChange(nextStatus: LeadStatus) {
+  async function request(url: string, init: RequestInit): Promise<Response | null> {
+    return fetch(url, init).catch((networkError: unknown) => {
+      console.error("[leads] request failed:", networkError);
+      return null;
+    });
+  }
+
+  async function handleStatusChange(nextStatus: KnownLeadStatus) {
     setStatusLoading(true);
     setError(null);
-
-    const response = await fetch(`/api/admin/leads/${leadId}/status`, {
+    const response = await request(`/api/admin/leads/${leadId}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: nextStatus }),
-    }).catch(() => null);
-
-    if (!response || !response.ok) {
-      setError("Failed to update the status.");
-    }
-
+    });
+    if (!response?.ok) setError("status");
     setStatusLoading(false);
     router.refresh();
   }
@@ -59,45 +53,26 @@ export default function LeadActions({
   async function handleConvert() {
     setConvertLoading(true);
     setError(null);
-
-    const response = await fetch(`/api/admin/leads/${leadId}/convert`, {
-      method: "POST",
-    }).catch(() => null);
-
-    if (!response) {
-      setError("Something went wrong.");
-      setConvertLoading(false);
-      return;
-    }
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok || data.error) {
-      setError(data.error ?? "Failed to convert the lead.");
-      setConvertLoading(false);
-      return;
-    }
-
+    const response = await request(`/api/admin/leads/${leadId}/convert`, { method: "POST" });
+    const data: { error?: string } = response ? await response.json().catch(() => ({})) : {};
     setConvertLoading(false);
+    if (!response?.ok || data.error) {
+      setError("convert");
+      return;
+    }
     setJustConverted(true);
   }
 
   async function handleSendInvite() {
     setInviteStatus("sending");
     setError(null);
-
-    const response = await fetch(`/api/admin/leads/${leadId}/send-invite`, {
-      method: "POST",
-    }).catch(() => null);
-
-    const data = await response?.json().catch(() => ({}));
-
-    if (!response || !response.ok || data?.error) {
+    const response = await request(`/api/admin/leads/${leadId}/send-invite`, { method: "POST" });
+    const data: { error?: string } = response ? await response.json().catch(() => ({})) : {};
+    if (!response?.ok || data.error) {
       setInviteStatus("error");
-      setError(data?.error ?? "Failed to send the invitation email.");
+      setError("invite");
       return;
     }
-
     setInviteStatus("sent");
     setJustConverted(false);
     router.refresh();
@@ -108,28 +83,31 @@ export default function LeadActions({
     router.refresh();
   }
 
-  // Post-creation confirmation (brief §5.3): the client record is already
-  // saved at this point either way — this only decides whether to also
-  // send the invite email right now.
+  const errorText = error ? (
+    <p role="alert" className="text-xs font-medium text-status-error">
+      {tActions(`errors.${error}`)}
+    </p>
+  ) : null;
+
+  // The client record is already saved at this point either way — this only
+  // decides whether to also send the invite email right now.
   if (justConverted) {
     return (
-      <div className="rounded-control border border-status-success/30 bg-status-success/10 p-4">
-        <p className="text-sm font-medium text-status-success">
-          Client oluşturuldu. Davet e-postası gönderilsin mi?
-        </p>
+      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4">
+        <p className="text-sm font-medium text-emerald-300">{tActions("askInvite")}</p>
         <div className="mt-3 flex items-center gap-3">
-          <Button type="button" onClick={handleSendInvite} disabled={inviteStatus === "sending"}>
-            {inviteStatus === "sending" ? "Gönderiliyor..." : "Evet"}
+          <Button type="button" onClick={handleSendInvite} loading={inviteStatus === "sending"}>
+            {inviteStatus === "sending" ? tActions("sending") : tActions("yes")}
           </Button>
           <button
             type="button"
             onClick={handleSkipInvite}
-            className="text-sm font-semibold text-ink-muted transition-colors hover:text-ink-primary"
+            className="text-sm font-medium text-slate-400 transition-colors hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-ring/60"
           >
-            Şimdi Değil
+            {tActions("notNow")}
           </button>
         </div>
-        {error && <p className="mt-2 text-xs font-medium text-status-error">{error}</p>}
+        {errorText ? <div className="mt-2">{errorText}</div> : null}
       </div>
     );
   }
@@ -137,55 +115,49 @@ export default function LeadActions({
   if (convertedOrganizationId) {
     return (
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 rounded-control border border-status-success/30 bg-status-success/10 px-4 py-3 text-sm font-medium text-status-success">
-          <CheckCircle2 size={16} />
-          Converted to a client organization.
+        <div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-300">
+          <CheckCircle2 aria-hidden size={16} />
+          {tActions("converted")}
         </div>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={handleSendInvite}
-          disabled={inviteStatus === "sending"}
-        >
-          <Mail size={14} />
+        <Button type="button" variant="secondary" onClick={handleSendInvite} loading={inviteStatus === "sending"}>
+          {inviteStatus === "sending" ? null : <Mail aria-hidden size={14} />}
           {inviteStatus === "sending"
-            ? "Gönderiliyor..."
+            ? tActions("sending")
             : inviteStatus === "sent"
-              ? "Daveti Yeniden Gönder"
-              : "Daveti Gönder"}
+              ? tActions("resendInvite")
+              : tActions("sendInvite")}
         </Button>
-        {inviteStatus === "sent" && (
-          <span className="text-xs font-medium text-status-success">Gönderildi</span>
-        )}
-        {error && <p className="w-full text-xs font-medium text-status-error">{error}</p>}
+        {inviteStatus === "sent" ? <span className="text-xs font-medium text-emerald-300">{tActions("sent")}</span> : null}
+        {errorText ? <div className="w-full">{errorText}</div> : null}
       </div>
     );
   }
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <label className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-        Status
+      <label htmlFor="lead-status" className="text-xs font-medium text-slate-400">
+        {tActions("status")}
       </label>
-      <select
+      <NativeSelect
+        id="lead-status"
         value={status}
         disabled={statusLoading}
-        onChange={(event) => handleStatusChange(event.target.value as LeadStatus)}
-        className="rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
+        onChange={(event) => {
+          const next = asLeadStatus(event.target.value);
+          if (next) void handleStatusChange(next);
+        }}
       >
-        {STATUS_OPTIONS.map((option) => (
+        {LEAD_STATUSES.map((option) => (
           <option key={option} value={option}>
-            {option}
+            {t(`status.${option}`)}
           </option>
         ))}
-      </select>
-
-      <Button type="button" onClick={handleConvert} disabled={convertLoading}>
-        {convertLoading ? "Converting..." : "Client'a Dönüştür"}
-        <ArrowUpRight size={16} />
+      </NativeSelect>
+      <Button type="button" onClick={handleConvert} loading={convertLoading}>
+        {convertLoading ? tActions("converting") : tActions("convert")}
+        {convertLoading ? null : <ArrowUpRight aria-hidden size={16} />}
       </Button>
-
-      {error && <p className="w-full text-xs font-medium text-status-error">{error}</p>}
+      {errorText ? <div className="w-full">{errorText}</div> : null}
     </div>
   );
 }

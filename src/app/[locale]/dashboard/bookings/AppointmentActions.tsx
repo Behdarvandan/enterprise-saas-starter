@@ -1,16 +1,15 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "@/i18n/navigation";
 import { cancelAppointment, rescheduleAppointment } from "./actions";
 
-export default function AppointmentActions({
-  appointmentId,
-}: {
-  appointmentId: string;
-}) {
+export default function AppointmentActions({ appointmentId }: { appointmentId: string }) {
+  const t = useTranslations("dashboard.bookings.actions");
   const router = useRouter();
   const [showReschedule, setShowReschedule] = useState(false);
   const [newDateTime, setNewDateTime] = useState("");
@@ -50,46 +49,40 @@ export default function AppointmentActions({
         <Button
           type="button"
           variant="secondary"
+          size="sm"
+          aria-expanded={showReschedule}
           onClick={() => setShowReschedule((value) => !value)}
           disabled={loading}
-          className="px-3 py-1.5 text-xs"
         >
-          Reschedule
+          {t("reschedule")}
         </Button>
-        <Button
-          type="button"
-          variant="destructive"
-          onClick={handleCancel}
-          disabled={loading}
-          className="px-3 py-1.5 text-xs"
-        >
-          {loading ? "Working..." : "Cancel"}
+        <Button type="button" variant="destructive" size="sm" onClick={handleCancel} loading={loading}>
+          {loading ? t("working") : t("cancel")}
         </Button>
       </div>
 
-      {showReschedule && (
-        <form
-          onSubmit={handleReschedule}
-          className="flex w-full flex-col gap-2 sm:flex-row"
-        >
-          <input
+      {showReschedule ? (
+        <form onSubmit={handleReschedule} className="flex w-full flex-col gap-2 sm:flex-row">
+          <Input
             type="datetime-local"
             required
+            dir="ltr"
+            aria-label={t("newTime")}
             value={newDateTime}
             onChange={(event) => setNewDateTime(event.target.value)}
-            className="rounded-control border border-subtle bg-surface-raised px-3 py-2 text-xs text-ink-primary outline-none transition-colors focus:border-violet-dim"
+            className="h-8 text-xs"
           />
-          <Button
-            type="submit"
-            disabled={loading}
-            className="px-3 py-1.5 text-xs"
-          >
-            Save
+          <Button type="submit" size="sm" disabled={loading}>
+            {t("save")}
           </Button>
         </form>
-      )}
+      ) : null}
 
-      {error && <p className="text-xs font-medium text-status-error">{error}</p>}
+      {error ? (
+        <p role="alert" className="text-xs font-medium text-status-error">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }

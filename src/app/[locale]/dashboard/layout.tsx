@@ -1,10 +1,21 @@
 import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/server";
-import { getUserOrganizations } from "@/lib/team";
+import { getUserMembership, getUserOrganizations } from "@/lib/team";
 import { getAdministeredAgency } from "@/lib/agency/admin";
-import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
-import Topbar from "@/components/dashboard/Topbar";
+import { fetchCrewInsights } from "@/lib/dev-crew/queries";
+import { collapseInsights } from "@/lib/dev-crew/recommendation";
+import { getOrganizationSnapshot } from "@/lib/dashboard/queries";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import AgentStatus from "@/components/layout/AgentStatus";
+import AppShell from "@/components/layout/AppShell";
+import DashboardSidebar from "@/components/layout/DashboardSidebar";
+import HeaderSearch from "@/components/layout/HeaderSearch";
+import NotificationsMenu from "@/components/layout/NotificationsMenu";
+import UserMenu from "@/components/layout/UserMenu";
+import type { CrewInsight } from "@/types";
+
+const NOTIFICATION_COUNT = 3;
 
 export default async function DashboardLayout({
   children,
@@ -13,7 +24,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
   // Next's typed-routes validator requires this to stay `string` here since
   // this segment has no generateStaticParams of its own; the middleware
-  // guarantees only "en"/"tr" ever reach it, hence the cast below.
+  // guarantees only routed locales ever reach it, hence the cast below.
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
@@ -24,35 +35,62 @@ export default async function DashboardLayout({
 
   // Deliberately not using the shared `requireUser()` helper from
   // `@/lib/auth`: that one redirects via plain `next/navigation`, which
-  // would drop the "tr" locale prefix. This layout needs next-intl's
-  // locale-aware redirect instead.
-  //
-  // next-intl's server-side redirect requires an explicit locale. The
-  // `return null` never executes (redirect() always throws) but satisfies
-  // TS narrowing of `user` below, since this shared navigation module isn't
-  // typed as returning `never` outside a react-server-only context.
+  // would drop the locale prefix. This layout needs next-intl's
+  // locale-aware redirect instead. The `return null` never executes
+  // (redirect() always throws) but narrows `user` below.
   if (!user) {
     redirect({ href: "/login", locale: locale as Locale });
     return null;
   }
 
-  const [organizations, agency] = await Promise.all([
+  const [organizations, membership, agency] = await Promise.all([
     getUserOrganizations(user.id),
+    getUserMembership(user.id),
     getAdministeredAgency(supabase),
   ]);
-  const activeOrganizationId = organizations[0]?.organizationId ?? "";
+  const activeOrganizationId = membership?.organizationId ?? "";
+
+  // Shell status + bell are best-effort chrome: a failure here must never
+  // take the whole dashboard down, so each degrades to "no data".
+  const [snapshot, notifications] = await Promise.all([
+    activeOrganizationId ? getOrganizationSnapshot(activeOrganizationId) : null,
+    activeOrganizationId ? loadNotifications(activeOrganizationId) : [],
+  ]);
+  const agentState = snapshot?.agentState ?? "inactive";
+  const quotaPercent = snapshot?.quota.percent ?? 0;
 
   return (
-    <div className="min-h-screen bg-canvas lg:flex">
-      <DashboardSidebar
-        organizations={organizations}
-        activeOrganizationId={activeOrganizationId}
-        isAgencyAdmin={agency !== null}
-      />
-      <div className="flex min-h-screen flex-1 flex-col">
-        <Topbar userEmail={user.email ?? ""} />
-        <main className="flex-1">{children}</main>
-      </div>
-    </div>
+    <AppShell
+      sidebar={
+        <DashboardSidebar
+          organizations={organizations}
+          activeOrganizationId={activeOrganizationId}
+          isAgencyAdmin={agency !== null}
+          agentState={agentState}
+          quotaPercent={quotaPercent}
+        />
+      }
+      headerStart={<HeaderSearch />}
+      headerEnd={
+        <>
+          <AgentStatus state={agentState} quotaPercent={Math.round(quotaPercent)} className="hidden md:inline-flex" />
+          <NotificationsMenu items={notifications} />
+          <LocaleSwitcher />
+          <UserMenu email={user.email ?? ""} />
+        </>
+      }
+    >
+      {children}
+    </AppShell>
   );
+}
+
+async function loadNotifications(organizationId: string): Promise<CrewInsight[]> {
+  try {
+    const recent = await fetchCrewInsights(organizationId, { limit: 30 });
+    return collapseInsights(recent).slice(0, NOTIFICATION_COUNT);
+  } catch (error) {
+    console.error("[dashboard] notifications unavailable:", error);
+    return [];
+  }
 }

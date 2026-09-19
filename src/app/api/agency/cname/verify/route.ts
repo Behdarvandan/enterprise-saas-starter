@@ -41,7 +41,7 @@ export const POST = withApiErrorHandling(
     const allowed = await checkRateLimit(`agency-cname-verify:${user.id}`);
     if (!allowed) {
       return NextResponse.json(
-        { error: "Too many requests. Please try again shortly." },
+        { error: "Too many requests. Please try again shortly.", code: "rate_limited" },
         { status: 429 },
       );
     }
@@ -54,11 +54,11 @@ export const POST = withApiErrorHandling(
     if (agencyError) throw agencyError;
 
     if (!agency) {
-      return NextResponse.json({ error: "Agency not found." }, { status: 404 });
+      return NextResponse.json({ error: "Agency not found.", code: "not_found" }, { status: 404 });
     }
     if (!agency.cname_domain) {
       return NextResponse.json(
-        { error: "This agency has no custom domain configured." },
+        { error: "This agency has no custom domain configured.", code: "no_domain" },
         { status: 400 },
       );
     }
@@ -72,7 +72,7 @@ export const POST = withApiErrorHandling(
         // status and let the caller retry.
         console.warn("Agency CNAME verification could not query DNS:", error);
         return NextResponse.json(
-          { error: "Could not reach the DNS resolver. Please try again." },
+          { error: "Could not reach the DNS resolver. Please try again.", code: "dns_unreachable" },
           { status: 502 },
         );
       }
@@ -91,12 +91,28 @@ export const POST = withApiErrorHandling(
       .eq("id", agency.id);
     if (updateError) throw updateError;
 
+    // The monitoring panel's "last checked" / "DNS points at" data lives in
+    // separate columns (see 20261123000000_agency_cname_check_state.sql). It is
+    // best-effort and kept apart from the verdict above so the route keeps
+    // working — just without persisted check state — until that migration is
+    // applied.
+    const checkedAt = new Date().toISOString();
+    const { error: checkStateError } = await createAdminClient()
+      .from("agencies")
+      .update({ cname_last_checked_at: checkedAt, cname_last_records: verification.records })
+      .eq("id", agency.id);
+    if (checkStateError) {
+      console.warn("Could not persist the CNAME check state:", checkStateError);
+    }
+
     await invalidateAgencyDomainCache(agency.cname_domain);
 
     return NextResponse.json({
       status: verification.status,
       domain: agency.cname_domain,
       target: verification.target,
+      records: verification.records,
+      checkedAt,
     });
   },
 );

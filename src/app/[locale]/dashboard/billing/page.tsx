@@ -1,13 +1,23 @@
+import { getFormatter, getTranslations } from "next-intl/server";
+import BillingPortalButton from "@/components/billing/BillingPortalButton";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
+import { resolvePlanTier } from "@/lib/plans";
+import { asSubscriptionStatus } from "@/lib/status";
 import { getUserMembership } from "@/lib/team";
-import { formatDate } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
-import BillingPortalButton from "@/components/billing/BillingPortalButton";
 import type { Organization } from "@/types";
 
 export default async function BillingPage() {
   const { supabase, user } = await requireUser();
+  const [t, tTiers, tStatus, format] = await Promise.all([
+    getTranslations("dashboard.billing"),
+    getTranslations("common.tiers"),
+    getTranslations("status.subscription"),
+    getFormatter(),
+  ]);
 
   const membership = await getUserMembership(user.id);
 
@@ -21,75 +31,60 @@ export default async function BillingPage() {
     organization = data;
   }
 
-  const planLabels: Record<string, string> = {
-    [process.env.STRIPE_PRICE_PRO ?? ""]: "Pro",
-    [process.env.STRIPE_PRICE_ENTERPRISE ?? ""]: "Enterprise",
-  };
-  const planLabel = organization?.plan_id
-    ? (planLabels[organization.plan_id] ?? organization.plan_id)
-    : "Free";
+  // `plan_id` holds a Stripe price id (or nothing); resolve it to a tier rather than matching env vars here.
+  const planLabel = organization?.plan_id ? tTiers(resolvePlanTier(organization.plan_id)) : tTiers("free");
+  const knownStatus = organization ? asSubscriptionStatus(organization.subscription_status) : null;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-semibold text-ink-primary">Billing</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Manage your subscription and payment details.
-      </p>
+    <PageContainer className="max-w-4xl">
+      <PageHeader title={t("title")} description={t("description")} />
 
-      <div className="mt-6">
-        {organization ? (
-          <Card className="animate-reveal-up p-6">
-            <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-              <div className="border-b border-subtle pb-2">
-                <dt className="text-xs font-medium text-ink-muted">Plan</dt>
-                <dd className="text-sm font-medium text-ink-primary">
-                  {planLabel}
-                </dd>
-              </div>
-              <div className="border-b border-subtle pb-2">
-                <dt className="text-xs font-medium text-ink-muted">Status</dt>
-                <dd className="text-sm font-medium capitalize text-ink-primary">
-                  {organization.subscription_status}
-                </dd>
-              </div>
-              <div className="border-b border-subtle pb-2">
-                <dt className="text-xs font-medium text-ink-muted">Renews</dt>
-                <dd className="text-sm font-medium text-ink-primary">
-                  {organization.current_period_end
-                    ? formatDate(organization.current_period_end)
-                    : "N/A"}
-                </dd>
-              </div>
-            </dl>
-
-            <div className="mt-6 flex items-center gap-3">
-              {organization.provider_customer_id ? (
-                <BillingPortalButton />
-              ) : (
-                <Link
-                  href="/pricing"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-violet px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet/90"
-                >
-                  Choose a plan
-                </Link>
-              )}
+      {organization ? (
+        <Card className="p-6">
+          <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+            <div className="border-b border-slate-800 pb-2">
+              <dt className="text-xs font-medium text-slate-400">{t("plan")}</dt>
+              <dd className="text-sm font-medium text-slate-100">{planLabel}</dd>
             </div>
-          </Card>
-        ) : (
-          <Card className="animate-reveal-up p-6">
-            <p className="text-sm text-ink-muted">
-              You don&apos;t belong to an organization yet.{" "}
-              <Link
-                href="/pricing"
-                className="font-semibold text-violet-dim hover:text-violet"
-              >
-                Choose a plan
-              </Link>{" "}
-              to get started.
-            </p>
-          </Card>
-        )}
-      </div>
-    </div>
+            <div className="border-b border-slate-800 pb-2">
+              <dt className="text-xs font-medium text-slate-400">{t("status")}</dt>
+              <dd className="text-sm font-medium text-slate-100">
+                {knownStatus ? tStatus(knownStatus) : organization.subscription_status}
+              </dd>
+            </div>
+            <div className="border-b border-slate-800 pb-2">
+              <dt className="text-xs font-medium text-slate-400">{t("renews")}</dt>
+              <dd className="text-sm font-medium text-slate-100">
+                {organization.current_period_end
+                  ? format.dateTime(new Date(organization.current_period_end), { dateStyle: "medium" })
+                  : t("notAvailable")}
+              </dd>
+            </div>
+          </dl>
+
+          <div className="mt-6 flex items-center gap-3">
+            {organization.provider_customer_id ? (
+              <BillingPortalButton />
+            ) : (
+              <Button asChild>
+                <Link href="/pricing">{t("choosePlan")}</Link>
+              </Button>
+            )}
+          </div>
+        </Card>
+      ) : (
+        <Card className="p-6">
+          <p className="text-sm text-slate-400">
+            {t.rich("noOrganization", {
+              link: (chunks) => (
+                <Link href="/pricing" className="font-medium text-violet-300 hover:text-violet-200">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </p>
+        </Card>
+      )}
+    </PageContainer>
   );
 }

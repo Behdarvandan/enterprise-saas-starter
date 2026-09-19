@@ -7,6 +7,12 @@
     "notFound": {
       "title": "Page not found",
       "body": "The page you're looking for doesn't exist or has moved."
+    },
+    "tiers": {
+      "free": "Free",
+      "starter": "Starter",
+      "pro": "Pro",
+      "enterprise": "Enterprise"
     }
   },
   "marketing": {
@@ -325,6 +331,1136 @@
       "backend": "Development",
       "test": "Test",
       "live": "Delivered"
+    },
+    "topbar": {
+      "navLabel": "Client portal navigation"
+    },
+    "projects": {
+      "description": "Track where your project stands, end to end.",
+      "emptyTitle": "No projects yet",
+      "emptyDescription": "Your project will appear here once it's kicked off.",
+      "viewRepo": "View repository",
+      "viewLive": "View live",
+      "stage": "Stage {index} of {total}: {name}"
+    },
+    "invoices": {
+      "description": "Download your invoices and access delivery links.",
+      "emptyTitle": "No invoices yet",
+      "emptyDescription": "Invoices will appear here once one is issued.",
+      "caption": "Invoices",
+      "columns": {
+        "invoice": "Invoice",
+        "amount": "Amount",
+        "status": "Status",
+        "due": "Due date",
+        "links": "Links"
+      },
+      "pdf": "PDF",
+      "contract": "Contract",
+      "repo": "Repo",
+      "live": "Live",
+      "status": {
+        "draft": "Draft",
+        "sent": "Sent",
+        "paid": "Paid",
+        "overdue": "Overdue",
+        "void": "Void"
+      }
+    },
+    "files": {
+      "description": "Delivery links for your project — repository access and live environments.",
+      "emptyTitle": "No deliverables yet",
+      "emptyDescription": "Repository and live links will appear here once your project has them.",
+      "repository": "{name} — Repository",
+      "live": "{name} — Live"
+    },
+    "settings": {
+      "description": "Contact details, language preference and license management.",
+      "tabs": {
+        "contact": "Contact",
+        "language": "Language",
+        "notifications": "Notifications",
+        "license": "License"
+      },
+      "language": {
+        "title": "Interface language",
+        "description": "Change the language the portal is displayed in."
+      },
+      "notifications": {
+        "title": "Coming soon",
+        "description": "Notification preferences aren't configurable yet."
+      },
+      "license": {
+        "emptyTitle": "No SaaS license",
+        "emptyDescription": "This organization doesn't have an active SaaS license yet.",
+        "tier": "Tier",
+        "seats": "Seats",
+        "key": "License key",
+        "rotate": "Regenerate API key",
+        "rotating": "Rotating…",
+        "copyNow": "Copy this key now — it won't be shown again.",
+        "error": "Couldn't regenerate the key. Please try again.",
+        "status": {
+          "active": "Active",
+          "suspended": "Suspended",
+          "cancelled": "Cancelled"
+        }
+      }
+    }
+  },
+  "ui": {
+    "close": "Close",
+    "dismiss": "Dismiss",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "delete": "Delete",
+    "retry": "Retry",
+    "copy": "Copy",
+    "copied": "Copied",
+    "loading": "Loading…",
+    "back": "Back",
+    "viewAll": "View all",
+    "errorTitle": "Something went wrong",
+    "errorDescription": "An unexpected error occurred while loading this page. You can try again, or come back later if the problem persists.",
+    "tryAgain": "Try again",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…",
+    "charts": {
+      "quotaUsed": "Quota used",
+      "quotaValue": "{percent}% ({used} / {limit} tokens)",
+      "revenue": "Revenue",
+      "mrr": "MRR",
+      "mrrValue": "{amount}/mo · {count, plural, one {# org} other {# orgs}}",
+      "perMonth": "{amount}/mo"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "unauthorized": "You need to sign in to continue.",
+    "forbidden": "You don't have permission to do that.",
+    "notFound": "We couldn't find what you were looking for.",
+    "rateLimited": "Too many requests. Please wait a moment and try again.",
+    "validation": "Some of the values you entered are not valid.",
+    "network": "Network error. Check your connection and try again.",
+    "noMembership": "You do not belong to an organization."
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "navigation": "Navigation",
+    "navigationDescription": "Main navigation menu",
+    "openMenu": "Open navigation menu",
+    "changeLanguage": "Change language",
+    "userMenu": "User menu",
+    "signedInAs": "Signed in as",
+    "backToDashboard": "Back to dashboard",
+    "adminBadge": "Operator admin",
+    "groups": {
+      "agent": "AI agent",
+      "business": "Business",
+      "agency": "Agency",
+      "operations": "Operations"
+    },
+    "nav": {
+      "dashboardLabel": "Dashboard navigation",
+      "agencyLabel": "Agency portal navigation",
+      "adminLabel": "Admin navigation",
+      "overview": "Overview",
+      "knowledgeBase": "Knowledge base",
+      "testAgent": "Test agent",
+      "skills": "Skills",
+      "crewInsights": "Dev Crew insights",
+      "bookings": "Bookings",
+      "team": "Team",
+      "billing": "Billing",
+      "settings": "Settings",
+      "agencyPortal": "Agency portal",
+      "adminDashboard": "Dashboard",
+      "adminLeads": "Leads / CRM",
+      "adminClients": "Clients",
+      "adminAppointments": "Appointments",
+      "adminPayments": "Payments",
+      "adminSettings": "Settings",
+      "adminAnalytics": "Analytics",
+      "adminTasks": "Tasks",
+      "agencyTenants": "Tenants",
+      "agencyBranding": "Branding & domain",
+      "agencyAnalytics": "Analytics"
+    },
+    "organization": {
+      "label": "Organizations",
+      "active": "Active organization",
+      "switch": "Switch organization",
+      "untitled": "Untitled organization",
+      "switchFailed": "Couldn't switch organization"
+    },
+    "roles": {
+      "owner": "Owner",
+      "admin": "Admin",
+      "member": "Member"
+    },
+    "agent": {
+      "live": "Agent live",
+      "quotaLow": "Quota running low",
+      "quotaExhausted": "Quota exhausted",
+      "inactive": "Agent paused",
+      "hint": {
+        "live": "Your agent is answering visitors. {percent}% of the token quota used.",
+        "quotaLow": "{percent}% of the token quota is used — upgrade or wait for the reset.",
+        "quotaExhausted": "The token quota is used up, so the agent can't answer until it resets.",
+        "inactive": "The subscription is not active, so the agent is not serving visitors."
+      }
+    },
+    "search": {
+      "placeholder": "Ask the knowledge base…",
+      "label": "Search the knowledge base"
+    },
+    "notifications": {
+      "label": "Notifications",
+      "labelUnread": "Notifications (new)",
+      "title": "Latest Dev Crew recommendations",
+      "empty": "No recommendations yet.",
+      "viewAll": "View all insights"
+    }
+  },
+  "chatWidget": {
+    "defaultTitle": "AI assistant",
+    "online": "Online · AI knowledge base",
+    "open": "Open chat",
+    "close": "Close chat",
+    "transcript": "Conversation",
+    "greeting": "Hi there! Ask me anything about our products and services.",
+    "placeholder": "Type your message…",
+    "send": "Send message",
+    "thinking": "Thinking…",
+    "errorGeneric": "Sorry, something went wrong. Please try again.",
+    "errorEmpty": "I could not generate a response.",
+    "simulatorTitle": "Quick test",
+    "simulatorHint": "Chat as a visitor would — answers come from your knowledge base.",
+    "newConversation": "New conversation",
+    "suggestion1": "What are your opening hours?",
+    "suggestion2": "How do I book an appointment?",
+    "suggestion3": "What is your refund policy?"
+  },
+  "status": {
+    "appointment": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed"
+    },
+    "subscription": {
+      "active": "Active",
+      "trialing": "Trial",
+      "past_due": "Past due",
+      "canceled": "Canceled",
+      "inactive": "Inactive"
+    }
+  },
+  "dashboard": {
+    "overview": {
+      "title": "Overview",
+      "welcome": "Welcome back, {email}.",
+      "welcomeAnonymous": "Welcome back.",
+      "plan": "{plan} plan",
+      "manageBilling": "Manage billing",
+      "metrics": {
+        "liveChats": {
+          "label": "Live chats",
+          "hint": "Active in the last {minutes} minutes"
+        },
+        "ragSuccess": {
+          "label": "RAG answer success",
+          "hint": "{count, plural, one {# answer} other {# answers}} in the last {days} days",
+          "empty": "No answers yet",
+          "tooltip": "Share of chat answers that were grounded in your knowledge base — not a low-confidence fallback and not blocked by the token quota."
+        },
+        "quota": {
+          "label": "Monthly token quota",
+          "hint": "of {limit} tokens · resets {date}",
+          "hintNoReset": "of {limit} tokens",
+          "usage": "Token quota used"
+        },
+        "bookings": {
+          "label": "Bookings this week",
+          "hint": "Created in the last 7 days"
+        }
+      },
+      "checklist": {
+        "title": "Finish setting up your organization",
+        "remaining": "{count, plural, one {# step} other {# steps}} left before you're fully live.",
+        "dismiss": "Dismiss setup checklist",
+        "org": "Create your organization",
+        "team": "Invite a teammate",
+        "service": "Add a bookable service",
+        "kb": "Add a knowledge base document"
+      },
+      "recent": {
+        "title": "Recent appointments",
+        "viewAll": "View all",
+        "customer": "Customer",
+        "service": "Service",
+        "date": "Date",
+        "status": "Status",
+        "fallbackService": "Service",
+        "emptyTitle": "No bookings yet",
+        "emptyDescription": "Bookings show up here as soon as customers start scheduling — or try the flow yourself.",
+        "simulate": "Try the booking page",
+        "testAgent": "Test the agent"
+      },
+      "crewWidget": {
+        "title": "Latest Dev Crew alert",
+        "emptyTitle": "All clear",
+        "emptyDescription": "The Dev Crew hasn't flagged anything on your agent yet.",
+        "viewAll": "Open insights feed",
+        "signals": "{count, plural, one {# negative signal} other {# negative signals}}"
+      }
+    },
+    "crewInsights": {
+      "severity": {
+        "critical": "Critical",
+        "warning": "Warning",
+        "info": "Info"
+      },
+      "title": "Dev Crew insights",
+      "description": "Live telemetry and autonomous recommendations from the Dev Crew watching your agent's conversations.",
+      "connection": {
+        "live": "Live",
+        "paused": "Paused while this tab is hidden",
+        "reconnecting": "Reconnecting…"
+      },
+      "updated": "updated {time}",
+      "refresh": "Refresh",
+      "stats": {
+        "label": "Feed summary",
+        "total": "Distinct recommendations",
+        "totalHint": "Repeats are merged",
+        "critical": "Critical",
+        "warning": "Warnings"
+      },
+      "filters": {
+        "all": "All",
+        "critical": "Critical",
+        "warning": "Warning",
+        "info": "Info"
+      },
+      "derivedNote": "Severity is estimated from the number of negative signals — the Dev Crew doesn't rate it itself.",
+      "emptyTitle": "No recommendations yet",
+      "emptyDescription": "When the Dev Crew spots a problem in your agent's conversations, its recommendation appears here in real time.",
+      "emptyFilteredTitle": "Nothing at this severity",
+      "emptyFilteredDescription": "Try another filter.",
+      "loadMore": "Load older",
+      "loadFailed": "Couldn't load older recommendations.",
+      "card": {
+        "signals": "{count, plural, one {# negative signal} other {# negative signals}}",
+        "repeated": "Repeated {count}×",
+        "new": "New",
+        "actions": "Most frequent actions",
+        "resources": "Most affected resources",
+        "analyzed": "Based on {count, plural, one {# analyzed event} other {# analyzed events}}",
+        "noText": "(no recommendation text)"
+      }
+    },
+    "skills": {
+      "title": "Skills",
+      "description": "Choose which capabilities your AI agent can use in conversations.",
+      "currentPlan": "Your plan: {plan}",
+      "readOnly": "Only owners and admins can change skills. You can review the current setup below.",
+      "matrixLabel": "Skill capabilities",
+      "tiers": {
+        "starter": "Starter",
+        "pro": "Pro",
+        "enterprise": "Enterprise"
+      },
+      "catalog": {
+        "rag_search": {
+          "title": "Knowledge base search (RAG)",
+          "description": "Let the agent search your uploaded documents to ground its answers."
+        },
+        "calendar_booking": {
+          "title": "Calendar booking assistant",
+          "description": "Let the agent check availability and book appointments for your services."
+        }
+      },
+      "toggle": "Enable {skill}",
+      "requires": "Requires {tier}",
+      "upgrade": "Upgrade to {tier}",
+      "locked": "Locked",
+      "configure": "Configure",
+      "updated": "Skills updated",
+      "updateFailed": "Couldn't update skills",
+      "config": {
+        "title": "Configure {skill}",
+        "description": "Tune how this skill behaves. Changes apply to new conversations.",
+        "reset": "Reset to defaults",
+        "save": "Save settings",
+        "saved": "Settings saved",
+        "saveFailed": "Couldn't save settings",
+        "range": "Allowed range: {min}–{max}. Default: {default}.",
+        "invalid": "Enter a value between {min} and {max}.",
+        "fields": {
+          "top_k": {
+            "label": "Passages retrieved",
+            "description": "How many document passages the agent reads before answering. More context can help, but costs more tokens."
+          },
+          "similarity_threshold": {
+            "label": "Match strictness",
+            "description": "Minimum similarity for a passage to count as relevant. Higher is stricter — fewer, more precise sources."
+          }
+        }
+      },
+      "enterprise": {
+        "title": "Custom skills & bring-your-own LLM",
+        "description": "Need a skill built for your workflow, or want to run on your own model provider keys? Enterprise includes both.",
+        "cta": "Talk to sales"
+      },
+      "errors": {
+        "forbidden": "Only owners and admins can manage skills.",
+        "invalid": "The skill list is not valid.",
+        "planLimit": "Your current plan doesn't include: {skills}.",
+        "saveFailed": "Couldn't save your changes. Please try again.",
+        "unknownSkill": "Unknown skill.",
+        "notConfigurable": "This skill has no settings.",
+        "invalidConfig": "Some settings are outside the allowed range."
+      }
+    },
+    "chatbot": {
+      "title": "Test agent",
+      "description": "Chat with your agent exactly as a visitor would, and grab the embed snippet.",
+      "embed": {
+        "title": "Embed the widget",
+        "description": "Drop the widget into any React page. It answers from the knowledge base of this organization."
+      },
+      "how": {
+        "title": "How it works",
+        "step1": "Add documents in the knowledge base.",
+        "step2": "A visitor sends a message through the widget.",
+        "step3": "The most relevant passages are retrieved by similarity.",
+        "step4": "The agent streams a grounded answer in real time."
+      }
+    },
+    "knowledgeBase": {
+      "title": "Knowledge base",
+      "description": "Upload the documents your agent answers from. Files are split into chunks and embedded for retrieval.",
+      "tabs": {
+        "files": "Upload files",
+        "text": "Paste text"
+      },
+      "dropzone": {
+        "label": "Upload files to the knowledge base",
+        "title": "Drag & drop files here, or click to browse",
+        "dragActive": "Drop to upload",
+        "hint": "PDF, TXT, MD, CSV, JSON or HTML · up to {size} MB each"
+      },
+      "queue": {
+        "title": "Uploads",
+        "queued": "Waiting…",
+        "uploading": "Uploading {percent}%",
+        "processing": "Chunking and embedding…",
+        "ready": "Ready — the agent can use it now",
+        "failed": "Failed",
+        "retry": "Retry upload",
+        "dismiss": "Dismiss"
+      },
+      "text": {
+        "titleLabel": "Title",
+        "titlePlaceholder": "e.g. Refund policy",
+        "contentLabel": "Content",
+        "contentPlaceholder": "Paste the text your agent should know…",
+        "tooLong": "This text is too long. Split it into several documents.",
+        "submit": "Add to knowledge base",
+        "preview": {
+          "title": "Chunk preview",
+          "summary": "{count, plural, one {# chunk} other {# chunks}} · ~{tokens} tokens",
+          "empty": "Start typing to see how your text will be split.",
+          "chunk": "Chunk {index}",
+          "tokens": "{count} tokens",
+          "more": "+ {count} more chunks"
+        }
+      },
+      "list": {
+        "title": "Documents",
+        "count": "{count} of {limit} documents on your plan",
+        "countUnlimited": "{count, plural, one {# document} other {# documents}}",
+        "emptyTitle": "No documents yet",
+        "emptyDescription": "Upload a file or paste text above — your agent will start answering from it right away.",
+        "loadFailedTitle": "Couldn't load documents",
+        "loadFailedDescription": "Check your connection and try again.",
+        "reload": "Reload",
+        "columns": {
+          "name": "Name",
+          "status": "Status",
+          "chunks": "Chunks",
+          "size": "Size",
+          "added": "Added",
+          "actions": "Actions"
+        },
+        "status": {
+          "processing": "Processing",
+          "ready": "Ready",
+          "failed": "Failed"
+        },
+        "bulkActions": "Bulk actions",
+        "selectAll": "Select all documents",
+        "select": "Select {title}",
+        "selected": "{count} selected",
+        "clearSelection": "Clear",
+        "deleteSelected": "Delete selected",
+        "deleteOne": "Delete {title}",
+        "viewChunks": "View chunks of {title}",
+        "confirmTitle": "Delete {count, plural, one {# document} other {# documents}}?",
+        "confirmDescription": "The documents and all of their chunks are removed permanently. Your agent will stop answering from them.",
+        "confirmDelete": "Delete",
+        "cancel": "Cancel",
+        "deleted": "{count, plural, one {# document} other {# documents}} deleted",
+        "deleteFailed": "Couldn't delete the documents"
+      },
+      "chunks": {
+        "title": "Chunks — {title}",
+        "description": "{count, plural, one {# chunk} other {# chunks}} stored. This is what the agent can retrieve.",
+        "chunk": "Chunk {index}",
+        "tokens": "{count} tokens",
+        "empty": "This document has no stored chunks.",
+        "loadFailed": "Couldn't load the chunks.",
+        "loadMore": "Load more"
+      },
+      "simulator": {
+        "title": "Retrieval test",
+        "description": "Ask a question and see which passages the agent would read, ranked by similarity.",
+        "placeholder": "e.g. What is your refund policy?",
+        "run": "Search",
+        "summary": "{count, plural, one {# passage} other {# passages}} at or above {threshold} similarity (top {topK})",
+        "none": "No passages reach {threshold} similarity. Rephrase the question, add content, or lower the match strictness under Skills.",
+        "similarity": "Similarity",
+        "untitled": "Untitled document"
+      },
+      "errors": {
+        "unsupported_type": "This file type isn't supported.",
+        "too_large": "This file is too large.",
+        "empty": "This file is empty.",
+        "extract_failed": "We couldn't read this file. Is it a valid, unprotected document?",
+        "empty_document": "No readable text was found in this file.",
+        "content_required": "Add some content first.",
+        "invalid_body": "The request wasn't valid.",
+        "not_found": "Document not found.",
+        "rate_limited": "Too many requests. Please wait a moment.",
+        "ingest_failed": "Processing failed. Try again in a moment.",
+        "server_error": "Something went wrong on our side.",
+        "network": "Network error. Check your connection.",
+        "unauthorized": "Please sign in again.",
+        "noMembership": "You don't belong to an organization."
+      }
+    },
+    "team": {
+      "title": "Team",
+      "yourOrganization": "Your organization",
+      "members": "Members ({count})",
+      "unknownMember": "Unknown",
+      "you": "(you)",
+      "remove": "Remove",
+      "removeAria": "Remove {name}",
+      "roleAria": "Role of {name}",
+      "invite": {
+        "title": "Invite member",
+        "onlyAdmins": "Only owners and admins can invite new members.",
+        "emailLabel": "Email address",
+        "emailPlaceholder": "colleague@example.com",
+        "roleLabel": "Role",
+        "send": "Send invite",
+        "sending": "Sending…",
+        "sent": "Invitation sent."
+      },
+      "pending": {
+        "title": "Pending invitations ({count})",
+        "emptyTitle": "No pending invitations",
+        "emptyDescription": "Invitations you send will show up here until they're accepted or revoked.",
+        "expires": "{role} · expires {date}",
+        "revoke": "Revoke",
+        "revoking": "Revoking…"
+      },
+      "errors": {
+        "generic": "Something went wrong. Please try again.",
+        "invalidEmail": "Please provide a valid email address.",
+        "invalidRole": "Invalid role.",
+        "cannotInvite": "Only owners and admins can invite members.",
+        "alreadyMember": "That person is already a member.",
+        "alreadyInvited": "An invitation for this email already exists.",
+        "cannotRevoke": "Only owners and admins can revoke invitations.",
+        "cannotRemove": "Only owners and admins can remove members.",
+        "memberNotFound": "Member not found.",
+        "cannotRemoveOwner": "You cannot remove the organization owner.",
+        "cannotChangeRoles": "Only owners and admins can change roles.",
+        "cannotChangeOwner": "You cannot change the owner's role."
+      }
+    },
+    "bookings": {
+      "title": "Bookings",
+      "description": "View and manage upcoming and past appointments.",
+      "filter": {
+        "status": "Status",
+        "allStatuses": "All statuses",
+        "date": "Date",
+        "apply": "Filter",
+        "reset": "Reset",
+        "resetFilter": "Reset filter"
+      },
+      "upcoming": "Upcoming ({count})",
+      "past": "Past ({count})",
+      "emptyFilteredTitle": "No appointments match this filter",
+      "emptyFilteredDescription": "Try a different status or date, or reset the filter.",
+      "emptyUpcomingTitle": "No upcoming appointments",
+      "emptyUpcomingWithServices": "Share your booking link so customers can put themselves on the calendar.",
+      "emptyUpcomingNoServices": "This organization has no bookable services configured yet, so nothing can be scheduled.",
+      "emptyPastTitle": "No past appointments",
+      "emptyPastDescription": "Completed and cancelled bookings will show up here once they happen.",
+      "fallbackService": "Service",
+      "when": "{date} · {start} – {end}",
+      "actions": {
+        "reschedule": "Reschedule",
+        "cancel": "Cancel",
+        "working": "Working…",
+        "save": "Save",
+        "newTime": "New date and time"
+      },
+      "errors": {
+        "generic": "Something went wrong. Please try again.",
+        "invalidId": "A valid appointment id is required.",
+        "invalidDate": "Please provide a valid date and time.",
+        "notFound": "Appointment not found.",
+        "alreadyCancelled": "This appointment is already cancelled.",
+        "mustBeFuture": "The new time must be in the future.",
+        "cannotReschedule": "This appointment can no longer be rescheduled.",
+        "serviceNotFound": "Service not found.",
+        "conflict": "The selected time conflicts with an existing booking."
+      }
+    },
+    "billing": {
+      "title": "Billing",
+      "description": "Manage your subscription and payment details.",
+      "plan": "Plan",
+      "status": "Status",
+      "renews": "Renews",
+      "notAvailable": "N/A",
+      "choosePlan": "Choose a plan",
+      "manage": "Manage billing",
+      "loading": "Loading…",
+      "noOrganization": "You don't belong to an organization yet. <link>Choose a plan</link> to get started.",
+      "error": "Couldn't open billing. Please try again."
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Manage your account and organization.",
+      "profile": {
+        "label": "Profile",
+        "description": "Update your name and view your email.",
+        "pageDescription": "Update your personal information.",
+        "email": "Email",
+        "emailHint": "Email is managed by your authentication provider and cannot be changed here.",
+        "fullName": "Full name",
+        "fullNamePlaceholder": "Your name",
+        "updated": "Profile updated.",
+        "tooLong": "Full name is too long."
+      },
+      "organization": {
+        "label": "Organization",
+        "description": "Manage your organization settings.",
+        "name": "Organization name",
+        "onlyAdmins": "Only owners and admins can edit organization settings.",
+        "updated": "Organization updated.",
+        "nameRequired": "Organization name is required.",
+        "nameTooLong": "Organization name is too long."
+      },
+      "save": "Save changes",
+      "saving": "Saving…",
+      "errors": {
+        "generic": "Something went wrong. Please try again.",
+        "forbidden": "Only owners and admins can edit organization settings."
+      }
+    }
+  },
+  "agency": {
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "not_agency_admin": "You don't have permission to manage this agency.",
+      "not_tenant_owner": "You can only link organizations that you own.",
+      "tenant_is_master": "Your agency's own organization can't be added as a tenant.",
+      "tenant_already_linked": "That organization is already linked to an agency.",
+      "tenant_not_in_agency": "That tenant isn't linked to your agency.",
+      "quota_pool_exceeded": "That would exceed your token pool. Enter a lower amount, or ask for a larger pool.",
+      "quota_below_consumed": "That is below what this tenant has already used. Enter at least the used amount.",
+      "invalid_quota": "Enter a valid number of tokens.",
+      "invalid_name": "Enter a name for the tenant.",
+      "invalid_slug": "Use lowercase letters, numbers and single hyphens, e.g. acme-repairs.",
+      "slug_taken": "That slug is already taken. Try another one.",
+      "org_not_found": "That organization wasn't found among the ones you own.",
+      "invalid_skills": "Invalid skill selection.",
+      "plan_limit": "Your agency plan doesn't include: {skills}.",
+      "form_invalid": "Please fix the highlighted fields.",
+      "domain_taken": "That domain is already connected to another agency."
+    },
+    "validation": {
+      "agency_id_invalid": "A valid agency id is required.",
+      "tenant_id_invalid": "A valid tenant id is required.",
+      "tenant_name_required": "Enter a name for the tenant.",
+      "tenant_name_max": "The name can be at most 80 characters.",
+      "slug_min": "The slug needs at least 3 characters.",
+      "slug_max": "The slug can be at most 48 characters.",
+      "slug_format": "Use lowercase letters, numbers and single hyphens, e.g. acme-repairs.",
+      "quota_digits": "Enter a whole number of tokens (0 or more).",
+      "quota_max": "That amount is too large.",
+      "brand_title_max": "The brand title can be at most 80 characters.",
+      "logo_url_invalid": "Enter a valid URL, e.g. https://cdn.youragency.com/logo.svg",
+      "https_only": "Must start with https://",
+      "color_hex": "Use a 6-digit hex color such as #7c3aed.",
+      "domain_invalid": "Enter a valid domain such as ai.youragency.com.",
+      "domain_platform": "That domain belongs to the platform."
+    },
+    "tenants": {
+      "title": "Tenants",
+      "description": "The client organizations you manage. Allocate tokens from your pool and choose the skills each assistant can use.",
+      "untitled": "Untitled organization",
+      "emptyTitle": "No tenants yet",
+      "emptyDescription": "Create a new client organization, or link one you already own, to start managing it here.",
+      "pool": {
+        "title": "Token pool",
+        "pool": "Pool",
+        "allocated": "Allocated",
+        "available": "Available",
+        "meter": "Share of the token pool allocated to tenants",
+        "allocatedShare": "{percent} of your pool is allocated to tenants.",
+        "empty": "Your token pool is empty, so tokens can't be allocated yet. Contact the platform team to have a pool assigned."
+      },
+      "add": {
+        "trigger": "Add tenant",
+        "triggerFirst": "Add your first tenant",
+        "title": "Add a tenant",
+        "description": "Tenants are the client organizations you manage. Each one draws from your token pool.",
+        "tabCreate": "Create new",
+        "tabLink": "Link existing",
+        "nameLabel": "Tenant name",
+        "slugLabel": "Slug",
+        "slugHint": "Lowercase letters, numbers and hyphens. You become the owner of the new organization.",
+        "creating": "Creating…",
+        "create": "Create tenant",
+        "created": "Tenant created",
+        "linkHint": "Only organizations you own can be linked. Linking lets you see its usage, chats and insights.",
+        "linking": "Linking…",
+        "link": "Link tenant",
+        "linked": "Tenant linked"
+      },
+      "picker": {
+        "label": "Organizations you can link",
+        "search": "Search your organizations…",
+        "noMatches": "No organization matches your search.",
+        "emptyTitle": "Nothing to link yet",
+        "emptyDescription": "You can link organizations you own that aren't part of an agency yet. Create a new tenant instead, or ask the client to make you the owner."
+      },
+      "table": {
+        "tenant": "Tenant",
+        "usage": "Token usage",
+        "skills": "Skills",
+        "actions": "Actions",
+        "noAllocation": "No tokens allocated",
+        "consumption": "{name} token consumption",
+        "remaining": "{remaining} left of {granted} ({percent} used)",
+        "outOfTokens": "Out of tokens",
+        "noSkills": "None",
+        "tokens": "Tokens",
+        "allocateAria": "Allocate tokens to {name}",
+        "skillsAria": "Manage skills for {name}",
+        "removeAria": "Remove {name}",
+        "remove": "Remove"
+      },
+      "quota": {
+        "title": "Allocate tokens to {name}",
+        "description": "Set this tenant's total token budget for the current period. Tokens it has already used stay counted.",
+        "label": "Total tokens",
+        "hint": "Used so far: {used} · Maximum you can set: {max}",
+        "errors": {
+          "digits": "Enter a whole number of tokens (0 or more).",
+          "min": "Enter at least {min} — this tenant has already used that many.",
+          "max": "Enter at most {max} — that's all your pool can cover for this tenant."
+        },
+        "cancel": "Cancel",
+        "saving": "Saving…",
+        "save": "Save allocation",
+        "saved": "Tokens updated for {name}"
+      },
+      "remove": {
+        "title": "Remove {name} from your agency?",
+        "description": "The organization and its data are not deleted. It simply stops being managed by your agency.",
+        "loseAccess": "You lose access to its usage, chats and insights.",
+        "returnsTokens": "Its {tokens}-token allocation returns to your pool, and its assistant stops drawing from it.",
+        "relink": "You can link it again later, if its owner is you.",
+        "keep": "Keep tenant",
+        "removing": "Removing…",
+        "confirm": "Remove tenant",
+        "removed": "{name} removed"
+      },
+      "skills": {
+        "title": "Skills for {name}",
+        "description": "Choose what this tenant's AI assistant can do. Available skills depend on your agency plan.",
+        "toggle": "Toggle {skill}",
+        "upgradeHint": "Upgrade your agency plan to hand out more skills, such as calendar booking.",
+        "cancel": "Cancel",
+        "saving": "Saving…",
+        "save": "Save skills",
+        "saved": "Skills updated for {name}"
+      }
+    },
+    "branding": {
+      "title": "Branding & domain",
+      "description": "Make the platform look like yours: your logo, colors and title, served from your own domain.",
+      "saving": "Saving…",
+      "save": "Save branding",
+      "saved": "Branding saved.",
+      "savedDomainChanged": "Branding saved. Your domain changed, so verify its DNS record below.",
+      "fields": {
+        "title": "Brand title",
+        "titleHint": "Shown next to your logo and as the page title on your domain.",
+        "logo": "Logo URL",
+        "logoHint": "A public https:// image. Roughly 32 px tall reads best; SVG or PNG on a transparent background works well on the dark theme.",
+        "logoBroken": "This image couldn't be loaded. Check the URL and that it's publicly reachable.",
+        "color": "Primary color",
+        "colorPicker": "Pick the primary color",
+        "domain": "Custom domain",
+        "domainHint": "The domain your clients visit. Changing it means re-verifying its DNS record."
+      },
+      "palette": {
+        "title": "Derived palette",
+        "base": "Primary",
+        "hover": "Hover",
+        "text": "Button text",
+        "contrastOk": "Button text contrast {ratio}:1 — meets WCAG AA.",
+        "contrastLow": "Button text contrast {ratio}:1 is below WCAG AA (4.5:1). Choose a darker or lighter color so buttons stay readable."
+      },
+      "preview": {
+        "title": "Live preview",
+        "device": "Preview size",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "brandFallback": "Your brand",
+        "domainFallback": "your-domain.com",
+        "navOverview": "Overview",
+        "navKnowledge": "Knowledge base",
+        "navSkills": "Skills",
+        "metricLabel": "RAG answer success",
+        "chatAgent": "Hi! How can I help you today?",
+        "chatUser": "What are your opening hours?",
+        "button": "Get started",
+        "buttonSecondary": "Learn more"
+      },
+      "dns": {
+        "title": "Domain verification",
+        "description": "Your branding is only served on a domain once its CNAME record is verified.",
+        "noDomain": "Save a custom domain above first, then come back here to verify its DNS record.",
+        "stepsLabel": "Verification progress",
+        "steps": {
+          "add": "Add the record",
+          "propagate": "Wait for DNS",
+          "verified": "Verified"
+        },
+        "addRecord": "Add this DNS record at your provider",
+        "record": {
+          "type": "Type",
+          "name": "Name",
+          "value": "Value"
+        },
+        "copyAria": "Copy {label}",
+        "copyFailed": "Couldn't copy to the clipboard",
+        "cloudflareHint": "Using Cloudflare? Set the record to DNS only (grey cloud) — a proxied record hides the CNAME and can't be verified.",
+        "verify": "Verify DNS",
+        "checking": "Checking DNS…",
+        "startWatching": "Watch automatically",
+        "stopWatching": "Stop watching",
+        "watching": "Auto-checking every 30 s · stops in {time}",
+        "verifiedToast": "{domain} is verified",
+        "status": {
+          "pending": "Pending",
+          "active": "Verified",
+          "failed": "Needs attention"
+        },
+        "message": {
+          "active": "Verified. Visitors on {domain} see your branding.",
+          "failed": "{domain} has a CNAME record, but it doesn't point to {target}. Update it and check again.",
+          "pending": "We don't see a CNAME record for {domain} yet. DNS changes can take a few minutes to a few hours to propagate."
+        },
+        "dnsReturns": "DNS currently returns",
+        "noRecordFound": "No CNAME record found",
+        "lastChecked": "Last checked",
+        "neverChecked": "Not checked yet",
+        "errors": {
+          "rate_limited": "Too many attempts. Please wait a minute and try again.",
+          "dns_unreachable": "Couldn't reach the DNS resolver. Please try again.",
+          "not_found": "Agency not found.",
+          "no_domain": "This agency has no custom domain configured.",
+          "generic": "Couldn't verify the domain right now. Please try again."
+        }
+      }
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "AI assistant usage across all of your tenants.",
+      "window": "Time window",
+      "days": "{count} days",
+      "emptyTitle": "Nothing to analyze yet",
+      "emptyDescription": "Add tenants and allocate tokens on the Tenants page. Usage from their AI assistants will show up here.",
+      "requests": "AI requests",
+      "requestsHint": "Visitor messages, last {days} days",
+      "consumption": "Token consumption",
+      "consumptionHint": "{used} of {granted} allocated",
+      "lowConfidence": "Low-confidence answers",
+      "lowConfidenceHint": "{low} of {total} replies, last {days} days",
+      "attention": "Need attention",
+      "attentionNone": "No tenant is close to its limit",
+      "attentionSome": "{out} out of tokens · {near} near limit",
+      "tokenNote": "Token figures describe each tenant's current allocation and don't change with the time window.",
+      "chartTitle": "Token consumption by tenant",
+      "chartDescription": "Share of each tenant's allocation used so far, most-used first",
+      "chartEmpty": "No tokens allocated to tenants yet.",
+      "table": {
+        "caption": "Usage per tenant",
+        "tenant": "Tenant",
+        "requests": "Requests",
+        "lowConfidence": "Low confidence",
+        "blocked": "Blocked by quota",
+        "tokens": "Tokens used",
+        "lastActivity": "Last activity"
+      },
+      "crew": {
+        "title": "Dev Crew recommendations",
+        "description": "Patterns Dev Crew spotted in your tenants' recent chats.",
+        "emptyTitle": "No recommendations yet",
+        "emptyDescription": "Dev Crew reviews chat activity after every conversation and posts here when it finds something worth acting on.",
+        "unknownTenant": "Unknown tenant"
+      }
+    }
+  },
+  "pricing": {
+    "checkout": {
+      "redirecting": "Redirecting…",
+      "error": "Couldn't start checkout. Please try again."
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Your business at a glance — revenue, leads and pending work in one view.",
+      "kpis": {
+        "collected": "Collected this month",
+        "activeClients": "Active clients",
+        "pendingLeads": "Pending leads",
+        "pendingAppointments": "Pending appointments"
+      },
+      "revenue": {
+        "title": "Revenue trend",
+        "subtitle": "Last {months} months, collected payments"
+      },
+      "actions": {
+        "title": "Needs action",
+        "empty": "Nothing is waiting for action right now.",
+        "fallbackClient": "Client",
+        "overdue": "Overdue payment — {name}",
+        "hotLead": "New lead — {name}",
+        "hotLeadDetail": "Arrived in the last 24 hours, not answered yet",
+        "appointment": "Appointment awaiting confirmation — {name}",
+        "risk": "Subscription risk — {name}",
+        "riskCanceled": "Canceled",
+        "riskPastDue": "Payment overdue",
+        "cold": "Cooling lead — {name}",
+        "coldDetail": "Waiting for a reply for more than 48 hours"
+      },
+      "activity": {
+        "title": "Activity feed",
+        "empty": "No activity yet."
+      }
+    },
+    "leads": {
+      "title": "Lead pipeline",
+      "description": "Track incoming SaaS and freelance requests through to conversion.",
+      "noLeads": "No leads",
+      "reject": "Reject",
+      "status": {
+        "new": "New",
+        "contacted": "Contacted",
+        "quoted": "Quoted",
+        "accepted": "Accepted",
+        "rejected": "Rejected"
+      },
+      "kind": {
+        "saas": "SaaS",
+        "freelance": "Freelance"
+      },
+      "categories": {
+        "fullstack_saas": "Full-stack SaaS",
+        "ai_automation": "AI automation",
+        "architecture_security": "Architecture & security",
+        "payment_subscription": "Payments & subscriptions"
+      },
+      "modes": {
+        "hourly": "Hourly",
+        "project": "Per project",
+        "either": "Either"
+      },
+      "detail": {
+        "back": "Back to pipeline",
+        "phone": "Phone",
+        "projectType": "Project type",
+        "workingMode": "Working mode",
+        "source": "Source",
+        "submitted": "Submitted",
+        "message": "Short description",
+        "scope": "Follow-up answer"
+      },
+      "actions": {
+        "status": "Status",
+        "convert": "Convert to client",
+        "converting": "Converting…",
+        "converted": "Converted to a client organization.",
+        "askInvite": "Client created. Send the invitation email now?",
+        "yes": "Yes",
+        "notNow": "Not now",
+        "sending": "Sending…",
+        "sendInvite": "Send invite",
+        "resendInvite": "Resend invite",
+        "sent": "Sent",
+        "errors": {
+          "status": "Failed to update the status.",
+          "convert": "Failed to convert the lead.",
+          "invite": "Failed to send the invitation email."
+        }
+      }
+    },
+    "clients": {
+      "title": "Clients",
+      "description": "Project tracking for every converted lead — delivery status and latest activity.",
+      "emptyTitle": "No clients yet",
+      "emptyDescription": "A lead appears here once it is converted to a client at the Accepted stage.",
+      "columns": {
+        "client": "Client",
+        "projectType": "Project type",
+        "workingMode": "Working mode",
+        "status": "Status",
+        "lastActivity": "Last activity"
+      },
+      "stage": {
+        "design": "Design",
+        "backend": "Development",
+        "test": "Test",
+        "live": "Live"
+      },
+      "state": {
+        "active": "Active",
+        "dormant": "On hold"
+      }
+    },
+    "payments": {
+      "title": "Payments",
+      "description": "Every client invoice — the freelance/services revenue stream in one place.",
+      "summary": {
+        "thisMonth": "This month total",
+        "pending": "Pending amount",
+        "failed": "Failed"
+      },
+      "emptyTitle": "No invoices yet",
+      "emptyDescription": "Invoices are listed here once added to a client project.",
+      "columns": {
+        "date": "Date",
+        "client": "Client",
+        "number": "Invoice no.",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "status": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "failed": "Failed"
+      }
+    },
+    "appointments": {
+      "title": "Appointments",
+      "description": "Your own booking calendar — consultation calls and delivery meetings.",
+      "upcoming": "Upcoming ({count})",
+      "past": "Past ({count})",
+      "emptyUpcomingTitle": "No upcoming appointments",
+      "emptyUpcomingDescription": "New bookings will show up here.",
+      "emptyPastTitle": "No past appointments",
+      "emptyPastDescription": "Completed and cancelled appointments will be listed here.",
+      "fallbackService": "Service",
+      "when": "{date} · {start}–{end}"
+    },
+    "tasks": {
+      "title": "Internal tasks",
+      "description": "Your own operational work — not visible to clients.",
+      "newTitle": "New task title…",
+      "add": "Add task",
+      "noTasks": "No tasks",
+      "moveTo": "Move to {column}",
+      "columns": {
+        "todo": "To do",
+        "in_progress": "In progress",
+        "review": "Review",
+        "done": "Done"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Business details, team and integration status.",
+      "tabs": {
+        "general": "General",
+        "team": "Team",
+        "notifications": "Notifications",
+        "integrations": "Integrations"
+      },
+      "general": {
+        "name": "Business name",
+        "slug": "Slug"
+      },
+      "team": {
+        "empty": "No team members found.",
+        "user": "User",
+        "role": "Role",
+        "note": "Single user today — multi-user team and role management is reserved for a later release."
+      },
+      "notifications": {
+        "title": "Coming soon",
+        "description": "Notification preferences aren't configurable yet."
+      },
+      "integrations": {
+        "payment": "Payment provider ({provider})",
+        "email": "Resend (email)",
+        "connected": "Connected",
+        "notConfigured": "Not configured",
+        "sandboxWarning": "No custom sending domain is configured — production emails go out from Resend's sandbox sender (<code>resend.dev</code>) and only reach the account's own verified address, not real customers. Set the <code>EMAIL_FROM</code> environment variable to a verified domain."
+      }
+    },
+    "analytics": {
+      "title": "Revenue analytics",
+      "description": "Freelance and SaaS revenue, tracked separately.",
+      "freelance": {
+        "title": "Freelance revenue",
+        "subtitle": "Paid invoices, last {months} months"
+      },
+      "saas": {
+        "title": "SaaS revenue",
+        "subtitle": "Live MRR by plan, active + trialing orgs"
+      },
+      "tokens": {
+        "title": "AI assistant token usage",
+        "subtitle": "Current period quota consumption, top 10 organizations by usage",
+        "empty": "No RAG chat usage recorded yet.",
+        "unknown": "Unknown"
+      },
+      "audit": {
+        "title": "Audit log",
+        "empty": "No audited actions yet.",
+        "action": "Action",
+        "actor": "Actor",
+        "target": "Target",
+        "when": "When",
+        "system": "system"
+      }
     }
   }
 }

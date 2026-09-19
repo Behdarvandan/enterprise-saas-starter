@@ -10,6 +10,7 @@ const invalidateMock = vi.fn();
 const updateMock = vi.fn();
 const eqMock = vi.fn();
 
+vi.mock("next-intl/server", async () => (await import("@/test/intl")).nextIntlServerMock());
 vi.mock("next/cache", () => ({ revalidatePath: revalidatePathMock }));
 vi.mock("@/lib/agency/admin", () => ({ requireAgencyAdminResult: requireAgencyAdminResultMock }));
 vi.mock("@/lib/agency/audit", () => ({ logAgencyAudit: logAgencyAuditMock }));

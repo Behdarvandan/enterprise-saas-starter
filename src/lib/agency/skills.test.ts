@@ -1,13 +1,5 @@
 // @vitest-environment node
-import { describe, expect, it, vi } from "vitest";
-
-vi.mock("@/lib/payment/handlers", () => ({
-  PLAN_ENABLED_SKILLS: {
-    starter: ["rag_search"],
-    pro: ["rag_search", "calendar_booking"],
-  },
-  DEFAULT_ENABLED_SKILLS: ["rag_search"],
-}));
+import { describe, expect, it } from "vitest";
 
 const { findDisallowedSkills, getAllowedAgencySkills, readEnabledSkills } = await import("./skills");
 

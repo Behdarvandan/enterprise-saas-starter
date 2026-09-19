@@ -2,20 +2,18 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
-// This project's cards are flat containers with no built-in padding/gap —
-// callers pass their own className (e.g. `className="p-6"`) — so the root
-// intentionally doesn't apply shadcn's default flex/spacing/ring layout.
-// The variants below reproduce the three treatments the app actually uses.
-const cardVariants = cva("", {
+// Glass surface recipe shared by every panel: slate-900/50 on the slate-950
+// canvas with a hairline slate-800 border. Padding is the caller's concern
+// (`className="p-5"`) unless the CardHeader/Content/Footer parts are used.
+const cardVariants = cva("rounded-xl border border-slate-800", {
   variants: {
     variant: {
-      /** Structural container (page sections, list wrappers): 0 radius, sits on bg-surface. */
-      section: "rounded-none border border-subtle bg-surface",
-      /** A discrete unit inside a section (a row, a stat tile) — a subtle
-       * gold-tinted lift on hover, per brief §7 (never a heavy glow). */
-      item: "rounded-interactive border border-subtle bg-surface transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10",
-      /** Modals/popovers. */
-      raised: "rounded-interactive border border-subtle bg-surface-raised shadow-lg",
+      /** Structural container: page sections, list wrappers. */
+      section: "bg-slate-900/50 backdrop-blur-md",
+      /** A discrete interactive unit (a tile, a row) — border brightens on hover. */
+      item: "bg-slate-900/50 backdrop-blur-md transition-colors duration-150 hover:border-slate-700",
+      /** Popovers and floating panels — opaque so content behind never bleeds through. */
+      raised: "bg-slate-900 shadow-xl shadow-black/30",
     },
   },
   defaultVariants: {
@@ -42,81 +40,44 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-header"
-      className={cn(
-        "group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)",
-        className
-      )}
+      className={cn("flex flex-col gap-1 p-5 pb-3", className)}
       {...props}
     />
   )
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+function CardTitle({ className, ...props }: React.ComponentProps<"h3">) {
   return (
-    <div
+    <h3
       data-slot="card-title"
-      className={cn(
-        "text-base leading-snug font-medium group-data-[size=sm]/card:text-sm",
-        className
-      )}
+      className={cn("text-sm font-semibold tracking-tight text-slate-100", className)}
       {...props}
     />
   )
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+function CardDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
-    <div
+    <p
       data-slot="card-description"
-      className={cn("text-sm text-muted-foreground", className)}
-      {...props}
-    />
-  )
-}
-
-function CardAction({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-action"
-      className={cn(
-        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
-        className
-      )}
+      className={cn("text-sm text-slate-400", className)}
       {...props}
     />
   )
 }
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-content"
-      className={cn("px-(--card-spacing)", className)}
-      {...props}
-    />
-  )
+  return <div data-slot="card-content" className={cn("p-5 pt-0", className)} {...props} />
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-footer"
-      className={cn(
-        "flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)",
-        className
-      )}
+      className={cn("flex items-center gap-2 border-t border-slate-800 p-4", className)}
       {...props}
     />
   )
 }
 
-export {
-  Card,
-  cardVariants,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
-}
+export { Card, cardVariants, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

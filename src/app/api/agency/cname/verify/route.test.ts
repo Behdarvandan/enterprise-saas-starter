@@ -120,10 +120,17 @@ describe("POST /api/agency/cname/verify", () => {
       status: "active",
       domain: "ai.acme.com",
       target: "cname.pasargad.app",
+      records: ["cname.pasargad.app"],
+      checkedAt: expect.any(String),
     });
     expect(updateMock).toHaveBeenCalledWith("agencies", {
       cname_status: "active",
       cname_verified_at: expect.any(String),
+    });
+    // The check state is a second, separate write (see the migration note in the route).
+    expect(updateMock).toHaveBeenCalledWith("agencies", {
+      cname_last_checked_at: expect.any(String),
+      cname_last_records: ["cname.pasargad.app"],
     });
     expect(updateEqMock).toHaveBeenCalledWith("id", AGENCY_ID);
     expect(invalidateMock).toHaveBeenCalledWith("ai.acme.com");

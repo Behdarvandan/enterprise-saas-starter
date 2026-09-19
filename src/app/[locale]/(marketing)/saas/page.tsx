@@ -60,7 +60,7 @@ export default async function SaasPage() {
             ].map((feature) => (
               <div
                 key={feature}
-                className="flex items-start gap-3 rounded-interactive border border-subtle bg-canvas p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
+                className="flex items-start gap-3 rounded-interactive border border-subtle bg-canvas p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-primary/50 hover:shadow-md hover:shadow-primary/10"
               >
                 <Check size={18} className="mt-0.5 shrink-0 text-status-success" />
                 <p className="text-sm text-ink-muted">{feature}</p>
@@ -81,10 +81,10 @@ export default async function SaasPage() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`rounded-interactive border p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:shadow-md hover:shadow-gold/10 ${
+              className={`rounded-interactive border p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:shadow-md hover:shadow-primary/10 ${
                 plan.highlight
-                  ? "border-gold/60 bg-surface-raised"
-                  : "border-subtle bg-surface hover:border-gold/50"
+                  ? "border-primary/60 bg-surface-raised"
+                  : "border-subtle bg-surface hover:border-primary/50"
               }`}
             >
               <h3 className="text-sm font-semibold text-ink-primary">{plan.name}</h3>

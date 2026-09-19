@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -13,13 +14,14 @@ export default function CheckoutButton({
   tier,
   label,
 }: CheckoutButtonProps) {
+  const t = useTranslations("pricing.checkout");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
 
   async function handleCheckout() {
     setLoading(true);
-    setError(null);
+    setFailed(false);
 
     try {
       const response = await fetch("/api/checkout", {
@@ -36,21 +38,18 @@ export default function CheckoutButton({
         return;
       }
 
-      const data = await response.json();
+      const data: { url?: string; error?: string } = await response.json();
 
-      if (!response.ok || data.error) {
-        setError(data.error ?? "Something went wrong.");
-        return;
-      }
-
-      if (!data.url) {
-        setError("Could not start checkout.");
+      if (!response.ok || data.error || !data.url) {
+        console.error("[checkout] request failed:", data.error);
+        setFailed(true);
         return;
       }
 
       window.location.assign(data.url);
-    } catch {
-      setError("Something went wrong.");
+    } catch (error) {
+      console.error("[checkout] request failed:", error);
+      setFailed(true);
     } finally {
       setLoading(false);
     }
@@ -58,17 +57,14 @@ export default function CheckoutButton({
 
   return (
     <div>
-      <Button
-        type="button"
-        onClick={handleCheckout}
-        disabled={loading}
-        className="w-full"
-      >
-        {loading ? "Redirecting..." : label}
+      <Button type="button" onClick={handleCheckout} loading={loading} className="w-full">
+        {loading ? t("redirecting") : label}
       </Button>
-      {error && (
-        <p className="mt-2 text-xs font-medium text-status-error">{error}</p>
-      )}
+      {failed ? (
+        <p role="alert" className="mt-2 text-xs font-medium text-status-error">
+          {t("error")}
+        </p>
+      ) : null}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireMembershipResult } from "@/lib/auth";
@@ -26,18 +27,19 @@ function getOrgScopedAppointment(
 // `newStartTime` comes from a `<input type="datetime-local">`, which produces
 // "YYYY-MM-DDTHH:mm" (no seconds, no timezone).
 const rescheduleInputSchema = z.object({
-  appointmentId: z.string().uuid("A valid appointment id is required."),
+  appointmentId: z.string().uuid("invalid_id"),
   newStartTime: z
     .string()
     .regex(
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/,
-      "Please provide a valid date and time.",
+      "invalid_date",
     ),
 });
 
 export async function cancelAppointment(
   appointmentId: string,
 ): Promise<BookingActionResult> {
+  const t = await getTranslations("dashboard.bookings.errors");
   const auth = await requireMembershipResult();
   if ("error" in auth) return auth;
   const { supabase, membership } = auth;
@@ -48,9 +50,9 @@ export async function cancelAppointment(
     membership.organizationId,
   );
 
-  if (!appointment) return { error: "Appointment not found." };
+  if (!appointment) return { error: t("notFound") };
   if (appointment.status === "cancelled") {
-    return { error: "This appointment is already cancelled." };
+    return { error: t("alreadyCancelled") };
   }
 
   const { error } = await supabase
@@ -59,7 +61,7 @@ export async function cancelAppointment(
     .eq("id", appointmentId)
     .eq("organization_id", membership.organizationId);
 
-  if (error) return { error: error.message };
+  if (error) return { error: t("generic") };
 
   revalidatePath("/dashboard/bookings");
   return { success: true };
@@ -69,12 +71,13 @@ export async function rescheduleAppointment(
   appointmentId: string,
   newStartTime: string,
 ): Promise<BookingActionResult> {
+  const t = await getTranslations("dashboard.bookings.errors");
   const parsedInput = rescheduleInputSchema.safeParse({
     appointmentId,
     newStartTime,
   });
   if (!parsedInput.success) {
-    return { error: firstIssueMessage(parsedInput.error) };
+    return { error: firstIssueMessage(parsedInput.error) === "invalid_id" ? t("invalidId") : t("invalidDate") };
   }
 
   const auth = await requireMembershipResult();
@@ -86,10 +89,10 @@ export async function rescheduleAppointment(
   // against calendar-invalid ones the regex can't catch (e.g. month 13).
   const newStart = new Date(`${parsedInput.data.newStartTime}:00Z`);
   if (Number.isNaN(newStart.getTime())) {
-    return { error: "Please provide a valid date and time." };
+    return { error: t("invalidDate") };
   }
   if (newStart <= new Date()) {
-    return { error: "The new time must be in the future." };
+    return { error: t("mustBeFuture") };
   }
 
   const { data: appointment } = await getOrgScopedAppointment(
@@ -98,9 +101,9 @@ export async function rescheduleAppointment(
     membership.organizationId,
   );
 
-  if (!appointment) return { error: "Appointment not found." };
+  if (!appointment) return { error: t("notFound") };
   if (appointment.status === "cancelled" || appointment.status === "completed") {
-    return { error: "This appointment can no longer be rescheduled." };
+    return { error: t("cannotReschedule") };
   }
 
   const { data: service } = await supabase
@@ -110,7 +113,7 @@ export async function rescheduleAppointment(
     .eq("organization_id", membership.organizationId)
     .maybeSingle();
 
-  if (!service) return { error: "Service not found." };
+  if (!service) return { error: t("serviceNotFound") };
 
   const newEnd = new Date(
     newStart.getTime() + service.duration_minutes * 60_000,
@@ -127,9 +130,9 @@ export async function rescheduleAppointment(
 
   if (error) {
     if (error.code === "P0001") {
-      return { error: "The selected time conflicts with an existing booking." };
+      return { error: t("conflict") };
     }
-    return { error: error.message };
+    return { error: t("generic") };
   }
 
   revalidatePath("/dashboard/bookings");

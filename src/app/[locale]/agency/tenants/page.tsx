@@ -1,20 +1,25 @@
 import { Building2 } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
 import AddTenantDialog from "@/components/agency/AddTenantDialog";
 import QuotaMeter from "@/components/agency/QuotaMeter";
 import TenantTable, { type TenantRowData } from "@/components/agency/TenantTable";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import { Card } from "@/components/ui/card";
 import EmptyState from "@/components/ui/EmptyState";
+import MetricCard from "@/components/ui/MetricCard";
 import { requireAgencyAdmin } from "@/lib/agency/admin";
 import { formatPercent, formatTokens } from "@/lib/agency/format";
+import { getLinkableOrganizations } from "@/lib/agency/linkable";
 import { getAllowedAgencySkills, readEnabledSkills } from "@/lib/agency/skills";
 import { summarizePool } from "@/lib/agency/usage";
-import { DEFAULT_ENABLED_SKILLS } from "@/lib/payment/handlers";
+import { DEFAULT_ENABLED_SKILLS } from "@/lib/skills-catalog";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
 export default async function AgencyTenantsPage() {
-  const { supabase, agency } = await requireAgencyAdmin();
+  const { supabase, user, agency } = await requireAgencyAdmin();
+  const [t, locale] = await Promise.all([getTranslations("agency.tenants"), getLocale()]);
 
   const { data: links, error } = await supabase
     .from("agency_tenants")
@@ -46,11 +51,14 @@ export default async function AgencyTenantsPage() {
     }
   }
 
-  const allowedSkills = await getAllowedAgencySkills(supabase, agency);
+  const [allowedSkills, linkable] = await Promise.all([
+    getAllowedAgencySkills(supabase, agency),
+    getLinkableOrganizations(supabase, user.id, agency),
+  ]);
 
   const tenants: TenantRowData[] = (links ?? []).map((link) => ({
     tenantId: link.tenant_id,
-    name: link.organizations?.name ?? "Untitled organization",
+    name: link.organizations?.name ?? t("untitled"),
     slug: link.organizations?.slug ?? "",
     granted: link.quota_granted,
     remaining: link.quota_allocation,
@@ -63,68 +71,38 @@ export default async function AgencyTenantsPage() {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-ink-primary">Tenants</h1>
-          <p className="mt-1 text-sm text-ink-muted">
-            The client organizations you manage. Allocate tokens from your pool and choose the
-            skills each assistant can use.
-          </p>
-        </div>
-        {tenants.length > 0 ? <AddTenantDialog /> : null}
-      </div>
+    <PageContainer>
+      <PageHeader
+        title={t("title")}
+        description={t("description")}
+        actions={tenants.length > 0 ? <AddTenantDialog linkable={linkable} /> : null}
+      />
 
-      <Card className="animate-reveal-up mt-8 rounded-interactive p-5">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3">
-          <h2 className="text-sm font-semibold text-ink-primary">Token pool</h2>
-          <dl className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-sm">
-            <div>
-              <dt className="text-xs text-ink-muted">Pool</dt>
-              <dd className="text-ink-primary">{formatTokens(pool.pool)}</dd>
-            </div>
-            <div>
-              <dt className="text-xs text-ink-muted">Allocated</dt>
-              <dd className="text-ink-primary">{formatTokens(pool.allocated)}</dd>
-            </div>
-            <div>
-              <dt className="text-xs text-ink-muted">Available</dt>
-              <dd className="text-ink-primary">{formatTokens(pool.unallocated)}</dd>
-            </div>
-          </dl>
-        </div>
-        <QuotaMeter
-          tone="neutral"
-          percent={pool.percentAllocated}
-          label="Share of the token pool allocated to tenants"
-          className="mt-4"
-        />
-        <p className="mt-2 text-xs text-ink-muted">
-          {pool.pool > 0
-            ? `${formatPercent(pool.percentAllocated)} of your pool is allocated to tenants.`
-            : "Your token pool is empty, so tokens can't be allocated yet. Contact the platform team to have a pool assigned."}
-        </p>
-      </Card>
+      <section aria-label={t("pool.title")} className="grid gap-4 sm:grid-cols-3">
+        <MetricCard label={t("pool.pool")} value={formatTokens(locale, pool.pool)} />
+        <MetricCard label={t("pool.allocated")} value={formatTokens(locale, pool.allocated)} />
+        <MetricCard label={t("pool.available")} value={formatTokens(locale, pool.unallocated)}>
+          <QuotaMeter tone="neutral" percent={pool.percentAllocated} label={t("pool.meter")} />
+        </MetricCard>
+      </section>
+      <p className="-mt-2 text-xs text-slate-400">
+        {pool.pool > 0
+          ? t("pool.allocatedShare", { percent: formatPercent(locale, pool.percentAllocated) })
+          : t("pool.empty")}
+      </p>
 
-      <Card
-        className="animate-reveal-up mt-6 rounded-interactive"
-        style={{ animationDelay: "60ms" }}
-      >
+      <Card>
         {tenants.length === 0 ? (
           <EmptyState
             icon={Building2}
-            title="No tenants yet"
-            description="Create a new client organization, or link one you already own, to start managing it here."
-            action={<AddTenantDialog triggerLabel="Add your first tenant" />}
+            title={t("emptyTitle")}
+            description={t("emptyDescription")}
+            action={<AddTenantDialog linkable={linkable} variant="first" />}
           />
         ) : (
-          <TenantTable
-            tenants={tenants}
-            allowedSkills={allowedSkills}
-            poolUnallocated={pool.unallocated}
-          />
+          <TenantTable tenants={tenants} allowedSkills={allowedSkills} poolUnallocated={pool.unallocated} />
         )}
       </Card>
-    </div>
+    </PageContainer>
   );
 }

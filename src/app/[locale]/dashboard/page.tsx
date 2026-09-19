@@ -1,19 +1,17 @@
-import { CalendarX2, Radio } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-import { requireUser } from "@/lib/auth";
-import { getUserMembership } from "@/lib/team";
-import { getAllPlans } from "@/lib/plans";
-import { checkQuota } from "@/lib/rag/quota";
-import {
-  appointmentStatusTone,
-  formatAppointmentDate,
-  formatAppointmentTime,
-} from "@/lib/utils";
-import type { AppointmentStatus } from "@/types";
+import { CalendarClock, CalendarX2, Gauge, MessagesSquare, ShieldCheck } from "lucide-react";
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import ChatSimulator from "@/components/chat-widget/ChatSimulator";
+import AppointmentStatusBadge from "@/components/dashboard/AppointmentStatusBadge";
+import LatestCrewAlert from "@/components/dashboard/LatestCrewAlert";
+import OnboardingChecklist from "@/components/dashboard/OnboardingChecklist";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
-import CountUp from "@/components/ui/CountUp";
+import LiveRefresh from "@/components/ui/LiveRefresh";
+import MetricCard from "@/components/ui/MetricCard";
+import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -22,356 +20,231 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import OnboardingChecklist from "@/components/dashboard/OnboardingChecklist";
+import { Tooltip } from "@/components/ui/tooltip";
+import { Link } from "@/i18n/navigation";
+import { requireMembership } from "@/lib/auth";
+import { getOverviewMetrics, getOrganizationSnapshot } from "@/lib/dashboard/queries";
+import { LIVE_WINDOW_MINUTES, RAG_WINDOW_DAYS } from "@/lib/dashboard/metrics";
+import { fetchCrewInsights } from "@/lib/dev-crew/queries";
+import { collapseInsights } from "@/lib/dev-crew/recommendation";
+import { formatMetricNumber, formatMetricPercent } from "@/lib/format";
+import { resolvePlanTier } from "@/lib/plans";
+import { asSubscriptionStatus } from "@/lib/status";
+import type { CrewInsight } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const SUBSCRIPTION_TONE: Record<string, "success" | "warn" | "error" | "neutral"> = {
+const SUBSCRIPTION_TONE: Record<string, BadgeTone> = {
   active: "success",
   trialing: "success",
   past_due: "warn",
   canceled: "error",
 };
 
-export default async function DashboardPage() {
-  const { supabase, user } = await requireUser();
-
-  const membership = await getUserMembership(user.id);
-
-  let organization: {
-    name: string;
-    slug: string;
-    subscription_status: string;
-    plan_id: string | null;
-    current_period_end: string | null;
-  } | null = null;
-  let memberCount = 0;
-  let serviceCount = 0;
-  let documentCount = 0;
-  let tokensUsed = 0;
-  let tokensLimit = 0;
-  let answeredEnquiries = 0;
-  let recentAppointments: {
-    id: string;
-    customer_name: string;
-    service_id: string;
-    start_time: string;
-    status: AppointmentStatus;
-  }[] = [];
-  let serviceNameById = new Map<string, string>();
-
-  if (membership) {
-    const organizationId = membership.organizationId;
-
-    const [
-      { data: org },
-      { count: members },
-      { data: services },
-      { count: documents },
-      quota,
-      { count: answered },
-      { data: recent },
-    ] = await Promise.all([
-      supabase
-        .from("organizations")
-        .select("name, slug, subscription_status, plan_id, current_period_end")
-        .eq("id", organizationId)
-        .single(),
-      supabase
-        .from("memberships")
-        .select("id", { count: "exact", head: true })
-        .eq("organization_id", organizationId),
-      supabase
-        .from("services")
-        .select("id, name")
-        .eq("organization_id", organizationId),
-      supabase
-        .from("documents")
-        .select("id", { count: "exact", head: true })
-        .eq("organization_id", organizationId),
-      checkQuota(organizationId),
-      // "Automated Enquiries" — every assistant reply the RAG chatbot has
-      // sent this org's visitors, i.e. an enquiry it answered without a
-      // human. Distinct from `upcomingCount`/appointments, which is a
-      // separate signal shown on the Bookings page.
-      supabase
-        .from("chat_messages")
-        .select("id", { count: "exact", head: true })
-        .eq("organization_id", organizationId)
-        .eq("role", "assistant"),
-      supabase
-        .from("appointments")
-        .select("id, customer_name, service_id, start_time, status")
-        .eq("organization_id", organizationId)
-        .order("created_at", { ascending: false })
-        .limit(6),
-    ]);
-
-    organization = org;
-    memberCount = members ?? 0;
-    serviceCount = services?.length ?? 0;
-    documentCount = documents ?? 0;
-    tokensUsed = quota.tokensUsed;
-    tokensLimit = quota.tokensLimit;
-    answeredEnquiries = answered ?? 0;
-    recentAppointments = recent ?? [];
-    serviceNameById = new Map((services ?? []).map((service) => [service.id, service.name]));
+async function loadLatestInsight(organizationId: string): Promise<CrewInsight | null> {
+  try {
+    // Fetch a page, not one row: duplicates are collapsed so the widget
+    // shows the newest *distinct* recommendation.
+    const [latest] = collapseInsights(await fetchCrewInsights(organizationId, { limit: 20 }));
+    return latest ?? null;
+  } catch (error) {
+    console.error("[overview] crew insight unavailable:", error);
+    return null;
   }
+}
+
+export default async function DashboardPage() {
+  const { supabase, user, membership } = await requireMembership();
+  const organizationId = membership.organizationId;
+
+  const [t, tStatus, tTiers, locale, format] = await Promise.all([
+    getTranslations("dashboard.overview"),
+    getTranslations("status"),
+    getTranslations("common.tiers"),
+    getLocale(),
+    getFormatter(),
+  ]);
+
+  const [snapshot, metrics, insight, memberCount, services, recent] = await Promise.all([
+    getOrganizationSnapshot(organizationId),
+    getOverviewMetrics(organizationId),
+    loadLatestInsight(organizationId),
+    supabase
+      .from("memberships")
+      .select("id", { count: "exact", head: true })
+      .eq("organization_id", organizationId),
+    supabase.from("services").select("id, name").eq("organization_id", organizationId),
+    supabase
+      .from("appointments")
+      .select("id, customer_name, service_id, start_time, status")
+      .eq("organization_id", organizationId)
+      .order("created_at", { ascending: false })
+      .limit(6),
+  ]);
+
+  const serviceNameById = new Map((services.data ?? []).map((service) => [service.id, service.name]));
+  const appointments = recent.data ?? [];
 
   const checklistItems = [
-    {
-      id: "org",
-      label: "Create your organization",
-      href: "/dashboard/settings/organization",
-      done: Boolean(organization),
-    },
-    {
-      id: "team",
-      label: "Invite a teammate",
-      href: "/dashboard/team",
-      done: memberCount > 1,
-    },
-    {
-      id: "service",
-      label: "Add a bookable service",
-      href: "/dashboard/bookings",
-      done: serviceCount > 0,
-    },
-    {
-      id: "kb",
-      label: "Ingest a knowledge base document",
-      href: "/dashboard/chatbot",
-      done: documentCount > 0,
-    },
+    { id: "org", label: t("checklist.org"), href: "/dashboard/settings/organization", done: snapshot !== null },
+    { id: "team", label: t("checklist.team"), href: "/dashboard/team", done: (memberCount.count ?? 0) > 1 },
+    { id: "service", label: t("checklist.service"), href: "/dashboard/bookings", done: (services.data?.length ?? 0) > 0 },
+    { id: "kb", label: t("checklist.kb"), href: "/dashboard/knowledge-base", done: metrics.documents > 0 },
   ];
 
-  const planName =
-    getAllPlans().find(
-      (plan) => plan.checkout.kind === "stripe" && plan.checkout.priceId === organization?.plan_id,
-    )?.name ?? "Starter";
-  const subscriptionTone = organization
-    ? (SUBSCRIPTION_TONE[organization.subscription_status] ?? "neutral")
-    : "neutral";
-
-  const usagePercent =
-    tokensLimit > 0 ? Math.min(100, Math.round((tokensUsed / tokensLimit) * 100)) : 0;
-  const usageTone = usagePercent >= 90 ? "bg-status-error" : "bg-gold";
+  const tier = resolvePlanTier(snapshot?.planId);
+  const planName = tTiers(tier);
+  const subscriptionStatus = snapshot?.subscriptionStatus ?? "inactive";
+  const knownSubscription = asSubscriptionStatus(subscriptionStatus);
+  const quota = snapshot?.quota;
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="font-serif text-2xl font-semibold text-ink-primary">Overview</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Welcome back{user.email ? `, ${user.email}` : ""}.
-      </p>
+    <PageContainer>
+      <LiveRefresh />
+      <PageHeader
+        title={t("title")}
+        description={user.email ? t("welcome", { email: user.email }) : t("welcomeAnonymous")}
+        actions={
+          <>
+            <Badge tone={SUBSCRIPTION_TONE[subscriptionStatus] ?? "neutral"}>
+              {knownSubscription ? tStatus(`subscription.${knownSubscription}`) : subscriptionStatus}
+            </Badge>
+            <span className="hidden text-sm text-slate-400 sm:inline">{t("plan", { plan: planName })}</span>
+            <Button asChild variant="secondary" size="sm">
+              <Link href="/dashboard/billing">{t("manageBilling")}</Link>
+            </Button>
+          </>
+        }
+      />
 
-      {organization && (
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div
-            className="animate-reveal-up rounded-interactive border border-subtle bg-surface p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
-            style={{ animationDelay: "0ms" }}
-          >
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Business Status
-            </p>
-            <div className="mt-2 flex items-center gap-2">
-              <span
-                className={`h-2 w-2 rounded-full ${
-                  subscriptionTone === "success" ? "animate-pulse bg-status-success" : "bg-subtle"
-                }`}
-              />
-              <span className="font-mono text-xl font-semibold text-ink-primary">
-                {subscriptionTone === "success" ? "Live & Ready" : "Setup Needed"}
-              </span>
-            </div>
-            <div className="mt-2 flex items-center gap-2">
-              <span className="text-xs text-ink-muted">{planName} plan</span>
-              <Badge tone={subscriptionTone}>{organization.subscription_status}</Badge>
-            </div>
-            <p className="mt-2 text-xs text-ink-muted">
-              {organization.current_period_end
-                ? `Renews ${new Date(organization.current_period_end).toLocaleDateString()}`
-                : "No active billing period"}
-            </p>
-            <Link
-              href="/dashboard/billing"
-              className="mt-3 inline-block text-xs font-semibold text-ink-primary hover:text-primary"
+      <section aria-label={t("title")} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <MetricCard
+          live={metrics.liveChats > 0}
+          icon={MessagesSquare}
+          label={t("metrics.liveChats.label")}
+          value={formatMetricNumber(locale, metrics.liveChats)}
+          hint={t("metrics.liveChats.hint", { minutes: LIVE_WINDOW_MINUTES })}
+        />
+
+        <MetricCard
+          icon={ShieldCheck}
+          label={t("metrics.ragSuccess.label")}
+          value={metrics.ragSuccessPercent === null ? "—" : formatMetricPercent(locale, metrics.ragSuccessPercent)}
+          hint={
+            metrics.ragSuccessPercent === null
+              ? t("metrics.ragSuccess.empty")
+              : t("metrics.ragSuccess.hint", { count: metrics.ragCompletions, days: RAG_WINDOW_DAYS })
+          }
+        >
+          <Tooltip content={t("metrics.ragSuccess.tooltip")}>
+            <button
+              type="button"
+              className="self-start rounded text-xs text-slate-400 underline decoration-dotted underline-offset-4 outline-none hover:text-slate-200 focus-visible:ring-2 focus-visible:ring-ring/60"
             >
-              Manage billing →
-            </Link>
-          </div>
+              {t("metrics.ragSuccess.label")}?
+            </button>
+          </Tooltip>
+        </MetricCard>
 
-          <div
-            className="animate-reveal-up rounded-interactive border border-subtle bg-surface p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
-            style={{ animationDelay: "60ms" }}
-          >
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              Automated Enquiries
-            </p>
-            <div className="mt-2 flex items-center gap-2">
-              <Radio
-                size={14}
-                className={answeredEnquiries > 0 ? "text-status-success" : "text-ink-muted"}
-              />
-              <span
-                className={`h-2 w-2 rounded-full ${
-                  answeredEnquiries > 0 ? "animate-pulse bg-status-success" : "bg-subtle"
-                }`}
-              />
-              <span className="font-mono text-xl font-semibold text-ink-primary">
-                <CountUp value={answeredEnquiries} />
-              </span>
-            </div>
-            <p className="mt-2 text-xs text-ink-muted">Yanıtlandı — handled by the AI assistant</p>
-          </div>
+        <MetricCard
+          icon={Gauge}
+          label={t("metrics.quota.label")}
+          value={quota ? formatMetricNumber(locale, quota.tokensUsed) : "—"}
+          hint={
+            quota
+              ? quota.resetsAt
+                ? t("metrics.quota.hint", {
+                    limit: formatMetricNumber(locale, quota.tokensLimit),
+                    date: format.dateTime(quota.resetsAt, { dateStyle: "medium" }),
+                  })
+                : t("metrics.quota.hintNoReset", { limit: formatMetricNumber(locale, quota.tokensLimit) })
+              : undefined
+          }
+        >
+          {quota ? (
+            <Progress value={quota.percent} tone={quota.tone} aria-label={t("metrics.quota.usage")} />
+          ) : null}
+        </MetricCard>
 
-          <div
-            className="animate-reveal-up rounded-interactive border border-subtle bg-surface p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-gold/50 hover:shadow-md hover:shadow-gold/10"
-            style={{ animationDelay: "120ms" }}
-          >
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-              AI Assistant Capacity
-            </p>
-            <p className="mt-2 font-mono text-xl font-semibold text-ink-primary">
-              <CountUp value={tokensUsed} /> / {tokensLimit.toLocaleString()}
-            </p>
-            <p className="mt-1 text-xs text-ink-muted">
-              Aylık Görüşme (%{usagePercent} Kullanıldı)
-            </p>
-            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-subtle">
-              <div
-                className={`h-full rounded-full ${usageTone} transition-[width] duration-500`}
-                style={{ width: `${usagePercent}%` }}
-              />
-            </div>
-          </div>
+        <MetricCard
+          icon={CalendarClock}
+          label={t("metrics.bookings.label")}
+          value={formatMetricNumber(locale, metrics.bookingsThisWeek)}
+          hint={t("metrics.bookings.hint")}
+        />
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-3">
+        <ChatSimulator organizationId={organizationId} className="lg:col-span-2" />
+        <div className="flex flex-col gap-6">
+          <LatestCrewAlert insight={insight} />
+          <OnboardingChecklist userId={user.id} items={checklistItems} />
         </div>
-      )}
+      </section>
 
-      <div className="mt-6 grid grid-cols-1 gap-6">
-        <OnboardingChecklist userId={user.id} items={checklistItems} />
+      <Card className="p-5">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("recent.title")}</h2>
+          <Link href="/dashboard/bookings" className="text-sm font-medium text-violet-300 hover:text-violet-200">
+            {t("recent.viewAll")}
+          </Link>
+        </div>
 
-        {organization && (
-          <Card className="animate-reveal-up p-6">
-            <div className="flex items-baseline justify-between">
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                Recent appointments
-              </h2>
-              <Link
-                href="/dashboard/bookings"
-                className="text-xs font-semibold text-ink-primary hover:text-primary"
-              >
-                View all →
-              </Link>
-            </div>
-
-            {recentAppointments.length === 0 ? (
-              <div className="mt-4">
-                <EmptyState
-                  icon={CalendarX2}
-                  title="İlk Otomasyonunuzu Test Edin"
-                  description="Bookings will show up here as soon as customers start scheduling — or try it yourself right now."
-                  action={
-                    <div className="flex flex-wrap justify-center gap-3">
-                      <Link
-                        href={`/book/${organization.slug}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-interactive bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-                      >
-                        Simulate Live Booking
-                      </Link>
-                      <Link
-                        href="/dashboard/chatbot"
-                        className="rounded-interactive border border-subtle px-4 py-2 text-sm font-semibold text-ink-primary transition-colors hover:border-gold/50"
-                      >
-                        Test AI Agent
-                      </Link>
-                    </div>
-                  }
-                />
+        {appointments.length === 0 ? (
+          <EmptyState
+            icon={CalendarX2}
+            title={t("recent.emptyTitle")}
+            description={t("recent.emptyDescription")}
+            action={
+              <div className="flex flex-wrap justify-center gap-2">
+                {snapshot ? (
+                  <Button asChild size="sm">
+                    <Link href={`/book/${snapshot.slug}`} target="_blank" rel="noopener noreferrer">
+                      {t("recent.simulate")}
+                    </Link>
+                  </Button>
+                ) : null}
+                <Button asChild variant="secondary" size="sm">
+                  <Link href="/dashboard/chatbot">{t("recent.testAgent")}</Link>
+                </Button>
               </div>
-            ) : (
-              <Table className="mt-4">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Service</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recentAppointments.map((appointment) => (
-                    <TableRow key={appointment.id}>
-                      <TableCell className="font-medium text-ink-primary">
-                        {appointment.customer_name}
-                      </TableCell>
-                      <TableCell className="text-ink-muted">
-                        {serviceNameById.get(appointment.service_id) ?? "Service"}
-                      </TableCell>
-                      <TableCell className="font-mono text-xs text-ink-muted">
-                        {formatAppointmentDate(appointment.start_time)}{" "}
-                        {formatAppointmentTime(appointment.start_time)}
-                      </TableCell>
-                      <TableCell>
-                        <Badge tone={appointmentStatusTone[appointment.status]}>
-                          {appointment.status}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </Card>
+            }
+          />
+        ) : (
+          <Table className="mt-4">
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t("recent.customer")}</TableHead>
+                <TableHead>{t("recent.service")}</TableHead>
+                <TableHead>{t("recent.date")}</TableHead>
+                <TableHead>{t("recent.status")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {appointments.map((appointment) => (
+                <TableRow key={appointment.id}>
+                  <TableCell className="font-medium text-slate-100">{appointment.customer_name}</TableCell>
+                  <TableCell className="text-slate-400">
+                    {serviceNameById.get(appointment.service_id) ?? t("recent.fallbackService")}
+                  </TableCell>
+                  <TableCell className="font-mono text-xs text-slate-400">
+                    {/* Appointments are anchored to UTC by the booking engine. */}
+                    {format.dateTime(new Date(appointment.start_time), {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                      timeZone: "UTC",
+                      numberingSystem: "latn",
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    <AppointmentStatusBadge status={appointment.status} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
-
-        <Card className="animate-reveal-up p-6" style={{ animationDelay: "60ms" }}>
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-            Authenticated user
-          </h2>
-          <dl className="mt-4 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-            <div className="border-b border-subtle pb-2">
-              <dt className="text-xs font-medium text-ink-muted">Email</dt>
-              <dd className="text-sm font-medium text-ink-primary">{user.email}</dd>
-            </div>
-            <div className="border-b border-subtle pb-2">
-              <dt className="text-xs font-medium text-ink-muted">User ID</dt>
-              <dd className="font-mono text-sm text-ink-primary">{user.id}</dd>
-            </div>
-            <div className="border-b border-subtle pb-2">
-              <dt className="text-xs font-medium text-ink-muted">Last sign in</dt>
-              <dd className="text-sm font-medium text-ink-primary">
-                {user.last_sign_in_at ?? "N/A"}
-              </dd>
-            </div>
-          </dl>
-        </Card>
-
-        <Card className="animate-reveal-up p-6" style={{ animationDelay: "120ms" }}>
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-            Organization
-          </h2>
-          {organization && membership ? (
-            <dl className="mt-4 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-              <div className="border-b border-subtle pb-2">
-                <dt className="text-xs font-medium text-ink-muted">Name</dt>
-                <dd className="text-sm font-medium text-ink-primary">{organization.name}</dd>
-              </div>
-              <div className="border-b border-subtle pb-2">
-                <dt className="text-xs font-medium text-ink-muted">Your role</dt>
-                <dd className="text-sm font-medium capitalize text-ink-primary">
-                  {membership.role}
-                </dd>
-              </div>
-            </dl>
-          ) : (
-            <p className="mt-4 text-sm text-ink-muted">
-              You don&apos;t belong to an organization yet.
-            </p>
-          )}
-        </Card>
-      </div>
-    </div>
+      </Card>
+    </PageContainer>
   );
 }

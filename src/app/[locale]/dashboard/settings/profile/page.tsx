@@ -1,9 +1,12 @@
-import { requireUser } from "@/lib/auth";
+import { getTranslations } from "next-intl/server";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import { Card } from "@/components/ui/card";
+import { requireUser } from "@/lib/auth";
 import ProfileForm from "./ProfileForm";
 
 export default async function ProfileSettingsPage() {
   const { supabase, user } = await requireUser();
+  const t = await getTranslations("dashboard.settings.profile");
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -11,21 +14,12 @@ export default async function ProfileSettingsPage() {
     .eq("id", user.id)
     .maybeSingle();
 
-  const email = profile?.email ?? user.email ?? "";
-  const fullName = profile?.full_name ?? "";
-
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-semibold text-ink-primary">Profile</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Update your personal information.
-      </p>
-
-      <div className="mt-6">
-        <Card className="animate-reveal-up p-6">
-          <ProfileForm email={email} fullName={fullName} />
-        </Card>
-      </div>
-    </div>
+    <PageContainer className="max-w-4xl">
+      <PageHeader title={t("label")} description={t("pageDescription")} />
+      <Card className="p-6">
+        <ProfileForm email={profile?.email ?? user.email ?? ""} fullName={profile?.full_name ?? ""} />
+      </Card>
+    </PageContainer>
   );
 }

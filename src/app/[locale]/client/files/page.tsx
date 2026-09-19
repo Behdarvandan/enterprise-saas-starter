@@ -1,19 +1,25 @@
 import { FolderOpen, Github, Globe } from "lucide-react";
-import { getTranslations } from "next-intl/server";
-import { requireMembership } from "@/lib/auth";
+import { getFormatter, getTranslations } from "next-intl/server";
+import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import { Card } from "@/components/ui/card";
 import EmptyState from "@/components/ui/EmptyState";
+import { requireMembership } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 /**
- * "Dosyalar/Teslimatlar" (brief §6): a deliverables list, not a file-upload
- * system — there's no document-storage table in this schema yet, so this
- * surfaces what's actually there: each project's repo/live links as
- * deliverable rows, dated by when the project record last changed.
+ * "Files / deliverables": a deliverables list, not a file-upload system —
+ * there's no document-storage table in this schema yet, so this surfaces
+ * what's actually there: each project's repo/live links as deliverable rows,
+ * dated by when the project record last changed.
  */
 export default async function ClientFilesPage() {
   const { supabase, membership } = await requireMembership();
-  const t = await getTranslations("client.nav");
+  const [t, tNav, format] = await Promise.all([
+    getTranslations("client.files"),
+    getTranslations("client.nav"),
+    getFormatter(),
+  ]);
 
   const { data: projects } = await supabase
     .from("client_projects")
@@ -26,7 +32,7 @@ export default async function ClientFilesPage() {
     if (project.repo_url) {
       rows.push({
         key: `${project.id}-repo`,
-        label: `${project.name} — Repository`,
+        label: t("repository", { name: project.name }),
         href: project.repo_url,
         icon: Github,
         date: project.updated_at,
@@ -35,7 +41,7 @@ export default async function ClientFilesPage() {
     if (project.live_url) {
       rows.push({
         key: `${project.id}-live`,
-        label: `${project.name} — Live`,
+        label: t("live", { name: project.name }),
         href: project.live_url,
         icon: Globe,
         date: project.updated_at,
@@ -45,43 +51,32 @@ export default async function ClientFilesPage() {
   });
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="font-serif text-2xl font-semibold text-ink-primary">{t("files")}</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Delivery links for your project — repository access and live environments.
-      </p>
+    <PageContainer className="max-w-5xl">
+      <PageHeader title={tNav("files")} description={t("description")} />
 
       {deliverables.length === 0 ? (
-        <div className="mt-8">
-          <EmptyState
-            icon={FolderOpen}
-            title="No deliverables yet"
-            description="Repository and live links will appear here once your project has them."
-          />
-        </div>
+        <EmptyState icon={FolderOpen} title={t("emptyTitle")} description={t("emptyDescription")} />
       ) : (
-        <div className="animate-reveal-up mt-8 overflow-hidden rounded-interactive border border-subtle bg-surface">
+        <Card className="overflow-hidden">
           {deliverables.map((row) => (
             <a
               key={row.key}
               href={row.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-4 border-b border-subtle px-4 py-3 transition-colors last:border-0 hover:border-gold/50 hover:bg-surface-raised"
+              className="flex items-center justify-between gap-4 border-b border-slate-800 px-4 py-3 transition-colors last:border-0 hover:bg-slate-800/40 focus-visible:bg-slate-800/40"
             >
               <div className="flex min-w-0 items-center gap-3">
-                <row.icon size={16} className="shrink-0 text-ink-muted" />
-                <span className="truncate text-sm font-medium text-ink-primary">
-                  {row.label}
-                </span>
+                <row.icon aria-hidden size={16} className="shrink-0 text-slate-500" />
+                <span className="truncate text-sm font-medium text-slate-100">{row.label}</span>
               </div>
-              <span className="shrink-0 font-mono text-xs text-ink-muted">
-                {new Date(row.date).toLocaleDateString()}
+              <span className="shrink-0 text-xs text-slate-400">
+                {format.dateTime(new Date(row.date), { dateStyle: "medium" })}
               </span>
             </a>
           ))}
-        </div>
+        </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }
