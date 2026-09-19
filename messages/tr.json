@@ -16,57 +16,12 @@
     }
   },
   "marketing": {
-    "header": {
-      "features": "Özellikler",
-      "howItWorks": "Nasıl Çalışır?",
-      "platform": "Platform",
-      "security": "Güvenlik",
-      "pricing": "Fiyatlandırma",
-      "signIn": "Giriş yap",
-      "startTrial": "Ücretsiz deneyin",
-      "services": "Hizmetler",
-      "saas": "SaaS"
-    },
-    "footer": {
-      "tagline": "Her organizasyon için satır düzeyinde izolasyon sağlayan çok kiracılı randevu ve planlama altyapısı.",
-      "productHeading": "Ürün",
-      "accountHeading": "Hesap",
-      "systemStatus": "Sistem durumu",
-      "copyright": "© {year} Pasargad. PostgreSQL satır düzeyi güvenlik üzerine inşa edildi."
-    },
-    "hero": {
-      "eyebrow": "Çok kiracılı SaaS altyapısı",
-      "title": "Müşterilerinizin telefon trafiğini ve randevu süreçlerini %80 azaltan otonom AI asistanı.",
-      "subtitle": "Teknik servisler, klinikler ve işletmeler için 7/24 cihaz durumu sorgulayan, fiyat veren ve randevu toplayan yapay zeka altyapısı.",
-      "ctaPrimary": "Fiyatları görün",
-      "ctaSecondary": "Demo isteyin",
-      "playground": {
-        "kicker": "Canlı deneyin",
-        "title": "Asistanın gerçek bir soruyu yanıtlamasını izleyin",
-        "description": "Dükkanınızın adını yazın, deneyin butonuna basın ve asistanın canlı yanıt vermesini izleyin — her Pasargad müşterisinin kullandığı aynı bilgi tabanı motoruyla çalışır.",
-        "placeholder": "Dükkanınızın adını yazın…",
-        "cta": "Canlı Deneyin",
-        "started": "Asistan açılıyor…",
-        "sampleQuestion": "Merhaba, çalışma saatleriniz nedir ve nasıl randevu alabilirim?",
-        "sampleQuestionWithName": "Merhaba, {name} için bilgi almak istiyorum — çalışma saatleriniz nedir ve nasıl randevu alabilirim?",
-        "widgetTitle": "Canlı demo asistanı"
-      }
-    },
-    "pricingSection": {
-      "title": "Rezervasyon hacminize göre ölçeklenen planlar.",
-      "subtitle": "Starter ile başlayın, yapay zekâ asistanı ve öncelikli destek işinize yaradığında yükseltin.",
-      "compareLink": "Tüm plan karşılaştırmasını görün ve ödemeyi başlatın"
-    },
     "security": {
       "title": "Satış sunumundan önce şemayı okuyan incelemeciler için.",
       "controls": {
         "isolation": {
           "label": "İzolasyon modeli",
           "detail": "Her kiracı tablosunda is_org_member(organization_id) ile kapsamlanan Satır Düzeyi Güvenlik. Veritabanı katmanında kiracılar arası hiçbir sorgu yolu yoktur."
-        },
-        "privilegedOps": {
-          "label": "Yetkili işlemler",
-          "detail": "Organizasyon oluşturma ve davet kabulü, açık bir search_path ile SECURITY DEFINER fonksiyonları olarak çalışır; böylece yükseltilmiş yazma işlemleri yalnızca denetlenen, dar giriş noktalarından geçer."
         },
         "serviceRole": {
           "label": "Servis rolü sınırı",
@@ -81,28 +36,6 @@
           "detail": "Next.js standalone çıktısı üzerinde, çok aşamalı bir Docker build içinde root olmayan bir kullanıcı olarak çalışır; özel bir health-check uç noktasına sahip bir yük dengeleyici arkasında AWS ECS Fargate'e dağıtılır."
         }
       }
-    },
-    "persona": {
-      "operations": {
-        "role": "Operasyon için",
-        "headline": "Artık kimse aynı zaman dilimine iki kez rezervasyon alamaz.",
-        "body": "Müsaitlik, hizmetler ve randevular, yazma anında çakışan rezervasyonları reddeden bir veritabanı tetikleyicisinin arkasında yaşar — bir yarış durumunun atlatabileceği istemci taraflı bir kontrol değil."
-      },
-      "security": {
-        "role": "BT ve güvenlik incelemesi için",
-        "headline": "Kiracı izolasyonu uygulama katmanında değil, veritabanında uygulanır.",
-        "body": "Her tabloda bir organization_id ve is_org_member() ile kapsamlanan bir Satır Düzeyi Güvenlik politikası bulunur. Ele geçirilmiş veya hatalı bir sorgu kiracı sınırını aşamaz — Postgres, kodunuz satırı hiç görmeden reddeder."
-      },
-      "finance": {
-        "role": "Finans ve faturalama için",
-        "headline": "Abonelik durumu otomatik olarak Stripe ile senkronize kalır.",
-        "body": "Ödeme, plan değişiklikleri ve iptaller, her organizasyonun abonelik kaydına doğrudan yazan imza doğrulamalı Stripe webhook'ları üzerinden akar — manuel mutabakat gerekmez."
-      }
-    },
-    "homeCta": {
-      "title": "İlk organizasyonunuzu dakikalar içinde kurun.",
-      "subtitle": "Ücretsiz başlayın — Starter plan için kart gerekmez.",
-      "button": "Ücretsiz deneyin"
     },
     "leadForm": {
       "fullNameLabel": "Ad Soyad",
@@ -210,38 +143,244 @@
       "stackLabel": "Teknoloji yığını",
       "notFoundTitle": "Vaka çalışması bulunamadı"
     },
-    "socialProof": {
-      "trustBadgesTitle": "Güvenlik ve güvenilirlik",
-      "trustBadges": {
-        "dataIsolation": {
-          "title": "Veri izolasyonu",
-          "body": "Her müşterinin verisi kendi veritabanı satırlarında kilitli kalır; başka hiçbir hesap erişemez."
-        },
-        "securePayments": {
-          "title": "Güvenli ödemeler",
-          "body": "Kart bilgileriniz sunucularımıza hiç dokunmaz; ödemeler doğrudan Stripe veya PayTR üzerinden işlenir."
-        },
-        "noDoubleBooking": {
-          "title": "Çakışmayan randevular",
-          "body": "İki müşteri aynı saati asla alamaz — bu kural veritabanı seviyesinde garanti altındadır."
+    "landing": {
+      "meta": {
+        "title": "Pasargad — Otonom müşteri temsilcisi ve AI Agent OS",
+        "description": "RAG tabanlı bilgi yönetimi, randevu takibi ve kendini geliştiren Dev Crew — işletmeniz için 7/24 çalışan otonom müşteri temsilcisi."
+      },
+      "nav": {
+        "agentOs": "Agent OS",
+        "capabilities": "Yetenekler",
+        "pricing": "Fiyatlandırma",
+        "agency": "Ajans portalı",
+        "signIn": "Giriş yap",
+        "startFree": "Ücretsiz başla",
+        "openMenu": "Menüyü aç",
+        "menuTitle": "Menü",
+        "primaryNav": "Ana gezinme"
+      },
+      "hero": {
+        "badge": "Agent OS · Ops Crew + Dev Crew",
+        "title": "İşletmeniz için otonom müşteri temsilcisi ve AI Agent OS",
+        "subtitle": "RAG tabanlı bilgi yönetimi, randevu takibi ve Dev Crew ile otonom optimizasyon — yanıtlayan, randevu alan ve her gün daha iyi olan tek bir ajan.",
+        "ctaPrimary": "Hemen ücretsiz başlayın",
+        "ctaSecondary": "Demo randevusu al · Yönetilen kurulum",
+        "points": {
+          "rag": "Yalnızca kendi dokümanlarınıza dayanan yanıtlar",
+          "booking": "Çakışmasız randevu kapatma",
+          "devCrew": "Dev Crew zayıf yanıtlar için iyileştirme önerir"
         }
       },
-      "howWeWorkTitle": "Nasıl çalışırız",
-      "howWeWork": {
-        "meeting": {
-          "step": "1",
-          "title": "Görüşme",
-          "body": "İhtiyacınızı birlikte netleştiririz."
+      "playground": {
+        "title": "Canlı ajan simülatörü",
+        "agentName": "Pasargad ajanı",
+        "simulated": "Örnek simülasyon",
+        "pickPrompt": "Ajanın nasıl düşündüğünü görmek için bir soru seçin",
+        "thinking": "Ajan düşünüyor…",
+        "replay": "Tekrar oynat",
+        "thoughtTitle": "Düşünce akışı",
+        "thoughtEmpty": "Ajanın karar adımları burada görünecek.",
+        "disclaimer": "Senaryolu bir örnektir. Skorlar ve sonuçlar örnek veridir; gerçek bir çalışma alanından canlı çıktı değildir.",
+        "thought": {
+          "ragSearch": "arama(“{query}”)",
+          "retrieval": "{chunks, plural, other {{chunks} parça}} getirildi · en yüksek benzerlik {similarity}",
+          "confidencePass": "skor {score} ≥ eşik {threshold} → bilgi tabanından yanıtlıyor",
+          "confidenceFail": "skor {score} < eşik {threshold} → düşük güven, yanıt verilmedi",
+          "toolCall": "calendar_booking.create(slot: “{slot}”) → onaylandı",
+          "handoff": "Dev Crew incelemesi için işaretlendi → iyileştirme önerisi sıraya alındı"
         },
-        "setup": {
-          "step": "2",
-          "title": "Kurulum",
-          "body": "Doğru mimariyle temeli birlikte kurarız."
+        "scenarios": {
+          "pricing": {
+            "label": "Fiyat sor",
+            "user": "Ekran değişimi ne kadar tutar?",
+            "intent": "fiyat sorusu",
+            "query": "ekran değişimi fiyatı",
+            "reply": "Ekran değişimi 89 $ ile başlar ve yaklaşık 45 dakika sürer. Randevusuz gelebilirsiniz, isterseniz sizin için bir saat de ayırabilirim."
+          },
+          "booking": {
+            "label": "Randevu al",
+            "user": "Perşembe öğleden sonra gelebilir miyim?",
+            "intent": "randevu talebi · Perşembe öğleden sonra",
+            "query": "çalışma saatleri, müsaitlik",
+            "slot": "Per 14:30",
+            "reply": "Perşembe 14:30 müsait, sizin için ayırdım. Onay mesajınız birazdan gelecek."
+          },
+          "escalation": {
+            "label": "Bilinmeyen bir şey sor",
+            "user": "Yurt dışından alınan cihazları tamir ediyor musunuz?",
+            "intent": "kapsam dışı soru",
+            "query": "yurt dışı cihaz tamiri",
+            "reply": "Bu konuda henüz güvenilir bir bilgim yok, bu yüzden sorunuzu ekibe ilettim. Size en kısa sürede dönüş yapılacak."
+          }
+        }
+      },
+      "roi": {
+        "eyebrow": "ROI hesaplayıcı",
+        "title": "Otonom bir ajanın ekibinize ne kazandırdığını görün",
+        "description": "Sürgüleri oynatın. Tahmin, hesaplayıcının altında listelenen varsayımlardan anında güncellenir.",
+        "volumeLabel": "Aylık gelen müşteri / randevu talebi hacmi",
+        "agentsLabel": "Mevcut müşteri temsilcisi / destek personeli sayısı",
+        "cta": "Ücretsiz başla",
+        "hoursLabel": "Kurtarılan mesai (insan-saat / ay)",
+        "hoursNote": "Ajanın görüşmelerin {rate} kadarını kendi başına çözdüğü varsayılır.",
+        "responseLabel": "Daha hızlı ilk yanıt",
+        "responseNote": "İlk yanıt {human} dk yerine {agent} sn (model varsayımı).",
+        "netLabel": "Aylık net dolar tasarrufu",
+        "netGrossNote": "Platform bedeli düşülmeden: bu hacim için Enterprise teklifi gerekir.",
+        "netWithPlanNote": "Bu hacmi karşılayan {cost} / ay plan bedeli düşüldükten sonra.",
+        "assumptionsTitle": "Bunu nasıl hesaplıyoruz?",
+        "assumptions": {
+          "handle": "İnsan işlem süresi: görüşme başına {minutes} dk",
+          "automation": "Ajanın çözdüğü görüşme oranı: {rate}",
+          "hourly": "Bir destek saatinin toplam maliyeti: {cost}",
+          "capacity": "Tasarruf, ekibinizin ücretli saatleriyle sınırlıdır (kişi başı ayda {hours} saat)",
+          "humanResponse": "İnsan ilk yanıt süresi: {minutes} dk",
+          "agentResponse": "Ajan ilk yanıt süresi: {seconds} sn"
         },
-        "delivery": {
-          "step": "3",
-          "title": "Teslim",
-          "body": "Çalışan sistemi özenle teslim ederiz."
+        "disclaimer": "Yukarıdaki varsayımlara dayanan örnek bir tahmindir. Ölçüm veya garanti değildir."
+      },
+      "crew": {
+        "eyebrow": "Agent OS mimarisi",
+        "title": "İki ekip, kendini geliştiren tek döngü",
+        "description": "Ops Crew müşterilerinize 7/24 hizmet verir. Dev Crew her düşük güvenli yanıtı izler ve nasıl düzelteceğinizi söyler.",
+        "ops": {
+          "title": "Ops Crew",
+          "tag": "7/24 canlı",
+          "description": "Müşteriyle konuşan ajan: bilgi tabanınızdan yanıt verir ve randevuları kapatır.",
+          "points": {
+            "always": "Etkinleştirdiğiniz her dilde 7/24 müşteri karşılama",
+            "rag": "Kendi dokümanlarınızda RAG araması, yalnızca kaynağa dayalı yanıtlar",
+            "booking": "Çakışmasız randevu: veritabanı üst üste binen randevuları reddeder"
+          }
+        },
+        "dev": {
+          "title": "Dev Crew",
+          "tag": "Arka plan telemetrisi",
+          "description": "Ops Crew görüşmelerini sonradan okuyan ve neyin iyileştirileceğini arayan bir arka plan motoru.",
+          "points": {
+            "scan": "Düşük güvenli ve yanıtsız soruları tarar",
+            "recommend": "Somut bilgi tabanı ve prompt iyileştirmeleri önerir",
+            "loop": "Öneriler Crew Insights akışınızda görünür"
+          },
+          "sample": {
+            "label": "Örnek içgörü",
+            "count": "×4",
+            "recommendation": "Müşteriler sürekli iade politikasını soruyor. Bilgi tabanına bir iade politikası dokümanı ekleyin."
+          }
+        },
+        "loop": {
+          "toDev": "Düşük güvenli yanıtlar",
+          "toOps": "İyileştirme önerileri"
+        }
+      },
+      "pricing": {
+        "eyebrow": "Fiyatlandırma",
+        "title": "Şeffaf fiyatlandırma, skill'lerle açılan paketler",
+        "description": "Her plan aynı Agent OS üzerinde çalışır. Üst planlar daha fazla skill ve görüşme açar. Fiyatlar bölgenize göre gösterilir.",
+        "popular": "En popüler",
+        "custom": "Özel teklif",
+        "perMonth": "/ ay",
+        "plans": {
+          "starter": {
+            "description": "Tek şube için, bilgi tabanınızdan 7/24 yanıt veren tek bir ajan.",
+            "cta": "Starter'ı seç"
+          },
+          "pro": {
+            "description": "Takvim/randevu skill'i, sınırsız kayıt ve öncelikli destek ekler.",
+            "cta": "Pro'yu seç"
+          },
+          "enterprise": {
+            "description": "Çoklu şube, özel entegrasyonlar ve kendi LLM anahtarlarınız.",
+            "cta": "Satışla görüşün"
+          }
+        },
+        "limits": {
+          "conversations": "Aylık {count} AI müşteri görüşmesi",
+          "conversationsUnlimited": "Sınırsız AI görüşmesi",
+          "records": "{count} canlı randevu / servis kaydı",
+          "recordsUnlimited": "Sınırsız randevu / servis kaydı",
+          "documents": "{count, plural, other {{formatted} bilgi tabanı dokümanı}}",
+          "documentsUnlimited": "Sınırsız bilgi tabanı dokümanı"
+        },
+        "matrixTitle": "Plana göre skill'ler",
+        "matrixHint": "Kilitli bir skill'e tıklayınca neyin onu açtığı kısaca gösterilir.",
+        "skillColumn": "Skill",
+        "includedOn": "{skill}, {tier} planına dahil",
+        "lockedOn": "{skill}, {tier} planında kilitli. Neyin açtığını göster",
+        "upsell": {
+          "title": "{skill}, {tier} ile açılır",
+          "dismiss": "Şimdi değil",
+          "viewPlan": "{tier} planını gör",
+          "talkToSales": "{tier} için satışla görüş"
+        }
+      },
+      "whiteLabel": {
+        "eyebrow": "Dijital ajanslar için",
+        "title": "Sizin markanız, sizin domain'iniz, bizim Agent OS'imiz",
+        "description": "Platformu kendi AI ürününüz olarak satın. Her müşteri, sizin domain'inizde markalı bir çalışma alanı ve sizin kontrol ettiğiniz kotalar alır.",
+        "points": {
+          "domain": {
+            "title": "CNAME ile özel domain",
+            "body": "Tek bir DNS kaydıyla ai.ajansadi.com adresini platforma yönlendirin. Doğrularız, ardından markanız o domain'de yayına girer."
+          },
+          "brand": {
+            "title": "Canlı marka özelleştirme",
+            "body": "Logo, ad ve ana renk müşteri çalışma alanının tamamına uygulanır; okunabilirlik için kontrast denetlenir."
+          },
+          "quota": {
+            "title": "Çok kiracılı müşteri yönetimi",
+            "body": "Müşteri çalışma alanları oluşturun, kota tahsis edin ve yalnızca planınızın izin verdiği skill'leri dağıtın."
+          }
+        },
+        "ctaApply": "Ajans olarak başvur",
+        "ctaPortal": "Ajans portalı girişi",
+        "dns": {
+          "title": "Özel domain",
+          "type": "Tür",
+          "name": "Ad",
+          "value": "Hedef",
+          "status": "Doğrulandı (örnek)",
+          "hint": "Örnek kayıt. Gerçek hedefiniz ajans portalında gösterilir."
+        },
+        "brand": {
+          "nameLabel": "Marka adı",
+          "colorLabel": "Marka rengi",
+          "sampleName": "Ajansınız",
+          "domain": "ai.ajansadi.com",
+          "presets": {
+            "violet": "Mor",
+            "emerald": "Zümrüt",
+            "amber": "Kehribar"
+          }
+        }
+      },
+      "cta": {
+        "title": "Ön büronuza otonom bir ajan koyun",
+        "subtitle": "Çalışma alanınızı oluşturun, dokümanlarınızı yükleyin ve ajanın ilk müşteri sorularını yanıtlamasına izin verin.",
+        "primary": "Ücretsiz başla",
+        "secondary": "Demo randevusu al"
+      },
+      "footer": {
+        "tagline": "Müşteri hizmetleri ve randevular için Agent OS: yanıtlayan otonom bir Ops Crew ve onu sürekli geliştiren bir Dev Crew.",
+        "product": "Ürün",
+        "agencies": "Ajanslar",
+        "account": "Hesap",
+        "links": {
+          "capabilities": "Yetenekler",
+          "pricing": "Fiyatlandırma",
+          "saas": "SaaS",
+          "services": "Hizmetler",
+          "whiteLabel": "White-label",
+          "agencyPortal": "Ajans portalı",
+          "agencyApply": "Ajans başvurusu",
+          "signIn": "Giriş yap",
+          "signUp": "Ücretsiz başla"
+        },
+        "copyright": "© {year} Pasargad. Tüm hakları saklıdır.",
+        "status": {
+          "checking": "Platform durumu kontrol ediliyor…",
+          "online": "Platform çevrimiçi",
+          "unreachable": "Durum alınamadı"
         }
       }
     }

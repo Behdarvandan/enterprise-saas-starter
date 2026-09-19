@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("home page renders", async ({ page }) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /autonomous AI assistant/i }),
+    page.getByRole("heading", { name: /autonomous customer agent/i }),
   ).toBeVisible();
 });
 

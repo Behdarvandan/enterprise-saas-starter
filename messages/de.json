@@ -16,57 +16,12 @@
     }
   },
   "marketing": {
-    "header": {
-      "features": "Funktionen",
-      "howItWorks": "So funktioniert's",
-      "platform": "Plattform",
-      "security": "Sicherheit",
-      "pricing": "Preise",
-      "signIn": "Anmelden",
-      "startTrial": "Kostenlos testen",
-      "services": "Leistungen",
-      "saas": "SaaS"
-    },
-    "footer": {
-      "tagline": "Mandantenfähige Buchungs- und Planungsinfrastruktur mit Zeilenebene-Isolation für jede Organisation.",
-      "productHeading": "Produkt",
-      "accountHeading": "Konto",
-      "systemStatus": "Systemstatus",
-      "copyright": "© {year} Pasargad. Aufgebaut auf PostgreSQL Row-Level Security."
-    },
-    "hero": {
-      "eyebrow": "Mandantenfähige SaaS-Infrastruktur",
-      "title": "Der autonome KI-Assistent, der Anrufaufkommen und Terminaufwand Ihrer Kunden um 80 % senkt.",
-      "subtitle": "KI-Infrastruktur für Werkstätten, Kliniken und Dienstleistungsunternehmen — prüft rund um die Uhr Gerätestatus, nennt Preise und sammelt Termine.",
-      "ctaPrimary": "Preise ansehen",
-      "ctaSecondary": "Demo vereinbaren",
-      "playground": {
-        "kicker": "Live testen",
-        "title": "Sehen Sie, wie der Assistent eine echte Frage beantwortet",
-        "description": "Geben Sie den Namen Ihres Geschäfts ein, klicken Sie auf Testen, und sehen Sie den Assistenten live antworten — angetrieben von derselben Wissensdatenbank-Engine, die jeder Pasargad-Kunde erhält.",
-        "placeholder": "Geben Sie den Namen Ihres Geschäfts ein…",
-        "cta": "Live-Demo testen",
-        "started": "Assistent wird geöffnet…",
-        "sampleQuestion": "Hallo, wie sind Ihre Öffnungszeiten und wie kann ich einen Termin buchen?",
-        "sampleQuestionWithName": "Hallo, ich interessiere mich für {name} — wie sind Ihre Öffnungszeiten und wie kann ich einen Termin buchen?",
-        "widgetTitle": "Live-Demo-Assistent"
-      }
-    },
-    "pricingSection": {
-      "title": "Pläne, die mit Ihrem Buchungsvolumen wachsen.",
-      "subtitle": "Beginnen Sie mit Starter und wechseln Sie, sobald sich der KI-Assistent und der priorisierte Support auszahlen.",
-      "compareLink": "Vollständigen Planvergleich ansehen und Checkout starten"
-    },
     "security": {
       "title": "Für Prüfer, die das Schema vor der Verkaufspräsentation lesen.",
       "controls": {
         "isolation": {
           "label": "Isolationsmodell",
           "detail": "Row Level Security auf jeder Mandantentabelle, kontrolliert über is_org_member(organization_id). Auf Datenbankebene existiert kein mandantenübergreifender Abfragepfad."
-        },
-        "privilegedOps": {
-          "label": "Privilegierte Vorgänge",
-          "detail": "Die Erstellung von Organisationen und die Annahme von Einladungen laufen als SECURITY DEFINER-Funktionen mit explizitem search_path, sodass erweiterte Schreibvorgänge ausschließlich über geprüfte, eng begrenzte Einstiegspunkte erfolgen."
         },
         "serviceRole": {
           "label": "Service-Role-Grenze",
@@ -81,28 +36,6 @@
           "detail": "Läuft als Non-Root-Benutzer in einem mehrstufigen Docker-Build auf Next.js-Standalone-Output, bereitgestellt auf AWS ECS Fargate hinter einem Load Balancer mit dediziertem Health-Check-Endpunkt."
         }
       }
-    },
-    "persona": {
-      "operations": {
-        "role": "Für den Betrieb",
-        "headline": "Niemand bucht einen Termin je wieder doppelt.",
-        "body": "Verfügbarkeit, Leistungen und Termine liegen hinter einem Datenbank-Trigger, der überlappende Buchungen beim Schreiben ablehnt — keine clientseitige Prüfung, die eine Race Condition umgehen könnte."
-      },
-      "security": {
-        "role": "Für IT & Sicherheitsprüfung",
-        "headline": "Mandantentrennung wird in der Datenbank durchgesetzt, nicht in der Anwendungsschicht.",
-        "body": "Jede Tabelle trägt eine organization_id und eine Row-Level-Security-Richtlinie, kontrolliert über is_org_member(). Eine kompromittierte oder fehlerhafte Abfrage kann eine Mandantengrenze nicht überschreiten — Postgres verweigert die Zeile, bevor Ihr Code sie überhaupt sieht."
-      },
-      "finance": {
-        "role": "Für Finanzen & Abrechnung",
-        "headline": "Der Abonnementstatus bleibt automatisch mit Stripe synchron.",
-        "body": "Checkout, Plananpassungen und Kündigungen laufen über signaturgeprüfte Stripe-Webhooks, die direkt in den Abonnementdatensatz jeder Organisation schreiben — kein manueller Abgleich erforderlich."
-      }
-    },
-    "homeCta": {
-      "title": "Richten Sie Ihre erste Organisation ein.",
-      "subtitle": "Kostenloser Start — für den Starter-Plan ist keine Karte erforderlich.",
-      "button": "Kostenlos testen"
     },
     "leadForm": {
       "fullNameLabel": "Vollständiger Name",
@@ -210,38 +143,244 @@
       "stackLabel": "Technologie",
       "notFoundTitle": "Fallstudie nicht gefunden"
     },
-    "socialProof": {
-      "trustBadgesTitle": "Sicherheit und Zuverlässigkeit",
-      "trustBadges": {
-        "dataIsolation": {
-          "title": "Datenisolation",
-          "body": "Die Daten jedes Kunden bleiben ausschließlich in dessen eigenen Datenbankzeilen — kein anderes Konto kann darauf zugreifen."
-        },
-        "securePayments": {
-          "title": "Sichere Zahlungen",
-          "body": "Kartendaten erreichen unsere Server nie; Zahlungen werden direkt über Stripe oder PayTR verarbeitet."
-        },
-        "noDoubleBooking": {
-          "title": "Keine Doppelbuchungen",
-          "body": "Zwei Kunden können niemals denselben Termin erhalten — diese Regel ist auf Datenbankebene garantiert."
+    "landing": {
+      "meta": {
+        "title": "Pasargad — Autonomer Kundenberater & AI Agent OS",
+        "description": "RAG-basiertes Wissensmanagement, Terminbuchung und ein selbstverbessernder Dev Crew — ein autonomer Kundenberater für Ihr Unternehmen, rund um die Uhr."
+      },
+      "nav": {
+        "agentOs": "Agent OS",
+        "capabilities": "Funktionen",
+        "pricing": "Preise",
+        "agency": "Agenturportal",
+        "signIn": "Anmelden",
+        "startFree": "Kostenlos starten",
+        "openMenu": "Menü öffnen",
+        "menuTitle": "Menü",
+        "primaryNav": "Hauptnavigation"
+      },
+      "hero": {
+        "badge": "Agent OS · Ops Crew + Dev Crew",
+        "title": "Der autonome Kundenberater & AI Agent OS für Ihr Unternehmen",
+        "subtitle": "RAG-basiertes Wissensmanagement, Terminverwaltung und autonome Optimierung durch Dev Crew — ein Agent, der antwortet, bucht und immer besser wird.",
+        "ctaPrimary": "Jetzt kostenlos starten",
+        "ctaSecondary": "Demo buchen & Managed Setup",
+        "points": {
+          "rag": "Antworten, die auf Ihren eigenen Dokumenten beruhen",
+          "booking": "Buchungen ohne Doppelbelegung",
+          "devCrew": "Dev Crew schlägt Verbesserungen für schwache Antworten vor"
         }
       },
-      "howWeWorkTitle": "So arbeiten wir",
-      "howWeWork": {
-        "meeting": {
-          "step": "1",
-          "title": "Gespräch",
-          "body": "Gemeinsam klären wir Ihren Bedarf."
+      "playground": {
+        "title": "Live-Agenten-Playground",
+        "agentName": "Pasargad-Agent",
+        "simulated": "Beispielsimulation",
+        "pickPrompt": "Wählen Sie eine Frage, um zu sehen, wie der Agent denkt",
+        "thinking": "Der Agent denkt nach…",
+        "replay": "Wiederholen",
+        "thoughtTitle": "Gedankenstrom",
+        "thoughtEmpty": "Die Entscheidungen des Agenten erscheinen hier.",
+        "disclaimer": "Skriptbasiertes Beispiel. Werte und Ergebnisse sind Beispieldaten, keine Live-Ausgabe eines echten Workspaces.",
+        "thought": {
+          "ragSearch": "suche(„{query}“)",
+          "retrieval": "{chunks, plural, one {{chunks} Abschnitt} other {{chunks} Abschnitte}} abgerufen · höchste Ähnlichkeit {similarity}",
+          "confidencePass": "Wert {score} ≥ Schwelle {threshold} → Antwort aus der Wissensbasis",
+          "confidenceFail": "Wert {score} < Schwelle {threshold} → geringe Sicherheit, Antwort zurückgehalten",
+          "toolCall": "calendar_booking.create(slot: „{slot}“) → bestätigt",
+          "handoff": "für die Prüfung durch Dev Crew markiert → Verbesserungsvorschlag eingereiht"
         },
-        "setup": {
-          "step": "2",
-          "title": "Einrichtung",
-          "body": "Wir errichten das Fundament mit der passenden Architektur."
+        "scenarios": {
+          "pricing": {
+            "label": "Nach dem Preis fragen",
+            "user": "Was kostet ein Displaytausch?",
+            "intent": "Preisfrage",
+            "query": "Displaytausch Preis",
+            "reply": "Ein Displaytausch beginnt bei 89 $ und dauert etwa 45 Minuten. Sie können ohne Termin kommen, oder ich buche Ihnen einen Slot."
+          },
+          "booking": {
+            "label": "Termin buchen",
+            "user": "Kann ich am Donnerstagnachmittag vorbeikommen?",
+            "intent": "Buchungsanfrage · Donnerstagnachmittag",
+            "query": "Öffnungszeiten, Verfügbarkeit",
+            "slot": "Do 14:30",
+            "reply": "Donnerstag um 14:30 ist frei, ich habe ihn für Sie gebucht. Die Bestätigung folgt gleich."
+          },
+          "escalation": {
+            "label": "Etwas Unbekanntes fragen",
+            "user": "Reparieren Sie im Ausland gekaufte Geräte?",
+            "intent": "Frage außerhalb des Wissens",
+            "query": "im Ausland gekaufte Geräte Reparatur",
+            "reply": "Dazu habe ich noch keine verlässlichen Informationen und habe Ihre Frage an das Team weitergegeben. Man meldet sich bei Ihnen."
+          }
+        }
+      },
+      "roi": {
+        "eyebrow": "ROI-Rechner",
+        "title": "So viel spart ein autonomer Agent Ihrem Team",
+        "description": "Bewegen Sie die Regler. Die Schätzung aktualisiert sich sofort anhand der unten aufgeführten Annahmen.",
+        "volumeLabel": "Monatliche Kunden- / Buchungsanfragen",
+        "agentsLabel": "Aktuelle Support-Mitarbeitende",
+        "cta": "Kostenlos starten",
+        "hoursLabel": "Eingesparte Teamstunden / Monat",
+        "hoursNote": "Angenommen, der Agent löst {rate} der Gespräche selbstständig.",
+        "responseLabel": "Schnellere erste Antwort",
+        "responseNote": "Erste Antwort in {agent} s statt {human} Min. (Modellannahme).",
+        "netLabel": "Monatliche Nettoersparnis (USD)",
+        "netGrossNote": "Vor Plattformkosten: Für dieses Volumen ist ein Enterprise-Angebot nötig.",
+        "netWithPlanNote": "Nach Abzug des Plans für {cost} / Monat, der dieses Volumen abdeckt.",
+        "assumptionsTitle": "So rechnen wir",
+        "assumptions": {
+          "handle": "Bearbeitungszeit durch Menschen: {minutes} Min. pro Gespräch",
+          "automation": "Vom Agenten gelöste Gespräche: {rate}",
+          "hourly": "Vollkosten einer Supportstunde: {cost}",
+          "capacity": "Ersparnis ist auf die bezahlten Stunden Ihres Teams begrenzt ({hours} Std. pro Person / Monat)",
+          "humanResponse": "Erste Antwort durch Menschen: {minutes} Min.",
+          "agentResponse": "Erste Antwort durch den Agenten: {seconds} s"
         },
-        "delivery": {
-          "step": "3",
-          "title": "Übergabe",
-          "body": "Wir übergeben Ihnen ein funktionierendes System — mit Sorgfalt."
+        "disclaimer": "Beispielhafte Schätzung auf Basis der obigen Annahmen. Keine Messung und keine Garantie."
+      },
+      "crew": {
+        "eyebrow": "Agent-OS-Architektur",
+        "title": "Zwei Crews, ein selbstverbessernder Kreislauf",
+        "description": "Die Ops Crew betreut Ihre Kunden rund um die Uhr. Die Dev Crew beobachtet jede unsichere Antwort und sagt Ihnen, wie Sie sie verbessern.",
+        "ops": {
+          "title": "Ops Crew",
+          "tag": "24/7 live",
+          "description": "Der kundennahe Agent: Er antwortet aus Ihrer Wissensbasis und schließt Buchungen ab.",
+          "points": {
+            "always": "Kundenbegrüßung rund um die Uhr in jeder aktivierten Sprache",
+            "rag": "RAG-Suche in Ihren eigenen Dokumenten, nur belegte Antworten",
+            "booking": "Konfliktfreie Buchung: Die Datenbank lehnt überlappende Termine ab"
+          }
+        },
+        "dev": {
+          "title": "Dev Crew",
+          "tag": "Hintergrund-Telemetrie",
+          "description": "Eine Hintergrund-Engine, die die Gespräche der Ops Crew nachträglich liest und Verbesserungen sucht.",
+          "points": {
+            "scan": "Durchsucht unsichere und unbeantwortete Fragen",
+            "recommend": "Schlägt konkrete Verbesserungen für Wissensbasis und Prompts vor",
+            "loop": "Empfehlungen erscheinen in Ihrem Crew-Insights-Feed"
+          },
+          "sample": {
+            "label": "Beispiel-Insight",
+            "count": "×4",
+            "recommendation": "Kunden fragen immer wieder nach der Rückerstattung. Fügen Sie der Wissensbasis ein Dokument zur Rückerstattungsrichtlinie hinzu."
+          }
+        },
+        "loop": {
+          "toDev": "Unsichere Antworten",
+          "toOps": "Verbesserungsvorschläge"
+        }
+      },
+      "pricing": {
+        "eyebrow": "Preise",
+        "title": "Transparente Preise, freigeschaltet durch Skills",
+        "description": "Jeder Plan nutzt dasselbe Agent OS. Höhere Pläne schalten mehr Skills und Gespräche frei. Die Preise gelten für Ihre Region.",
+        "popular": "Am beliebtesten",
+        "custom": "Individuelles Angebot",
+        "perMonth": "/ Monat",
+        "plans": {
+          "starter": {
+            "description": "Ein Agent für einen Standort, der rund um die Uhr aus Ihrer Wissensbasis antwortet.",
+            "cta": "Starter wählen"
+          },
+          "pro": {
+            "description": "Ergänzt den Kalender-Skill, unbegrenzte Datensätze und bevorzugten Support.",
+            "cta": "Pro wählen"
+          },
+          "enterprise": {
+            "description": "Mehrere Standorte, individuelle Integrationen und eigene LLM-Schlüssel.",
+            "cta": "Vertrieb kontaktieren"
+          }
+        },
+        "limits": {
+          "conversations": "{count} KI-Gespräche / Monat",
+          "conversationsUnlimited": "Unbegrenzte KI-Gespräche",
+          "records": "{count} aktive Buchungs- / Service-Datensätze",
+          "recordsUnlimited": "Unbegrenzte Buchungs- / Service-Datensätze",
+          "documents": "{count, plural, one {{formatted} Wissensbasis-Dokument} other {{formatted} Wissensbasis-Dokumente}}",
+          "documentsUnlimited": "Unbegrenzte Wissensbasis-Dokumente"
+        },
+        "matrixTitle": "Skills nach Plan",
+        "matrixHint": "Ein gesperrter Skill zeigt kurz, was ihn freischaltet.",
+        "skillColumn": "Skill",
+        "includedOn": "{skill} ist in {tier} enthalten",
+        "lockedOn": "{skill} ist in {tier} gesperrt. Zeigen, was es freischaltet",
+        "upsell": {
+          "title": "{skill} wird mit {tier} freigeschaltet",
+          "dismiss": "Nicht jetzt",
+          "viewPlan": "{tier}-Plan ansehen",
+          "talkToSales": "Vertrieb zu {tier} kontaktieren"
+        }
+      },
+      "whiteLabel": {
+        "eyebrow": "Für Digitalagenturen",
+        "title": "Ihre Marke, Ihre Domain, unser Agent OS",
+        "description": "Vertreiben Sie die Plattform als Ihr eigenes KI-Produkt. Jeder Kunde erhält einen Workspace mit Ihrer Marke auf Ihrer Domain, mit Kontingenten unter Ihrer Kontrolle.",
+        "points": {
+          "domain": {
+            "title": "Eigene Domain per CNAME",
+            "body": "Richten Sie ai.ihreagentur.com mit einem DNS-Eintrag auf die Plattform. Wir prüfen ihn, danach geht Ihre Marke auf dieser Domain live."
+          },
+          "brand": {
+            "title": "Live-Markenanpassung",
+            "body": "Logo, Name und Primärfarbe gelten im gesamten Kunden-Workspace, der Kontrast wird auf Lesbarkeit geprüft."
+          },
+          "quota": {
+            "title": "Mandantenfähige Kundenverwaltung",
+            "body": "Legen Sie Kunden-Workspaces an, teilen Sie Kontingente zu und vergeben Sie nur die Skills, die Ihr Plan erlaubt."
+          }
+        },
+        "ctaApply": "Als Agentur bewerben",
+        "ctaPortal": "Anmeldung zum Agenturportal",
+        "dns": {
+          "title": "Eigene Domain",
+          "type": "Typ",
+          "name": "Name",
+          "value": "Ziel",
+          "status": "Verifiziert (Beispiel)",
+          "hint": "Beispieleintrag. Ihr echtes Ziel sehen Sie im Agenturportal."
+        },
+        "brand": {
+          "nameLabel": "Markenname",
+          "colorLabel": "Markenfarbe",
+          "sampleName": "Ihre Agentur",
+          "domain": "ai.ihreagentur.com",
+          "presets": {
+            "violet": "Violett",
+            "emerald": "Smaragd",
+            "amber": "Bernstein"
+          }
+        }
+      },
+      "cta": {
+        "title": "Setzen Sie einen autonomen Agenten an Ihre Rezeption",
+        "subtitle": "Legen Sie Ihren Workspace an, laden Sie Ihre Dokumente hoch und lassen Sie den Agenten die ersten Kundenfragen beantworten.",
+        "primary": "Kostenlos starten",
+        "secondary": "Demo buchen"
+      },
+      "footer": {
+        "tagline": "Das Agent OS für Kundenservice und Buchungen: eine autonome Ops Crew, die antwortet, und eine Dev Crew, die sie laufend verbessert.",
+        "product": "Produkt",
+        "agencies": "Agenturen",
+        "account": "Konto",
+        "links": {
+          "capabilities": "Funktionen",
+          "pricing": "Preise",
+          "saas": "SaaS",
+          "services": "Leistungen",
+          "whiteLabel": "White-Label",
+          "agencyPortal": "Agenturportal",
+          "agencyApply": "Als Agentur bewerben",
+          "signIn": "Anmelden",
+          "signUp": "Kostenlos starten"
+        },
+        "copyright": "© {year} Pasargad. Alle Rechte vorbehalten.",
+        "status": {
+          "checking": "Plattformstatus wird geprüft…",
+          "online": "Plattform online",
+          "unreachable": "Status nicht verfügbar"
         }
       }
     }

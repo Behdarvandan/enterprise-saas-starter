@@ -13,6 +13,8 @@ const buttonVariants = cva(
         // Violet CTA — the only element in the system that carries the violet-950 shadow.
         default:
           "bg-primary text-primary-foreground shadow-lg shadow-violet-950/50 hover:bg-primary-hover",
+        // Landing-page primary CTA: same fill, violet glow instead of the drop shadow.
+        glow: "bg-primary text-primary-foreground shadow-[0_0_25px_rgba(124,58,237,0.25)] hover:bg-primary-hover hover:shadow-[0_0_32px_rgba(124,58,237,0.4)]",
         secondary:
           "border border-slate-800 bg-slate-900/50 text-slate-100 backdrop-blur-md hover:border-slate-700 hover:bg-slate-800/70",
         ghost: "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100",

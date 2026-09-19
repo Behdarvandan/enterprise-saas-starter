@@ -214,12 +214,31 @@ export function resolvePlanTier(planId: string | null | undefined): PlanTier {
 }
 
 /**
- * Knowledge-base documents each tier advertises (see the plan feature lists
- * above; Enterprise has no stated cap). Display-only for now — the ingest
- * route does not enforce it.
+ * Quotas each tier advertises (mirrors the plan feature lists above; `null`
+ * means no stated cap). Structured so the landing page can localise the copy
+ * instead of parsing the display strings.
+ */
+export interface PlanLimits {
+  /** AI customer conversations per month. */
+  conversations: number | null;
+  /** Live booking/service records. */
+  records: number | null;
+  /** Knowledge-base documents. */
+  documents: number | null;
+}
+
+export const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
+  starter: { conversations: 500, records: 100, documents: 1 },
+  pro: { conversations: 3_000, records: null, documents: 5 },
+  enterprise: { conversations: null, records: null, documents: null },
+};
+
+/**
+ * Knowledge-base documents each tier advertises. Display-only for now — the
+ * ingest route does not enforce it.
  */
 export const KNOWLEDGE_BASE_DOCUMENT_LIMITS: Record<PlanTier, number | null> = {
-  starter: 1,
-  pro: 5,
-  enterprise: null,
+  starter: PLAN_LIMITS.starter.documents,
+  pro: PLAN_LIMITS.pro.documents,
+  enterprise: PLAN_LIMITS.enterprise.documents,
 };

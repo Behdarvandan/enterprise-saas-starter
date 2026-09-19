@@ -16,57 +16,12 @@
     }
   },
   "marketing": {
-    "header": {
-      "features": "Features",
-      "howItWorks": "How it works",
-      "platform": "Platform",
-      "security": "Security",
-      "pricing": "Pricing",
-      "signIn": "Sign in",
-      "startTrial": "Start free trial",
-      "services": "Services",
-      "saas": "SaaS"
-    },
-    "footer": {
-      "tagline": "Multi-tenant booking and scheduling infrastructure with row-level isolation for every organization.",
-      "productHeading": "Product",
-      "accountHeading": "Account",
-      "systemStatus": "System status",
-      "copyright": "© {year} Pasargad. Built on PostgreSQL row-level security."
-    },
-    "hero": {
-      "eyebrow": "Multi-tenant SaaS infrastructure",
-      "title": "The autonomous AI assistant that cuts your customers' call volume and booking overhead by 80%.",
-      "subtitle": "AI infrastructure for repair shops, clinics, and service businesses — checking device status, quoting prices, and collecting bookings around the clock.",
-      "ctaPrimary": "View pricing",
-      "ctaSecondary": "Book a demo",
-      "playground": {
-        "kicker": "Try it live",
-        "title": "See the assistant answer a real question",
-        "description": "Type your shop's name, hit try, and watch the assistant respond live — powered by the same knowledge-base engine every Pasargad tenant gets.",
-        "placeholder": "Enter your shop's name…",
-        "cta": "Try live demo",
-        "started": "Opening the assistant…",
-        "sampleQuestion": "Hi, what are your opening hours and how do I book an appointment?",
-        "sampleQuestionWithName": "Hi, I'm looking into {name} — what are your opening hours and how do I book an appointment?",
-        "widgetTitle": "Live demo assistant"
-      }
-    },
-    "pricingSection": {
-      "title": "Plans that scale with your booking volume.",
-      "subtitle": "Start on Starter, upgrade when the AI assistant and priority support earn their keep.",
-      "compareLink": "See full plan comparison and start checkout"
-    },
     "security": {
       "title": "For the reviewer who reads the schema before the sales deck.",
       "controls": {
         "isolation": {
           "label": "Isolation model",
           "detail": "Row Level Security on every tenant table, scoped via is_org_member(organization_id). No cross-tenant query path exists at the database layer."
-        },
-        "privilegedOps": {
-          "label": "Privileged operations",
-          "detail": "Org creation and invitation acceptance run as SECURITY DEFINER functions with an explicit search_path, so elevated writes happen only through audited, narrow entry points."
         },
         "serviceRole": {
           "label": "Service-role boundary",
@@ -81,28 +36,6 @@
           "detail": "Runs as a non-root user in a multi-stage Docker build on Next.js standalone output, deployed to AWS ECS Fargate behind a load balancer with a dedicated health-check endpoint."
         }
       }
-    },
-    "persona": {
-      "operations": {
-        "role": "For operations",
-        "headline": "Nobody double-books a slot again.",
-        "body": "Availability, services, and appointments live behind a database trigger that rejects overlapping bookings at write time — not a client-side check that a race condition can slip past."
-      },
-      "security": {
-        "role": "For IT & security review",
-        "headline": "Tenant isolation enforced in the database, not the app layer.",
-        "body": "Every table carries an organization_id and a Row Level Security policy scoped through is_org_member(). A compromised or buggy query can't cross a tenant boundary — Postgres refuses the row before your code ever sees it."
-      },
-      "finance": {
-        "role": "For finance & billing",
-        "headline": "Subscription state stays in sync with Stripe, automatically.",
-        "body": "Checkout, plan changes, and cancellations flow through signature-verified Stripe webhooks that write directly to each organization's subscription record — no manual reconciliation."
-      }
-    },
-    "homeCta": {
-      "title": "Set up your first organization in minutes.",
-      "subtitle": "Free to start — no card required for the Starter plan.",
-      "button": "Start free trial"
     },
     "leadForm": {
       "fullNameLabel": "Full name",
@@ -210,38 +143,244 @@
       "stackLabel": "Stack",
       "notFoundTitle": "Case study not found"
     },
-    "socialProof": {
-      "trustBadgesTitle": "Security and reliability",
-      "trustBadges": {
-        "dataIsolation": {
-          "title": "Data isolation",
-          "body": "Every customer's data stays locked to its own database rows — no other account can reach it."
-        },
-        "securePayments": {
-          "title": "Secure payments",
-          "body": "Card details never touch our servers; payments are processed directly through Stripe or PayTR."
-        },
-        "noDoubleBooking": {
-          "title": "No double-bookings",
-          "body": "Two customers can never take the same slot — that rule is guaranteed at the database level."
+    "landing": {
+      "meta": {
+        "title": "Pasargad — Autonomous customer agent & AI Agent OS",
+        "description": "RAG-based knowledge management, appointment booking and a self-improving Dev Crew — an autonomous customer agent for your business, available around the clock."
+      },
+      "nav": {
+        "agentOs": "Agent OS",
+        "capabilities": "Capabilities",
+        "pricing": "Pricing",
+        "agency": "Agency portal",
+        "signIn": "Sign in",
+        "startFree": "Get started free",
+        "openMenu": "Open menu",
+        "menuTitle": "Menu",
+        "primaryNav": "Main navigation"
+      },
+      "hero": {
+        "badge": "Agent OS · Ops Crew + Dev Crew",
+        "title": "The autonomous customer agent & AI Agent OS for your business",
+        "subtitle": "RAG-based knowledge management, appointment tracking and autonomous Dev Crew optimization — one agent that answers, books and keeps getting better.",
+        "ctaPrimary": "Get started free",
+        "ctaSecondary": "Book a demo & managed setup",
+        "points": {
+          "rag": "Answers grounded in your own documents",
+          "booking": "Bookings closed without double-booking",
+          "devCrew": "Dev Crew proposes fixes for weak answers"
         }
       },
-      "howWeWorkTitle": "How we work",
-      "howWeWork": {
-        "meeting": {
-          "step": "1",
-          "title": "Consultation",
-          "body": "We clarify what you need, together."
+      "playground": {
+        "title": "Live agent playground",
+        "agentName": "Pasargad agent",
+        "simulated": "Sample simulation",
+        "pickPrompt": "Pick a question to see how the agent thinks",
+        "thinking": "The agent is thinking…",
+        "replay": "Replay",
+        "thoughtTitle": "Thought stream",
+        "thoughtEmpty": "The agent's decisions will appear here.",
+        "disclaimer": "Scripted example. The scores and results are sample data, not live output from a real workspace.",
+        "thought": {
+          "ragSearch": "search(“{query}”)",
+          "retrieval": "{chunks, plural, one {{chunks} chunk} other {{chunks} chunks}} retrieved · top similarity {similarity}",
+          "confidencePass": "score {score} ≥ threshold {threshold} → answering from the knowledge base",
+          "confidenceFail": "score {score} < threshold {threshold} → low confidence, answer withheld",
+          "toolCall": "calendar_booking.create(slot: “{slot}”) → confirmed",
+          "handoff": "flagged for Dev Crew review → improvement recommendation queued"
         },
-        "setup": {
-          "step": "2",
-          "title": "Setup",
-          "body": "We build the foundation with the right architecture."
+        "scenarios": {
+          "pricing": {
+            "label": "Ask about pricing",
+            "user": "How much does a screen replacement cost?",
+            "intent": "price question",
+            "query": "screen replacement price",
+            "reply": "A screen replacement starts at $89 and takes about 45 minutes. Walk-ins are welcome, or I can book you a slot."
+          },
+          "booking": {
+            "label": "Book an appointment",
+            "user": "Can I come in on Thursday afternoon?",
+            "intent": "booking request · Thursday afternoon",
+            "query": "opening hours, availability",
+            "slot": "Thu 14:30",
+            "reply": "Thursday at 14:30 is free, so I have booked it for you. A confirmation is on its way."
+          },
+          "escalation": {
+            "label": "Ask something unknown",
+            "user": "Do you repair devices bought abroad?",
+            "intent": "out-of-scope question",
+            "query": "devices bought abroad repair",
+            "reply": "I do not have reliable information on that yet, so I have passed your question to the team. Someone will get back to you."
+          }
+        }
+      },
+      "roi": {
+        "eyebrow": "ROI calculator",
+        "title": "See what an autonomous agent saves your team",
+        "description": "Move the sliders. The estimate updates instantly from the assumptions listed below the calculator.",
+        "volumeLabel": "Monthly customer / booking requests",
+        "agentsLabel": "Current support staff",
+        "cta": "Start free",
+        "hoursLabel": "Team hours saved / month",
+        "hoursNote": "Assumes the agent resolves {rate} of conversations on its own.",
+        "responseLabel": "Faster first response",
+        "responseNote": "First reply in {agent} s instead of {human} min (model assumption).",
+        "netLabel": "Net monthly savings (USD)",
+        "netGrossNote": "Before platform fees: this volume needs an Enterprise quote.",
+        "netWithPlanNote": "After the {cost} / month plan that covers this volume.",
+        "assumptionsTitle": "How we calculate this",
+        "assumptions": {
+          "handle": "Human handling time: {minutes} min per conversation",
+          "automation": "Conversations resolved by the agent: {rate}",
+          "hourly": "Loaded cost of a support hour: {cost}",
+          "capacity": "Savings capped at your team's paid hours ({hours} h per person / month)",
+          "humanResponse": "Human first response: {minutes} min",
+          "agentResponse": "Agent first response: {seconds} s"
         },
-        "delivery": {
-          "step": "3",
-          "title": "Delivery",
-          "body": "We hand off a working system, with care."
+        "disclaimer": "Illustrative estimate based on the assumptions above. It is not a measurement or a guarantee."
+      },
+      "crew": {
+        "eyebrow": "Agent OS architecture",
+        "title": "Two crews, one self-improving loop",
+        "description": "The Ops Crew serves your customers around the clock. The Dev Crew watches every low-confidence answer and tells you how to fix it.",
+        "ops": {
+          "title": "Ops Crew",
+          "tag": "Live 24/7",
+          "description": "The customer-facing agent: it answers from your knowledge base and closes bookings.",
+          "points": {
+            "always": "24/7 customer greeting in every language you enable",
+            "rag": "RAG search over your own documents, grounded answers only",
+            "booking": "Conflict-free booking: the database rejects overlapping appointments"
+          }
+        },
+        "dev": {
+          "title": "Dev Crew",
+          "tag": "Background telemetry",
+          "description": "A background engine that reads the Ops Crew's conversations after the fact and looks for what to improve.",
+          "points": {
+            "scan": "Scans low-confidence and unanswered questions",
+            "recommend": "Proposes concrete knowledge-base and prompt improvements",
+            "loop": "Recommendations appear in your Crew Insights feed"
+          },
+          "sample": {
+            "label": "Sample insight",
+            "count": "×4",
+            "recommendation": "Customers keep asking about the refund policy. Add a refund-policy document to the knowledge base."
+          }
+        },
+        "loop": {
+          "toDev": "Low-confidence answers",
+          "toOps": "Improvement recommendations"
+        }
+      },
+      "pricing": {
+        "eyebrow": "Pricing",
+        "title": "Transparent pricing, unlocked by skills",
+        "description": "Every plan runs the same Agent OS. Higher plans unlock more skills and more conversations. Prices are shown for your region.",
+        "popular": "Most popular",
+        "custom": "Custom quote",
+        "perMonth": "/ month",
+        "plans": {
+          "starter": {
+            "description": "One agent for a single location, answering from your knowledge base around the clock.",
+            "cta": "Choose Starter"
+          },
+          "pro": {
+            "description": "Adds the calendar booking skill, unlimited records and priority support.",
+            "cta": "Choose Pro"
+          },
+          "enterprise": {
+            "description": "Multiple locations, custom integrations and your own LLM keys.",
+            "cta": "Talk to sales"
+          }
+        },
+        "limits": {
+          "conversations": "{count} AI conversations / month",
+          "conversationsUnlimited": "Unlimited AI conversations",
+          "records": "{count} live booking / service records",
+          "recordsUnlimited": "Unlimited booking / service records",
+          "documents": "{count, plural, one {{formatted} knowledge-base document} other {{formatted} knowledge-base documents}}",
+          "documentsUnlimited": "Unlimited knowledge-base documents"
+        },
+        "matrixTitle": "Skills by plan",
+        "matrixHint": "Locked skills open a short explanation of what unlocks them.",
+        "skillColumn": "Skill",
+        "includedOn": "{skill} is included in {tier}",
+        "lockedOn": "{skill} is locked on {tier}. Show what unlocks it",
+        "upsell": {
+          "title": "{skill} unlocks with {tier}",
+          "dismiss": "Not now",
+          "viewPlan": "See the {tier} plan",
+          "talkToSales": "Talk to sales about {tier}"
+        }
+      },
+      "whiteLabel": {
+        "eyebrow": "For digital agencies",
+        "title": "Your brand, your domain, our Agent OS",
+        "description": "Resell the platform as your own AI product. Each client gets a branded workspace on your domain, with usage quotas you control.",
+        "points": {
+          "domain": {
+            "title": "Custom domain via CNAME",
+            "body": "Point ai.youragency.com at the platform with one DNS record. We verify it, then your branding goes live on that domain."
+          },
+          "brand": {
+            "title": "Live brand customization",
+            "body": "Logo, name and primary colour apply across the client workspace, with contrast checked for readability."
+          },
+          "quota": {
+            "title": "Multi-tenant client management",
+            "body": "Create client workspaces, allocate quotas and hand out only the skills your plan allows."
+          }
+        },
+        "ctaApply": "Apply as an agency",
+        "ctaPortal": "Agency portal sign-in",
+        "dns": {
+          "title": "Custom domain",
+          "type": "Type",
+          "name": "Name",
+          "value": "Target",
+          "status": "Verified (example)",
+          "hint": "Example record. Your real target is shown in the agency portal."
+        },
+        "brand": {
+          "nameLabel": "Brand name",
+          "colorLabel": "Brand colour",
+          "sampleName": "Your Agency",
+          "domain": "ai.youragency.com",
+          "presets": {
+            "violet": "Violet",
+            "emerald": "Emerald",
+            "amber": "Amber"
+          }
+        }
+      },
+      "cta": {
+        "title": "Put an autonomous agent on your front desk",
+        "subtitle": "Create your workspace, upload your documents and let the agent take its first customer questions.",
+        "primary": "Get started free",
+        "secondary": "Book a demo"
+      },
+      "footer": {
+        "tagline": "The Agent OS for customer service and bookings: an autonomous Ops Crew that answers, and a Dev Crew that keeps improving it.",
+        "product": "Product",
+        "agencies": "Agencies",
+        "account": "Account",
+        "links": {
+          "capabilities": "Capabilities",
+          "pricing": "Pricing",
+          "saas": "SaaS",
+          "services": "Services",
+          "whiteLabel": "White-label",
+          "agencyPortal": "Agency portal",
+          "agencyApply": "Apply as an agency",
+          "signIn": "Sign in",
+          "signUp": "Get started free"
+        },
+        "copyright": "© {year} Pasargad. All rights reserved.",
+        "status": {
+          "checking": "Checking platform status…",
+          "online": "Platform online",
+          "unreachable": "Status unavailable"
         }
       }
     }
