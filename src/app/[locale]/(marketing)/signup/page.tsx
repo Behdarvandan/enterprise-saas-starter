@@ -7,6 +7,7 @@ import { UserPlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Card } from "@/core/ui/primitives/card";
 import { Button } from "@/core/ui/primitives/button";
+import { OAuthButtons } from "@/modules/auth";
 
 export default function SignUpPage() {
   const t = useTranslations("auth.signup");
@@ -140,6 +141,10 @@ export default function SignUpPage() {
             {loading ? t("creatingAccount") : t("createAccountButton")}
           </Button>
         </form>
+
+        <div className="mt-6">
+          <OAuthButtons />
+        </div>
 
         <p className="mt-6 text-center text-sm text-ink-muted">
           {t("alreadyHaveAccount")}{" "}

@@ -7,6 +7,7 @@ import { LogIn } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Card } from "@/core/ui/primitives/card";
 import { Button } from "@/core/ui/primitives/button";
+import { OAuthButtons } from "@/modules/auth";
 
 export default function LoginPage() {
   const t = useTranslations("auth.login");
@@ -106,6 +107,10 @@ export default function LoginPage() {
             </Link>
           </p>
         </form>
+
+        <div className="mt-6">
+          <OAuthButtons />
+        </div>
 
         <p className="mt-6 text-center text-sm text-ink-muted">
           {t("noAccount")}{" "}

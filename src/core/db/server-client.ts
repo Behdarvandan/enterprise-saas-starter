@@ -1,4 +1,4 @@
-import { createBrowserClient, createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { unstable_rethrow } from "next/navigation";
 import type { GenericDatabase } from "@/core/db/types";
@@ -41,7 +41,9 @@ function getCoreSupabaseEnv(): { url: string; anonKey: string } {
 /**
  * Supabase client for Server Components, Server Actions, and Route
  * Handlers, cookie-wired to Next.js `cookies()`. If request cookies can't be
- * read, the client is built signed-out rather than failing the render.
+ * read, the client is built signed-out rather than failing the render. Kept
+ * in its own file, separate from `createCoreBrowserClient` — this file's
+ * `next/headers` import must never be reachable from a client bundle.
  */
 export async function createCoreServerClient<TDatabase = GenericDatabase>() {
   const { url, anonKey } = getCoreSupabaseEnv();
@@ -68,10 +70,4 @@ export async function createCoreServerClient<TDatabase = GenericDatabase>() {
       },
     },
   });
-}
-
-/** Supabase client for Client Components (browser). */
-export function createCoreBrowserClient<TDatabase = GenericDatabase>() {
-  const { url, anonKey } = getCoreSupabaseEnv();
-  return createBrowserClient<TDatabase>(url, anonKey);
 }
