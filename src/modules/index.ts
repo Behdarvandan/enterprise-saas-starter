@@ -10,6 +10,6 @@ export function registerModules(): void {
   moduleRegistry.register(demoManifest);
 
   for (const contribution of demoManifest.slots ?? []) {
-    registerSlotContribution(contribution.slotId, contribution.component);
+    registerSlotContribution(contribution.slotId, contribution.component, demoManifest.id);
   }
 }

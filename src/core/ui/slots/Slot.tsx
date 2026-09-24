@@ -1,4 +1,5 @@
-import { Fragment, type ReactNode } from "react";
+import type { ReactNode } from "react";
+import type { FeatureFlagMap } from "@/core/registry";
 import { getContributions, type SlotId } from "@/core/ui/slots/SlotRegistry";
 
 interface SlotProps {
@@ -6,17 +7,19 @@ interface SlotProps {
   id: SlotId;
   /** Rendered when nothing is registered for this slot. */
   fallback?: ReactNode;
+  /** Runtime feature flags used to filter out contributions from disabled modules. */
+  activeFlags?: FeatureFlagMap;
 }
 
 /** Renders every contribution currently registered for `id` via `SlotRegistry`. */
-export default function Slot({ id, fallback = null }: SlotProps) {
-  const items = getContributions<ReactNode>(id);
-  if (items.length === 0) return <>{fallback}</>;
+export default function Slot({ id, fallback = null, activeFlags }: SlotProps) {
+  const components = getContributions(id, activeFlags);
+  if (components.length === 0) return <>{fallback}</>;
 
   return (
     <>
-      {items.map((item, index) => (
-        <Fragment key={index}>{item}</Fragment>
+      {components.map((Component, index) => (
+        <Component key={index} />
       ))}
     </>
   );
