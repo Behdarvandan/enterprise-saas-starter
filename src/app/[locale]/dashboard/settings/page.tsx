@@ -2,6 +2,7 @@ import { Building2, ChevronRight, User } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import { Card } from "@/core/ui/primitives/card";
+import { SHELL_SLOTS, Slot } from "@/core/ui/slots";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 
@@ -43,6 +44,10 @@ export default async function SettingsPage() {
             </Card>
           </Link>
         ))}
+      </div>
+
+      <div className="mt-6 space-y-4">
+        <Slot id={SHELL_SLOTS.SETTINGS_TAB} />
       </div>
     </PageContainer>
   );
