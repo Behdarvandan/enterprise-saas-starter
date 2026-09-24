@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import Logo from "@/components/layout/Logo";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import LiveDot from "@/components/ui/LiveDot";
 import {
   Sheet,
@@ -14,7 +14,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/core/ui/primitives/sheet";
 import { Link } from "@/i18n/navigation";
 
 export interface MarketingNavLink {

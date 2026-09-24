@@ -2,7 +2,7 @@ import { Receipt } from "lucide-react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import Badge, { type BadgeTone } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import MetricCard from "@/components/ui/MetricCard";
 import {
@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/core/ui/primitives/table";
 import { formatMoney } from "@/lib/format";
 import { requireOperatorAdmin } from "@/lib/operator";
 import type { ClientInvoice } from "@/types";

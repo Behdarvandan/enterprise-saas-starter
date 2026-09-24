@@ -1,4 +1,4 @@
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "@/core/ui/primitives/progress";
 import { NEAR_LIMIT_PERCENT } from "@/lib/agency/usage";
 
 interface QuotaMeterProps {

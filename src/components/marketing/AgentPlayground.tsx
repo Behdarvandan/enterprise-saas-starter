@@ -6,7 +6,7 @@ import { useEffect, useId, useState } from "react";
 import GlassPanel from "@/components/marketing/GlassPanel";
 import ThoughtStream from "@/components/marketing/ThoughtStream";
 import { useScenarioRun } from "@/components/marketing/useScenarioRun";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import LiveDot from "@/components/ui/LiveDot";
 import { SCENARIO_IDS, type ScenarioId } from "@/lib/marketing/scenarios";
 import { cn } from "@/lib/utils";

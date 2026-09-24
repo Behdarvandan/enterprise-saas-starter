@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useId, useState, useTransition, type FormEvent } from "react";
 import { allocateQuota } from "@/app/[locale]/agency/tenants/actions";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import {
   Dialog,
   DialogContent,
@@ -11,10 +11,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/core/ui/primitives/dialog";
 import FormStatus from "@/components/ui/FormStatus";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/core/ui/primitives/input";
+import { Label } from "@/core/ui/primitives/label";
 import { useRouter } from "@/i18n/navigation";
 import { formatTokens } from "@/lib/agency/format";
 import { toast } from "@/lib/toast";

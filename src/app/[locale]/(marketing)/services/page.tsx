@@ -1,7 +1,7 @@
 import { Check, Code2, CreditCard, ShieldCheck, Sparkles } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import LeadForm from "../_components/LeadForm";
 import { getPortfolioItems } from "@/lib/portfolio";
 

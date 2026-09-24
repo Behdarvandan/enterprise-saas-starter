@@ -2,7 +2,7 @@ import { Link } from "@/i18n/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { getAppointmentDetails } from "@/lib/booking";
 import { formatAppointmentDate, formatAppointmentTime } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 
 interface SuccessPageProps {
   searchParams: Promise<{ appointment_id?: string; organization_id?: string }>;

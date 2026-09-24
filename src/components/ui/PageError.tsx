@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import * as Sentry from "@sentry/nextjs";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 
 /**
  * Shared segment-level error boundary UI for `error.tsx` files. Each

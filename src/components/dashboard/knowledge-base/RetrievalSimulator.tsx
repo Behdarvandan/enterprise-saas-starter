@@ -3,10 +3,10 @@
 import { Search } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
+import { Button } from "@/core/ui/primitives/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/core/ui/primitives/card";
+import { Input } from "@/core/ui/primitives/input";
+import { Progress } from "@/core/ui/primitives/progress";
 import { formatMetricPercent } from "@/lib/format";
 import { RagApiError, searchKnowledgeBase } from "@/lib/rag/client";
 import type { RagSearchHit } from "@/types";

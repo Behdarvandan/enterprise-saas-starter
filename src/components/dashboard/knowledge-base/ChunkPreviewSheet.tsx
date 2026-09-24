@@ -2,15 +2,15 @@
 
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@/core/ui/primitives/sheet";
+import { Skeleton } from "@/core/ui/primitives/skeleton";
 import { fetchChunks, RagApiError } from "@/lib/rag/client";
 import type { DocumentListItem, IngestChunk } from "@/types";
 

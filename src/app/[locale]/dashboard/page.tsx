@@ -6,12 +6,12 @@ import LatestCrewAlert from "@/components/dashboard/LatestCrewAlert";
 import OnboardingChecklist from "@/components/dashboard/OnboardingChecklist";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import Badge, { type BadgeTone } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/core/ui/primitives/button";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import LiveRefresh from "@/components/ui/LiveRefresh";
 import MetricCard from "@/components/ui/MetricCard";
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "@/core/ui/primitives/progress";
 import {
   Table,
   TableBody,
@@ -19,8 +19,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Tooltip } from "@/components/ui/tooltip";
+} from "@/core/ui/primitives/table";
+import { Tooltip } from "@/core/ui/primitives/tooltip";
 import { Link } from "@/i18n/navigation";
 import { requireMembership } from "@/lib/auth";
 import { getOverviewMetrics, getOrganizationSnapshot } from "@/lib/dashboard/queries";

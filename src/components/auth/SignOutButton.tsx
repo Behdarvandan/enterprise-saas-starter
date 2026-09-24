@@ -3,7 +3,7 @@
 import { LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import { useRouter } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
 

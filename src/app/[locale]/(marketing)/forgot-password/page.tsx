@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { KeyRound } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card } from "@/core/ui/primitives/card";
+import { Button } from "@/core/ui/primitives/button";
 import { requestPasswordReset } from "./actions";
 
 export default function ForgotPasswordPage() {

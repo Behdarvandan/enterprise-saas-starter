@@ -1,10 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import FormStatus from "@/components/ui/FormStatus";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/core/ui/primitives/input";
+import { Label } from "@/core/ui/primitives/label";
 import { useFormAction } from "@/hooks/useFormAction";
 import { updateProfile } from "./actions";
 

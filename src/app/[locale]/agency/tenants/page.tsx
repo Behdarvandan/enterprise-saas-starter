@@ -4,7 +4,7 @@ import AddTenantDialog from "@/components/agency/AddTenantDialog";
 import QuotaMeter from "@/components/agency/QuotaMeter";
 import TenantTable, { type TenantRowData } from "@/components/agency/TenantTable";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import MetricCard from "@/components/ui/MetricCard";
 import { requireAgencyAdmin } from "@/lib/agency/admin";

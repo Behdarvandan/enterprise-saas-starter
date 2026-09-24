@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/core/ui/primitives/button";
+import { Input } from "@/core/ui/primitives/input";
 import { useRouter } from "@/i18n/navigation";
 import { cancelAppointment, rescheduleAppointment } from "./actions";
 

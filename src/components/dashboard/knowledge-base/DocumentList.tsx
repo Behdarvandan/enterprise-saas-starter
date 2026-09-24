@@ -4,9 +4,9 @@ import { AlertCircle, FileText, Layers, Trash2, TypeIcon } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import Badge from "@/components/ui/Badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/core/ui/primitives/button";
+import { Card } from "@/core/ui/primitives/card";
+import { Checkbox } from "@/core/ui/primitives/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -14,9 +14,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/core/ui/primitives/dialog";
 import EmptyState from "@/components/ui/EmptyState";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/core/ui/primitives/skeleton";
 import Spinner from "@/components/ui/Spinner";
 import {
   Table,
@@ -25,7 +25,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/core/ui/primitives/table";
 import { formatBytes, formatMetricNumber } from "@/lib/format";
 import { toast } from "@/lib/toast";
 import type { DocumentListItem } from "@/types";

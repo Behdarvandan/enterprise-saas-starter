@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import { requireMembership } from "@/lib/auth";
 import { getOrganizationName } from "@/lib/organizations";
 import { canManageMembers } from "@/lib/team";

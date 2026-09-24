@@ -1,7 +1,7 @@
 import { BookOpenCheck, CalendarCheck, Sparkles, type LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import AgentPlayground from "@/components/marketing/AgentPlayground";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import LiveDot from "@/components/ui/LiveDot";
 import { Link } from "@/i18n/navigation";
 

@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/core/ui/primitives/skeleton";
 
 /**
  * Generic page-level loading skeleton shared by every portal route segment:

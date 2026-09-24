@@ -1,8 +1,8 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 import BillingPortalButton from "@/components/billing/BillingPortalButton";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/core/ui/primitives/button";
+import { Card } from "@/core/ui/primitives/card";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { resolvePlanTier } from "@/lib/plans";

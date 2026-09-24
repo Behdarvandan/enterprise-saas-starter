@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useSkillLabel } from "@/components/dashboard/skills/useSkillLabel";
 import Badge from "@/components/ui/Badge";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/core/ui/primitives/table";
 import { formatPercent, formatTokens } from "@/lib/agency/format";
 import { consumptionPercent } from "@/lib/agency/usage";
 import QuotaDialog from "./QuotaDialog";

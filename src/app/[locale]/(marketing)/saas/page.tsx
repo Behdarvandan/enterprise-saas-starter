@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import { getPlans } from "@/lib/plans";
 import { getPricingRegion } from "@/lib/geo";
 

@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { unlinkTenant } from "@/app/[locale]/agency/tenants/actions";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/core/ui/primitives/dialog";
 import FormStatus from "@/components/ui/FormStatus";
 import { useRouter } from "@/i18n/navigation";
 import { formatTokens } from "@/lib/agency/format";

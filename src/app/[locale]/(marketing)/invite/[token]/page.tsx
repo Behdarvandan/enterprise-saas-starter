@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import AcceptInviteButton from "./AcceptInviteButton";
 
 export default async function InvitePage({

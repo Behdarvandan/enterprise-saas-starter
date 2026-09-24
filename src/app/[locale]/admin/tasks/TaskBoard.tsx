@@ -3,9 +3,9 @@
 import { ArrowRight, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/core/ui/primitives/button";
+import { Card } from "@/core/ui/primitives/card";
+import { Input } from "@/core/ui/primitives/input";
 import { useRouter } from "@/i18n/navigation";
 import type { InternalTask, TaskColumnStatus } from "@/types";
 

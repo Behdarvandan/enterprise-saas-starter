@@ -2,7 +2,7 @@ import { Building2 } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import Badge from "@/components/ui/Badge";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import {
   Table,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/core/ui/primitives/table";
 import { Link } from "@/i18n/navigation";
 import { asLeadCategory, asProjectStage, asWorkingMode } from "@/lib/admin/enums";
 import { requireOperatorAdmin } from "@/lib/operator";

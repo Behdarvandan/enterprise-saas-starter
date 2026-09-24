@@ -1,7 +1,7 @@
 import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import {
   Table,
   TableBody,
@@ -9,8 +9,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@/core/ui/primitives/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/core/ui/primitives/tabs";
 import { requireOperatorAdmin, getOperatorOrganizationId } from "@/lib/operator";
 import { asMembershipRole } from "@/lib/status";
 

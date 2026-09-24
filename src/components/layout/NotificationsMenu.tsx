@@ -3,7 +3,7 @@
 import { Bell, Lightbulb } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/core/ui/primitives/popover";
 import { Link } from "@/i18n/navigation";
 import { parseRecommendation } from "@/lib/dev-crew/recommendation";
 import type { CrewInsight } from "@/types";

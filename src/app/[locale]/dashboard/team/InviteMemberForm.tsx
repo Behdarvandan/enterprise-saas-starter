@@ -2,10 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import FormStatus from "@/components/ui/FormStatus";
-import { Input } from "@/components/ui/input";
-import { NativeSelect } from "@/components/ui/native-select";
+import { Input } from "@/core/ui/primitives/input";
+import { NativeSelect } from "@/core/ui/primitives/native-select";
 import { useRouter } from "@/i18n/navigation";
 import { inviteMember } from "./actions";
 

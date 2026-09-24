@@ -3,7 +3,7 @@
 import { Check, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 

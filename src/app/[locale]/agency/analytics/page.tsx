@@ -3,7 +3,7 @@ import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import TokenUsageChart from "@/components/admin/TokenUsageChart";
 import CrewInsightCard from "@/components/dashboard/crew/CrewInsightCard";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import MetricCard from "@/components/ui/MetricCard";
 import {
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/core/ui/primitives/table";
 import { Link } from "@/i18n/navigation";
 import { requireAgencyAdmin } from "@/lib/agency/admin";
 import { formatPercent, formatTokens } from "@/lib/agency/format";

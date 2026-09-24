@@ -5,9 +5,9 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import ChatPanel from "@/components/chat-widget/ChatPanel";
 import { useRagChat } from "@/components/chat-widget/useRagChat";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import LiveDot from "@/components/ui/LiveDot";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 
 interface ChatSimulatorProps {
   organizationId: string;

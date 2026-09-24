@@ -3,8 +3,8 @@
 import { ArrowUpRight, CheckCircle2, Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { NativeSelect } from "@/components/ui/native-select";
+import { Button } from "@/core/ui/primitives/button";
+import { NativeSelect } from "@/core/ui/primitives/native-select";
 import { useRouter } from "@/i18n/navigation";
 import { asLeadStatus, LEAD_STATUSES, type KnownLeadStatus } from "@/lib/admin/enums";
 

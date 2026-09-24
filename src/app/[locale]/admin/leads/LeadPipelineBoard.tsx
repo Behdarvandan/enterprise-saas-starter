@@ -4,7 +4,7 @@ import { ArrowRight, X } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import Badge from "@/components/ui/Badge";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import { Link, useRouter } from "@/i18n/navigation";
 import { asLeadCategory, LEAD_STATUSES, type KnownLeadStatus } from "@/lib/admin/enums";
 import type { Lead } from "@/types";

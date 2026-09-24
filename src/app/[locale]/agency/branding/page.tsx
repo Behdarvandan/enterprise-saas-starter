@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import BrandingStudio from "@/components/agency/BrandingStudio";
 import DnsStatusPanel from "@/components/agency/DnsStatusPanel";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/core/ui/primitives/card";
 import { requireAgencyAdmin } from "@/lib/agency/admin";
 import { parseAgencyBranding } from "@/lib/agency/branding";
 import { getCnameTarget } from "@/lib/agency/cname";

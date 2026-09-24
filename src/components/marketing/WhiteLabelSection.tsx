@@ -4,7 +4,7 @@ import BrandingDemo from "@/components/marketing/BrandingDemo";
 import GlassPanel from "@/components/marketing/GlassPanel";
 import Reveal from "@/components/marketing/Reveal";
 import SectionHeading from "@/components/marketing/SectionHeading";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import LiveDot from "@/components/ui/LiveDot";
 import { Link } from "@/i18n/navigation";
 import { getCnameTarget } from "@/lib/agency/cname";

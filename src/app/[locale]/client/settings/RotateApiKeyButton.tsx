@@ -3,7 +3,7 @@
 import { KeyRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import { useRouter } from "@/i18n/navigation";
 
 export default function RotateApiKeyButton() {

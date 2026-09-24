@@ -12,7 +12,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/core/ui/primitives/dropdown-menu";
 import { useRouter } from "@/i18n/navigation";
 import type { UserOrganization } from "@/lib/team";
 import { toast } from "@/lib/toast";

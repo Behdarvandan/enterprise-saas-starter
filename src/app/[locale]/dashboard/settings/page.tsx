@@ -1,7 +1,7 @@
 import { Building2, ChevronRight, User } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 

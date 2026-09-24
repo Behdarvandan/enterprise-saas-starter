@@ -1,7 +1,7 @@
 import { Lightbulb } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import Badge, { type BadgeTone } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import { Link } from "@/i18n/navigation";
 import { deriveSeverity, parseRecommendation } from "@/lib/dev-crew/recommendation";

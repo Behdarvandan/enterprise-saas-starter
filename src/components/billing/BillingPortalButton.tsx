@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 
 export default function BillingPortalButton() {
   const t = useTranslations("dashboard.billing");

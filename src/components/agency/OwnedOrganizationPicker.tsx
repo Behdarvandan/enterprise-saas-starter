@@ -3,7 +3,7 @@
 import { Building2, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useMemo, useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/core/ui/primitives/input";
 import type { LinkableOrganization } from "@/lib/agency/linkable";
 import { cn } from "@/lib/utils";
 

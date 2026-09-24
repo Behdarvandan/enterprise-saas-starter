@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useId, useState } from "react";
 import TenantPreview from "@/components/agency/TenantPreview";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/core/ui/primitives/input";
+import { Label } from "@/core/ui/primitives/label";
 import { cn } from "@/lib/utils";
 
 const PRESETS = [

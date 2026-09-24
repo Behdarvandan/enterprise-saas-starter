@@ -5,8 +5,8 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { UserPlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card } from "@/core/ui/primitives/card";
+import { Button } from "@/core/ui/primitives/button";
 
 export default function SignUpPage() {
   const t = useTranslations("auth.signup");

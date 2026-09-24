@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useId, useState, useTransition, type FormEvent } from "react";
 import { createTenant, linkTenant, type AgencyActionResult } from "@/app/[locale]/agency/tenants/actions";
 import OwnedOrganizationPicker from "@/components/agency/OwnedOrganizationPicker";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import {
   Dialog,
   DialogContent,
@@ -14,11 +14,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/core/ui/primitives/dialog";
 import FormStatus from "@/components/ui/FormStatus";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/core/ui/primitives/input";
+import { Label } from "@/core/ui/primitives/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/core/ui/primitives/tabs";
 import { useRouter } from "@/i18n/navigation";
 import type { LinkableOrganization } from "@/lib/agency/linkable";
 import { toast } from "@/lib/toast";

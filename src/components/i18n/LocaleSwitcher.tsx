@@ -10,7 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/core/ui/primitives/dropdown-menu";
 
 interface LocaleSwitcherProps {
   className?: string;

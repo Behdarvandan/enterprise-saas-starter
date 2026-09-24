@@ -5,8 +5,8 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card } from "@/core/ui/primitives/card";
+import { Button } from "@/core/ui/primitives/button";
 
 export default function ResetPasswordPage() {
   const t = useTranslations("auth.resetPassword");

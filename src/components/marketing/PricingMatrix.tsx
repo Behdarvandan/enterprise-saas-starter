@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import GlassPanel from "@/components/marketing/GlassPanel";
 import Badge from "@/components/ui/Badge";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import {
   Dialog,
   DialogContent,
@@ -13,8 +13,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Switch } from "@/components/ui/switch";
+} from "@/core/ui/primitives/dialog";
+import { Switch } from "@/core/ui/primitives/switch";
 import { Link } from "@/i18n/navigation";
 import { formatMetricNumber } from "@/lib/format";
 import {

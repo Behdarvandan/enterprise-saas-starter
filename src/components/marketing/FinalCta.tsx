@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import GlassPanel from "@/components/marketing/GlassPanel";
 import Reveal from "@/components/marketing/Reveal";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import { Link } from "@/i18n/navigation";
 
 export default async function FinalCta() {

@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import Badge, { type BadgeTone } from "@/components/ui/Badge";
-import { NativeSelect } from "@/components/ui/native-select";
+import { NativeSelect } from "@/core/ui/primitives/native-select";
 import { useRouter } from "@/i18n/navigation";
 import type { MembershipRole } from "@/types";
 import { removeMember, updateMemberRole } from "./actions";

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import { formatAppointmentTime, formatPrice } from "@/lib/utils";
 import type { Service } from "@/types";
 

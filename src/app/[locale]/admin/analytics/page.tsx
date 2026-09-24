@@ -3,7 +3,7 @@ import FreelanceRevenueChart, { type MonthlyRevenuePoint } from "@/components/ad
 import SaasRevenueChart, { type PlanRevenuePoint } from "@/components/admin/SaasRevenueChart";
 import TokenUsageChart, { type OrgTokenUsagePoint } from "@/components/admin/TokenUsageChart";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/core/ui/primitives/table";
 import { formatMoney } from "@/lib/format";
 import { requireOperatorAdmin } from "@/lib/operator";
 import { getAllPlans, type Plan, type PlanCheckout } from "@/lib/plans";

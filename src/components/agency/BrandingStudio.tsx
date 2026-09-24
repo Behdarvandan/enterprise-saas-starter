@@ -9,10 +9,10 @@ import {
   type BrandingField,
 } from "@/app/[locale]/agency/branding/actions";
 import TenantPreview from "@/components/agency/TenantPreview";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import FormStatus from "@/components/ui/FormStatus";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/core/ui/primitives/input";
+import { Label } from "@/core/ui/primitives/label";
 import { useRouter } from "@/i18n/navigation";
 import { deriveBrandPalette, isHexColor } from "@/lib/agency/palette";
 import { toast } from "@/lib/toast";

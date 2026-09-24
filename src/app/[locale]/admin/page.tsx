@@ -1,7 +1,7 @@
 import { AlertTriangle, CalendarClock, TrendingDown, UserPlus } from "lucide-react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import MetricCard from "@/components/ui/MetricCard";
 import { Link } from "@/i18n/navigation";
 import { formatMetricNumber, formatMoney } from "@/lib/format";

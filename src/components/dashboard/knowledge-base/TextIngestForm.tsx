@@ -2,10 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { useMemo, useState, type FormEvent } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/core/ui/primitives/button";
+import { Input } from "@/core/ui/primitives/input";
+import { Label } from "@/core/ui/primitives/label";
+import { Textarea } from "@/core/ui/primitives/textarea";
 import { chunkText } from "@/lib/rag/chunking";
 import { MAX_CONTENT_LENGTH } from "@/lib/rag/file-types";
 

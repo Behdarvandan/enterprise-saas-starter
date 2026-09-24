@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/layout/PageHeader";
 import Badge from "@/components/ui/Badge";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import { Link } from "@/i18n/navigation";
 import { asLeadCategory, asLeadStatus, asWorkingMode } from "@/lib/admin/enums";
 import { requireOperatorAdmin } from "@/lib/operator";

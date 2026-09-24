@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import CheckoutButton from "@/components/billing/CheckoutButton";
 import { getPlans } from "@/lib/plans";
 import { getPricingRegion } from "@/lib/geo";

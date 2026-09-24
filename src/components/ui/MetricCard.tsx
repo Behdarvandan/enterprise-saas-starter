@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import LiveDot from "@/components/ui/LiveDot";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/ui/primitives/card";
 import { cn } from "@/lib/utils";
 
 interface MetricCardProps {

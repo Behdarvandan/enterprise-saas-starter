@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "@/i18n/navigation";
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/core/ui/primitives/sheet";
 import Toaster from "@/components/ui/Toaster";
 
 interface AppShellProps {

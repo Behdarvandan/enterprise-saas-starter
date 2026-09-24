@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import Logo from "@/components/layout/Logo";
 import MobileNav, { type MarketingNavLink } from "@/components/layout/MobileNav";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import LiveDot from "@/components/ui/LiveDot";
 import { Link } from "@/i18n/navigation";
 

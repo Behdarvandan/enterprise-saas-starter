@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { updateTenantSkills } from "@/app/[locale]/agency/tenants/actions";
 import { useSkillLabel } from "@/components/dashboard/skills/useSkillLabel";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import {
   Dialog,
   DialogContent,
@@ -12,9 +12,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/core/ui/primitives/dialog";
 import FormStatus from "@/components/ui/FormStatus";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/core/ui/primitives/switch";
 import { useRouter } from "@/i18n/navigation";
 import { toast } from "@/lib/toast";
 import type { TenantRowData } from "./TenantTable";

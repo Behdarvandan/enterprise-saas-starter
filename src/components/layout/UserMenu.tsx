@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import SignOutButton from "@/components/auth/SignOutButton";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/core/ui/primitives/popover";
 
 interface UserMenuProps {
   email: string;

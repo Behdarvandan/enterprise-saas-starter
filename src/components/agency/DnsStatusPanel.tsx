@@ -4,7 +4,7 @@ import { Check, CheckCircle2, CircleAlert, Clock, Copy, Eye, EyeOff, RefreshCw }
 import { useFormatter, useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Badge from "@/components/ui/Badge";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/core/ui/primitives/button";
 import LiveDot from "@/components/ui/LiveDot";
 import type { CnameStatus } from "@/lib/agency/cname";
 import {

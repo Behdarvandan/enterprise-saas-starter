@@ -10,8 +10,8 @@ import TextIngestForm from "@/components/dashboard/knowledge-base/TextIngestForm
 import UploadQueue from "@/components/dashboard/knowledge-base/UploadQueue";
 import { useDocuments } from "@/components/dashboard/knowledge-base/useDocuments";
 import { useUploadQueue } from "@/components/dashboard/knowledge-base/useUploadQueue";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from "@/core/ui/primitives/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/core/ui/primitives/tabs";
 import type { DocumentListItem } from "@/types";
 
 interface KnowledgeBasePanelProps {
