@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@/core/ui/primitives/table";
 import { Tooltip } from "@/core/ui/primitives/tooltip";
+import Slot from "@/core/ui/slots/Slot";
 import { Link } from "@/i18n/navigation";
 import { requireMembership } from "@/lib/auth";
 import { getOverviewMetrics, getOrganizationSnapshot } from "@/lib/dashboard/queries";
@@ -173,6 +174,10 @@ export default async function DashboardPage() {
           hint={t("metrics.bookings.hint")}
         />
       </section>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Slot id="dashboard-overview-slot" />
+      </div>
 
       <section className="grid gap-6 lg:grid-cols-3">
         <ChatSimulator organizationId={organizationId} className="lg:col-span-2" />
