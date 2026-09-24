@@ -3,8 +3,7 @@
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { getAgencyNavGroups } from "@/components/layout/nav-config";
-import ShellNav from "@/components/layout/ShellNav";
-import SidebarFrame from "@/components/layout/SidebarFrame";
+import Sidebar from "@/core/ui/shell/Sidebar";
 import { Link } from "@/i18n/navigation";
 
 interface AgencySidebarProps {
@@ -15,9 +14,11 @@ export default function AgencySidebar({ agencyName }: AgencySidebarProps) {
   const t = useTranslations("shell");
 
   return (
-    <SidebarFrame
+    <Sidebar
       homeHref="/agency/tenants"
       subtitle={agencyName}
+      groups={getAgencyNavGroups()}
+      label={t("nav.agencyLabel")}
       bottom={
         <Link
           href="/dashboard"
@@ -27,8 +28,6 @@ export default function AgencySidebar({ agencyName }: AgencySidebarProps) {
           {t("backToDashboard")}
         </Link>
       }
-    >
-      <ShellNav groups={getAgencyNavGroups()} label={t("nav.agencyLabel")} />
-    </SidebarFrame>
+    />
   );
 }

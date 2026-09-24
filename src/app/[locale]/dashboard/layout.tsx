@@ -8,7 +8,7 @@ import { collapseInsights } from "@/lib/dev-crew/recommendation";
 import { getOrganizationSnapshot } from "@/lib/dashboard/queries";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import AgentStatus from "@/components/layout/AgentStatus";
-import AppShell from "@/components/layout/AppShell";
+import AppShell from "@/core/ui/shell/AppShell";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 import HeaderSearch from "@/components/layout/HeaderSearch";
 import NotificationsMenu from "@/components/layout/NotificationsMenu";

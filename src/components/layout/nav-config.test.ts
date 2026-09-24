@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  getAdminNavGroups,
-  getAgencyNavGroups,
-  getDashboardNavGroups,
-  resolveActiveHref,
-  type ShellNavGroup,
-} from "./nav-config";
+import type { ShellNavGroup } from "@/core/ui/shell/Sidebar";
+import { getAdminNavGroups, getAgencyNavGroups, getDashboardNavGroups } from "./nav-config";
 
 const hrefs = (groups: ShellNavGroup[]) => groups.flatMap((g) => g.items.map((i) => i.href));
 
@@ -27,23 +22,5 @@ describe("getDashboardNavGroups", () => {
   ])("%s nav has unique hrefs", (_name, groups) => {
     const all = hrefs(groups);
     expect(new Set(all).size).toBe(all.length);
-  });
-});
-
-describe("resolveActiveHref", () => {
-  const all = hrefs(getDashboardNavGroups(true));
-
-  it("matches the overview only on the exact path", () => {
-    expect(resolveActiveHref("/dashboard", all)).toBe("/dashboard");
-    expect(resolveActiveHref("/dashboard/skills", all)).toBe("/dashboard/skills");
-  });
-
-  it("prefers the longest matching prefix for nested routes", () => {
-    expect(resolveActiveHref("/dashboard/settings/organization", all)).toBe("/dashboard/settings");
-  });
-
-  it("does not match on a partial segment", () => {
-    expect(resolveActiveHref("/dashboard/team-invites", all)).toBe("/dashboard");
-    expect(resolveActiveHref("/elsewhere", all)).toBeNull();
   });
 });

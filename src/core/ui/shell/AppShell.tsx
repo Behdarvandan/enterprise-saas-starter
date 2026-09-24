@@ -1,14 +1,14 @@
 "use client";
 
-import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "@/i18n/navigation";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/core/ui/primitives/sheet";
+import Header from "@/core/ui/shell/Header";
 import Toaster from "@/components/ui/Toaster";
 
 interface AppShellProps {
-  /** Sidebar content (SidebarFrame + nav). Rendered in the desktop rail and the mobile drawer. */
+  /** Sidebar content (Sidebar). Rendered in the desktop rail and the mobile drawer. */
   sidebar: ReactNode;
   /** Left side of the header, after the mobile menu button (e.g. search). */
   headerStart?: ReactNode;
@@ -54,18 +54,7 @@ export default function AppShell({ sidebar, headerStart, headerEnd, children }: 
       </Sheet>
 
       <div className="flex min-h-screen min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-slate-800 bg-slate-950/80 px-4 backdrop-blur-md sm:px-6">
-          <button
-            type="button"
-            onClick={() => setMobileOpen(true)}
-            aria-label={t("openMenu")}
-            className="-ms-1 flex size-9 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-ring/60 lg:hidden"
-          >
-            <Menu aria-hidden className="size-5" />
-          </button>
-          <div className="flex min-w-0 flex-1 items-center">{headerStart}</div>
-          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">{headerEnd}</div>
-        </header>
+        <Header onOpenMenu={() => setMobileOpen(true)} headerStart={headerStart} headerEnd={headerEnd} />
         <main id="main" tabIndex={-1} className="flex-1 outline-none">
           {children}
         </main>

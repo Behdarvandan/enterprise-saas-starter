@@ -14,8 +14,10 @@ import {
   Users,
   UserSquare2,
   Wallet,
-  type LucideIcon,
 } from "lucide-react";
+import type { ShellNavGroup } from "@/core/ui/shell/Sidebar";
+
+export { resolveActiveHref } from "@/core/ui/shell/Sidebar";
 
 /** Keys under `shell.nav` in the message catalogs. */
 export type NavLabelKey =
@@ -44,20 +46,8 @@ export type NavLabelKey =
 /** Keys under `shell.groups`. */
 export type NavGroupKey = "agent" | "business" | "agency" | "operations";
 
-export interface ShellNavItem {
-  labelKey: NavLabelKey;
-  href: string;
-  icon: LucideIcon;
-}
-
-export interface ShellNavGroup {
-  /** Omitted for the ungrouped lead section. */
-  labelKey?: NavGroupKey;
-  items: ShellNavItem[];
-}
-
-export function getDashboardNavGroups(isAgencyAdmin: boolean): ShellNavGroup[] {
-  const groups: ShellNavGroup[] = [
+export function getDashboardNavGroups(isAgencyAdmin: boolean): ShellNavGroup<NavLabelKey, NavGroupKey>[] {
+  const groups: ShellNavGroup<NavLabelKey, NavGroupKey>[] = [
     { items: [{ labelKey: "overview", href: "/dashboard", icon: LayoutDashboard }] },
     {
       labelKey: "agent",
@@ -90,7 +80,7 @@ export function getDashboardNavGroups(isAgencyAdmin: boolean): ShellNavGroup[] {
   return groups;
 }
 
-export function getAgencyNavGroups(): ShellNavGroup[] {
+export function getAgencyNavGroups(): ShellNavGroup<NavLabelKey, NavGroupKey>[] {
   return [
     {
       items: [
@@ -102,7 +92,7 @@ export function getAgencyNavGroups(): ShellNavGroup[] {
   ];
 }
 
-export function getAdminNavGroups(): ShellNavGroup[] {
+export function getAdminNavGroups(): ShellNavGroup<NavLabelKey, NavGroupKey>[] {
   return [
     { items: [{ labelKey: "adminDashboard", href: "/admin", icon: LayoutDashboard }] },
     {
@@ -118,18 +108,4 @@ export function getAdminNavGroups(): ShellNavGroup[] {
       ],
     },
   ];
-}
-
-/**
- * The single nav entry that owns `pathname`: the longest href that equals it
- * or is a path-segment prefix of it. Longest-match means a nested route
- * highlights its own entry rather than also lighting up its parent's.
- */
-export function resolveActiveHref(pathname: string, hrefs: readonly string[]): string | null {
-  let best: string | null = null;
-  for (const href of hrefs) {
-    const matches = pathname === href || pathname.startsWith(`${href}/`);
-    if (matches && (best === null || href.length > best.length)) best = href;
-  }
-  return best;
 }

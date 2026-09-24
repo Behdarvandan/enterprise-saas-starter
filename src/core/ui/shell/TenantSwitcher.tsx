@@ -3,7 +3,6 @@
 import { ChevronsUpDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
-import { switchOrganization } from "@/app/[locale]/dashboard/actions";
 import Spinner from "@/components/ui/Spinner";
 import {
   DropdownMenu,
@@ -17,9 +16,16 @@ import { useRouter } from "@/i18n/navigation";
 import type { UserOrganization } from "@/lib/team";
 import { toast } from "@/lib/toast";
 
-interface OrgSwitcherProps {
+interface TenantSwitcherProps {
   organizations: UserOrganization[];
   activeOrganizationId: string;
+  /**
+   * Persists the switch (e.g. a server action) and is awaited before the
+   * router refreshes. Core has no knowledge of *how* a switch is persisted —
+   * the caller supplies it. An `{ error }` result surfaces as a toast
+   * instead of refreshing.
+   */
+  onSwitch: (organizationId: string) => Promise<{ error?: string } | void>;
 }
 
 /**
@@ -27,7 +33,7 @@ interface OrgSwitcherProps {
  * who you are acting as; the menu (radio group: arrow keys, typeahead, Esc)
  * only opens when there is somewhere else to switch to.
  */
-export default function OrgSwitcher({ organizations, activeOrganizationId }: OrgSwitcherProps) {
+export default function TenantSwitcher({ organizations, activeOrganizationId, onSwitch }: TenantSwitcherProps) {
   const t = useTranslations("shell");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -40,8 +46,8 @@ export default function OrgSwitcher({ organizations, activeOrganizationId }: Org
   function handleChange(organizationId: string) {
     if (organizationId === activeOrganizationId) return;
     startTransition(async () => {
-      const result = await switchOrganization(organizationId);
-      if (result.error) {
+      const result = await onSwitch(organizationId);
+      if (result?.error) {
         toast({ tone: "error", title: t("organization.switchFailed"), description: result.error });
         return;
       }

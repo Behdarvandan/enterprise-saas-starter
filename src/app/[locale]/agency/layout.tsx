@@ -3,7 +3,7 @@ import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import AgencySidebar from "@/components/layout/AgencySidebar";
-import AppShell from "@/components/layout/AppShell";
+import AppShell from "@/core/ui/shell/AppShell";
 import UserMenu from "@/components/layout/UserMenu";
 import { getAdministeredAgency } from "@/lib/agency/admin";
 import { createClient } from "@/lib/supabase/server";

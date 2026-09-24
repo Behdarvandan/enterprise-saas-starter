@@ -2,7 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 import { requireOperatorAdmin } from "@/lib/operator";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import AdminSidebar from "@/components/layout/AdminSidebar";
-import AppShell from "@/components/layout/AppShell";
+import AppShell from "@/core/ui/shell/AppShell";
 import UserMenu from "@/components/layout/UserMenu";
 
 export default async function AdminLayout({

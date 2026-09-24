@@ -2,8 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
-import { AGENCY_CONTEXT_HEADER, encodeAgencyContext } from "@/lib/agency/branding";
-import { getAgencyByDomain, isPlatformHost, normalizeHost } from "@/lib/agency/cname";
+import { resolveTenantContext } from "@/core/tenant/resolver";
 import { updateSession } from "@/lib/supabase/middleware";
 
 const handleI18nRouting = createMiddleware(routing);
@@ -29,29 +28,10 @@ function getSafeFallbackResponse(request: NextRequest): NextResponse {
 }
 
 export async function middleware(request: NextRequest) {
-  // Never trust an inbound copy of the agency header: only a value written
-  // below may reach downstream Server Components (a client could otherwise
-  // spoof another agency's branding on any domain).
-  request.headers.delete(AGENCY_CONTEXT_HEADER);
-
-  // White-label routing: a Host outside the platform's own domains is looked
-  // up as an agency custom domain (cached, see lib/agency/cname.ts). The
-  // header is set on the request *before* next-intl runs, since next-intl
-  // clones request.headers into the response's request overrides. Unknown
-  // hosts fall through to the default Pasargad look.
-  try {
-    const host = normalizeHost(request.headers.get("host"));
-    if (host && !isPlatformHost(host)) {
-      const agency = await getAgencyByDomain(host);
-      if (agency) {
-        request.headers.set(AGENCY_CONTEXT_HEADER, encodeAgencyContext(agency));
-      }
-    }
-  } catch (error) {
-    // A branding lookup must never take the whole site down: serve the
-    // default look instead.
-    console.warn("[middleware] agency lookup failed, serving default branding:", error);
-  }
+  // White-label routing: resolves the request's tenant (if any) and writes
+  // it onto request.headers *before* next-intl runs, since next-intl clones
+  // request.headers into the response's request overrides.
+  await resolveTenantContext(request);
 
   // next-intl runs first to resolve/redirect on locale; its response is then
   // handed to updateSession so the Supabase cookie refresh lands on top of
