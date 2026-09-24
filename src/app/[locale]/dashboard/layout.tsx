@@ -11,6 +11,7 @@ import AgentStatus from "@/components/layout/AgentStatus";
 import type { TenantRole } from "@/core/auth/types";
 import { moduleRegistry } from "@/core/registry";
 import { TenantProvider, type TenantContext } from "@/core/tenant";
+import { SHELL_SLOTS, Slot } from "@/core/ui/slots";
 import AppShell from "@/core/ui/shell/AppShell";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 import HeaderSearch from "@/components/layout/HeaderSearch";
@@ -85,6 +86,7 @@ export default async function DashboardLayout({
         headerStart={<HeaderSearch />}
         headerEnd={
           <>
+            <Slot id={SHELL_SLOTS.HEADER_ACTIONS} />
             <AgentStatus state={agentState} quotaPercent={Math.round(quotaPercent)} className="hidden md:inline-flex" />
             <NotificationsMenu items={notifications} />
             <LocaleSwitcher />

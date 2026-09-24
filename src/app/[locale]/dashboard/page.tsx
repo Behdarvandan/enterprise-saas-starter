@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@/core/ui/primitives/table";
 import { Tooltip } from "@/core/ui/primitives/tooltip";
+import { SHELL_SLOTS } from "@/core/ui/slots";
 import Slot from "@/core/ui/slots/Slot";
 import { Link } from "@/i18n/navigation";
 import { requireMembership } from "@/lib/auth";
@@ -176,7 +177,7 @@ export default async function DashboardPage() {
       </section>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Slot id="dashboard-overview-slot" />
+        <Slot id={SHELL_SLOTS.DASHBOARD_OVERVIEW} />
       </div>
 
       <section className="grid gap-6 lg:grid-cols-3">
