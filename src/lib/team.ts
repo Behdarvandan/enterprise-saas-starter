@@ -14,6 +14,7 @@ export interface UserOrganization {
   organizationId: string;
   /** Null when the organization row has no readable name; the UI supplies the label. */
   organizationName: string | null;
+  organizationSlug: string;
   role: MembershipRole;
 }
 
@@ -82,13 +83,14 @@ export async function getUserOrganizations(
 
   const { data } = await supabase
     .from("memberships")
-    .select("organization_id, role, organizations ( name )")
+    .select("organization_id, role, organizations ( name, slug )")
     .eq("user_id", userId)
     .order("created_at", { ascending: true });
 
   return (data ?? []).map((row) => ({
     organizationId: row.organization_id,
     organizationName: row.organizations?.name ?? null,
+    organizationSlug: row.organizations?.slug ?? row.organization_id,
     role: row.role,
   }));
 }

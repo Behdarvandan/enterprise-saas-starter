@@ -8,6 +8,8 @@ import { collapseInsights } from "@/lib/dev-crew/recommendation";
 import { getOrganizationSnapshot } from "@/lib/dashboard/queries";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import AgentStatus from "@/components/layout/AgentStatus";
+import type { TenantRole } from "@/core/auth/types";
+import { TenantProvider, type TenantContext } from "@/core/tenant";
 import AppShell from "@/core/ui/shell/AppShell";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 import HeaderSearch from "@/components/layout/HeaderSearch";
@@ -50,6 +52,12 @@ export default async function DashboardLayout({
   ]);
   const activeOrganizationId = membership?.organizationId ?? "";
 
+  const activeOrg = organizations.find((org) => org.organizationId === activeOrganizationId) ?? null;
+  const initialTenant: TenantContext | null = activeOrg
+    ? { id: activeOrg.organizationId, slug: activeOrg.organizationSlug, name: activeOrg.organizationName ?? "" }
+    : null;
+  const initialUserRole: TenantRole | null = membership?.role ?? null;
+
   // Shell status + bell are best-effort chrome: a failure here must never
   // take the whole dashboard down, so each degrades to "no data".
   const [snapshot, notifications] = await Promise.all([
@@ -60,28 +68,30 @@ export default async function DashboardLayout({
   const quotaPercent = snapshot?.quota.percent ?? 0;
 
   return (
-    <AppShell
-      sidebar={
-        <DashboardSidebar
-          organizations={organizations}
-          activeOrganizationId={activeOrganizationId}
-          isAgencyAdmin={agency !== null}
-          agentState={agentState}
-          quotaPercent={quotaPercent}
-        />
-      }
-      headerStart={<HeaderSearch />}
-      headerEnd={
-        <>
-          <AgentStatus state={agentState} quotaPercent={Math.round(quotaPercent)} className="hidden md:inline-flex" />
-          <NotificationsMenu items={notifications} />
-          <LocaleSwitcher />
-          <UserMenu email={user.email ?? ""} />
-        </>
-      }
-    >
-      {children}
-    </AppShell>
+    <TenantProvider initialTenant={initialTenant} initialUserRole={initialUserRole}>
+      <AppShell
+        sidebar={
+          <DashboardSidebar
+            organizations={organizations}
+            activeOrganizationId={activeOrganizationId}
+            isAgencyAdmin={agency !== null}
+            agentState={agentState}
+            quotaPercent={quotaPercent}
+          />
+        }
+        headerStart={<HeaderSearch />}
+        headerEnd={
+          <>
+            <AgentStatus state={agentState} quotaPercent={Math.round(quotaPercent)} className="hidden md:inline-flex" />
+            <NotificationsMenu items={notifications} />
+            <LocaleSwitcher />
+            <UserMenu email={user.email ?? ""} />
+          </>
+        }
+      >
+        {children}
+      </AppShell>
+    </TenantProvider>
   );
 }
 

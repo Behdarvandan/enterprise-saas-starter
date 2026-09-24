@@ -5,6 +5,9 @@ export async function register() {
     const { validateProductionConfig } = await import("@/lib/config-check");
     validateProductionConfig();
 
+    const { registerModules } = await import("@/modules");
+    registerModules();
+
     await import("../sentry.server.config");
   }
 
