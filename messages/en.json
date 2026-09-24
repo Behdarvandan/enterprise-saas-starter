@@ -599,7 +599,8 @@
       "agent": "AI agent",
       "business": "Business",
       "agency": "Agency",
-      "operations": "Operations"
+      "operations": "Operations",
+      "modules": "Modules"
     },
     "nav": {
       "dashboardLabel": "Dashboard navigation",

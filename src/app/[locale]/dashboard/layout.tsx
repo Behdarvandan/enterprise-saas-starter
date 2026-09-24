@@ -9,6 +9,7 @@ import { getOrganizationSnapshot } from "@/lib/dashboard/queries";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import AgentStatus from "@/components/layout/AgentStatus";
 import type { TenantRole } from "@/core/auth/types";
+import { moduleRegistry } from "@/core/registry";
 import { TenantProvider, type TenantContext } from "@/core/tenant";
 import AppShell from "@/core/ui/shell/AppShell";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
@@ -57,6 +58,7 @@ export default async function DashboardLayout({
     ? { id: activeOrg.organizationId, slug: activeOrg.organizationSlug, name: activeOrg.organizationName ?? "" }
     : null;
   const initialUserRole: TenantRole | null = membership?.role ?? null;
+  const moduleNavItems = moduleRegistry.getNavigationItems(initialUserRole ?? undefined);
 
   // Shell status + bell are best-effort chrome: a failure here must never
   // take the whole dashboard down, so each degrades to "no data".
@@ -77,6 +79,7 @@ export default async function DashboardLayout({
             isAgencyAdmin={agency !== null}
             agentState={agentState}
             quotaPercent={quotaPercent}
+            moduleNavItems={moduleNavItems}
           />
         }
         headerStart={<HeaderSearch />}

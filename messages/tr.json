@@ -599,7 +599,8 @@
       "agent": "Yapay zekâ ajanı",
       "business": "İşletme",
       "agency": "Ajans",
-      "operations": "Operasyon"
+      "operations": "Operasyon",
+      "modules": "Modüller"
     },
     "nav": {
       "dashboardLabel": "Panel gezinmesi",

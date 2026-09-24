@@ -599,7 +599,8 @@
       "agent": "KI-Agent",
       "business": "Geschäft",
       "agency": "Agentur",
-      "operations": "Betrieb"
+      "operations": "Betrieb",
+      "modules": "Module"
     },
     "nav": {
       "dashboardLabel": "Dashboard-Navigation",

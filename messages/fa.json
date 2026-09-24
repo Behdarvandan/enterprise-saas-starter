@@ -599,7 +599,8 @@
       "agent": "عامل هوش مصنوعی",
       "business": "کسب‌وکار",
       "agency": "آژانس",
-      "operations": "عملیات"
+      "operations": "عملیات",
+      "modules": "ماژول‌ها"
     },
     "nav": {
       "dashboardLabel": "پیمایش داشبورد",
