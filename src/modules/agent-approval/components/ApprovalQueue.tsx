@@ -1,19 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createCoreBrowserClient } from "@/core/db";
+import { useTenant } from "@/core/tenant";
 import { Button } from "@/core/ui/primitives/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/core/ui/primitives/card";
+import { fetchPendingApprovals, submitApprovalDecision } from "@/modules/agent-approval/service";
 import type { AgentApprovalTask } from "@/modules/agent-approval/types";
 
-/**
- * Zero-prop slot contribution (same contract as DemoWidget/AuditLogTable),
- * so it starts empty — real task data lands via a future data-fetching step.
- */
+async function getAccessToken(): Promise<string | undefined> {
+  const supabase = createCoreBrowserClient();
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token;
+}
+
+/** Zero-prop slot contribution (same contract as DemoWidget/AuditLogTable) — sources tenant/jwt itself. */
 export default function ApprovalQueue() {
+  const { tenant } = useTenant();
   const [tasks, setTasks] = useState<AgentApprovalTask[]>([]);
 
-  function resolveTask(id: string) {
+  useEffect(() => {
+    if (!tenant) return;
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const jwt = await getAccessToken();
+        const pending = await fetchPendingApprovals(tenant!.id, jwt);
+        if (!cancelled) setTasks(pending);
+      } catch (error) {
+        console.error("[agent-approval] failed to load pending approvals:", error);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [tenant]);
+
+  async function resolveTask(id: string, approved: boolean) {
     setTasks((prev) => prev.filter((task) => task.id !== id));
+    try {
+      const jwt = await getAccessToken();
+      await submitApprovalDecision(id, approved, undefined, tenant?.id, jwt);
+    } catch (error) {
+      console.error("[agent-approval] failed to submit approval decision:", error);
+    }
   }
 
   return (
@@ -32,10 +65,10 @@ export default function ApprovalQueue() {
                 <p className="text-slate-400">{task.agentId}</p>
               </div>
               <div className="flex gap-2">
-                <Button size="sm" onClick={() => resolveTask(task.id)}>
+                <Button size="sm" onClick={() => resolveTask(task.id, true)}>
                   Approve
                 </Button>
-                <Button size="sm" variant="secondary" onClick={() => resolveTask(task.id)}>
+                <Button size="sm" variant="secondary" onClick={() => resolveTask(task.id, false)}>
                   Reject
                 </Button>
               </div>
