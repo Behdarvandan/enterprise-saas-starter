@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createCoreBrowserClient } from "@/core/db";
 import { useTenant } from "@/core/tenant";
 import { Button } from "@/core/ui/primitives/button";
@@ -14,30 +14,52 @@ async function getAccessToken(): Promise<string | undefined> {
   return data.session?.access_token;
 }
 
-/** Zero-prop slot contribution (same contract as DemoWidget/AuditLogTable) — sources tenant/jwt itself. */
+/**
+ * Zero-prop slot contribution (same contract as DemoWidget/AuditLogTable) —
+ * sources tenant/jwt itself. Also subscribes to Realtime `postgres_changes`
+ * on `agent_approvals` to auto-refetch on live updates. That table doesn't
+ * exist yet (approval data currently comes only from pasargad-core's REST
+ * API — see service.ts), so this subscription is a forward-compatible
+ * placeholder: it starts firing the moment that table lands.
+ */
 export default function ApprovalQueue() {
   const { tenant } = useTenant();
   const [tasks, setTasks] = useState<AgentApprovalTask[]>([]);
 
+  const loadApprovals = useCallback(async () => {
+    if (!tenant) return;
+    try {
+      const jwt = await getAccessToken();
+      const pending = await fetchPendingApprovals(tenant.id, jwt);
+      setTasks(pending);
+    } catch (error) {
+      console.error("[agent-approval] failed to load pending approvals:", error);
+    }
+  }, [tenant]);
+
+  useEffect(() => {
+    loadApprovals();
+  }, [loadApprovals]);
+
   useEffect(() => {
     if (!tenant) return;
-    let cancelled = false;
 
-    async function load() {
-      try {
-        const jwt = await getAccessToken();
-        const pending = await fetchPendingApprovals(tenant!.id, jwt);
-        if (!cancelled) setTasks(pending);
-      } catch (error) {
-        console.error("[agent-approval] failed to load pending approvals:", error);
-      }
-    }
+    const supabase = createCoreBrowserClient();
+    const channel = supabase
+      .channel(`agent_approvals:${tenant.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "agent_approvals", filter: `organization_id=eq.${tenant.id}` },
+        () => {
+          loadApprovals();
+        },
+      )
+      .subscribe();
 
-    load();
     return () => {
-      cancelled = true;
+      supabase.removeChannel(channel);
     };
-  }, [tenant]);
+  }, [tenant, loadApprovals]);
 
   async function resolveTask(id: string, approved: boolean) {
     setTasks((prev) => prev.filter((task) => task.id !== id));
