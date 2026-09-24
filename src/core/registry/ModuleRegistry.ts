@@ -1,5 +1,5 @@
 import type { TenantRole } from "@/core/auth/types";
-import type { ModuleManifest, ModuleNavigationItem } from "@/core/registry/types";
+import type { FeatureFlagMap, ModuleManifest, ModuleNavigationItem } from "@/core/registry/types";
 
 /**
  * In-memory module registry: feature modules register their manifest at
@@ -22,8 +22,25 @@ export class ModuleRegistry {
     return Array.from(this.modules.values());
   }
 
-  getEnabledModules(): ModuleManifest[] {
-    return this.getAllModules().filter((module) => module.enabled);
+  /**
+   * Whether `id` is enabled right now: a flag present in `activeFlags`
+   * (keyed by the manifest's `featureFlagKey`) overrides the manifest's
+   * default `enabled`; a missing flag or missing `featureFlagKey` falls back
+   * to `enabled`. An unknown module id is never enabled.
+   */
+  isModuleEnabled(id: string, activeFlags?: FeatureFlagMap): boolean {
+    const manifest = this.modules.get(id);
+    if (!manifest) return false;
+
+    if (manifest.featureFlagKey && activeFlags && manifest.featureFlagKey in activeFlags) {
+      return activeFlags[manifest.featureFlagKey];
+    }
+
+    return manifest.enabled;
+  }
+
+  getEnabledModules(activeFlags?: FeatureFlagMap): ModuleManifest[] {
+    return this.getAllModules().filter((module) => this.isModuleEnabled(module.id, activeFlags));
   }
 
   /**
@@ -31,8 +48,8 @@ export class ModuleRegistry {
    * is visible to everyone; an item with `roles` requires a matching
    * `userRole` — omitting `userRole` excludes every role-gated item.
    */
-  getNavigationItems(userRole?: TenantRole): ModuleNavigationItem[] {
-    return this.getEnabledModules()
+  getNavigationItems(userRole?: TenantRole, activeFlags?: FeatureFlagMap): ModuleNavigationItem[] {
+    return this.getEnabledModules(activeFlags)
       .flatMap((module) => module.navigation ?? [])
       .filter((item) => !item.roles || (userRole !== undefined && item.roles.includes(userRole)));
   }
