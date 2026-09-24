@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint src",
     "test": "vitest run",
-    "check:boundaries": "node scripts/check-core-boundaries.mjs"
+    "check:boundaries": "node scripts/check-core-boundaries.mjs",
+    "generate:api": "openapi-typescript ${PASARGAD_OPENAPI_URL:-http://localhost:8000/openapi.json} -o src/core/api/schema.d.ts"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",
@@ -24,6 +25,7 @@
     "next": "15.5.25",
     "next-intl": "^4.14.5",
     "next-themes": "^0.4.6",
+    "openapi-fetch": "^0.17.0",
     "posthog-js": "^1.433.6",
     "posthog-node": "^5.52.4",
     "radix-ui": "^1.6.7",
@@ -48,6 +50,7 @@
     "eslint": "^9.16.0",
     "eslint-config-next": "15.5.25",
     "jsdom": "^25.0.1",
+    "openapi-typescript": "^7.13.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.7.2",
