@@ -792,6 +792,7 @@ export type Database = {
           provider_subscription_id: string | null
           slug: string
           subscription_status: string
+          trial_ends_at: string | null
           updated_at: string
         }
         Insert: {
@@ -804,6 +805,7 @@ export type Database = {
           provider_subscription_id?: string | null
           slug: string
           subscription_status?: string
+          trial_ends_at?: string | null
           updated_at?: string
         }
         Update: {
@@ -816,6 +818,7 @@ export type Database = {
           provider_subscription_id?: string | null
           slug?: string
           subscription_status?: string
+          trial_ends_at?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -1160,6 +1163,7 @@ export type Database = {
           provider_customer_id: string | null
           provider_subscription_id: string | null
           subscription_status: string
+          trial_ends_at: string | null
           updated_at: string
         }
         SetofOptions: {
@@ -1222,6 +1226,7 @@ export type Database = {
           provider_customer_id: string | null
           provider_subscription_id: string | null
           subscription_status: string
+          trial_ends_at: string | null
           updated_at: string
         }
         SetofOptions: {

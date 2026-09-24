@@ -4,3 +4,4 @@ export { default as UsageTracker } from "@/modules/billing/components/UsageTrack
 export { registerBillingListeners } from "@/modules/billing/listeners";
 export { verifyLemonSqueezySignature, applyLemonSqueezySubscriptionEvent } from "@/modules/billing/lemonsqueezy";
 export type { LemonSqueezyWebhookPayload } from "@/modules/billing/lemonsqueezy";
+export { createLemonSqueezyCheckoutAction } from "@/modules/billing/actions";

@@ -4,6 +4,7 @@ import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { resolveTenantContext } from "@/core/tenant/resolver";
 import { updateSession } from "@/lib/supabase/middleware";
+import { applySubscriptionGate } from "@/lib/supabase/subscription-gate";
 
 const handleI18nRouting = createMiddleware(routing);
 
@@ -38,7 +39,8 @@ export async function middleware(request: NextRequest) {
   // it instead of a fresh response that would drop the locale redirect.
   try {
     const response = handleI18nRouting(request);
-    return await updateSession(request, response);
+    const sessionResponse = await updateSession(request, response);
+    return await applySubscriptionGate(request, sessionResponse);
   } catch (error) {
     // An unhandled throw here is a 500 for every page: degrade to the
     // default-locale routing instead.
