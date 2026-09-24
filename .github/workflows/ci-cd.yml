@@ -6,27 +6,9 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  NODE_VERSION: "20"
-  # Non-secret placeholder values so builds and tests run out-of-the-box.
-  # Replace these with GitHub Secrets for real environments.
-  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key' }}
-  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key' }}
-  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY || 'sk_test_placeholder' }}
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder' }}
-  STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET || 'whsec_placeholder' }}
-  STRIPE_PRICE_PRO: ${{ secrets.STRIPE_PRICE_PRO || 'price_placeholder' }}
-  STRIPE_PRICE_ENTERPRISE: ${{ secrets.STRIPE_PRICE_ENTERPRISE || 'price_placeholder' }}
-  NEXT_PUBLIC_PAYMENT_PROVIDER: ${{ secrets.NEXT_PUBLIC_PAYMENT_PROVIDER || 'stripe' }}
-  PAYTR_MERCHANT_ID: ${{ secrets.PAYTR_MERCHANT_ID || 'placeholder-merchant-id' }}
-  PAYTR_MERCHANT_KEY: ${{ secrets.PAYTR_MERCHANT_KEY || 'placeholder-merchant-key' }}
-  PAYTR_MERCHANT_SALT: ${{ secrets.PAYTR_MERCHANT_SALT || 'placeholder-merchant-salt' }}
-  RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_placeholder' }}
-
 jobs:
-  build:
-    name: Lint & Build
+  quality-gate:
+    name: Quality Gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,42 +16,50 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: "20"
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Lint
-        run: npm run lint
+      - name: Check core/module boundaries
+        run: npm run check:boundaries
       - name: Build
         run: npm run build
 
-  e2e:
-    name: Playwright E2E
-    needs: build
+  build-and-deploy:
+    name: Build & Deploy
+    needs: quality-gate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-      - name: Install dependencies
-        run: npm ci
-      - name: Build app
-        run: npm run build
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-      - name: Run Playwright tests
-        run: npx playwright test
-      - name: Upload Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
 
-  # Deployment is handled by Vercel's own GitHub integration (auto-deploy on
-  # push to main), not by a workflow job here.
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" -t "$ECR_REGISTRY/$ECR_REPOSITORY:latest" .
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:latest"
+
+      - name: Deploy to Amazon ECS
+        run: |
+          aws ecs update-service \
+            --cluster "${{ secrets.ECS_CLUSTER }}" \
+            --service "${{ secrets.ECS_SERVICE }}" \
+            --force-new-deployment
