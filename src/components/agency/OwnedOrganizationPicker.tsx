@@ -67,7 +67,7 @@ export default function OwnedOrganizationPicker({
                 key={org.id}
                 className={cn(
                   "flex cursor-pointer items-center gap-3 border-b border-slate-800 px-3 py-2.5 transition-colors last:border-0 focus-within:bg-slate-800/60",
-                  selected ? "bg-violet-500/10" : "hover:bg-slate-800/40",
+                  selected ? "bg-primary/10" : "hover:bg-slate-800/40",
                   disabled && "cursor-not-allowed opacity-60",
                 )}
               >
@@ -78,7 +78,7 @@ export default function OwnedOrganizationPicker({
                   checked={selected}
                   disabled={disabled}
                   onChange={() => onChange(org.id)}
-                  className="size-4 accent-violet-500"
+                  className="size-4 accent-primary"
                 />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-medium text-slate-100">{org.name}</span>

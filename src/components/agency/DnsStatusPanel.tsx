@@ -172,7 +172,7 @@ export default function DnsStatusPanel({
                 done
                   ? "border-emerald-500/20 bg-emerald-500/5 text-emerald-300"
                   : current
-                    ? "border-violet-500/40 bg-violet-500/10 text-violet-200"
+                    ? "border-primary/40 bg-primary/10 text-primary"
                     : "border-slate-800 text-slate-400",
               )}
             >
@@ -180,7 +180,7 @@ export default function DnsStatusPanel({
                 aria-hidden
                 className={cn(
                   "flex size-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-                  done ? "bg-emerald-500/20" : current ? "bg-violet-500/20" : "bg-slate-800",
+                  done ? "bg-emerald-500/20" : current ? "bg-primary/20" : "bg-slate-800",
                 )}
               >
                 {done ? <Check className="size-3" /> : index + 1}

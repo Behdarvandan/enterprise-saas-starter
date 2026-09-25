@@ -49,12 +49,15 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Primary hover shade. Defaults to violet-500 and is re-derived from the
-     tenant colour by getBrandingCssVars on white-labelled domains. */
+  /* Primary hover shade. Defaults to zinc-800/zinc-200 and is re-derived
+     from the tenant colour by getBrandingCssVars on white-labelled domains. */
   --color-primary-hover: var(--primary-hover);
 
   /* Marketing-site aliases — the public pages still read these names. The
-     app portals use literal slate/violet utilities instead. */
+     app portals use literal slate/zinc utilities instead. --color-violet*
+     now alias the neutral primary token; names kept for backward
+     compatibility rather than chasing every `bg-violet`/`text-violet`/
+     `border-violet` consumer through a rename. */
   --color-canvas: var(--background);
   --color-surface: var(--card);
   --color-surface-raised: var(--popover);
@@ -76,12 +79,12 @@
 
 @theme {
   /* Legacy brand palette (public booking flow + global error boundary). */
-  --color-brand-50: #f5f7ff;
-  --color-brand-100: #ebf0ff;
-  --color-brand-300: #a5b4fc;
-  --color-brand-500: #5b4fe0;
-  --color-brand-600: #5b4fe0;
-  --color-brand-700: #4a3fc9;
+  --color-brand-50: #fafafa;
+  --color-brand-100: #f4f4f5;
+  --color-brand-300: #d4d4d8;
+  --color-brand-500: #71717a;
+  --color-brand-600: #52525b;
+  --color-brand-700: #3f3f46;
 
   /* Status colors. */
   --color-status-success: #10b981;
@@ -122,9 +125,9 @@
   }
 }
 
-/* Semantic design tokens — Liquid Glass, violet-600 primary throughout.
+/* Semantic design tokens — Liquid Glass, neutral zinc primary throughout.
    `:root` carries the light theme; `.dark` overrides the palette-specific
-   vars for the Dark Violet theme. `next-themes` toggles the `.dark` class on
+   vars for the Dark Neutral theme. `next-themes` toggles the `.dark` class on
    <html> (see ThemeToggle) — both share --radius/--touch-target-min since
    those aren't theme-dependent. The agency white-label layer
    (getBrandingCssVars) overrides --primary/--primary-hover/--ring/
@@ -144,33 +147,33 @@
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
-  --primary: #7c3aed; /* violet-600 */
-  --primary-hover: #6d28d9; /* violet-700, darker for contrast on light */
+  --primary: #18181b; /* zinc-900 */
+  --primary-hover: #27272a; /* zinc-800, lighter on hover for a near-black light-mode button */
   --primary-foreground: #ffffff;
   --secondary: #e8e9f3;
   --secondary-foreground: #0f172a;
   --muted: #e8e9f3;
   --muted-foreground: #5b6472;
-  --accent: #ede9fc;
-  --accent-foreground: #4c1d95;
+  --accent: #f4f4f5; /* zinc-100 */
+  --accent-foreground: #18181b; /* zinc-900 */
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --border: rgb(15 23 42 / 0.1);
   --input: rgb(15 23 42 / 0.18);
-  --ring: #7c3aed;
-  --chart-1: #7c3aed;
-  --chart-2: #a78bfa;
+  --ring: #3f3f46; /* zinc-700 */
+  --chart-1: #18181b;
+  --chart-2: #71717a;
   --chart-3: #059669;
   --chart-4: #dc2626;
   --chart-5: #5b6472;
   --sidebar: #ececf5;
   --sidebar-foreground: #0f172a;
-  --sidebar-primary: #7c3aed;
+  --sidebar-primary: #18181b;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #e8e9f3;
   --sidebar-accent-foreground: #0f172a;
   --sidebar-border: rgb(15 23 42 / 0.1);
-  --sidebar-ring: #7c3aed;
+  --sidebar-ring: #3f3f46;
 }
 
 .dark {
@@ -182,9 +185,9 @@
   --card-foreground: #f1f5f9;
   --popover: #0f172a; /* slate-900 */
   --popover-foreground: #f1f5f9;
-  --primary: #7c3aed; /* violet-600 */
-  --primary-hover: #8b5cf6; /* violet-500 */
-  --primary-foreground: #ffffff;
+  --primary: #f4f4f5; /* zinc-100 — inverted so the button stays visible on a near-black page */
+  --primary-hover: #e4e4e7; /* zinc-200 */
+  --primary-foreground: #18181b; /* zinc-900 — paired with --primary, must flip together */
   --secondary: #1e293b; /* slate-800 */
   --secondary-foreground: #f1f5f9;
   --muted: #1e293b;
@@ -195,20 +198,20 @@
   --destructive-foreground: #f8fafc;
   --border: #1e293b; /* slate-800 */
   --input: #334155; /* slate-700 */
-  --ring: #8b5cf6; /* violet-500 */
-  --chart-1: #8b5cf6;
-  --chart-2: #c4b5fd;
+  --ring: #a1a1aa; /* zinc-400 */
+  --chart-1: #f4f4f5;
+  --chart-2: #a1a1aa;
   --chart-3: #10b981;
   --chart-4: #f87171;
   --chart-5: #94a3b8;
   --sidebar: #020617;
   --sidebar-foreground: #f1f5f9;
-  --sidebar-primary: #7c3aed;
-  --sidebar-primary-foreground: #ffffff;
+  --sidebar-primary: #f4f4f5;
+  --sidebar-primary-foreground: #18181b; /* paired with --primary-foreground, must flip together */
   --sidebar-accent: #1e293b;
   --sidebar-accent-foreground: #f1f5f9;
   --sidebar-border: #1e293b;
-  --sidebar-ring: #8b5cf6;
+  --sidebar-ring: #a1a1aa;
 }
 
 /* Public marketing surface — the landing page and the pages that share the

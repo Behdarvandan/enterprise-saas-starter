@@ -15,7 +15,7 @@ export default function UserMenu({ email }: UserMenuProps) {
     <Popover>
       <PopoverTrigger
         aria-label={t("userMenu")}
-        className="flex size-9 items-center justify-center rounded-full border border-slate-800 bg-slate-900/50 text-xs font-semibold text-violet-300 transition-colors outline-none hover:border-slate-700 focus-visible:ring-2 focus-visible:ring-ring/60"
+        className="flex size-9 items-center justify-center rounded-full border border-slate-800 bg-slate-900/50 text-xs font-semibold text-primary transition-colors outline-none hover:border-slate-700 focus-visible:ring-2 focus-visible:ring-ring/60"
       >
         {(email.charAt(0) || "?").toUpperCase()}
       </PopoverTrigger>

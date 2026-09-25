@@ -54,7 +54,7 @@ export default function ChatPanel({ messages, streaming, onSend, suggestions, cl
                     type="button"
                     onClick={() => submit(suggestion)}
                     disabled={streaming}
-                    className="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-300 transition-colors hover:border-violet-500/60 hover:text-violet-300 focus-visible:ring-2 focus-visible:ring-ring/60 disabled:opacity-50"
+                    className="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-300 transition-colors hover:border-primary/60 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring/60 disabled:opacity-50"
                   >
                     {suggestion}
                   </button>
@@ -88,7 +88,7 @@ export default function ChatPanel({ messages, streaming, onSend, suggestions, cl
         {streaming ? (
           <div className="flex justify-start">
             <div className="flex items-center gap-2 rounded-2xl border border-slate-800 bg-slate-900 px-3 py-2">
-              <Loader2 aria-hidden className="size-4 animate-spin text-violet-400" />
+              <Loader2 aria-hidden className="size-4 animate-spin text-primary" />
               <span className="text-sm text-slate-400">{t("thinking")}</span>
             </div>
           </div>
@@ -108,13 +108,13 @@ export default function ChatPanel({ messages, streaming, onSend, suggestions, cl
           placeholder={t("placeholder")}
           aria-label={t("placeholder")}
           disabled={streaming}
-          className="h-9 flex-1 rounded-lg border border-slate-700 bg-slate-950/60 px-3 text-sm text-slate-100 transition-colors outline-none placeholder:text-slate-500 focus-visible:border-violet-500 focus-visible:ring-2 focus-visible:ring-violet-500/30 disabled:opacity-60"
+          className="h-9 flex-1 rounded-lg border border-slate-700 bg-slate-950/60 px-3 text-sm text-slate-100 transition-colors outline-none placeholder:text-slate-500 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 disabled:opacity-60"
         />
         <button
           type="submit"
           disabled={streaming || !input.trim()}
           aria-label={t("send")}
-          className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-violet-950/50 transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-ring/60 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-zinc-950/50 transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-ring/60 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Send aria-hidden className="size-4 rtl:-scale-x-100" />
         </button>

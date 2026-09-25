@@ -111,7 +111,7 @@ export default function TaskBoard({ tasks }: TaskBoardProps) {
                           type="button"
                           onClick={() => moveToNextColumn(task, nextColumn)}
                           disabled={pendingId === task.id}
-                          className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-violet-300 transition-colors hover:text-violet-200 focus-visible:ring-2 focus-visible:ring-ring/60 disabled:opacity-50"
+                          className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary-hover focus-visible:ring-2 focus-visible:ring-ring/60 disabled:opacity-50"
                         >
                           {t("moveTo", { column: t(`columns.${nextColumn}`) })}
                           <ArrowRight aria-hidden size={12} className="rtl:rotate-180" />

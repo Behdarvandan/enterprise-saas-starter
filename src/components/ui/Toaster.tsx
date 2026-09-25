@@ -15,7 +15,7 @@ const toneIcon: Record<ToastTone, typeof Info> = {
 const toneIconClass: Record<ToastTone, string> = {
   success: "text-emerald-400",
   error: "text-red-400",
-  info: "text-violet-400",
+  info: "text-primary",
 };
 
 /** Mount once per shell. Feedback for actions that have no inline home. */

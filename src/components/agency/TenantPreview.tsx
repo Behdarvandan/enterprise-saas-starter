@@ -115,7 +115,7 @@ export default function TenantPreview({ title, logoUrl, color, domain, onLogoErr
 
             <div className="rounded-lg border border-slate-800 bg-slate-900/50 p-3">
               <p className="text-[10px] text-slate-400">{t("metricLabel")}</p>
-              <p dir="ltr" className="mt-1 text-start font-mono text-lg font-semibold text-violet-400">
+              <p dir="ltr" className="mt-1 text-start font-mono text-lg font-semibold text-primary">
                 94.2%
               </p>
             </div>

@@ -59,7 +59,7 @@ export default function TenantSwitcher({ organizations, activeOrganizationId, on
     <>
       <span
         aria-hidden
-        className="flex size-7 shrink-0 items-center justify-center rounded-md bg-violet-500/15 text-xs font-semibold text-violet-300"
+        className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/15 text-xs font-semibold text-primary"
       >
         {activeName.charAt(0).toUpperCase()}
       </span>

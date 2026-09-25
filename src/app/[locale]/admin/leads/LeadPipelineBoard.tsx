@@ -68,7 +68,7 @@ export default function LeadPipelineBoard({ leads }: LeadPipelineBoardProps) {
                     className="rounded-lg border border-slate-800 bg-slate-950/60 p-3 transition-colors hover:border-slate-700"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <Link href={`/admin/leads/${lead.id}`} className="text-sm font-semibold text-slate-100 hover:text-violet-300">
+                      <Link href={`/admin/leads/${lead.id}`} className="text-sm font-semibold text-slate-100 hover:text-primary">
                         {lead.full_name}
                       </Link>
                       <Badge tone={lead.kind === "saas" ? "neutral" : "warn"}>
@@ -85,7 +85,7 @@ export default function LeadPipelineBoard({ leads }: LeadPipelineBoardProps) {
                           type="button"
                           onClick={() => setStatus(lead, nextStatus)}
                           disabled={isPending}
-                          className="inline-flex items-center gap-1 text-xs font-medium text-violet-300 transition-colors hover:text-violet-200 focus-visible:ring-2 focus-visible:ring-ring/60 disabled:opacity-50"
+                          className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary-hover focus-visible:ring-2 focus-visible:ring-ring/60 disabled:opacity-50"
                         >
                           {t(`status.${nextStatus}`)}
                           <ArrowRight aria-hidden size={12} className="rtl:rotate-180" />

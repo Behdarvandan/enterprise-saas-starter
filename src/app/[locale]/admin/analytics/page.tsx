@@ -133,7 +133,7 @@ export default async function AdminAnalyticsPage() {
         <Card className="p-6">
           <div className="flex items-baseline justify-between gap-3">
             <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("freelance.title")}</h2>
-            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-violet-400">
+            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-primary">
               {formatMoney(locale, freelanceTotal * 100)}
             </span>
           </div>
@@ -146,7 +146,7 @@ export default async function AdminAnalyticsPage() {
         <Card className="p-6">
           <div className="flex items-baseline justify-between gap-3">
             <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("saas.title")}</h2>
-            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-violet-400">
+            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-primary">
               {formatMoney(locale, saasTotal * 100)}
             </span>
           </div>

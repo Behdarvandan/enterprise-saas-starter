@@ -107,12 +107,12 @@ function ProjectStageCard({
       {project.repo_url || project.live_url ? (
         <div className="mt-6 flex flex-wrap gap-4 border-t border-slate-800 pt-4">
           {project.repo_url ? (
-            <a href={project.repo_url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-violet-300 hover:text-violet-200">
+            <a href={project.repo_url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:text-primary-hover">
               {viewRepo} <span aria-hidden className="inline-block rtl:-scale-x-100">→</span>
             </a>
           ) : null}
           {project.live_url ? (
-            <a href={project.live_url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-violet-300 hover:text-violet-200">
+            <a href={project.live_url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:text-primary-hover">
               {viewLive} <span aria-hidden className="inline-block rtl:-scale-x-100">→</span>
             </a>
           ) : null}

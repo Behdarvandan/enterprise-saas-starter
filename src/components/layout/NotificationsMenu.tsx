@@ -53,7 +53,7 @@ export default function NotificationsMenu({ items }: NotificationsMenuProps) {
       >
         <Bell aria-hidden className="size-4" />
         {unread ? (
-          <span aria-hidden className="absolute end-2 top-2 size-2 rounded-full bg-violet-500 ring-2 ring-slate-950" />
+          <span aria-hidden className="absolute end-2 top-2 size-2 rounded-full bg-primary ring-2 ring-slate-950" />
         ) : null}
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80 p-0">
@@ -68,7 +68,7 @@ export default function NotificationsMenu({ items }: NotificationsMenuProps) {
               const parsed = parseRecommendation(item.recommendation);
               return (
                 <li key={item.id} className="flex gap-3 px-4 py-3">
-                  <Lightbulb aria-hidden className="mt-0.5 size-4 shrink-0 text-violet-400" />
+                  <Lightbulb aria-hidden className="mt-0.5 size-4 shrink-0 text-primary" />
                   <div className="min-w-0">
                     <p className="line-clamp-3 text-sm text-slate-200">{parsed.advice ?? parsed.raw}</p>
                     <p className="mt-1 text-xs text-slate-400">
@@ -83,7 +83,7 @@ export default function NotificationsMenu({ items }: NotificationsMenuProps) {
         <div className="border-t border-slate-800 p-2">
           <Link
             href="/dashboard/crew-insights"
-            className="block rounded-md px-2 py-1.5 text-center text-sm font-medium text-violet-300 transition-colors hover:bg-slate-800/60"
+            className="block rounded-md px-2 py-1.5 text-center text-sm font-medium text-primary transition-colors hover:bg-slate-800/60"
           >
             {t("viewAll")}
           </Link>

@@ -71,7 +71,7 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
             key={plan.tier}
             className={cn(
               "relative flex flex-col p-6",
-              plan.highlight && "border-primary/50 shadow-[0_0_40px_rgba(124,58,237,0.18)]",
+              plan.highlight && "border-primary/50 shadow-[0_0_40px_rgba(100,116,139,0.18)]",
             )}
           >
             {plan.highlight ? (

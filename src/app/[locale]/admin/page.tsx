@@ -227,7 +227,7 @@ export default async function AdminDashboardPage() {
         <Card className="p-6 lg:col-span-2">
           <div className="flex items-baseline justify-between gap-3">
             <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("revenue.title")}</h2>
-            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-violet-400">
+            <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-primary">
               {formatMoney(locale, revenueTotal)}
             </span>
           </div>

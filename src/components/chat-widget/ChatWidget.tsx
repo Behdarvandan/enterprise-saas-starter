@@ -51,7 +51,7 @@ export default function ChatWidget({
         aria-label={open ? t("close") : t("open")}
         aria-expanded={open}
         className={cn(
-          "fixed bottom-4 z-50 flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-violet-950/50 transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-ring/60",
+          "fixed bottom-4 z-50 flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-zinc-950/50 transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-ring/60",
           anchor,
         )}
       >

@@ -42,7 +42,7 @@ export default async function AdminLeadDetailPage({ params }: LeadDetailPageProp
 
   return (
     <PageContainer className="max-w-3xl">
-      <Link href="/admin/leads" className="inline-flex items-center gap-2 text-sm font-medium text-violet-300 hover:text-violet-200">
+      <Link href="/admin/leads" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-hover">
         <ArrowLeft aria-hidden size={16} className="rtl:rotate-180" />
         {t("detail.back")}
       </Link>

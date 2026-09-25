@@ -4,7 +4,7 @@ interface AmbientGlowProps {
   className?: string;
   /** Where the glow's center sits within its positioned container. */
   position?: "top" | "bottom" | "center";
-  /** Any valid CSS color, including alpha. Defaults to the brand violet. */
+  /** Any valid CSS color, including alpha. Defaults to a neutral slate tint. */
   color?: string;
 }
 
@@ -21,7 +21,7 @@ const POSITION_ORIGIN: Record<NonNullable<AmbientGlowProps["position"]>, string>
  * the gradient string again. Purely decorative: no hooks, safe in Server
  * Components. Place inside a `relative` (or `isolate`) positioned parent.
  */
-export function AmbientGlow({ className, position = "top", color = "rgba(124,58,237,0.22)" }: AmbientGlowProps) {
+export function AmbientGlow({ className, position = "top", color = "rgba(100,116,139,0.18)" }: AmbientGlowProps) {
   return (
     <div
       aria-hidden

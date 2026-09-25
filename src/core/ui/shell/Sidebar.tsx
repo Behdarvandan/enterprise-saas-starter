@@ -97,13 +97,13 @@ export default function Sidebar<TItemLabelKey extends string, TGroupLabelKey ext
                     className={cn(
                       "relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
                       active
-                        ? "bg-slate-800/70 text-slate-100 before:absolute before:inset-y-2 before:start-0 before:w-0.5 before:rounded-full before:bg-violet-500"
+                        ? "bg-slate-800/70 text-slate-100 before:absolute before:inset-y-2 before:start-0 before:w-0.5 before:rounded-full before:bg-primary"
                         : "text-slate-400 hover:bg-slate-900 hover:text-slate-100",
                     )}
                   >
                     <item.icon
                       aria-hidden
-                      className={cn("size-4 shrink-0", active ? "text-violet-400" : "text-slate-500")}
+                      className={cn("size-4 shrink-0", active ? "text-primary" : "text-slate-500")}
                     />
                     <span className="truncate">{t(`nav.${item.labelKey}` as Parameters<typeof t>[0])}</span>
                   </Link>

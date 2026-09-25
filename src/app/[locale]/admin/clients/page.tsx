@@ -91,7 +91,7 @@ export default async function AdminClientsPage() {
                     <TableRow key={project.id}>
                       <TableCell>
                         {project.lead_id ? (
-                          <Link href={`/admin/leads/${project.lead_id}`} className="font-medium text-slate-100 hover:text-violet-300">
+                          <Link href={`/admin/leads/${project.lead_id}`} className="font-medium text-slate-100 hover:text-primary">
                             {name}
                           </Link>
                         ) : (

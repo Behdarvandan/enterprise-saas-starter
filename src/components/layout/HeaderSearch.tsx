@@ -31,7 +31,7 @@ export default function HeaderSearch() {
         onChange={(event) => setQuery(event.target.value)}
         placeholder={t("placeholder")}
         aria-label={t("label")}
-        className="h-9 w-full rounded-lg border border-slate-800 bg-slate-900/50 ps-9 pe-3 text-sm text-slate-100 transition-colors outline-none placeholder:text-slate-500 focus-visible:border-violet-500 focus-visible:ring-2 focus-visible:ring-violet-500/30"
+        className="h-9 w-full rounded-lg border border-slate-800 bg-slate-900/50 ps-9 pe-3 text-sm text-slate-100 transition-colors outline-none placeholder:text-slate-500 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
       />
     </form>
   );

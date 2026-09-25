@@ -32,7 +32,7 @@ function asInvoiceStatus(value: string): KnownInvoiceStatus | null {
   return (INVOICE_STATUSES as readonly string[]).includes(value) ? (value as KnownInvoiceStatus) : null;
 }
 
-const linkClass = "inline-flex items-center gap-1 text-sm font-medium text-violet-300 hover:text-violet-200";
+const linkClass = "inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-hover";
 
 export default async function ClientInvoicesPage() {
   const { supabase, membership } = await requireMembership();

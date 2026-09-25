@@ -92,11 +92,11 @@ export default function ThoughtStream({ scenario, visibleSteps, id }: ThoughtStr
                   aria-hidden
                   className={cn(
                     "mt-0.5 size-3.5 shrink-0",
-                    failed || step.kind === "handoff" ? "text-amber-400" : "text-violet-400",
+                    failed || step.kind === "handoff" ? "text-amber-400" : "text-primary",
                   )}
                 />
                 <p className="min-w-0 text-slate-300">
-                  <code dir="ltr" className="me-2 rounded bg-slate-800/80 px-1.5 py-0.5 font-mono text-[11px] text-violet-400">
+                  <code dir="ltr" className="me-2 rounded bg-slate-800/80 px-1.5 py-0.5 font-mono text-[11px] text-primary">
                     {STEP_TOKEN[step.kind]}
                   </code>
                   <span

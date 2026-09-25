@@ -13,7 +13,7 @@ export default async function FinalCta() {
         <GlassPanel className="relative isolate overflow-hidden px-6 py-14 text-center sm:px-12">
           <div
             aria-hidden
-            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_80%_at_50%_100%,rgba(124,58,237,0.25),transparent_70%)]"
+            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_80%_at_50%_100%,rgba(100,116,139,0.22),transparent_70%)]"
           />
           <h2 className="mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             {t("title")}

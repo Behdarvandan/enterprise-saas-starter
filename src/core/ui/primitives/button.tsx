@@ -10,20 +10,20 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Violet CTA — the only element in the system that carries the violet-950 shadow.
+        // Neutral CTA — the only element in the system that carries the zinc-950 shadow.
         default:
-          "bg-primary text-primary-foreground shadow-lg shadow-violet-950/50 hover:bg-primary-hover",
-        // Landing-page primary CTA: same fill, violet glow instead of the drop shadow.
-        glow: "bg-primary text-primary-foreground shadow-[0_0_25px_rgba(124,58,237,0.25)] hover:bg-primary-hover hover:shadow-[0_0_32px_rgba(124,58,237,0.4)]",
+          "bg-primary text-primary-foreground shadow-lg shadow-zinc-950/50 hover:bg-primary-hover",
+        // Landing-page primary CTA: same fill, neutral glow instead of the drop shadow.
+        glow: "bg-primary text-primary-foreground shadow-[0_0_25px_rgba(100,116,139,0.25)] hover:bg-primary-hover hover:shadow-[0_0_32px_rgba(100,116,139,0.4)]",
         secondary:
           "border border-slate-800 bg-slate-900/50 text-slate-100 backdrop-blur-md hover:border-slate-700 hover:bg-slate-800/70",
         ghost: "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        link: "text-violet-400 underline-offset-4 hover:text-violet-300 hover:underline",
+        link: "text-primary underline-offset-4 hover:text-primary-hover hover:underline",
         // Liquid Glass: frosted material (see .liquid-surface in globals.css)
         // with a hover lift and a tactile press. Theme-aware via --card/--foreground.
         liquid:
-          "liquid-surface border-transparent text-foreground hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(124,58,237,0.18)] active:translate-y-0 active:scale-[0.98]",
+          "liquid-surface border-transparent text-foreground hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(100,116,139,0.18)] active:translate-y-0 active:scale-[0.98]",
       },
       size: {
         default: "h-9 px-4",

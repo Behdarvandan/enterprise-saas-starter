@@ -3,7 +3,7 @@
 import { Globe } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { isRtlLocale, routing } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -46,7 +46,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
   const router = useRouter();
 
   return (
-    <DropdownMenu>
+    <DropdownMenu dir="ltr">
       <DropdownMenuTrigger asChild>
         <LiquidButton
           type="button"
@@ -62,9 +62,8 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
         {routing.locales.map((candidate) => (
           <DropdownMenuItem
             key={candidate}
-            dir={isRtlLocale(candidate) ? "rtl" : "ltr"}
             className={cn(
-              "justify-between",
+              "flex w-full items-center justify-start gap-2 text-left",
               candidate === locale && "font-semibold text-foreground",
             )}
             onSelect={() => router.replace(pathname, { locale: candidate })}

@@ -37,7 +37,7 @@ export default function MetricCard({
         </p>
         {Icon ? <Icon aria-hidden className="size-4 text-slate-500" /> : null}
       </div>
-      <p dir="ltr" className="text-start font-mono text-2xl font-semibold tabular-nums text-violet-400">
+      <p dir="ltr" className="text-start font-mono text-2xl font-semibold tabular-nums text-primary">
         {value}
       </p>
       {hint ? <p className="text-xs text-slate-400">{hint}</p> : null}
