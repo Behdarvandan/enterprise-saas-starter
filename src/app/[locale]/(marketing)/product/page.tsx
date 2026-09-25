@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Bot, Building2, Palette, Search } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/core/ui/primitives/button";
@@ -14,8 +14,12 @@ import { getPricingRegion } from "@/lib/geo";
 // baked into the build.
 export const dynamic = "force-dynamic";
 
-export default async function SaasPage() {
-  const t = await getTranslations("marketing.saasPage");
+const MODULE_KEYS = ["digitalWorkforce", "knowledgeBase", "multiCompany", "whiteLabelPortal"] as const;
+const MODULE_ICONS = { digitalWorkforce: Bot, knowledgeBase: Search, multiCompany: Building2, whiteLabelPortal: Palette };
+
+export default async function ProductPage() {
+  const t = await getTranslations("marketing.productPage");
+  const tNav = await getTranslations("marketing.megaNav");
   const region = await getPricingRegion();
   const plans = getPlans(region);
 
@@ -30,43 +34,51 @@ export default async function SaasPage() {
           <p className="mt-5 text-lg text-ink-muted">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button asChild variant="glow" size="lg">
-              <Link href="#features">{t("ctaPrimary")}</Link>
+              <Link href="/signup">{t("ctaPrimary")}</Link>
             </Button>
             <LiquidButton asChild size="lg">
               <Link href="/pricing">{t("ctaSecondary")}</Link>
             </LiquidButton>
           </div>
           <p className="mt-4 text-sm text-ink-muted">
-            <Link href="/services" className="font-semibold text-ink-primary hover:text-primary">
+            <Link href="/solutions" className="font-semibold text-ink-primary hover:text-primary">
               {t("bridgeLink")}
             </Link>
           </p>
         </div>
       </section>
 
-      <section
-        id="features"
-        className="animate-reveal-up border-y border-subtle bg-surface"
-        style={{ animationDelay: "80ms" }}
-      >
+      <section className="animate-reveal-up border-y border-subtle bg-surface" style={{ animationDelay: "80ms" }}>
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <h2 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
-            {t("featuresTitle")}
+            {t("modulesTitle")}
           </h2>
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              t("features.multiTenant"),
-              t("features.payments"),
-              t("features.rag"),
-              t("features.rls"),
-              t("features.i18n"),
-              t("features.observability"),
-            ].map((feature) => (
-              <LiquidCard key={feature} interactive className="flex items-start gap-3 p-5">
-                <Check size={18} className="mt-0.5 shrink-0 text-status-success" />
-                <p className="text-sm text-ink-muted">{feature}</p>
-              </LiquidCard>
-            ))}
+          <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {MODULE_KEYS.map((key) => {
+              const Icon = MODULE_ICONS[key];
+              const bullets = t.raw(`modules.${key}.bullets`) as string[];
+              return (
+                <LiquidCard key={key} id={key} interactive className="scroll-mt-28 p-6">
+                  <Icon size={20} className="text-primary" />
+                  <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-ink-muted">
+                    {tNav(`products.${key}.tag`)}
+                  </p>
+                  <h3 className="mt-1 text-base font-semibold text-ink-primary">
+                    {tNav(`products.${key}.title`)}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+                    {tNav(`products.${key}.description`)}
+                  </p>
+                  <ul className="mt-4 space-y-2">
+                    {bullets.map((bullet) => (
+                      <li key={bullet} className="text-sm text-ink-muted">
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                </LiquidCard>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -100,7 +112,7 @@ export default async function SaasPage() {
         </div>
         <div className="mt-6">
           <Link href="/pricing" className="text-sm font-semibold text-ink-primary hover:text-primary">
-            {t("ctaSecondary")} →
+            {t("pricingCta")} →
           </Link>
         </div>
       </section>

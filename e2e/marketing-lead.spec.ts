@@ -1,35 +1,35 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Marketing lead pages", () => {
-  test("/saas renders its hero and links to /services, no lead form", async ({
+  test("/product renders its hero and links to /solutions, no lead form", async ({
     page,
   }) => {
-    await page.goto("/saas");
+    await page.goto("/product");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(page.locator("form")).toHaveCount(0);
     await expect(
-      page.getByRole("link", { name: "As your business grows, the same team grows with you" }),
+      page.getByRole("link", { name: "Looking for something tailored to your business instead?" }),
     ).toBeVisible();
   });
 
-  test("/services renders the categories and the quote lead form", async ({
+  test("/solutions renders the segments and the quote lead form", async ({
     page,
   }) => {
-    await page.goto("/services");
+    await page.goto("/solutions");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(page.locator("form")).toBeVisible();
   });
 
-  test("/services/portfolio/[slug] 404s for an unknown case study", async ({
+  test("/solutions/portfolio/[slug] 404s for an unknown case study", async ({
     page,
   }) => {
-    const response = await page.goto("/services/portfolio/no-such-project");
+    const response = await page.goto("/solutions/portfolio/no-such-project");
     expect(response?.status()).toBe(404);
   });
 
-  test("/repair-shops redirects to /services", async ({ page }) => {
+  test("/repair-shops redirects to /solutions", async ({ page }) => {
     const response = await page.goto("/repair-shops");
-    expect(new URL(page.url()).pathname).toBe("/services");
+    expect(new URL(page.url()).pathname).toBe("/solutions");
     expect(response?.status()).toBe(200);
   });
 

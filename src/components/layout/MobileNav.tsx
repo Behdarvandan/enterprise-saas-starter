@@ -105,7 +105,7 @@ export default function MobileNav() {
           </SheetClose>
           <SheetClose asChild>
             <Button asChild variant="glow" size="lg">
-              <Link href="/services#quote">{t("requestDemo")}</Link>
+              <Link href="/solutions#quote">{t("requestDemo")}</Link>
             </Button>
           </SheetClose>
         </div>

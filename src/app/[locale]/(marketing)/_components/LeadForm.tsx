@@ -25,7 +25,7 @@ const labelClass =
  * lead-intake form, single page (no wizard), no budget field. Project
  * category drives one dynamic follow-up question so the pipeline gets
  * CRM-quality detail without adding friction up front. Always submits
- * `kind: "freelance"` since this form only appears on /services — /saas
+ * `kind: "freelance"` since this form only appears on /solutions — /product
  * never captures leads, it links here instead.
  */
 export default function LeadForm() {

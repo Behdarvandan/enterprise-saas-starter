@@ -182,7 +182,7 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
                   {t("upsell.dismiss")}
                 </Button>
                 <Button asChild variant="glow">
-                  <Link href={upsell.tier === "enterprise" ? "/services#quote" : "/pricing"}>
+                  <Link href={upsell.tier === "enterprise" ? "/solutions#quote" : "/pricing"}>
                     {t(upsell.tier === "enterprise" ? "upsell.talkToSales" : "upsell.viewPlan", {
                       tier: tTier(upsell.tier),
                     })}

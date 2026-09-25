@@ -24,7 +24,7 @@ export default async function FinalCta() {
               <Link href="/signup">{t("primary")}</Link>
             </Button>
             <Button asChild variant="secondary" size="lg">
-              <Link href="/services#quote">{t("secondary")}</Link>
+              <Link href="/solutions#quote">{t("secondary")}</Link>
             </Button>
           </div>
         </GlassPanel>

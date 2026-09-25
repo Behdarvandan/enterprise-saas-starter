@@ -183,7 +183,7 @@ function enterprisePlan(region: PricingRegion, priceLabel: string): Plan {
       "Özel ERP/CRM API Entegrasyonu",
       "Dedicated Sunucu & Özel Müşteri Yöneticisi",
     ],
-    checkout: { kind: "contact", href: "/services#quote" },
+    checkout: { kind: "contact", href: "/solutions#quote" },
   };
 }
 

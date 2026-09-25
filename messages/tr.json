@@ -70,76 +70,8 @@
       "successMessage": "Teşekkürler — talebinizi aldık, en kısa sürede size dönüş yapacağız.",
       "genericError": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
     },
-    "saasPage": {
-      "heroTitle": "İşinize göre kurulmuş, sizinle birlikte büyüyen bir sistem.",
-      "heroSubtitle": "Randevu, ödeme, müşteri takibi — ihtiyacınız olanı seçin, gerektiğinde ekleyin. Sistem sizin işinize uyum sağlar, siz sisteme değil.",
-      "ctaPrimary": "Demo İzle",
-      "ctaSecondary": "Planları Gör",
-      "featuresTitle": "Bir SaaS lansmanının ilk günden ihtiyaç duyacağı her şey.",
-      "features": {
-        "multiTenant": "Uygulama kodunda değil, veritabanı katmanında uygulanan Postgres satır düzeyi güvenlikli çok kiracılı mimari.",
-        "payments": "Tek bir sağlayıcıdan bağımsız adaptör arkasında Stripe ve PayTR faturalama — checkout mantığına dokunmadan sağlayıcı değiştirin.",
-        "rag": "pgvector benzerlik araması ile kendi dokümantasyonunuza dayanan bir AI bilgi tabanı sohbet botu.",
-        "rls": "Her kiracı tablosu, incelenmiş ve test edilmiş satır düzeyi güvenlik politikalarıyla birlikte gelir.",
-        "i18n": "Kutudan çıktığı haliyle yerelleştirilmiş yönlendirme, İngilizce ve Türkçe'nin ötesinde daha fazla dile hazır.",
-        "observability": "İlk günden itibaren istemci, sunucu ve edge çalışma zamanlarında devreye alınmış Sentry hata takibi."
-      },
-      "pricingTitle": "Ürününüzle birlikte ölçeklenen planlar.",
-      "bridgeLink": "İşiniz büyüdükçe, aynı ekip sizinle birlikte büyür"
-    },
-    "servicesPage": {
-      "heroTitle": "Sizin için tasarlanmış, sizinle birlikte kurulan çözümler.",
-      "heroSubtitle": "Küçük bir entegrasyondan uçtan uca bir projeye kadar — ihtiyacınıza göre, saatlik veya proje bazlı çalışırız.",
-      "ctaPrimary": "Teklif Al",
-      "ctaSecondary": "Hizmetleri İnceleyin",
-      "bridgeLink": "Hazır bir başlangıç noktası arıyorsanız",
-      "categoriesTitle": "Hizmet alanlarımız",
-      "categories": {
-        "fullstackSaas": {
-          "title": "Full-Stack & SaaS Geliştirme",
-          "description": "Fikrinizi, çalışan bir ürüne dönüştürüyoruz. Next.js ve Supabase üzerine kurulu, üretime hazır web uygulamaları ve MVP'ler.",
-          "bullets": [
-            "Sıfırdan ürün geliştirme",
-            "Mevcut sistemlere yeni özellik ekleme",
-            "Ölçeklenebilir mimari kurulumu",
-            "Örnek: tamirci dükkanları için randevu ve ön-tanı sistemi"
-          ]
-        },
-        "aiAutomation": {
-          "title": "Yapay Zeka & Otomasyon Entegrasyonları",
-          "description": "İşletmenizin kendi verisiyle konuşan, tekrarlayan işleri sizin yerinize yapan akıllı sistemler kuruyoruz.",
-          "bullets": [
-            "Kendi verinizle çalışan akıllı asistanlar",
-            "Süreç otomasyonu",
-            "Mevcut sistemlere AI entegrasyonu"
-          ]
-        },
-        "architectureSecurity": {
-          "title": "Sistem Mimarisi & Güvenlik Denetimi",
-          "description": "Verileriniz kendi kasanızda kilitli kalsın diye, temelden doğru kurulmuş bir yapı sağlıyoruz.",
-          "bullets": [
-            "Veri izolasyonu ve erişim kontrolü kurulumu",
-            "Mevcut sistemde güvenlik denetimi",
-            "Çok kullanıcılı/çok şubeli yapı mimarisi"
-          ]
-        },
-        "paymentSubscription": {
-          "title": "Ödeme & Abonelik Altyapıları",
-          "description": "Ödeme almak kadar, doğru almak da önemli. Esnek faturalandırma ve abonelik sistemleri kuruyoruz.",
-          "bullets": [
-            "Tek seferlik ve abonelik bazlı ödeme kurulumu",
-            "Fatura/kayıt otomasyonu",
-            "Mevcut ödeme akışında sorun giderme"
-          ]
-        }
-      },
-      "portfolioTitle": "Son çalışmalar",
-      "portfolioViewAll": "Tüm çalışmaları görüntüle",
-      "formTitle": "Projeniz hakkında bilgi verin",
-      "formSubtitle": "İhtiyacınızı kısaca anlatın, size dönüş yapalım."
-    },
     "portfolioPage": {
-      "backLink": "Hizmetlere dön",
+      "backLink": "Çözümlere dön",
       "stackLabel": "Teknoloji yığını",
       "notFoundTitle": "Vaka çalışması bulunamadı"
     },
@@ -368,8 +300,8 @@
         "links": {
           "capabilities": "Yetenekler",
           "pricing": "Fiyatlandırma",
-          "saas": "SaaS",
-          "services": "Hizmetler",
+          "saas": "Ürün",
+          "services": "Çözümler",
           "whiteLabel": "White-label",
           "agencyPortal": "Ajans portalı",
           "agencyApply": "Ajans başvurusu",
@@ -427,6 +359,80 @@
       "resources": "Kaynaklar",
       "pricing": "Fiyatlandırma",
       "requestDemo": "Demo İsteyin"
+    },
+    "productPage": {
+      "heroTitle": "Sizin yerinize çalışan bir ekip.",
+      "heroSubtitle": "Müşterilerinizi 7/24 karşılayan, randevularını alan ve birden fazla şirketinizi güvenle yöneten dijital iş gücü.",
+      "ctaPrimary": "Ücretsiz Başlayın",
+      "ctaSecondary": "Fiyatlandırmayı Görün",
+      "bridgeLink": "Kendi ihtiyacınıza özel bir çözüm mü arıyorsunuz?",
+      "modulesTitle": "Sistemde neler var?",
+      "modules": {
+        "digitalWorkforce": {
+          "bullets": [
+            "Müşteri sorularını anında yanıtlar",
+            "Randevu ve rezervasyonları otomatik alır",
+            "Hiç mola vermeden, 7/24 çalışır"
+          ]
+        },
+        "knowledgeBase": {
+          "bullets": [
+            "Fiyat listenizden, kataloğunuzdan doğru cevabı bulur",
+            "Yanlış ya da eski bilgi vermez",
+            "Yeni bir doküman eklediğinizde anında öğrenir"
+          ]
+        },
+        "multiCompany": {
+          "bullets": [
+            "Her şirketin verisi diğerinden tamamen ayrı",
+            "Tek panelden hepsini yönetin",
+            "Yetkilendirme ve erişim tamamen sizin kontrolünüzde"
+          ]
+        },
+        "whiteLabelPortal": {
+          "bullets": [
+            "Kendi logonuz, kendi renkleriniz, kendi alan adınız",
+            "Müşterileriniz platformu değil, sizi görür",
+            "Kurulum dakikalar sürer"
+          ]
+        }
+      },
+      "pricingTitle": "Şeffaf fiyatlandırma",
+      "pricingCta": "Tüm paketleri görün"
+    },
+    "solutionsPage": {
+      "heroTitle": "Kim olursanız olun, size uygun bir yol var.",
+      "heroSubtitle": "Kurumsal bir şirket, bir ajans ya da bir yazılım ekibi olun — Pasargad'ı kendi ihtiyacınıza göre şekillendiriyoruz.",
+      "ctaPrimary": "Teklif Alın",
+      "ctaSecondary": "Çözümleri Keşfedin",
+      "bridgeLink": "Hazır bir başlangıç noktası mı arıyorsunuz?",
+      "segmentsTitle": "Size en yakın olanı seçin",
+      "segments": {
+        "enterprise": {
+          "bullets": [
+            "Tekrarlayan iş süreçlerini otomatikleştirin",
+            "Ekibinizi daha değerli işlere yönlendirin",
+            "Kurumsal güvenlik ve izin yönetimi"
+          ]
+        },
+        "agencies": {
+          "bullets": [
+            "Kendi markanızla, kendi fiyatınızla satın",
+            "Her müşteri için ayrı, izole bir ortam",
+            "Komisyon değil, kendi gelir modeliniz"
+          ]
+        },
+        "devTeams": {
+          "bullets": [
+            "Açık API ile kendi ürününüze entegre edin",
+            "Webhook'lar ve dokümante edilmiş uç noktalar",
+            "İhtiyacınız kadar kullanın, ölçeklendirin"
+          ]
+        }
+      },
+      "portfolioTitle": "Örnek çalışmalar",
+      "formTitle": "Projenizi anlatın",
+      "formSubtitle": "İhtiyacınızı kısaca yazın, size dönüş yapalım."
     }
   },
   "auth": {

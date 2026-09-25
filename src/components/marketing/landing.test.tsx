@@ -38,7 +38,7 @@ describe("landing sections", () => {
 
     expect(html).toContain("The autonomous customer agent &amp; AI Agent OS for your business");
     expect(html).toContain('href="/signup"');
-    expect(html).toContain('href="/services#quote"');
+    expect(html).toContain('href="/solutions#quote"');
     // The simulator is labelled as a sample and starts idle on the server.
     expect(html).toContain("Sample simulation");
     // No trial promise the backend cannot honour.
@@ -83,7 +83,7 @@ describe("landing sections", () => {
 
     expect(html).toContain('id="agency"');
     expect(html).toContain("cname.pasargad.app");
-    expect(html).toContain('href="/services#quote"');
+    expect(html).toContain('href="/solutions#quote"');
     // The agency plan has no price in the plan data, so none is advertised.
     expect(html).not.toContain("$199");
   });
@@ -92,6 +92,6 @@ describe("landing sections", () => {
     const html = await render(FinalCta);
 
     expect(html).toContain('href="/signup"');
-    expect(html).toContain('href="/services#quote"');
+    expect(html).toContain('href="/solutions#quote"');
   });
 });

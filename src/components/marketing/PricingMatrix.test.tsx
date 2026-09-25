@@ -93,7 +93,7 @@ describe("PricingMatrix", () => {
     await act(async () => lockedButton("Custom skills & bring-your-own LLM is locked on Pro").click());
 
     const link = document.querySelector('[role="dialog"] a');
-    expect(link?.getAttribute("href")).toBe("/services#quote");
+    expect(link?.getAttribute("href")).toBe("/solutions#quote");
     expect(link?.textContent).toBe("Talk to sales about Enterprise");
   });
 });

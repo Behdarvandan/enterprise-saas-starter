@@ -70,76 +70,8 @@
       "successMessage": "Thanks — we've received your request and will be in touch shortly.",
       "genericError": "Something went wrong. Please try again."
     },
-    "saasPage": {
-      "heroTitle": "A system built around your business, that grows with you.",
-      "heroSubtitle": "Appointments, payments, customer tracking — choose what you need, add more as it grows. The system adapts to your business, not the other way around.",
-      "ctaPrimary": "Watch the Demo",
-      "ctaSecondary": "See Plans",
-      "featuresTitle": "Everything a SaaS launch needs on day one.",
-      "features": {
-        "multiTenant": "Multi-tenant architecture with Postgres row-level security enforced at the database layer, not in application code.",
-        "payments": "Stripe and PayTR billing behind a single provider-agnostic adapter — swap providers without touching checkout logic.",
-        "rag": "An AI knowledge-base chatbot grounded in your own documentation via pgvector similarity search.",
-        "rls": "Every tenant table ships with matching row-level security policies, reviewed and battle-tested.",
-        "i18n": "Localized routing out of the box, ready for more locales beyond English and Turkish.",
-        "observability": "Sentry error tracking wired in across client, server, and edge runtimes from day one."
-      },
-      "pricingTitle": "Plans that scale with your product.",
-      "bridgeLink": "As your business grows, the same team grows with you"
-    },
-    "servicesPage": {
-      "heroTitle": "Solutions designed for you, built together with you.",
-      "heroSubtitle": "From a small integration to an end-to-end project — we work hourly or project-based, depending on your needs.",
-      "ctaPrimary": "Get a Quote",
-      "ctaSecondary": "Explore Services",
-      "bridgeLink": "Looking for a ready-made starting point instead",
-      "categoriesTitle": "What we do",
-      "categories": {
-        "fullstackSaas": {
-          "title": "Full-Stack & SaaS Development",
-          "description": "We turn your idea into a working product — production-ready web applications and MVPs built on Next.js and Supabase.",
-          "bullets": [
-            "Building a product from the ground up",
-            "Adding new capabilities to an existing system",
-            "Setting up an architecture built to scale",
-            "Example: booking and pre-diagnosis system for repair shops"
-          ]
-        },
-        "aiAutomation": {
-          "title": "AI & Automation Integrations",
-          "description": "We build intelligent systems that speak with your business's own data and take repetitive work off your hands.",
-          "bullets": [
-            "Assistants grounded in your own data",
-            "Process automation",
-            "AI integration into existing systems"
-          ]
-        },
-        "architectureSecurity": {
-          "title": "System Architecture & Security Review",
-          "description": "We build the foundation correctly from the start, so your data stays locked in your own vault.",
-          "bullets": [
-            "Data isolation and access-control setup",
-            "Security review of an existing system",
-            "Multi-user / multi-branch architecture"
-          ]
-        },
-        "paymentSubscription": {
-          "title": "Payments & Subscription Infrastructure",
-          "description": "Taking payment matters — taking it correctly matters just as much. We build flexible billing and subscription systems.",
-          "bullets": [
-            "One-time and subscription-based payment setup",
-            "Invoicing / record automation",
-            "Troubleshooting an existing payment flow"
-          ]
-        }
-      },
-      "portfolioTitle": "Recent work",
-      "portfolioViewAll": "View all work",
-      "formTitle": "Tell us about your project",
-      "formSubtitle": "Share a short description of what you need and we'll follow up."
-    },
     "portfolioPage": {
-      "backLink": "Back to services",
+      "backLink": "Back to solutions",
       "stackLabel": "Stack",
       "notFoundTitle": "Case study not found"
     },
@@ -368,8 +300,8 @@
         "links": {
           "capabilities": "Capabilities",
           "pricing": "Pricing",
-          "saas": "SaaS",
-          "services": "Services",
+          "saas": "Product",
+          "services": "Solutions",
           "whiteLabel": "White-label",
           "agencyPortal": "Agency portal",
           "agencyApply": "Apply as an agency",
@@ -427,6 +359,80 @@
       "resources": "Resources",
       "pricing": "Pricing",
       "requestDemo": "Request a demo"
+    },
+    "productPage": {
+      "heroTitle": "A team that works in your place.",
+      "heroSubtitle": "A digital workforce that greets your customers around the clock, books their appointments, and safely runs every company you manage.",
+      "ctaPrimary": "Get started free",
+      "ctaSecondary": "See pricing",
+      "bridgeLink": "Looking for something tailored to your business instead?",
+      "modulesTitle": "What's inside",
+      "modules": {
+        "digitalWorkforce": {
+          "bullets": [
+            "Answers customer questions instantly",
+            "Books appointments and reservations automatically",
+            "Never takes a break — runs 24/7"
+          ]
+        },
+        "knowledgeBase": {
+          "bullets": [
+            "Finds the right answer in your price list or catalog",
+            "Never gives outdated or incorrect information",
+            "Learns instantly the moment you add a new document"
+          ]
+        },
+        "multiCompany": {
+          "bullets": [
+            "Every company's data stays completely separate",
+            "Manage all of them from a single dashboard",
+            "You control every permission and access level"
+          ]
+        },
+        "whiteLabelPortal": {
+          "bullets": [
+            "Your own logo, colors, and domain",
+            "Your customers see your brand, not ours",
+            "Set up in minutes"
+          ]
+        }
+      },
+      "pricingTitle": "Transparent pricing",
+      "pricingCta": "See all plans"
+    },
+    "solutionsPage": {
+      "heroTitle": "Whoever you are, there's a way that fits.",
+      "heroSubtitle": "Whether you're an enterprise, an agency, or a dev team — we shape Pasargad around what you actually need.",
+      "ctaPrimary": "Get a Quote",
+      "ctaSecondary": "Explore Solutions",
+      "bridgeLink": "Looking for a ready-made starting point instead?",
+      "segmentsTitle": "Pick the one closest to you",
+      "segments": {
+        "enterprise": {
+          "bullets": [
+            "Automate repetitive business processes",
+            "Free your team to focus on higher-value work",
+            "Enterprise-grade security and permission management"
+          ]
+        },
+        "agencies": {
+          "bullets": [
+            "Sell under your own brand, at your own price",
+            "A separate, isolated environment for every client",
+            "Your own revenue model, not a commission"
+          ]
+        },
+        "devTeams": {
+          "bullets": [
+            "Integrate into your own product via an open API",
+            "Webhooks and documented endpoints",
+            "Use as much as you need, scale as you grow"
+          ]
+        }
+      },
+      "portfolioTitle": "Example projects",
+      "formTitle": "Tell us about your project",
+      "formSubtitle": "Share a short description of what you need and we'll follow up."
     }
   },
   "auth": {

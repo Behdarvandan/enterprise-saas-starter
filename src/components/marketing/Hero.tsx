@@ -40,7 +40,7 @@ export default async function Hero() {
               <Link href="/signup">{t("ctaPrimary")}</Link>
             </Button>
             <Button asChild variant="secondary" size="lg">
-              <Link href="/services#quote">{t("ctaSecondary")}</Link>
+              <Link href="/solutions#quote">{t("ctaSecondary")}</Link>
             </Button>
           </div>
         </div>

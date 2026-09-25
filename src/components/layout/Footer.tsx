@@ -26,8 +26,8 @@ export default async function Footer() {
       links: [
         { href: "/#capabilities", label: t("links.capabilities") },
         { href: "/#pricing", label: t("links.pricing") },
-        { href: "/saas", label: t("links.saas") },
-        { href: "/services", label: t("links.services") },
+        { href: "/product", label: t("links.saas") },
+        { href: "/solutions", label: t("links.services") },
       ],
     },
     {
@@ -35,7 +35,7 @@ export default async function Footer() {
       links: [
         { href: "/#agency", label: t("links.whiteLabel") },
         { href: "/agency", label: t("links.agencyPortal") },
-        { href: "/services#quote", label: t("links.agencyApply") },
+        { href: "/solutions#quote", label: t("links.agencyApply") },
       ],
     },
     {

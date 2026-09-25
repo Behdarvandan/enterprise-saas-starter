@@ -24,12 +24,24 @@ const nextConfig = {
   },
   // /repair-shops was folded into /services as an industry example (Pasargad
   // rebrand, brief §4). Keep old links/bookmarks working instead of 404ing.
+  // /saas and /services were later renamed to /product and /solutions as
+  // part of the customer-benefit-language IA rewrite — same reasoning.
   async redirects() {
     return [
-      { source: "/repair-shops", destination: "/services", permanent: true },
+      { source: "/repair-shops", destination: "/solutions", permanent: true },
       {
         source: "/:locale(tr|de|fa)/repair-shops",
-        destination: "/:locale/services",
+        destination: "/:locale/solutions",
+        permanent: true,
+      },
+      { source: "/saas", destination: "/product", permanent: true },
+      { source: "/:locale(tr|de|fa)/saas", destination: "/:locale/product", permanent: true },
+      { source: "/services", destination: "/solutions", permanent: true },
+      { source: "/:locale(tr|de|fa)/services", destination: "/:locale/solutions", permanent: true },
+      { source: "/services/:path*", destination: "/solutions/:path*", permanent: true },
+      {
+        source: "/:locale(tr|de|fa)/services/:path*",
+        destination: "/:locale/solutions/:path*",
         permanent: true,
       },
     ];

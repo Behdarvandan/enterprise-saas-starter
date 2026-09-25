@@ -46,7 +46,7 @@ export default async function SkillsPage() {
 
   // Enterprise is contact-only in every region; its plan carries the sales link.
   const enterpriseCheckout = getAllPlans().find((plan) => plan.tier === "enterprise")?.checkout;
-  const salesHref = enterpriseCheckout?.kind === "contact" ? enterpriseCheckout.href : "/services#quote";
+  const salesHref = enterpriseCheckout?.kind === "contact" ? enterpriseCheckout.href : "/solutions#quote";
 
   return (
     <PageContainer className="max-w-4xl">

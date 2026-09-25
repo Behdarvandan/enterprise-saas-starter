@@ -25,7 +25,7 @@ export default async function PortfolioDetailPage({
   return (
     <div className="animate-reveal-up mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
       <Link
-        href="/services"
+        href="/solutions"
         className="inline-flex items-center gap-2 text-sm font-semibold text-ink-primary hover:text-primary"
       >
         <ArrowLeft size={16} />

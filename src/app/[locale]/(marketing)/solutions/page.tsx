@@ -1,4 +1,4 @@
-import { Check, Code2, CreditCard, ShieldCheck, Sparkles } from "lucide-react";
+import { Building2, Code2, Handshake } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/core/ui/primitives/button";
@@ -8,17 +8,12 @@ import { AmbientGlow } from "@/components/ui/liquid/AmbientGlow";
 import LeadForm from "../_components/LeadForm";
 import { getPortfolioItems } from "@/lib/portfolio";
 
-const CATEGORY_KEYS = [
-  "fullstackSaas",
-  "aiAutomation",
-  "architectureSecurity",
-  "paymentSubscription",
-] as const;
+const SEGMENT_KEYS = ["enterprise", "agencies", "devTeams"] as const;
+const SEGMENT_ICONS = { enterprise: Building2, agencies: Handshake, devTeams: Code2 };
 
-const CATEGORY_ICONS = [Code2, Sparkles, ShieldCheck, CreditCard] as const;
-
-export default async function ServicesPage() {
-  const t = await getTranslations("marketing.servicesPage");
+export default async function SolutionsPage() {
+  const t = await getTranslations("marketing.solutionsPage");
+  const tNav = await getTranslations("marketing.megaNav");
   const portfolioItems = getPortfolioItems();
 
   return (
@@ -35,11 +30,11 @@ export default async function ServicesPage() {
               <Link href="#quote">{t("ctaPrimary")}</Link>
             </Button>
             <LiquidButton asChild size="lg">
-              <Link href="#categories">{t("ctaSecondary")}</Link>
+              <Link href="#segments">{t("ctaSecondary")}</Link>
             </LiquidButton>
           </div>
           <p className="mt-4 text-sm text-ink-muted">
-            <Link href="/saas" className="font-semibold text-ink-primary hover:text-primary">
+            <Link href="/product" className="font-semibold text-ink-primary hover:text-primary">
               {t("bridgeLink")}
             </Link>
           </p>
@@ -47,34 +42,30 @@ export default async function ServicesPage() {
       </section>
 
       <section
-        id="categories"
+        id="segments"
         className="animate-reveal-up border-y border-subtle bg-surface"
         style={{ animationDelay: "80ms" }}
       >
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <h2 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
-            {t("categoriesTitle")}
+            {t("segmentsTitle")}
           </h2>
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {CATEGORY_KEYS.map((key, index) => {
-              const Icon = CATEGORY_ICONS[index];
-              const bullets = t.raw(`categories.${key}.bullets`) as string[];
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {SEGMENT_KEYS.map((key) => {
+              const Icon = SEGMENT_ICONS[key];
+              const bullets = t.raw(`segments.${key}.bullets`) as string[];
               return (
-                <LiquidCard key={key} interactive className="p-6">
+                <LiquidCard key={key} id={key} interactive className="scroll-mt-28 p-6">
                   <Icon size={20} className="text-primary" />
                   <h3 className="mt-4 text-base font-semibold text-ink-primary">
-                    {t(`categories.${key}.title`)}
+                    {tNav(`solutions.${key}.title`)}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-                    {t(`categories.${key}.description`)}
+                    {tNav(`solutions.${key}.description`)}
                   </p>
                   <ul className="mt-4 space-y-2">
                     {bullets.map((bullet) => (
-                      <li
-                        key={bullet}
-                        className="flex items-start gap-2 text-sm text-ink-muted"
-                      >
-                        <Check size={14} className="mt-0.5 shrink-0 text-status-success" />
+                      <li key={bullet} className="text-sm text-ink-muted">
                         {bullet}
                       </li>
                     ))}
@@ -99,7 +90,7 @@ export default async function ServicesPage() {
           {portfolioItems.map((item) => (
             <Link
               key={item.slug}
-              href={`/services/portfolio/${item.slug}`}
+              href={`/solutions/portfolio/${item.slug}`}
               className="liquid-surface block rounded-2xl border-transparent p-6 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10"
             >
               <h3 className="text-base font-semibold text-ink-primary">

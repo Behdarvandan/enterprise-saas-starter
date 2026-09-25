@@ -49,7 +49,7 @@ export default async function WhiteLabelSection() {
             </ul>
             <div className="mt-10 flex flex-wrap gap-3">
               <Button asChild variant="glow" size="lg">
-                <Link href="/services#quote">{t("ctaApply")}</Link>
+                <Link href="/solutions#quote">{t("ctaApply")}</Link>
               </Button>
               <Button asChild variant="secondary" size="lg">
                 <Link href="/agency">{t("ctaPortal")}</Link>

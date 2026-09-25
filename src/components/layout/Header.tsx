@@ -121,7 +121,7 @@ export default async function Header() {
               {tNav("signIn")}
             </Link>
             <Button asChild variant="glow" size="sm">
-              <Link href="/services#quote">{t("requestDemo")}</Link>
+              <Link href="/solutions#quote">{t("requestDemo")}</Link>
             </Button>
           </div>
           <MobileNav />

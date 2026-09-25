@@ -29,8 +29,8 @@ const leadSchema = z.object({
  * POST /api/leads
  *
  * Public, anonymous lead-intake endpoint backing the "Teklif Al" quote form
- * on `/services` (the marketing site's only lead-capture form — `/saas`
- * links to `/services` instead of embedding a form). Writes go through the
+ * on `/solutions` (the marketing site's only lead-capture form — `/product`
+ * links to `/solutions` instead of embedding a form). Writes go through the
  * `submit_lead` SECURITY DEFINER RPC via the anon-scoped client — the RPC
  * hardcodes `organization_id` to the operator organization server-side, so
  * this route never touches the `leads` table directly and can't be tricked

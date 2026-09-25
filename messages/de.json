@@ -70,76 +70,8 @@
       "successMessage": "Vielen Dank — wir haben Ihre Anfrage erhalten und melden uns in Kürze bei Ihnen.",
       "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
     },
-    "saasPage": {
-      "heroTitle": "Ein System, das auf Ihr Unternehmen zugeschnitten ist und mit Ihnen wächst.",
-      "heroSubtitle": "Termine, Zahlungen, Kundenverwaltung — wählen Sie, was Sie benötigen, und ergänzen Sie es bei Bedarf. Das System passt sich Ihrem Unternehmen an, nicht umgekehrt.",
-      "ctaPrimary": "Demo ansehen",
-      "ctaSecondary": "Pläne ansehen",
-      "featuresTitle": "Alles, was ein SaaS-Start vom ersten Tag an benötigt.",
-      "features": {
-        "multiTenant": "Mandantenfähige Architektur mit Postgres Row-Level Security, durchgesetzt auf Datenbankebene — nicht im Anwendungscode.",
-        "payments": "Stripe- und PayTR-Abrechnung hinter einem einzigen anbieterunabhängigen Adapter — Anbieter wechseln, ohne die Checkout-Logik anzufassen.",
-        "rag": "Ein KI-Wissensdatenbank-Chatbot, der über pgvector-Ähnlichkeitssuche in Ihrer eigenen Dokumentation verankert ist.",
-        "rls": "Jede Mandantentabelle wird mit passenden, geprüften und bewährten Row-Level-Security-Richtlinien ausgeliefert.",
-        "i18n": "Lokalisiertes Routing von Haus aus, bereit für weitere Sprachen über Englisch und Türkisch hinaus.",
-        "observability": "Sentry-Fehlerverfolgung vom ersten Tag an über Client-, Server- und Edge-Laufzeitumgebungen hinweg eingebunden."
-      },
-      "pricingTitle": "Pläne, die mit Ihrem Produkt wachsen.",
-      "bridgeLink": "Wenn Ihr Unternehmen wächst, wächst dasselbe Team mit Ihnen"
-    },
-    "servicesPage": {
-      "heroTitle": "Für Sie konzipierte, gemeinsam mit Ihnen umgesetzte Lösungen.",
-      "heroSubtitle": "Von einer kleinen Integration bis zu einem umfassenden Projekt — wir arbeiten je nach Bedarf auf Stunden- oder Projektbasis.",
-      "ctaPrimary": "Angebot anfordern",
-      "ctaSecondary": "Leistungen entdecken",
-      "bridgeLink": "Suchen Sie stattdessen einen fertigen Ausgangspunkt",
-      "categoriesTitle": "Was wir tun",
-      "categories": {
-        "fullstackSaas": {
-          "title": "Full-Stack- & SaaS-Entwicklung",
-          "description": "Wir verwandeln Ihre Idee in ein funktionierendes Produkt — produktionsreife Webanwendungen und MVPs auf Basis von Next.js und Supabase.",
-          "bullets": [
-            "Produktentwicklung von Grund auf",
-            "Neue Funktionen für ein bestehendes System",
-            "Aufbau einer skalierbaren Architektur",
-            "Beispiel: Buchungs- und Vordiagnosesystem für Reparaturwerkstätten"
-          ]
-        },
-        "aiAutomation": {
-          "title": "KI- & Automatisierungsintegrationen",
-          "description": "Wir bauen intelligente Systeme, die mit den eigenen Daten Ihres Unternehmens arbeiten und Ihnen wiederkehrende Aufgaben abnehmen.",
-          "bullets": [
-            "Assistenten auf Basis Ihrer eigenen Daten",
-            "Prozessautomatisierung",
-            "KI-Integration in bestehende Systeme"
-          ]
-        },
-        "architectureSecurity": {
-          "title": "Systemarchitektur & Sicherheitsprüfung",
-          "description": "Wir errichten das Fundament von Beginn an korrekt, damit Ihre Daten sicher in Ihrem eigenen Tresor bleiben.",
-          "bullets": [
-            "Einrichtung von Datenisolation und Zugriffskontrolle",
-            "Sicherheitsprüfung eines bestehenden Systems",
-            "Mehrbenutzer-/Mehrstandort-Architektur"
-          ]
-        },
-        "paymentSubscription": {
-          "title": "Zahlungs- & Abonnement-Infrastruktur",
-          "description": "Zahlungen entgegenzunehmen ist wichtig — sie korrekt entgegenzunehmen ebenso. Wir bauen flexible Abrechnungs- und Abonnementsysteme.",
-          "bullets": [
-            "Einrichtung von Einmal- und Abonnementzahlungen",
-            "Automatisierung von Rechnungsstellung und Buchführung",
-            "Fehlerbehebung in einem bestehenden Zahlungsablauf"
-          ]
-        }
-      },
-      "portfolioTitle": "Aktuelle Arbeiten",
-      "portfolioViewAll": "Alle Arbeiten ansehen",
-      "formTitle": "Erzählen Sie uns von Ihrem Projekt",
-      "formSubtitle": "Teilen Sie uns kurz mit, was Sie benötigen — wir melden uns bei Ihnen."
-    },
     "portfolioPage": {
-      "backLink": "Zurück zu den Leistungen",
+      "backLink": "Zurück zu Lösungen",
       "stackLabel": "Technologie",
       "notFoundTitle": "Fallstudie nicht gefunden"
     },
@@ -368,8 +300,8 @@
         "links": {
           "capabilities": "Funktionen",
           "pricing": "Preise",
-          "saas": "SaaS",
-          "services": "Leistungen",
+          "saas": "Produkt",
+          "services": "Lösungen",
           "whiteLabel": "White-Label",
           "agencyPortal": "Agenturportal",
           "agencyApply": "Als Agentur bewerben",
@@ -427,6 +359,80 @@
       "resources": "Ressourcen",
       "pricing": "Preise",
       "requestDemo": "Demo anfordern"
+    },
+    "productPage": {
+      "heroTitle": "Ein Team, das für Sie arbeitet.",
+      "heroSubtitle": "Eine digitale Belegschaft, die Ihre Kunden rund um die Uhr empfängt, deren Termine bucht und jedes Unternehmen, das Sie verwalten, sicher betreibt.",
+      "ctaPrimary": "Kostenlos starten",
+      "ctaSecondary": "Preise ansehen",
+      "bridgeLink": "Suchen Sie stattdessen eine maßgeschneiderte Lösung?",
+      "modulesTitle": "Was ist enthalten",
+      "modules": {
+        "digitalWorkforce": {
+          "bullets": [
+            "Beantwortet Kundenanfragen sofort",
+            "Bucht Termine und Reservierungen automatisch",
+            "Macht nie Pause — läuft rund um die Uhr"
+          ]
+        },
+        "knowledgeBase": {
+          "bullets": [
+            "Findet die richtige Antwort in Ihrer Preisliste oder Ihrem Katalog",
+            "Gibt nie veraltete oder falsche Informationen",
+            "Lernt sofort, sobald Sie ein neues Dokument hinzufügen"
+          ]
+        },
+        "multiCompany": {
+          "bullets": [
+            "Die Daten jedes Unternehmens bleiben vollständig getrennt",
+            "Verwalten Sie alle über ein einziges Dashboard",
+            "Sie kontrollieren jede Berechtigung und jeden Zugriff"
+          ]
+        },
+        "whiteLabelPortal": {
+          "bullets": [
+            "Ihr eigenes Logo, Ihre Farben, Ihre Domain",
+            "Ihre Kunden sehen Ihre Marke, nicht unsere",
+            "In wenigen Minuten eingerichtet"
+          ]
+        }
+      },
+      "pricingTitle": "Transparente Preise",
+      "pricingCta": "Alle Pakete ansehen"
+    },
+    "solutionsPage": {
+      "heroTitle": "Wer auch immer Sie sind, es gibt einen passenden Weg.",
+      "heroSubtitle": "Ob Unternehmen, Agentur oder Entwicklerteam — wir gestalten Pasargad genau nach Ihren Bedürfnissen.",
+      "ctaPrimary": "Angebot anfordern",
+      "ctaSecondary": "Lösungen entdecken",
+      "bridgeLink": "Suchen Sie stattdessen einen fertigen Ausgangspunkt?",
+      "segmentsTitle": "Wählen Sie das Passende",
+      "segments": {
+        "enterprise": {
+          "bullets": [
+            "Automatisieren Sie sich wiederholende Geschäftsprozesse",
+            "Geben Sie Ihrem Team Raum für wertvollere Arbeit",
+            "Sicherheit und Berechtigungsverwaltung auf Unternehmensniveau"
+          ]
+        },
+        "agencies": {
+          "bullets": [
+            "Verkaufen Sie unter Ihrer eigenen Marke, zu Ihrem eigenen Preis",
+            "Eine separate, isolierte Umgebung für jeden Kunden",
+            "Ihr eigenes Umsatzmodell, keine Provision"
+          ]
+        },
+        "devTeams": {
+          "bullets": [
+            "Integrieren Sie es über eine offene API in Ihr eigenes Produkt",
+            "Webhooks und dokumentierte Endpunkte",
+            "Nutzen Sie so viel Sie brauchen, skalieren Sie mit Ihrem Wachstum"
+          ]
+        }
+      },
+      "portfolioTitle": "Beispielprojekte",
+      "formTitle": "Erzählen Sie uns von Ihrem Projekt",
+      "formSubtitle": "Teilen Sie uns kurz mit, was Sie brauchen — wir melden uns bei Ihnen."
     }
   },
   "auth": {

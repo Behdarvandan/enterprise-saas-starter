@@ -8,7 +8,7 @@ describe("buildPricingView", () => {
     const { plans } = buildPricingView("global");
 
     expect(plans.map((plan) => plan.tier)).toEqual(["starter", "pro", "enterprise"]);
-    expect(plans[2]).toMatchObject({ priceLabel: null, href: "/services#quote" });
+    expect(plans[2]).toMatchObject({ priceLabel: null, href: "/solutions#quote" });
     expect(plans[0]?.href).toBe("/pricing");
   });
 

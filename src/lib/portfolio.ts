@@ -7,7 +7,7 @@ export interface PortfolioItem {
 }
 
 /**
- * Static case-study content for the /services portfolio pages. MVP: a
+ * Static case-study content for the /solutions portfolio pages. MVP: a
  * hardcoded array, not a database table. Promote this to a real table only
  * if editing it outside a deploy becomes a real need.
  */

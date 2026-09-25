@@ -40,7 +40,7 @@ export function buildPricingView(region: PricingRegion): PricingView {
       highlight: plan.highlight === true,
       priceLabel: paid ? formatPlanPrice(paid.amount, paid.currency) : null,
       limits: PLAN_LIMITS[plan.tier],
-      href: paid ? "/pricing" : "/services#quote",
+      href: paid ? "/pricing" : "/solutions#quote",
     };
   });
 
