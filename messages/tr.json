@@ -433,6 +433,38 @@
       "portfolioTitle": "Örnek çalışmalar",
       "formTitle": "Projenizi anlatın",
       "formSubtitle": "İhtiyacınızı kısaca yazın, size dönüş yapalım."
+    },
+    "customersPage": {
+      "heroTitle": "Gerçek işletmeler, gerçek sonuçlar.",
+      "heroSubtitle": "Pasargad'ı zaten kullanan ekipler için neler değişti, birlikte bakalım.",
+      "ctaPrimary": "Ücretsiz Başlayın",
+      "ctaSecondary": "Teklif Alın",
+      "resultsTitle": "Sonuçlar",
+      "resultsCta": "Hikayenin tamamını okuyun"
+    },
+    "resourcesPage": {
+      "heroTitle": "Yola nereden başlayacağınızı bulun",
+      "heroSubtitle": "Basit rehberler ve sistemin canlı durumu, tek sayfada.",
+      "statusTitle": "Sistem durumu",
+      "guidesTitle": "Rehberler",
+      "guides": {
+        "digitalWorkforce": {
+          "title": "İlk AI asistanınızı başlatın",
+          "description": "Dijital iş gücünüzü açın, dakikalar içinde müşterilere yanıt vermeye başlayın."
+        },
+        "knowledgeBase": {
+          "title": "Bilgi bankanızı bağlayın",
+          "description": "Fiyat listenizi ya da dokümantasyonunuzu yükleyin, asistan her zaman doğru cevabı versin."
+        },
+        "multiCompany": {
+          "title": "Birden fazla şirketi yönetin",
+          "description": "Yönettiğiniz her şirketi ekleyin, tek panelden aralarında geçiş yapın."
+        },
+        "whiteLabelPortal": {
+          "title": "Markaya özel portalınızı kurun",
+          "description": "Kendi alan adınızı platforma yönlendirin, markanızı uygulayın."
+        }
+      }
     }
   },
   "auth": {

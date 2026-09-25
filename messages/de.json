@@ -433,6 +433,38 @@
       "portfolioTitle": "Beispielprojekte",
       "formTitle": "Erzählen Sie uns von Ihrem Projekt",
       "formSubtitle": "Teilen Sie uns kurz mit, was Sie brauchen — wir melden uns bei Ihnen."
+    },
+    "customersPage": {
+      "heroTitle": "Echte Unternehmen, echte Ergebnisse.",
+      "heroSubtitle": "Ein Blick darauf, was sich für Teams verändert hat, die bereits mit Pasargad arbeiten.",
+      "ctaPrimary": "Kostenlos starten",
+      "ctaSecondary": "Angebot anfordern",
+      "resultsTitle": "Ergebnisse",
+      "resultsCta": "Ganze Geschichte lesen"
+    },
+    "resourcesPage": {
+      "heroTitle": "Finden Sie, wo Sie anfangen sollen",
+      "heroSubtitle": "Einfache Anleitungen und der Live-Status der Plattform an einem Ort.",
+      "statusTitle": "Systemstatus",
+      "guidesTitle": "Anleitungen",
+      "guides": {
+        "digitalWorkforce": {
+          "title": "Starten Sie Ihren ersten KI-Assistenten",
+          "description": "Aktivieren Sie Ihre digitale Belegschaft und beginnen Sie in wenigen Minuten, Kunden zu antworten."
+        },
+        "knowledgeBase": {
+          "title": "Verbinden Sie Ihre Wissensdatenbank",
+          "description": "Laden Sie Ihre Preisliste oder Dokumentation hoch, damit der Assistent immer die richtige Antwort hat."
+        },
+        "multiCompany": {
+          "title": "Verwalten Sie mehrere Unternehmen",
+          "description": "Fügen Sie jedes Unternehmen hinzu, das Sie betreiben, und wechseln Sie über ein Dashboard zwischen ihnen."
+        },
+        "whiteLabelPortal": {
+          "title": "Richten Sie Ihr White-Label-Portal ein",
+          "description": "Verweisen Sie Ihre eigene Domain auf die Plattform und wenden Sie Ihre Marke an."
+        }
+      }
     }
   },
   "auth": {

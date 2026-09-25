@@ -433,6 +433,38 @@
       "portfolioTitle": "Example projects",
       "formTitle": "Tell us about your project",
       "formSubtitle": "Share a short description of what you need and we'll follow up."
+    },
+    "customersPage": {
+      "heroTitle": "Real businesses, real results.",
+      "heroSubtitle": "A look at what changed for the teams already running on Pasargad.",
+      "ctaPrimary": "Get started free",
+      "ctaSecondary": "Get a Quote",
+      "resultsTitle": "Results",
+      "resultsCta": "Read the full story"
+    },
+    "resourcesPage": {
+      "heroTitle": "Find where to start",
+      "heroSubtitle": "Simple guides and the platform's live status, in one place.",
+      "statusTitle": "System status",
+      "guidesTitle": "Guides",
+      "guides": {
+        "digitalWorkforce": {
+          "title": "Launch your first AI assistant",
+          "description": "Turn on your digital workforce and start answering customers in minutes."
+        },
+        "knowledgeBase": {
+          "title": "Connect your knowledge base",
+          "description": "Upload your price list or documentation so the assistant always has the right answer."
+        },
+        "multiCompany": {
+          "title": "Manage multiple companies",
+          "description": "Add every company you run and switch between them from one dashboard."
+        },
+        "whiteLabelPortal": {
+          "title": "Set up your white-label portal",
+          "description": "Point your own domain at the platform and apply your brand."
+        }
+      }
     }
   },
   "auth": {
