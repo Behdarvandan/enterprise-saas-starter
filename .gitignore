@@ -85,3 +85,5 @@ repomix-output.txt
 CLAUDE.local.md
 .claude/
 .context/
+*.tmp.driveupload
+*.driveupload
