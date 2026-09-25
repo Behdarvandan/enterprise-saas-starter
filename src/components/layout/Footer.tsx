@@ -1,6 +1,5 @@
 import { getTranslations } from "next-intl/server";
 import Logo from "@/components/layout/Logo";
-import SystemStatus from "@/components/marketing/SystemStatus";
 import { Link } from "@/i18n/navigation";
 
 // No /contact page: general questions go to this address only. Placeholder
@@ -56,9 +55,6 @@ export default async function Footer() {
               <Logo iconless />
             </Link>
             <p className="mt-4 max-w-sm text-sm text-slate-400">{t("tagline")}</p>
-            <div className="mt-5">
-              <SystemStatus />
-            </div>
           </div>
 
           {columns.map((column) => (
