@@ -3,6 +3,7 @@ import { PricingOfferCard } from "@/components/marketing/PricingOfferCard";
 import PricingMatrix from "@/components/marketing/PricingMatrix";
 import Reveal from "@/components/marketing/Reveal";
 import RoiCalculator from "@/components/marketing/RoiCalculator";
+import { AmbientGlow } from "@/components/ui/liquid/AmbientGlow";
 import { buildPricingView, getRoiPlanCosts } from "@/lib/marketing/pricing-view";
 import { getPricingRegion } from "@/lib/geo";
 
@@ -16,7 +17,8 @@ export default async function PricingPage() {
   const { plans, skills } = buildPricingView(region);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <div className="relative isolate mx-auto max-w-7xl overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+      <AmbientGlow position="top" />
       <Reveal>
         <PricingOfferCard />
       </Reveal>
