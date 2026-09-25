@@ -465,6 +465,212 @@
           "description": "Point your own domain at the platform and apply your brand."
         }
       }
+    },
+    "nav": {
+      "home": "Home",
+      "pricing": "Pricing",
+      "appEngine": "App Engine"
+    },
+    "home": {
+      "hero": {
+        "badge": "Multi-Tenant Agent OS",
+        "title": "One workspace to build, deploy, and manage every AI agent your business needs",
+        "subtitle": "Pasargad's App Engine gives your team custom AI agents, RAG-grounded knowledge, autonomous workflows, and white-label branding — all from one dashboard.",
+        "ctaPrimary": "Open App Engine",
+        "ctaSecondary": "View pricing"
+      },
+      "preview": {
+        "title": "Watch a RAG query resolve, token by token",
+        "description": "A scripted walkthrough of the same request path production traffic takes: retrieval, confidence scoring, then a streamed answer.",
+        "queryLabel": "Sample query",
+        "query": "What is your refund policy on annual plans?",
+        "retrievalStep": "Vector search over pgvector: {chunks} chunks retrieved, top similarity {similarity}",
+        "confidenceStep": "Confidence {score} at or above threshold {threshold}, answering from the knowledge base",
+        "streamStep": "Streaming the answer over SSE",
+        "answer": "Annual plans can be refunded within 30 days of purchase, prorated for unused months.",
+        "metricsLabel": "Stream metrics",
+        "metricFirstToken": "First token",
+        "metricTokensPerSecond": "Tokens per second",
+        "metricTotalTokens": "Total tokens",
+        "replay": "Replay",
+        "disclaimer": "Scripted simulation for illustration. Not a live query against a real workspace."
+      },
+      "features": {
+        "eyebrow": "Platform",
+        "title": "Everything your team needs to run AI agents at scale",
+        "items": {
+          "agents": {
+            "title": "AI Agents",
+            "description": "Create and configure custom assistants with their own system prompt, model, and knowledge bindings.",
+            "subBullets": [
+              "Own system prompt, model, and temperature per agent",
+              "Bind one or more knowledge bases per agent",
+              "Test changes in a sandbox before publishing"
+            ]
+          },
+          "rag": {
+            "title": "RAG Engine",
+            "description": "Ground every answer in your own documents with built-in ingestion and vector search.",
+            "subBullets": [
+              "Automatic chunking and embedding on upload",
+              "pgvector similarity search with an HNSW index",
+              "Low-confidence answers are withheld, not guessed"
+            ]
+          },
+          "workflows": {
+            "title": "Autonomous Workflows",
+            "description": "Chain agents, retrievers, and conditional logic into automated multi-step workflows.",
+            "subBullets": [
+              "Chain agents, retrievers, and conditional branches",
+              "Trigger on new documents, bookings, or webhooks",
+              "Low-confidence steps are flagged for review"
+            ]
+          },
+          "whiteLabel": {
+            "title": "White-Label",
+            "description": "Resell the platform under your own brand, domain, and color palette.",
+            "subBullets": [
+              "Custom domain through a single CNAME record",
+              "Logo, name, and brand color across the workspace",
+              "Per-client usage quotas you control"
+            ]
+          }
+        }
+      },
+      "architecture": {
+        "title": "From upload to streamed answer",
+        "description": "Every stage in this diagram runs in the platform today.",
+        "stages": {
+          "ingestion": {
+            "title": "Data ingestion",
+            "description": "Documents are chunked and embedded on upload."
+          },
+          "vector": {
+            "title": "pgvector, HNSW index",
+            "description": "Cosine-similarity search over an HNSW index in Postgres."
+          },
+          "orchestration": {
+            "title": "Agent orchestration engine",
+            "description": "Retrieval, confidence scoring, and tool calls run in sequence."
+          },
+          "stream": {
+            "title": "SSE stream",
+            "description": "The answer streams to the browser token by token."
+          }
+        }
+      },
+      "telemetry": {
+        "title": "What you can verify before you sign",
+        "description": "Three numbers we commit to, and the controls behind them.",
+        "uptimeLabel": "Target uptime",
+        "uptimeValue": "99.9%",
+        "latencyLabel": "Latency budget (p95)",
+        "latencyValue": "<150ms",
+        "latencyNote": "Platform routing and retrieval only, not model generation time.",
+        "isolationLabel": "Tenant isolation",
+        "isolationValue": "RLS",
+        "controlsIntro": "The controls behind those numbers"
+      },
+      "cta": {
+        "title": "Put an AI Agent OS behind your front desk",
+        "subtitle": "Open the App Engine and configure your first agent in minutes.",
+        "footerTagline": "The Agent OS for AI agents, RAG, and white-label workspaces.",
+        "footerCopyright": "© {year} Pasargad. All rights reserved."
+      }
+    },
+    "pricingPage": {
+      "title": "Simple, transparent pricing",
+      "subtitle": "Every plan runs the full Pasargad App Engine. Upgrade as your team grows.",
+      "popularBadge": "Popular",
+      "perMonth": "/mo",
+      "tiers": {
+        "starter": {
+          "name": "Starter",
+          "price": "$49",
+          "description": "For small teams launching their first AI agent.",
+          "cta": "Choose Starter",
+          "features": [
+            "Up to 3 AI agents",
+            "5,000 monthly API calls",
+            "1 GB vector storage",
+            "Email support"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$149",
+          "description": "For growing teams running agents across the business.",
+          "cta": "Choose Pro",
+          "features": [
+            "Up to 15 AI agents",
+            "50,000 monthly API calls",
+            "10 GB vector storage",
+            "Priority support",
+            "Basic white-label branding"
+          ]
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "$499",
+          "description": "For organizations that need scale, branding, and dedicated support.",
+          "cta": "Talk to sales",
+          "features": [
+            "Unlimited AI agents",
+            "Unlimited API calls",
+            "100 GB vector storage",
+            "Dedicated support",
+            "Full white-label + custom domain"
+          ]
+        }
+      },
+      "comparison": {
+        "title": "Compare plans",
+        "columns": {
+          "feature": "Feature",
+          "starter": "Starter",
+          "pro": "Pro",
+          "enterprise": "Enterprise"
+        },
+        "rows": {
+          "agents": { "label": "AI agents", "starter": "Up to 3", "pro": "Up to 15", "enterprise": "Unlimited" },
+          "documents": { "label": "Knowledge base documents", "starter": "Up to 50", "pro": "Up to 500", "enterprise": "Unlimited" },
+          "workflows": { "label": "Workflows", "starter": "1", "pro": "10", "enterprise": "Unlimited" },
+          "apiCalls": { "label": "Monthly API calls", "starter": "5,000", "pro": "50,000", "enterprise": "Unlimited" },
+          "vectorStorage": { "label": "Vector storage", "starter": "1 GB", "pro": "10 GB", "enterprise": "100 GB" },
+          "whiteLabel": { "label": "White-label branding", "starter": "—", "pro": "Basic", "enterprise": "Full" },
+          "customDomain": { "label": "Custom domain", "starter": "—", "pro": "—", "enterprise": "✓" },
+          "support": { "label": "Support", "starter": "Email", "pro": "Priority", "enterprise": "Dedicated" }
+        }
+      },
+      "faq": {
+        "title": "Frequently asked questions",
+        "items": {
+          "trial": {
+            "question": "Is there a free trial?",
+            "answer": "Every plan includes a trial period so your team can fully evaluate the App Engine before committing."
+          },
+          "changePlan": {
+            "question": "Can I change plans later?",
+            "answer": "Yes — upgrade or downgrade at any time from your billing settings. Changes take effect on your next billing cycle."
+          },
+          "cancelData": {
+            "question": "What happens to my data if I cancel?",
+            "answer": "Your agents, documents, and workflows remain accessible for 30 days after cancellation so you can export anything you need."
+          },
+          "languages": {
+            "question": "Does Pasargad support multiple languages?",
+            "answer": "Yes — the entire platform, including agent responses, is available in English, Turkish, German, and Persian."
+          },
+          "customDomain": {
+            "question": "Can I use my own domain?",
+            "answer": "Enterprise plans include full white-label branding with a custom domain via CNAME."
+          },
+          "isolation": {
+            "question": "Is my data isolated from other tenants?",
+            "answer": "Yes — every tenant table is protected by Row Level Security at the database layer, with no cross-tenant query path."
+          }
+        }
+      }
     }
   },
   "auth": {
@@ -676,6 +882,7 @@
     "userMenu": "User menu",
     "signedInAs": "Signed in as",
     "backToDashboard": "Back to dashboard",
+    "landingPage": "Landing page",
     "adminBadge": "Operator admin",
     "groups": {
       "agent": "AI agent",
@@ -968,15 +1175,27 @@
     "knowledgeBase": {
       "title": "Knowledge base",
       "description": "Upload the documents your agent answers from. Files are split into chunks and embedded for retrieval.",
+      "metrics": {
+        "totalDocuments": "Total documents",
+        "totalChunks": "Total vector chunks",
+        "storageUsed": "Storage used"
+      },
       "tabs": {
         "files": "Upload files",
-        "text": "Paste text"
+        "text": "Paste text",
+        "url": "Add from URL"
       },
       "dropzone": {
         "label": "Upload files to the knowledge base",
         "title": "Drag & drop files here, or click to browse",
         "dragActive": "Drop to upload",
         "hint": "PDF, TXT, MD, CSV, JSON or HTML · up to {size} MB each"
+      },
+      "url": {
+        "label": "Page URL",
+        "placeholder": "https://example.com/article",
+        "hint": "We'll fetch and read the page. Coming soon.",
+        "submit": "Add page"
       },
       "queue": {
         "title": "Uploads",
@@ -1006,6 +1225,8 @@
       },
       "list": {
         "title": "Documents",
+        "searchPlaceholder": "Search documents…",
+        "filterAll": "All",
         "count": "{count} of {limit} documents on your plan",
         "countUnlimited": "{count, plural, one {# document} other {# documents}}",
         "emptyTitle": "No documents yet",
@@ -1060,6 +1281,27 @@
         "similarity": "Similarity",
         "untitled": "Untitled document"
       },
+      "chunking": {
+        "title": "Chunking strategy",
+        "description": "Choose how documents are split into chunks before embedding.",
+        "strategy": {
+          "recursive": "Recursive character",
+          "semantic": "Semantic chunking"
+        },
+        "chunkSizeLabel": "Chunk size",
+        "overlapLabel": "Overlap",
+        "semantic": {
+          "thresholdLabel": "Similarity threshold",
+          "hint": "Semantic chunking groups text by meaning. Chunk size and overlap don't apply."
+        },
+        "preview": "≈{chunks} chunks · ≈{tokens} tokens"
+      },
+      "hybridSearch": {
+        "title": "Hybrid search weighting",
+        "description": "Balance semantic similarity against exact keyword matches.",
+        "denseLabel": "Dense vector search {percent}%",
+        "bm25Label": "BM25 keyword search {percent}%"
+      },
       "errors": {
         "unsupported_type": "This file type isn't supported.",
         "too_large": "This file is too large.",
@@ -1077,6 +1319,283 @@
         "noMembership": "You don't belong to an organization."
       }
     },
+    "workflows": {
+      "status": {
+        "active": "Active",
+        "completed": "Completed",
+        "pending": "Pending",
+        "awaitingApproval": "Awaiting approval"
+      },
+      "actions": {
+        "addNode": "+ Add Node",
+        "runTest": "Run Test"
+      },
+      "palette": {
+        "title": "Node palette",
+        "aiAgent": "AI Agent",
+        "ragRetriever": "RAG Retriever",
+        "conditional": "Conditional",
+        "webhook": "Webhook",
+        "approvalGate": "Approval gate"
+      },
+      "canvas": {
+        "title": "Workflow overview"
+      },
+      "hitl": {
+        "actionLabel": "Action",
+        "payloadLabel": "Payload",
+        "approveButton": "Approve",
+        "rejectButton": "Reject",
+        "statusApproved": "Approved",
+        "statusRejected": "Rejected"
+      }
+    },
+    "logs": {
+      "metrics": {
+        "totalRequests": "Total requests",
+        "avgLatency": "Avg. latency",
+        "errorRate": "Error rate",
+        "activeTokens": "Active tokens"
+      },
+      "searchPlaceholder": "Search logs…",
+      "levels": {
+        "all": "All",
+        "info": "INFO",
+        "warn": "WARN",
+        "error": "ERROR"
+      },
+      "columns": {
+        "timestamp": "Timestamp",
+        "service": "Service",
+        "level": "Level",
+        "message": "Message",
+        "duration": "Duration",
+        "authorization": "Authorization",
+        "trace": "Trace"
+      },
+      "hitl": {
+        "filterLabel": "Requires approval",
+        "statusPending": "Pending",
+        "statusApproved": "Approved",
+        "statusRejected": "Rejected",
+        "none": "—"
+      },
+      "trace": {
+        "dialogTitle": "Execution trace",
+        "totalDurationLabel": "Total duration",
+        "span": {
+          "embeddingGeneration": "Embedding generation",
+          "vectorSearch": "Vector search",
+          "llmTokenStream": "LLM token stream"
+        },
+        "viewButtonLabel": "View trace",
+        "expandLabel": "Expand",
+        "collapseLabel": "Collapse"
+      }
+    },
+    "whiteLabel": {
+      "title": "Brand Customization",
+      "description": "Customize your workspace branding, colors, and custom domain.",
+      "brandAssets": {
+        "title": "Brand Assets",
+        "appNameLabel": "App name",
+        "appNamePlaceholder": "Acme Workspace",
+        "logoLabel": "Logo",
+        "logoHint": "PNG or SVG, up to 2MB",
+        "faviconLabel": "Favicon",
+        "faviconHint": "ICO or PNG, 32x32"
+      },
+      "colorPalette": {
+        "title": "Color Palette",
+        "primaryAccentLabel": "Primary accent",
+        "sidebarBackgroundLabel": "Sidebar background",
+        "previewLabel": "Preview"
+      },
+      "domain": {
+        "title": "Custom Domain & SSL",
+        "domainLabel": "Custom domain",
+        "domainPlaceholder": "app.yourcompany.com",
+        "cnameLabel": "CNAME target",
+        "copyButton": "Copy",
+        "statusVerified": "Verified",
+        "statusPending": "Pending"
+      },
+      "widget": {
+        "title": "Embeddable chat widget",
+        "description": "Copy this snippet onto your site to embed the chat widget.",
+        "positionLabel": "Position",
+        "positionBottomRight": "Bottom right",
+        "positionBottomLeft": "Bottom left",
+        "accentColorLabel": "Accent color",
+        "greetingLabel": "Greeting message",
+        "greetingPlaceholder": "Hi! How can we help?",
+        "agentNameLabel": "Agent name",
+        "agentNamePlaceholder": "Support triage",
+        "snippetLabel": "Embed code",
+        "copyButton": "Copy",
+        "previewLabel": "Preview"
+      }
+    },
+    "appSettings": {
+      "title": "Settings",
+      "description": "Manage API access, the vector engine, and workspace preferences.",
+      "apiKeys": {
+        "title": "API Keys",
+        "currentKeyLabel": "Current key",
+        "generateButton": "+ Generate New Key",
+        "copyButton": "Copy",
+        "revealButton": "Reveal",
+        "hideButton": "Hide"
+      },
+      "vectorEngine": {
+        "title": "Vector Engine Sync",
+        "embeddingModelLabel": "Embedding model",
+        "chunkSizeLabel": "Chunk size",
+        "chunkOverlapLabel": "Chunk overlap",
+        "syncButton": "Sync now"
+      },
+      "preferences": {
+        "title": "System Preferences",
+        "defaultLocaleLabel": "Default locale",
+        "timezoneLabel": "Timezone",
+        "emailNotificationsLabel": "Email notifications",
+        "productUpdatesLabel": "Product updates"
+      }
+    },
+    "appBilling": {
+      "title": "Billing & Subscription",
+      "description": "Manage your plan, usage, and payment history.",
+      "currentPlan": {
+        "title": "Current Plan",
+        "planName": "Pro Plan",
+        "renewsLabel": "Renews on",
+        "statusActive": "Active",
+        "manageButton": "Manage Subscription"
+      },
+      "usage": {
+        "title": "Usage This Period",
+        "vectorStorageLabel": "Vector storage",
+        "tokenUsageLabel": "AI token usage",
+        "apiCallsLabel": "Monthly API calls"
+      },
+      "plans": {
+        "title": "Compare Plans",
+        "currentBadge": "Current plan",
+        "upgradeButton": "Upgrade Plan",
+        "starter": {
+          "name": "Starter",
+          "price": "$49/mo",
+          "features": [
+            "Up to 3 assistants",
+            "5,000 monthly API calls",
+            "1 GB vector storage",
+            "Email support"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$149/mo",
+          "features": [
+            "Up to 15 assistants",
+            "50,000 monthly API calls",
+            "10 GB vector storage",
+            "Priority support"
+          ]
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "$499/mo",
+          "features": [
+            "Unlimited assistants",
+            "Unlimited API calls",
+            "100 GB vector storage",
+            "Dedicated support"
+          ]
+        }
+      },
+      "invoices": {
+        "title": "Payment History",
+        "columns": {
+          "date": "Invoice Date",
+          "amount": "Amount",
+          "status": "Status",
+          "receipt": "Receipt"
+        },
+        "statusPaid": "Paid",
+        "viewReceipt": "View"
+      }
+    },
+    "appOverview": {
+      "title": "Overview",
+      "description": "A snapshot of your workspace's agents, documents, and workflows.",
+      "statusOperational": "Operational",
+      "newAgentButton": "+ New Agent",
+      "kpis": {
+        "activeAgents": "Active AI Agents",
+        "totalDocuments": "Total Ingested Documents",
+        "activeWorkflows": "Active Workflows",
+        "executionVolume": "24h Execution Volume"
+      },
+      "agentsOverview": {
+        "title": "Active Agents",
+        "viewAll": "View all"
+      },
+      "activityFeed": {
+        "title": "Live Activity Feed",
+        "ragIngest": "Document ingested: {name}",
+        "workflowRun": "Workflow executed: {name}",
+        "systemEvent": "{message}"
+      }
+    },
+    "appAgentDetail": {
+      "agentIdLabel": "Agent ID: {id}",
+      "statusActive": "Active",
+      "statusInactive": "Inactive",
+      "saveButton": "Save",
+      "deployButton": "Deploy",
+      "systemPrompt": {
+        "title": "System Prompt",
+        "instructionsLabel": "Behavior instructions",
+        "temperatureLabel": "Temperature",
+        "maxTokensLabel": "Max tokens"
+      },
+      "knowledgeBase": {
+        "title": "Knowledge Base",
+        "description": "Toggle which documents this agent can reference."
+      },
+      "tools": {
+        "title": "Tool calling",
+        "description": "Let this agent call outside tools during a run.",
+        "webSearch": { "label": "Web search API" },
+        "webhook": {
+          "label": "Custom webhook",
+          "methodLabel": "Method",
+          "urlLabel": "Webhook URL",
+          "urlPlaceholder": "https://example.com/webhook"
+        },
+        "sqlQuery": {
+          "label": "SQL query execution",
+          "templateLabel": "Allowed query template",
+          "templatePlaceholder": "SELECT * FROM orders WHERE customer_id = {{customer_id}}",
+          "mockHint": "No live database connector yet. This defines the template for later."
+        }
+      },
+      "variables": {
+        "title": "Dynamic prompt variables",
+        "description": "Runtime values injected into the system prompt for each request.",
+        "keyLabel": "Variable name",
+        "defaultValueLabel": "Default value",
+        "addButton": "+ Add variable",
+        "removeButton": "Remove variable"
+      },
+      "playground": {
+        "title": "Test Playground",
+        "inputPlaceholder": "Send a test message…",
+        "sendButton": "Send",
+        "emptyHint": "Send a message to test this agent's responses.",
+        "simulatedReply": "Simulated response based on the assigned knowledge base for: \"{message}\""
+      }
+    },
     "team": {
       "title": "Team",
       "yourOrganization": "Your organization",
@@ -1086,6 +1605,16 @@
       "remove": "Remove",
       "removeAria": "Remove {name}",
       "roleAria": "Role of {name}",
+      "columns": {
+        "member": "Member",
+        "role": "Role",
+        "actions": "Actions"
+      },
+      "roles": {
+        "owner": "Owner",
+        "admin": "Admin",
+        "member": "Member"
+      },
       "invite": {
         "title": "Invite member",
         "onlyAdmins": "Only owners and admins can invite new members.",
@@ -1100,6 +1629,8 @@
         "title": "Pending invitations ({count})",
         "emptyTitle": "No pending invitations",
         "emptyDescription": "Invitations you send will show up here until they're accepted or revoked.",
+        "columnEmail": "Email",
+        "columnRole": "Role / expires",
         "expires": "{role} · expires {date}",
         "revoke": "Revoke",
         "revoking": "Revoking…"
@@ -1223,6 +1754,18 @@
       "errors": {
         "generic": "Something went wrong. Please try again.",
         "forbidden": "Only owners and admins can edit organization settings."
+      },
+      "security": {
+        "title": "Security",
+        "currentPasswordLabel": "Current password",
+        "newPasswordLabel": "New password",
+        "confirmPasswordLabel": "Confirm new password",
+        "updateButton": "Update password"
+      },
+      "notifications": {
+        "title": "Notification preferences",
+        "emailLabel": "Email notifications",
+        "productUpdatesLabel": "Product updates"
       }
     }
   },

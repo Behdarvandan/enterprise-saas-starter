@@ -17,7 +17,12 @@ export default function AgencySidebar({ agencyName }: AgencySidebarProps) {
   return (
     <Sidebar
       homeHref="/agency/tenants"
-      logo={<Logo subtitle={agencyName} />}
+      logo={
+        <div className="flex flex-col gap-0.5">
+          <Logo />
+          <span className="block text-xs text-slate-400">{agencyName}</span>
+        </div>
+      }
       groups={getAgencyNavGroups()}
       label={t("nav.agencyLabel")}
       bottom={

@@ -118,53 +118,113 @@
       background-position: -200% 0;
     }
   }
+
+  /* Active-assistant status dot (`duration-pulse`/`ease-in-out` in the
+     Pasargad design system's tokens.json). Disabled globally, like every
+     other animation, under prefers-reduced-motion (see the media query
+     below). */
+  --animate-status-pulse: status-pulse 2000ms ease-in-out infinite;
+
+  @keyframes status-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
 }
 
-/* Semantic design tokens — pure white reset, dark theme removed. The agency
-   white-label layer (getBrandingCssVars) still overrides --primary/
-   --primary-hover/--ring/--primary-foreground on <html>, which every
-   `bg-primary` consumer follows. */
+/* Semantic design tokens — Pasargad brand (Paper/Ink/Firuzeh). Light theme
+   here, dark theme in the `.dark` block below (both from the approved design
+   system's tokens.json/tokens.css). Dark is opt-in via next-themes'
+   `attribute="class"` (`ThemeProvider defaultTheme="light"` in
+   `[locale]/layout.tsx`). The agency white-label layer (getBrandingCssVars)
+   still overrides --primary/--primary-hover/--ring/--primary-foreground on
+   <html>, which every `bg-primary` consumer follows, in both themes. */
 :root {
   color-scheme: light;
 
   --radius: 0.5rem;
 
-  /* Minimum comfortable tap-target size for touch devices (44px). */
+  /* Minimum comfortable tap-target size for touch devices (44px, `touch-min` in tokens.json). */
   --touch-target-min: 2.75rem;
 
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: rgb(255 255 255 / 0.6); /* frosted white glass */
-  --card-foreground: #0f172a;
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #18181b; /* zinc-900 */
-  --primary-hover: #27272a; /* zinc-800, lighter on hover for a near-black light-mode button */
-  --primary-foreground: #ffffff;
-  --secondary: #e8e9f3;
-  --secondary-foreground: #0f172a;
-  --muted: #e8e9f3;
-  --muted-foreground: #5b6472;
-  --accent: #f4f4f5; /* zinc-100 */
-  --accent-foreground: #18181b; /* zinc-900 */
-  --destructive: #dc2626;
+  --background: #fafafa; /* zinc-50 / Paper (`bg`) */
+  --foreground: #09090b; /* zinc-950 / Ink (`text`) */
+  --card: #f4f4f5; /* zinc-100 (`surface`) */
+  --card-foreground: #09090b;
+  --popover: #f4f4f5;
+  --popover-foreground: #09090b;
+  --primary: #0f766e; /* firuzeh-700 */
+  --primary-hover: #0d9488; /* firuzeh-600 */
+  --primary-foreground: #ffffff; /* `on-primary` */
+  --secondary: #f4f4f5;
+  --secondary-foreground: #09090b;
+  --muted: #f4f4f5;
+  --muted-foreground: #475569; /* slate-600 (`text-muted`) */
+  --accent: #f4f4f5; /* neutral hover surface — Firuzeh is reserved for the 4 accent uses only, not general highlights */
+  --accent-foreground: #09090b;
+  --destructive: #dc2626; /* red-600 (`error`) */
   --destructive-foreground: #ffffff;
-  --border: rgb(15 23 42 / 0.1);
-  --input: rgb(15 23 42 / 0.18);
-  --ring: #3f3f46; /* zinc-700 */
-  --chart-1: #18181b;
-  --chart-2: #71717a;
-  --chart-3: #059669;
-  --chart-4: #dc2626;
-  --chart-5: #5b6472;
-  --sidebar: #ececf5;
-  --sidebar-foreground: #0f172a;
-  --sidebar-primary: #18181b;
+  --border: #e4e4e7; /* zinc-200 hairline (`border`) */
+  --input: #e4e4e7;
+  --ring: #0f766e; /* firuzeh-700 (`focus`) */
+  --chart-1: #0d9488; /* firuzeh-600 — the one highlighted series */
+  --chart-2: #27272a; /* zinc-800 */
+  --chart-3: #475569; /* slate-600 */
+  --chart-4: #a1a1aa; /* zinc-400 */
+  --chart-5: #e4e4e7; /* zinc-200 */
+  --sidebar: #f4f4f5;
+  --sidebar-foreground: #09090b;
+  --sidebar-primary: #0f766e;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #e8e9f3;
-  --sidebar-accent-foreground: #0f172a;
-  --sidebar-border: rgb(15 23 42 / 0.1);
-  --sidebar-ring: #3f3f46;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #09090b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #0f766e;
+}
+
+/* Dark theme — Ink background, zinc-900/800 surfaces, Firuzeh-600 accents
+   (tokens.json's dark column). Firuzeh itself and destructive/error are
+   theme-invariant, so only the neutral scale and focus ring actually change. */
+.dark {
+  color-scheme: dark;
+
+  --background: #09090b; /* zinc-950 / Ink */
+  --foreground: #fafafa; /* zinc-50 / Paper */
+  --card: #18181b; /* zinc-900 (`surface`) */
+  --card-foreground: #fafafa;
+  --popover: #18181b;
+  --popover-foreground: #fafafa;
+  --primary: #0f766e; /* firuzeh-700, unchanged */
+  --primary-hover: #0d9488; /* firuzeh-600, unchanged */
+  --primary-foreground: #ffffff;
+  --secondary: #18181b;
+  --secondary-foreground: #fafafa;
+  --muted: #18181b;
+  --muted-foreground: #a1a1aa; /* zinc-400 (`text-muted` in dark) */
+  --accent: #18181b;
+  --accent-foreground: #fafafa;
+  --destructive: #dc2626; /* unchanged */
+  --destructive-foreground: #ffffff;
+  --border: #27272a; /* zinc-800 hairline */
+  --input: #27272a;
+  --ring: #0d9488; /* firuzeh-600 (`focus` in dark) */
+  --chart-1: #0d9488;
+  --chart-2: #e4e4e7;
+  --chart-3: #a1a1aa;
+  --chart-4: #475569; /* slate-600 */
+  --chart-5: #27272a; /* zinc-800 */
+  --sidebar: #18181b;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #0f766e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #18181b;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #0d9488;
 }
 
 @layer base {
@@ -177,8 +237,8 @@
   }
 
   body {
-    background-color: #ffffff !important;
-    color: #000000;
+    background-color: var(--background) !important;
+    color: var(--foreground);
   }
 
   ::selection {

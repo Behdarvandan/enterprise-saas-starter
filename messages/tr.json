@@ -465,6 +465,212 @@
           "description": "Kendi alan adınızı platforma yönlendirin, markanızı uygulayın."
         }
       }
+    },
+    "nav": {
+      "home": "Ana Sayfa",
+      "pricing": "Fiyatlandırma",
+      "appEngine": "App Engine"
+    },
+    "home": {
+      "hero": {
+        "badge": "Çok Kiracılı Ajan İşletim Sistemi",
+        "title": "İşletmenizin ihtiyaç duyduğu her yapay zeka ajanını oluşturup dağıtacağınız tek çalışma alanı",
+        "subtitle": "Pasargad'ın App Engine'i ekibinize özel yapay zeka ajanları, RAG tabanlı bilgi tabanı, otonom iş akışları ve markaya özel görünüm sunar — hepsi tek bir panelden.",
+        "ctaPrimary": "App Engine'i Aç",
+        "ctaSecondary": "Fiyatlandırmayı Gör"
+      },
+      "preview": {
+        "title": "Bir RAG sorgusunun token token nasıl çözüldüğünü izleyin",
+        "description": "Üretim trafiğinin izlediği aynı istek yolunun senaryolu bir yürüyüşü: alma, güven skorlaması, ardından akışlı bir yanıt.",
+        "queryLabel": "Örnek sorgu",
+        "query": "Yıllık planlarda iade politikanız nedir?",
+        "retrievalStep": "pgvector üzerinden vektör araması: {chunks} parça getirildi, en yüksek benzerlik {similarity}",
+        "confidenceStep": "Güven {score}, eşik değeri {threshold} veya üzerinde, bilgi tabanından yanıtlanıyor",
+        "streamStep": "Yanıt SSE üzerinden akıtılıyor",
+        "answer": "Yıllık planlar, satın alımdan sonra 30 gün içinde, kullanılmayan aylar oranında iade edilebilir.",
+        "metricsLabel": "Akış metrikleri",
+        "metricFirstToken": "İlk token",
+        "metricTokensPerSecond": "Saniyedeki token",
+        "metricTotalTokens": "Toplam token",
+        "replay": "Tekrar oynat",
+        "disclaimer": "Örnekleme amaçlı senaryolu simülasyon. Gerçek bir çalışma alanına yapılan canlı bir sorgu değildir."
+      },
+      "features": {
+        "eyebrow": "Platform",
+        "title": "Ekibinizin yapay zeka ajanlarını ölçekte çalıştırmak için ihtiyaç duyduğu her şey",
+        "items": {
+          "agents": {
+            "title": "Yapay Zeka Ajanları",
+            "description": "Kendi sistem talimatı, modeli ve bilgi bankası bağlantılarıyla özel asistanlar oluşturun ve yapılandırın.",
+            "subBullets": [
+              "Her ajan için kendi sistem talimatı, modeli ve sıcaklığı",
+              "Ajan başına bir veya daha fazla bilgi bankası bağlama",
+              "Yayınlamadan önce değişiklikleri bir sandbox'ta test etme"
+            ]
+          },
+          "rag": {
+            "title": "RAG Motoru",
+            "description": "Yerleşik alma ve vektör aramasıyla her yanıtı kendi belgelerinize dayandırın.",
+            "subBullets": [
+              "Yükleme sırasında otomatik parçalama ve gömme",
+              "HNSW indeksiyle pgvector benzerlik araması",
+              "Güven düzeyi düşük yanıtlar tahmin edilmez, gösterilmez"
+            ]
+          },
+          "workflows": {
+            "title": "Otonom İş Akışları",
+            "description": "Ajanları, veri alıcılarını ve koşullu mantığı otomatik çok adımlı iş akışlarında birleştirin.",
+            "subBullets": [
+              "Ajanları, veri alıcılarını ve koşullu dalları birbirine zincirleme",
+              "Yeni belgeler, randevular veya webhook'larla tetikleme",
+              "Güven düzeyi düşük adımlar incelemeye işaretlenir"
+            ]
+          },
+          "whiteLabel": {
+            "title": "Markaya Özel",
+            "description": "Platformu kendi markanız, alan adınız ve renk paletinizle yeniden satın.",
+            "subBullets": [
+              "Tek bir CNAME kaydıyla özel alan adı",
+              "Çalışma alanının tamamında logo, ad ve marka rengi",
+              "Kontrol ettiğiniz müşteri başına kullanım kotaları"
+            ]
+          }
+        }
+      },
+      "architecture": {
+        "title": "Yüklemeden akışlı yanıta",
+        "description": "Bu diyagramdaki her aşama bugün platformda çalışıyor.",
+        "stages": {
+          "ingestion": {
+            "title": "Veri alımı",
+            "description": "Belgeler yükleme sırasında parçalara ayrılır ve gömülür."
+          },
+          "vector": {
+            "title": "pgvector, HNSW indeksi",
+            "description": "Postgres'te bir HNSW indeksi üzerinden kosinüs benzerlik araması."
+          },
+          "orchestration": {
+            "title": "Ajan orkestrasyon motoru",
+            "description": "Alma, güven skorlaması ve araç çağrıları sırayla çalışır."
+          },
+          "stream": {
+            "title": "SSE akışı",
+            "description": "Yanıt, tarayıcıya token token akıtılır."
+          }
+        }
+      },
+      "telemetry": {
+        "title": "İmzalamadan önce doğrulayabilecekleriniz",
+        "description": "Taahhüt ettiğimiz üç sayı ve arkasındaki kontroller.",
+        "uptimeLabel": "Hedef çalışma süresi",
+        "uptimeValue": "%99,9",
+        "latencyLabel": "Gecikme bütçesi (p95)",
+        "latencyValue": "<150ms",
+        "latencyNote": "Yalnızca platform yönlendirmesi ve alma, model üretim süresi hariç.",
+        "isolationLabel": "Kiracı izolasyonu",
+        "isolationValue": "RLS",
+        "controlsIntro": "Bu sayıların arkasındaki kontroller"
+      },
+      "cta": {
+        "title": "Bir yapay zeka Ajan İşletim Sistemini resepsiyonunuza yerleştirin",
+        "subtitle": "App Engine'i açın ve ilk ajanınızı dakikalar içinde yapılandırın.",
+        "footerTagline": "Yapay zeka ajanları, RAG ve markaya özel çalışma alanları için Ajan İşletim Sistemi.",
+        "footerCopyright": "© {year} Pasargad. Tüm hakları saklıdır."
+      }
+    },
+    "pricingPage": {
+      "title": "Basit, şeffaf fiyatlandırma",
+      "subtitle": "Her plan tam App Engine'i çalıştırır. Ekibiniz büyüdükçe yükseltin.",
+      "popularBadge": "Popüler",
+      "perMonth": "/ay",
+      "tiers": {
+        "starter": {
+          "name": "Başlangıç",
+          "price": "$49",
+          "description": "İlk yapay zeka ajanını başlatan küçük ekipler için.",
+          "cta": "Başlangıç'ı Seç",
+          "features": [
+            "3 yapay zeka ajanına kadar",
+            "Aylık 5.000 API çağrısı",
+            "1 GB vektör depolama",
+            "E-posta desteği"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$149",
+          "description": "İşletme genelinde ajan çalıştıran büyüyen ekipler için.",
+          "cta": "Pro'yu Seç",
+          "features": [
+            "15 yapay zeka ajanına kadar",
+            "Aylık 50.000 API çağrısı",
+            "10 GB vektör depolama",
+            "Öncelikli destek",
+            "Temel markaya özel görünüm"
+          ]
+        },
+        "enterprise": {
+          "name": "Kurumsal",
+          "price": "$499",
+          "description": "Ölçek, markalaşma ve özel destek gerektiren kuruluşlar için.",
+          "cta": "Satışla Görüşün",
+          "features": [
+            "Sınırsız yapay zeka ajanı",
+            "Sınırsız API çağrısı",
+            "100 GB vektör depolama",
+            "Özel destek",
+            "Tam markaya özel görünüm + özel alan adı"
+          ]
+        }
+      },
+      "comparison": {
+        "title": "Planları karşılaştırın",
+        "columns": {
+          "feature": "Özellik",
+          "starter": "Başlangıç",
+          "pro": "Pro",
+          "enterprise": "Kurumsal"
+        },
+        "rows": {
+          "agents": { "label": "Yapay zeka ajanları", "starter": "3'e kadar", "pro": "15'e kadar", "enterprise": "Sınırsız" },
+          "documents": { "label": "Bilgi bankası belgeleri", "starter": "50'ye kadar", "pro": "500'e kadar", "enterprise": "Sınırsız" },
+          "workflows": { "label": "İş akışları", "starter": "1", "pro": "10", "enterprise": "Sınırsız" },
+          "apiCalls": { "label": "Aylık API çağrıları", "starter": "5.000", "pro": "50.000", "enterprise": "Sınırsız" },
+          "vectorStorage": { "label": "Vektör depolama", "starter": "1 GB", "pro": "10 GB", "enterprise": "100 GB" },
+          "whiteLabel": { "label": "Markaya özel görünüm", "starter": "—", "pro": "Temel", "enterprise": "Tam" },
+          "customDomain": { "label": "Özel alan adı", "starter": "—", "pro": "—", "enterprise": "✓" },
+          "support": { "label": "Destek", "starter": "E-posta", "pro": "Öncelikli", "enterprise": "Özel" }
+        }
+      },
+      "faq": {
+        "title": "Sıkça sorulan sorular",
+        "items": {
+          "trial": {
+            "question": "Ücretsiz deneme var mı?",
+            "answer": "Her plan, ekibinizin App Engine'i tam olarak değerlendirebilmesi için bir deneme süresi içerir."
+          },
+          "changePlan": {
+            "question": "Planımı daha sonra değiştirebilir miyim?",
+            "answer": "Evet — faturalandırma ayarlarınızdan istediğiniz zaman yükseltebilir veya düşürebilirsiniz. Değişiklikler bir sonraki faturalandırma döneminde geçerli olur."
+          },
+          "cancelData": {
+            "question": "İptal edersem verilerime ne olur?",
+            "answer": "Ajanlarınız, belgeleriniz ve iş akışlarınız iptalden sonra 30 gün boyunca erişilebilir kalır, böylece ihtiyacınız olanı dışa aktarabilirsiniz."
+          },
+          "languages": {
+            "question": "Pasargad birden fazla dili destekliyor mu?",
+            "answer": "Evet — ajan yanıtları dahil tüm platform İngilizce, Türkçe, Almanca ve Farsça olarak kullanılabilir."
+          },
+          "customDomain": {
+            "question": "Kendi alan adımı kullanabilir miyim?",
+            "answer": "Kurumsal planlar, CNAME ile özel alan adı içeren tam markaya özel görünümü içerir."
+          },
+          "isolation": {
+            "question": "Verilerim diğer kiracılardan izole mi?",
+            "answer": "Evet — her kiracı tablosu, veritabanı katmanında Satır Düzeyinde Güvenlik ile korunur ve kiracılar arası bir sorgu yolu yoktur."
+          }
+        }
+      }
     }
   },
   "auth": {
@@ -676,6 +882,7 @@
     "userMenu": "Kullanıcı menüsü",
     "signedInAs": "Oturum açan hesap",
     "backToDashboard": "Panele dön",
+    "landingPage": "Ana Sayfa",
     "adminBadge": "Operatör yönetimi",
     "groups": {
       "agent": "Yapay zekâ ajanı",
@@ -968,15 +1175,27 @@
     "knowledgeBase": {
       "title": "Bilgi tabanı",
       "description": "Ajanınızın yanıtlarını dayandırdığı belgeleri yükleyin. Dosyalar parçalara ayrılır ve arama için vektörleştirilir.",
+      "metrics": {
+        "totalDocuments": "Toplam belge",
+        "totalChunks": "Toplam vektör parçası",
+        "storageUsed": "Kullanılan depolama"
+      },
       "tabs": {
         "files": "Dosya yükle",
-        "text": "Metin yapıştır"
+        "text": "Metin yapıştır",
+        "url": "URL'den ekle"
       },
       "dropzone": {
         "label": "Bilgi tabanına dosya yükle",
         "title": "Dosyaları buraya sürükleyin veya göz atmak için tıklayın",
         "dragActive": "Yüklemek için bırakın",
         "hint": "PDF, TXT, MD, CSV, JSON veya HTML · dosya başına en fazla {size} MB"
+      },
+      "url": {
+        "label": "Sayfa URL'si",
+        "placeholder": "https://example.com/makale",
+        "hint": "Sayfayı alıp okuyacağız. Yakında.",
+        "submit": "Sayfa ekle"
       },
       "queue": {
         "title": "Yüklemeler",
@@ -1006,6 +1225,8 @@
       },
       "list": {
         "title": "Belgeler",
+        "searchPlaceholder": "Belgelerde ara…",
+        "filterAll": "Tümü",
         "count": "Planınızdaki {limit} belgeden {count} tanesi",
         "countUnlimited": "{count} belge",
         "emptyTitle": "Henüz belge yok",
@@ -1060,6 +1281,27 @@
         "similarity": "Benzerlik",
         "untitled": "Adsız belge"
       },
+      "chunking": {
+        "title": "Parçalama stratejisi",
+        "description": "Belgelerin gömme öncesi nasıl parçalara bölüneceğini seçin.",
+        "strategy": {
+          "recursive": "Yinelemeli karakter",
+          "semantic": "Anlamsal parçalama"
+        },
+        "chunkSizeLabel": "Parça boyutu",
+        "overlapLabel": "Örtüşme",
+        "semantic": {
+          "thresholdLabel": "Benzerlik eşiği",
+          "hint": "Anlamsal parçalama metni anlamına göre gruplar. Parça boyutu ve örtüşme bu modda geçerli değildir."
+        },
+        "preview": "≈{chunks} parça · ≈{tokens} token"
+      },
+      "hybridSearch": {
+        "title": "Hibrit arama ağırlıklandırması",
+        "description": "Anlamsal benzerliği tam anahtar kelime eşleşmeleriyle dengeleyin.",
+        "denseLabel": "Yoğun vektör arama %{percent}",
+        "bm25Label": "BM25 anahtar kelime arama %{percent}"
+      },
       "errors": {
         "unsupported_type": "Bu dosya türü desteklenmiyor.",
         "too_large": "Bu dosya çok büyük.",
@@ -1077,6 +1319,283 @@
         "noMembership": "Herhangi bir kuruluşa üye değilsiniz."
       }
     },
+    "workflows": {
+      "status": {
+        "active": "Aktif",
+        "completed": "Tamamlandı",
+        "pending": "Beklemede",
+        "awaitingApproval": "Onay bekliyor"
+      },
+      "actions": {
+        "addNode": "+ Düğüm ekle",
+        "runTest": "Testi çalıştır"
+      },
+      "palette": {
+        "title": "Düğüm paleti",
+        "aiAgent": "Yapay zekâ asistanı",
+        "ragRetriever": "RAG alıcısı",
+        "conditional": "Koşullu",
+        "webhook": "Webhook",
+        "approvalGate": "Onay kapısı"
+      },
+      "canvas": {
+        "title": "İş akışına genel bakış"
+      },
+      "hitl": {
+        "actionLabel": "Eylem",
+        "payloadLabel": "Veri yükü",
+        "approveButton": "Onayla",
+        "rejectButton": "Reddet",
+        "statusApproved": "Onaylandı",
+        "statusRejected": "Reddedildi"
+      }
+    },
+    "logs": {
+      "metrics": {
+        "totalRequests": "Toplam istek",
+        "avgLatency": "Ort. gecikme",
+        "errorRate": "Hata oranı",
+        "activeTokens": "Aktif token"
+      },
+      "searchPlaceholder": "Günlüklerde ara…",
+      "levels": {
+        "all": "Tümü",
+        "info": "INFO",
+        "warn": "WARN",
+        "error": "ERROR"
+      },
+      "columns": {
+        "timestamp": "Zaman damgası",
+        "service": "Servis",
+        "level": "Seviye",
+        "message": "Mesaj",
+        "duration": "Süre",
+        "authorization": "Yetkilendirme",
+        "trace": "İz"
+      },
+      "hitl": {
+        "filterLabel": "Onay gerektirir",
+        "statusPending": "Beklemede",
+        "statusApproved": "Onaylandı",
+        "statusRejected": "Reddedildi",
+        "none": "—"
+      },
+      "trace": {
+        "dialogTitle": "Yürütme izi",
+        "totalDurationLabel": "Toplam süre",
+        "span": {
+          "embeddingGeneration": "Gömme oluşturma",
+          "vectorSearch": "Vektör arama",
+          "llmTokenStream": "LLM token akışı"
+        },
+        "viewButtonLabel": "İzi görüntüle",
+        "expandLabel": "Genişlet",
+        "collapseLabel": "Daralt"
+      }
+    },
+    "whiteLabel": {
+      "title": "Marka Özelleştirme",
+      "description": "Çalışma alanınızın markasını, renklerini ve özel alan adını özelleştirin.",
+      "brandAssets": {
+        "title": "Marka Varlıkları",
+        "appNameLabel": "Uygulama adı",
+        "appNamePlaceholder": "Acme Workspace",
+        "logoLabel": "Logo",
+        "logoHint": "PNG veya SVG, en fazla 2MB",
+        "faviconLabel": "Favicon",
+        "faviconHint": "ICO veya PNG, 32x32"
+      },
+      "colorPalette": {
+        "title": "Renk Paleti",
+        "primaryAccentLabel": "Birincil vurgu",
+        "sidebarBackgroundLabel": "Kenar çubuğu arka planı",
+        "previewLabel": "Önizleme"
+      },
+      "domain": {
+        "title": "Özel Alan Adı ve SSL",
+        "domainLabel": "Özel alan adı",
+        "domainPlaceholder": "app.sirketiniz.com",
+        "cnameLabel": "CNAME hedefi",
+        "copyButton": "Kopyala",
+        "statusVerified": "Doğrulandı",
+        "statusPending": "Bekliyor"
+      },
+      "widget": {
+        "title": "Gömülebilir sohbet widget'ı",
+        "description": "Sohbet widget'ını sitenize gömmek için bu kodu kopyalayın.",
+        "positionLabel": "Konum",
+        "positionBottomRight": "Sağ alt",
+        "positionBottomLeft": "Sol alt",
+        "accentColorLabel": "Vurgu rengi",
+        "greetingLabel": "Karşılama mesajı",
+        "greetingPlaceholder": "Merhaba! Nasıl yardımcı olabiliriz?",
+        "agentNameLabel": "Ajan adı",
+        "agentNamePlaceholder": "Destek triyaj",
+        "snippetLabel": "Yerleştirme kodu",
+        "copyButton": "Kopyala",
+        "previewLabel": "Önizleme"
+      }
+    },
+    "appSettings": {
+      "title": "Ayarlar",
+      "description": "API erişimini, vektör motorunu ve çalışma alanı tercihlerini yönetin.",
+      "apiKeys": {
+        "title": "API Anahtarları",
+        "currentKeyLabel": "Geçerli anahtar",
+        "generateButton": "+ Yeni Anahtar Oluştur",
+        "copyButton": "Kopyala",
+        "revealButton": "Göster",
+        "hideButton": "Gizle"
+      },
+      "vectorEngine": {
+        "title": "Vektör Motoru Senkronizasyonu",
+        "embeddingModelLabel": "Gömme modeli",
+        "chunkSizeLabel": "Parça boyutu",
+        "chunkOverlapLabel": "Parça örtüşmesi",
+        "syncButton": "Şimdi senkronize et"
+      },
+      "preferences": {
+        "title": "Sistem Tercihleri",
+        "defaultLocaleLabel": "Varsayılan dil",
+        "timezoneLabel": "Saat dilimi",
+        "emailNotificationsLabel": "E-posta bildirimleri",
+        "productUpdatesLabel": "Ürün güncellemeleri"
+      }
+    },
+    "appBilling": {
+      "title": "Faturalandırma ve Abonelik",
+      "description": "Planınızı, kullanımınızı ve ödeme geçmişinizi yönetin.",
+      "currentPlan": {
+        "title": "Mevcut Plan",
+        "planName": "Pro Plan",
+        "renewsLabel": "Yenilenme tarihi",
+        "statusActive": "Aktif",
+        "manageButton": "Aboneliği Yönet"
+      },
+      "usage": {
+        "title": "Bu Dönemki Kullanım",
+        "vectorStorageLabel": "Vektör depolama",
+        "tokenUsageLabel": "Yapay zeka token kullanımı",
+        "apiCallsLabel": "Aylık API çağrıları"
+      },
+      "plans": {
+        "title": "Planları Karşılaştır",
+        "currentBadge": "Mevcut plan",
+        "upgradeButton": "Planı Yükselt",
+        "starter": {
+          "name": "Başlangıç",
+          "price": "$49/ay",
+          "features": [
+            "3 asistana kadar",
+            "Aylık 5.000 API çağrısı",
+            "1 GB vektör depolama",
+            "E-posta desteği"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$149/ay",
+          "features": [
+            "15 asistana kadar",
+            "Aylık 50.000 API çağrısı",
+            "10 GB vektör depolama",
+            "Öncelikli destek"
+          ]
+        },
+        "enterprise": {
+          "name": "Kurumsal",
+          "price": "$499/ay",
+          "features": [
+            "Sınırsız asistan",
+            "Sınırsız API çağrısı",
+            "100 GB vektör depolama",
+            "Özel destek"
+          ]
+        }
+      },
+      "invoices": {
+        "title": "Ödeme Geçmişi",
+        "columns": {
+          "date": "Fatura Tarihi",
+          "amount": "Tutar",
+          "status": "Durum",
+          "receipt": "Makbuz"
+        },
+        "statusPaid": "Ödendi",
+        "viewReceipt": "Görüntüle"
+      }
+    },
+    "appOverview": {
+      "title": "Genel Bakış",
+      "description": "Çalışma alanınızın ajanları, belgeleri ve iş akışlarına genel bir bakış.",
+      "statusOperational": "Çalışıyor",
+      "newAgentButton": "+ Yeni Ajan",
+      "kpis": {
+        "activeAgents": "Aktif Yapay Zeka Ajanları",
+        "totalDocuments": "Toplam Alınan Belge",
+        "activeWorkflows": "Aktif İş Akışları",
+        "executionVolume": "24 Saatlik Yürütme Hacmi"
+      },
+      "agentsOverview": {
+        "title": "Aktif Ajanlar",
+        "viewAll": "Tümünü gör"
+      },
+      "activityFeed": {
+        "title": "Canlı Etkinlik Akışı",
+        "ragIngest": "Belge alındı: {name}",
+        "workflowRun": "İş akışı çalıştırıldı: {name}",
+        "systemEvent": "{message}"
+      }
+    },
+    "appAgentDetail": {
+      "agentIdLabel": "Ajan Kimliği: {id}",
+      "statusActive": "Aktif",
+      "statusInactive": "Pasif",
+      "saveButton": "Kaydet",
+      "deployButton": "Dağıt",
+      "systemPrompt": {
+        "title": "Sistem Talimatı",
+        "instructionsLabel": "Davranış talimatları",
+        "temperatureLabel": "Sıcaklık",
+        "maxTokensLabel": "Maksimum token"
+      },
+      "knowledgeBase": {
+        "title": "Bilgi Bankası",
+        "description": "Bu ajanın başvurabileceği belgeleri açıp kapatın."
+      },
+      "tools": {
+        "title": "Araç çağırma",
+        "description": "Bu ajanın çalışma sırasında harici araçları çağırmasına izin verin.",
+        "webSearch": { "label": "Web arama API'si" },
+        "webhook": {
+          "label": "Özel webhook",
+          "methodLabel": "Yöntem",
+          "urlLabel": "Webhook URL'si",
+          "urlPlaceholder": "https://example.com/webhook"
+        },
+        "sqlQuery": {
+          "label": "SQL sorgusu çalıştırma",
+          "templateLabel": "İzin verilen sorgu şablonu",
+          "templatePlaceholder": "SELECT * FROM orders WHERE customer_id = {{customer_id}}",
+          "mockHint": "Henüz canlı bir veritabanı bağlayıcısı yok. Bu, ileride kullanılacak şablonu tanımlar."
+        }
+      },
+      "variables": {
+        "title": "Dinamik istem değişkenleri",
+        "description": "Her istekte sistem istemine eklenen çalışma zamanı değerleri.",
+        "keyLabel": "Değişken adı",
+        "defaultValueLabel": "Varsayılan değer",
+        "addButton": "+ Değişken ekle",
+        "removeButton": "Değişkeni kaldır"
+      },
+      "playground": {
+        "title": "Test Alanı",
+        "inputPlaceholder": "Bir test mesajı gönderin…",
+        "sendButton": "Gönder",
+        "emptyHint": "Bu ajanın yanıtlarını test etmek için bir mesaj gönderin.",
+        "simulatedReply": "Atanan bilgi bankasına dayalı simüle edilmiş yanıt: \"{message}\""
+      }
+    },
     "team": {
       "title": "Ekip",
       "yourOrganization": "Kuruluşunuz",
@@ -1086,6 +1605,16 @@
       "remove": "Kaldır",
       "removeAria": "{name} üyesini kaldır",
       "roleAria": "{name} rolü",
+      "columns": {
+        "member": "Üye",
+        "role": "Rol",
+        "actions": "İşlemler"
+      },
+      "roles": {
+        "owner": "Sahip",
+        "admin": "Yönetici",
+        "member": "Üye"
+      },
       "invite": {
         "title": "Üye davet et",
         "onlyAdmins": "Yeni üyeleri yalnızca sahipler ve yöneticiler davet edebilir.",
@@ -1100,6 +1629,8 @@
         "title": "Bekleyen davetler ({count})",
         "emptyTitle": "Bekleyen davet yok",
         "emptyDescription": "Gönderdiğiniz davetler kabul edilene veya iptal edilene kadar burada görünür.",
+        "columnEmail": "E-posta",
+        "columnRole": "Rol / son geçerlilik",
         "expires": "{role} · {date} tarihinde sona erer",
         "revoke": "İptal et",
         "revoking": "İptal ediliyor…"
@@ -1223,6 +1754,18 @@
       "errors": {
         "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
         "forbidden": "Kuruluş ayarlarını yalnızca sahipler ve yöneticiler düzenleyebilir."
+      },
+      "security": {
+        "title": "Güvenlik",
+        "currentPasswordLabel": "Mevcut şifre",
+        "newPasswordLabel": "Yeni şifre",
+        "confirmPasswordLabel": "Yeni şifreyi onayla",
+        "updateButton": "Şifreyi güncelle"
+      },
+      "notifications": {
+        "title": "Bildirim tercihleri",
+        "emailLabel": "E-posta bildirimleri",
+        "productUpdatesLabel": "Ürün güncellemeleri"
       }
     }
   },

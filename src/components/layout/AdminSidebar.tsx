@@ -11,7 +11,12 @@ export default function AdminSidebar() {
   return (
     <Sidebar
       homeHref="/admin"
-      logo={<Logo subtitle={t("adminBadge")} />}
+      logo={
+        <div className="flex flex-col gap-0.5">
+          <Logo />
+          <span className="block text-xs text-slate-400">{t("adminBadge")}</span>
+        </div>
+      }
       groups={getAdminNavGroups()}
       label={t("nav.adminLabel")}
     />

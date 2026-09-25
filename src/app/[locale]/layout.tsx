@@ -106,7 +106,7 @@ export default async function RootLayout({
       <body className="min-h-screen bg-white font-sans antialiased">
         <NextIntlClientProvider messages={messages}>
           <AgencyBrandingProvider agency={agency}>
-            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
               {children}
             </ThemeProvider>
           </AgencyBrandingProvider>

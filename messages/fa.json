@@ -465,6 +465,212 @@
           "description": "دامنه خودتان را به پلتفرم متصل کنید و برند خود را اعمال کنید."
         }
       }
+    },
+    "nav": {
+      "home": "خانه",
+      "pricing": "قیمت‌گذاری",
+      "appEngine": "App Engine"
+    },
+    "home": {
+      "hero": {
+        "badge": "سیستم‌عامل چند-مستأجری ایجنت",
+        "title": "یک فضای کاری برای ساخت، استقرار و مدیریت هر دستیار هوش مصنوعی که کسب‌وکار شما نیاز دارد",
+        "subtitle": "App Engine پاسارگاد به تیم شما دستیارهای هوش مصنوعی اختصاصی، پایگاه دانش مبتنی بر RAG، گردش‌های کاری خودران و برندسازی اختصاصی می‌دهد — همه از یک داشبورد.",
+        "ctaPrimary": "باز کردن App Engine",
+        "ctaSecondary": "مشاهده قیمت‌گذاری"
+      },
+      "preview": {
+        "title": "مشاهده حل‌شدن یک پرسش RAG، توکن به توکن",
+        "description": "یک گذر برنامه‌ریزی‌شده روی همان مسیر درخواستی که ترافیک واقعی طی می‌کند: بازیابی، امتیازدهی اطمینان، سپس پاسخی که به‌صورت استریم ارسال می‌شود.",
+        "queryLabel": "پرسش نمونه",
+        "query": "سیاست بازگشت وجه شما برای طرح‌های سالانه چیست؟",
+        "retrievalStep": "جستجوی برداری روی pgvector: {chunks} قطعه بازیابی شد، بالاترین شباهت {similarity}",
+        "confidenceStep": "اطمینان {score}، برابر یا بالاتر از آستانه {threshold}، پاسخ از پایگاه دانش",
+        "streamStep": "استریم پاسخ از طریق SSE",
+        "answer": "طرح‌های سالانه تا ۳۰ روز پس از خرید قابل بازگشت هستند، به‌نسبت ماه‌های استفاده‌نشده.",
+        "metricsLabel": "معیارهای استریم",
+        "metricFirstToken": "اولین توکن",
+        "metricTokensPerSecond": "توکن بر ثانیه",
+        "metricTotalTokens": "مجموع توکن‌ها",
+        "replay": "پخش دوباره",
+        "disclaimer": "شبیه‌سازی برنامه‌ریزی‌شده برای نمایش. یک پرسش زنده روی فضای کاری واقعی نیست."
+      },
+      "features": {
+        "eyebrow": "پلتفرم",
+        "title": "هر آنچه تیم شما برای اجرای دستیارهای هوش مصنوعی در مقیاس نیاز دارد",
+        "items": {
+          "agents": {
+            "title": "دستیارهای هوش مصنوعی",
+            "description": "دستیارهای اختصاصی با دستور سیستم، مدل و اتصالات پایگاه دانش مخصوص به خود بسازید و پیکربندی کنید.",
+            "subBullets": [
+              "دستور سیستم، مدل و دمای مخصوص هر دستیار",
+              "اتصال یک یا چند پایگاه دانش به هر دستیار",
+              "آزمایش تغییرات در محیط آزمایشی پیش از انتشار"
+            ]
+          },
+          "rag": {
+            "title": "موتور RAG",
+            "description": "هر پاسخ را با دریافت داخلی و جستجوی برداری بر پایه اسناد خودتان استوار کنید.",
+            "subBullets": [
+              "قطعه‌بندی و embedding خودکار هنگام بارگذاری",
+              "جستجوی شباهت pgvector با ایندکس HNSW",
+              "پاسخ‌های با اطمینان پایین حدس زده نمی‌شوند، نگه داشته می‌شوند"
+            ]
+          },
+          "workflows": {
+            "title": "گردش‌های کاری خودران",
+            "description": "دستیارها، بازیابی‌کننده‌ها و منطق شرطی را در گردش‌های کاری چندمرحله‌ای خودکار زنجیره کنید.",
+            "subBullets": [
+              "زنجیره‌کردن دستیارها، بازیابی‌کننده‌ها و شاخه‌های شرطی",
+              "فعال‌سازی با اسناد جدید، رزروها یا webhook",
+              "مراحل با اطمینان پایین برای بازبینی نشان‌گذاری می‌شوند"
+            ]
+          },
+          "whiteLabel": {
+            "title": "برندسازی اختصاصی",
+            "description": "پلتفرم را زیر برند، دامنه و پالت رنگ خودتان بازفروشی کنید.",
+            "subBullets": [
+              "دامنه اختصاصی از طریق یک رکورد CNAME",
+              "لوگو، نام و رنگ برند در سراسر فضای کاری",
+              "سهمیه استفاده هر مشتری تحت کنترل شما"
+            ]
+          }
+        }
+      },
+      "architecture": {
+        "title": "از بارگذاری تا پاسخ استریم‌شده",
+        "description": "هر مرحله در این نمودار امروز در پلتفرم در حال اجراست.",
+        "stages": {
+          "ingestion": {
+            "title": "دریافت داده",
+            "description": "اسناد هنگام بارگذاری قطعه‌بندی و embed می‌شوند."
+          },
+          "vector": {
+            "title": "pgvector، ایندکس HNSW",
+            "description": "جستجوی شباهت کسینوسی روی یک ایندکس HNSW در Postgres."
+          },
+          "orchestration": {
+            "title": "موتور orchestration دستیار",
+            "description": "بازیابی، امتیازدهی اطمینان و فراخوانی ابزارها به‌ترتیب اجرا می‌شوند."
+          },
+          "stream": {
+            "title": "استریم SSE",
+            "description": "پاسخ توکن به توکن به مرورگر استریم می‌شود."
+          }
+        }
+      },
+      "telemetry": {
+        "title": "چیزی که پیش از امضا می‌توانید راستی‌آزمایی کنید",
+        "description": "سه عدد که به آن‌ها متعهدیم، و کنترل‌های پشت آن‌ها.",
+        "uptimeLabel": "هدف زمان کارکرد",
+        "uptimeValue": "۹۹.۹٪",
+        "latencyLabel": "بودجه تأخیر (p95)",
+        "latencyValue": "کمتر از ۱۵۰ میلی‌ثانیه",
+        "latencyNote": "فقط مسیریابی پلتفرم و بازیابی، نه زمان تولید مدل.",
+        "isolationLabel": "ایزوله‌سازی مستأجر",
+        "isolationValue": "RLS",
+        "controlsIntro": "کنترل‌های پشت این اعداد"
+      },
+      "cta": {
+        "title": "یک سیستم‌عامل ایجنت هوش مصنوعی پشت میز پذیرش خودتان بگذارید",
+        "subtitle": "App Engine را باز کنید و اولین دستیار خود را در چند دقیقه پیکربندی کنید.",
+        "footerTagline": "سیستم‌عامل ایجنت برای دستیارهای هوش مصنوعی، RAG و فضاهای کاری اختصاصی.",
+        "footerCopyright": "© {year} پاسارگاد. همه حقوق محفوظ است."
+      }
+    },
+    "pricingPage": {
+      "title": "قیمت‌گذاری ساده و شفاف",
+      "subtitle": "هر پلن کل App Engine پاسارگاد را اجرا می‌کند. با رشد تیم خود ارتقا دهید.",
+      "popularBadge": "محبوب",
+      "perMonth": "/ماه",
+      "tiers": {
+        "starter": {
+          "name": "استارتر",
+          "price": "۴۹ دلار",
+          "description": "برای تیم‌های کوچکی که اولین دستیار هوش مصنوعی خود را راه‌اندازی می‌کنند.",
+          "cta": "انتخاب استارتر",
+          "features": [
+            "تا ۳ دستیار هوش مصنوعی",
+            "۵٬۰۰۰ تماس API ماهانه",
+            "۱ گیگابایت فضای ذخیره‌سازی برداری",
+            "پشتیبانی ایمیلی"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "۱۴۹ دلار",
+          "description": "برای تیم‌های در حال رشد که دستیارها را در سراسر کسب‌وکار اجرا می‌کنند.",
+          "cta": "انتخاب Pro",
+          "features": [
+            "تا ۱۵ دستیار هوش مصنوعی",
+            "۵۰٬۰۰۰ تماس API ماهانه",
+            "۱۰ گیگابایت فضای ذخیره‌سازی برداری",
+            "پشتیبانی اولویت‌دار",
+            "برندسازی اختصاصی پایه"
+          ]
+        },
+        "enterprise": {
+          "name": "سازمانی",
+          "price": "۴۹۹ دلار",
+          "description": "برای سازمان‌هایی که به مقیاس، برندسازی و پشتیبانی اختصاصی نیاز دارند.",
+          "cta": "تماس با فروش",
+          "features": [
+            "دستیار هوش مصنوعی نامحدود",
+            "تماس API نامحدود",
+            "۱۰۰ گیگابایت فضای ذخیره‌سازی برداری",
+            "پشتیبانی اختصاصی",
+            "برندسازی اختصاصی کامل + دامنه اختصاصی"
+          ]
+        }
+      },
+      "comparison": {
+        "title": "مقایسه پلن‌ها",
+        "columns": {
+          "feature": "ویژگی",
+          "starter": "استارتر",
+          "pro": "Pro",
+          "enterprise": "سازمانی"
+        },
+        "rows": {
+          "agents": { "label": "دستیارهای هوش مصنوعی", "starter": "تا ۳", "pro": "تا ۱۵", "enterprise": "نامحدود" },
+          "documents": { "label": "اسناد پایگاه دانش", "starter": "تا ۵۰", "pro": "تا ۵۰۰", "enterprise": "نامحدود" },
+          "workflows": { "label": "گردش‌های کاری", "starter": "۱", "pro": "۱۰", "enterprise": "نامحدود" },
+          "apiCalls": { "label": "تماس‌های API ماهانه", "starter": "۵٬۰۰۰", "pro": "۵۰٬۰۰۰", "enterprise": "نامحدود" },
+          "vectorStorage": { "label": "فضای ذخیره‌سازی برداری", "starter": "۱ گیگابایت", "pro": "۱۰ گیگابایت", "enterprise": "۱۰۰ گیگابایت" },
+          "whiteLabel": { "label": "برندسازی اختصاصی", "starter": "—", "pro": "پایه", "enterprise": "کامل" },
+          "customDomain": { "label": "دامنه اختصاصی", "starter": "—", "pro": "—", "enterprise": "✓" },
+          "support": { "label": "پشتیبانی", "starter": "ایمیل", "pro": "اولویت‌دار", "enterprise": "اختصاصی" }
+        }
+      },
+      "faq": {
+        "title": "سوالات متداول",
+        "items": {
+          "trial": {
+            "question": "آیا نسخه آزمایشی رایگان وجود دارد؟",
+            "answer": "هر پلن شامل یک دوره آزمایشی است تا تیم شما بتواند App Engine را قبل از تعهد به طور کامل ارزیابی کند."
+          },
+          "changePlan": {
+            "question": "آیا می‌توانم بعداً پلن خود را تغییر دهم؟",
+            "answer": "بله — در هر زمان از تنظیمات صورتحساب خود می‌توانید ارتقا یا کاهش دهید. تغییرات از دوره صورتحساب بعدی اعمال می‌شود."
+          },
+          "cancelData": {
+            "question": "در صورت لغو، چه اتفاقی برای داده‌های من می‌افتد؟",
+            "answer": "دستیارها، اسناد و گردش‌های کاری شما تا ۳۰ روز پس از لغو در دسترس باقی می‌مانند تا بتوانید هر آنچه نیاز دارید را صادر کنید."
+          },
+          "languages": {
+            "question": "آیا پاسارگاد از چند زبان پشتیبانی می‌کند؟",
+            "answer": "بله — کل پلتفرم، از جمله پاسخ‌های دستیار، به زبان‌های انگلیسی، ترکی، آلمانی و فارسی در دسترس است."
+          },
+          "customDomain": {
+            "question": "آیا می‌توانم از دامنه اختصاصی خودم استفاده کنم؟",
+            "answer": "پلن‌های سازمانی شامل برندسازی اختصاصی کامل با دامنه اختصاصی از طریق CNAME هستند."
+          },
+          "isolation": {
+            "question": "آیا داده‌های من از سایر مستأجرها ایزوله است؟",
+            "answer": "بله — هر جدول مستأجر با امنیت در سطح ردیف در لایه پایگاه داده محافظت می‌شود و هیچ مسیر پرس‌وجوی بین‌مستأجری وجود ندارد."
+          }
+        }
+      }
     }
   },
   "auth": {
@@ -676,6 +882,7 @@
     "userMenu": "منوی کاربر",
     "signedInAs": "واردشده با",
     "backToDashboard": "بازگشت به داشبورد",
+    "landingPage": "صفحه اصلی",
     "adminBadge": "مدیریت اپراتور",
     "groups": {
       "agent": "عامل هوش مصنوعی",
@@ -968,15 +1175,27 @@
     "knowledgeBase": {
       "title": "پایگاه دانش",
       "description": "اسنادی را که عامل شما از آن‌ها پاسخ می‌دهد بارگذاری کنید. فایل‌ها به بخش‌هایی تقسیم و برای بازیابی بردارسازی می‌شوند.",
+      "metrics": {
+        "totalDocuments": "کل اسناد",
+        "totalChunks": "کل بخش‌های برداری",
+        "storageUsed": "فضای ذخیره‌سازی استفاده‌شده"
+      },
       "tabs": {
         "files": "بارگذاری فایل",
-        "text": "چسباندن متن"
+        "text": "چسباندن متن",
+        "url": "افزودن از آدرس"
       },
       "dropzone": {
         "label": "بارگذاری فایل در پایگاه دانش",
         "title": "فایل‌ها را اینجا بکشید یا برای انتخاب کلیک کنید",
         "dragActive": "برای بارگذاری رها کنید",
         "hint": "PDF، TXT، MD، CSV، JSON یا HTML · حداکثر {size} مگابایت برای هر فایل"
+      },
+      "url": {
+        "label": "آدرس صفحه",
+        "placeholder": "https://example.com/article",
+        "hint": "این صفحه را دریافت و بررسی خواهیم کرد. به‌زودی.",
+        "submit": "افزودن صفحه"
       },
       "queue": {
         "title": "بارگذاری‌ها",
@@ -1006,6 +1225,8 @@
       },
       "list": {
         "title": "اسناد",
+        "searchPlaceholder": "جستجوی اسناد…",
+        "filterAll": "همه",
         "count": "{count} از {limit} سند در پلن شما",
         "countUnlimited": "{count} سند",
         "emptyTitle": "هنوز سندی وجود ندارد",
@@ -1060,6 +1281,27 @@
         "similarity": "شباهت",
         "untitled": "سند بدون عنوان"
       },
+      "chunking": {
+        "title": "راهبرد قطعه‌بندی",
+        "description": "نحوه تقسیم اسناد به قطعه‌ها پیش از تعبیه را انتخاب کنید.",
+        "strategy": {
+          "recursive": "بازگشتی بر اساس نویسه",
+          "semantic": "قطعه‌بندی معنایی"
+        },
+        "chunkSizeLabel": "اندازه قطعه",
+        "overlapLabel": "همپوشانی",
+        "semantic": {
+          "thresholdLabel": "آستانه شباهت",
+          "hint": "قطعه‌بندی معنایی متن را بر اساس معنا گروه‌بندی می‌کند. در این حالت اندازه قطعه و همپوشانی کاربردی ندارند."
+        },
+        "preview": "≈{chunks} قطعه · ≈{tokens} توکن"
+      },
+      "hybridSearch": {
+        "title": "وزن‌دهی جستجوی ترکیبی",
+        "description": "شباهت معنایی را با تطابق دقیق کلیدواژه متوازن کنید.",
+        "denseLabel": "جستجوی بردار متراکم {percent}٪",
+        "bm25Label": "جستجوی کلیدواژه BM25 {percent}٪"
+      },
       "errors": {
         "unsupported_type": "این نوع فایل پشتیبانی نمی‌شود.",
         "too_large": "این فایل بسیار بزرگ است.",
@@ -1077,6 +1319,283 @@
         "noMembership": "شما عضو هیچ سازمانی نیستید."
       }
     },
+    "workflows": {
+      "status": {
+        "active": "فعال",
+        "completed": "تکمیل‌شده",
+        "pending": "در انتظار",
+        "awaitingApproval": "در انتظار تأیید"
+      },
+      "actions": {
+        "addNode": "+ افزودن گره",
+        "runTest": "اجرای آزمایشی"
+      },
+      "palette": {
+        "title": "پالت گره‌ها",
+        "aiAgent": "دستیار هوش مصنوعی",
+        "ragRetriever": "بازیاب RAG",
+        "conditional": "شرطی",
+        "webhook": "webhook",
+        "approvalGate": "دروازه تأیید"
+      },
+      "canvas": {
+        "title": "نمای کلی گردش کار"
+      },
+      "hitl": {
+        "actionLabel": "عملیات",
+        "payloadLabel": "بار داده",
+        "approveButton": "تأیید",
+        "rejectButton": "رد",
+        "statusApproved": "تأییدشده",
+        "statusRejected": "ردشده"
+      }
+    },
+    "logs": {
+      "metrics": {
+        "totalRequests": "کل درخواست‌ها",
+        "avgLatency": "میانگین تأخیر",
+        "errorRate": "نرخ خطا",
+        "activeTokens": "توکن‌های فعال"
+      },
+      "searchPlaceholder": "جستجوی گزارش‌ها…",
+      "levels": {
+        "all": "همه",
+        "info": "INFO",
+        "warn": "WARN",
+        "error": "ERROR"
+      },
+      "columns": {
+        "timestamp": "زمان",
+        "service": "سرویس",
+        "level": "سطح",
+        "message": "پیام",
+        "duration": "مدت",
+        "authorization": "مجوز",
+        "trace": "ردیابی"
+      },
+      "hitl": {
+        "filterLabel": "نیازمند تأیید",
+        "statusPending": "در انتظار",
+        "statusApproved": "تأییدشده",
+        "statusRejected": "ردشده",
+        "none": "—"
+      },
+      "trace": {
+        "dialogTitle": "ردیابی اجرا",
+        "totalDurationLabel": "مدت کل",
+        "span": {
+          "embeddingGeneration": "تولید تعبیه",
+          "vectorSearch": "جستجوی برداری",
+          "llmTokenStream": "جریان توکن مدل زبانی"
+        },
+        "viewButtonLabel": "نمایش ردیابی",
+        "expandLabel": "بازکردن",
+        "collapseLabel": "بستن"
+      }
+    },
+    "whiteLabel": {
+      "title": "شخصی‌سازی برند",
+      "description": "برند، رنگ‌ها و دامنه اختصاصی فضای کاری خود را شخصی‌سازی کنید.",
+      "brandAssets": {
+        "title": "دارایی‌های برند",
+        "appNameLabel": "نام برنامه",
+        "appNamePlaceholder": "Acme Workspace",
+        "logoLabel": "لوگو",
+        "logoHint": "PNG یا SVG، حداکثر ۲ مگابایت",
+        "faviconLabel": "فاوآیکون",
+        "faviconHint": "ICO یا PNG، ۳۲×۳۲"
+      },
+      "colorPalette": {
+        "title": "پالت رنگ",
+        "primaryAccentLabel": "رنگ اصلی",
+        "sidebarBackgroundLabel": "پس‌زمینه نوار کناری",
+        "previewLabel": "پیش‌نمایش"
+      },
+      "domain": {
+        "title": "دامنه اختصاصی و SSL",
+        "domainLabel": "دامنه اختصاصی",
+        "domainPlaceholder": "app.yourcompany.com",
+        "cnameLabel": "مقصد CNAME",
+        "copyButton": "کپی",
+        "statusVerified": "تأیید شده",
+        "statusPending": "در انتظار"
+      },
+      "widget": {
+        "title": "ویجت گفتگوی جای‌گذاری‌پذیر",
+        "description": "این کد را در سایت خود کپی کنید تا ویجت گفتگو جای‌گذاری شود.",
+        "positionLabel": "موقعیت",
+        "positionBottomRight": "پایین راست",
+        "positionBottomLeft": "پایین چپ",
+        "accentColorLabel": "رنگ تأکیدی",
+        "greetingLabel": "پیام خوش‌آمدگویی",
+        "greetingPlaceholder": "سلام! چطور می‌توانیم کمک کنیم؟",
+        "agentNameLabel": "نام دستیار",
+        "agentNamePlaceholder": "تریاژ پشتیبانی",
+        "snippetLabel": "کد جای‌گذاری",
+        "copyButton": "کپی",
+        "previewLabel": "پیش‌نمایش"
+      }
+    },
+    "appSettings": {
+      "title": "تنظیمات",
+      "description": "دسترسی API، موتور برداری و تنظیمات فضای کاری را مدیریت کنید.",
+      "apiKeys": {
+        "title": "کلیدهای API",
+        "currentKeyLabel": "کلید فعلی",
+        "generateButton": "+ ایجاد کلید جدید",
+        "copyButton": "کپی",
+        "revealButton": "نمایش",
+        "hideButton": "پنهان کردن"
+      },
+      "vectorEngine": {
+        "title": "همگام‌سازی موتور برداری",
+        "embeddingModelLabel": "مدل تعبیه‌سازی",
+        "chunkSizeLabel": "اندازه قطعه",
+        "chunkOverlapLabel": "همپوشانی قطعه",
+        "syncButton": "همگام‌سازی اکنون"
+      },
+      "preferences": {
+        "title": "تنظیمات سیستم",
+        "defaultLocaleLabel": "زبان پیش‌فرض",
+        "timezoneLabel": "منطقه زمانی",
+        "emailNotificationsLabel": "اعلان‌های ایمیل",
+        "productUpdatesLabel": "به‌روزرسانی‌های محصول"
+      }
+    },
+    "appBilling": {
+      "title": "صورتحساب و اشتراک",
+      "description": "پلن، میزان استفاده و سابقه پرداخت خود را مدیریت کنید.",
+      "currentPlan": {
+        "title": "پلن فعلی",
+        "planName": "پلن Pro",
+        "renewsLabel": "تاریخ تمدید",
+        "statusActive": "فعال",
+        "manageButton": "مدیریت اشتراک"
+      },
+      "usage": {
+        "title": "میزان استفاده این دوره",
+        "vectorStorageLabel": "فضای ذخیره‌سازی برداری",
+        "tokenUsageLabel": "میزان استفاده از توکن هوش مصنوعی",
+        "apiCallsLabel": "تماس‌های API ماهانه"
+      },
+      "plans": {
+        "title": "مقایسه پلن‌ها",
+        "currentBadge": "پلن فعلی",
+        "upgradeButton": "ارتقای پلن",
+        "starter": {
+          "name": "استارتر",
+          "price": "۴۹ دلار/ماه",
+          "features": [
+            "تا ۳ دستیار",
+            "۵٬۰۰۰ تماس API ماهانه",
+            "۱ گیگابایت فضای ذخیره‌سازی برداری",
+            "پشتیبانی ایمیلی"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "۱۴۹ دلار/ماه",
+          "features": [
+            "تا ۱۵ دستیار",
+            "۵۰٬۰۰۰ تماس API ماهانه",
+            "۱۰ گیگابایت فضای ذخیره‌سازی برداری",
+            "پشتیبانی اولویت‌دار"
+          ]
+        },
+        "enterprise": {
+          "name": "سازمانی",
+          "price": "۴۹۹ دلار/ماه",
+          "features": [
+            "دستیار نامحدود",
+            "تماس API نامحدود",
+            "۱۰۰ گیگابایت فضای ذخیره‌سازی برداری",
+            "پشتیبانی اختصاصی"
+          ]
+        }
+      },
+      "invoices": {
+        "title": "سابقه پرداخت",
+        "columns": {
+          "date": "تاریخ فاکتور",
+          "amount": "مبلغ",
+          "status": "وضعیت",
+          "receipt": "رسید"
+        },
+        "statusPaid": "پرداخت شده",
+        "viewReceipt": "مشاهده"
+      }
+    },
+    "appOverview": {
+      "title": "نمای کلی",
+      "description": "نمایی کلی از دستیارها، اسناد و گردش‌های کاری فضای کاری شما.",
+      "statusOperational": "فعال",
+      "newAgentButton": "+ دستیار جدید",
+      "kpis": {
+        "activeAgents": "دستیارهای هوش مصنوعی فعال",
+        "totalDocuments": "کل اسناد دریافت‌شده",
+        "activeWorkflows": "گردش‌های کاری فعال",
+        "executionVolume": "حجم اجرا در ۲۴ ساعت"
+      },
+      "agentsOverview": {
+        "title": "دستیارهای فعال",
+        "viewAll": "مشاهده همه"
+      },
+      "activityFeed": {
+        "title": "فید فعالیت زنده",
+        "ragIngest": "سند دریافت شد: {name}",
+        "workflowRun": "گردش کاری اجرا شد: {name}",
+        "systemEvent": "{message}"
+      }
+    },
+    "appAgentDetail": {
+      "agentIdLabel": "شناسه دستیار: {id}",
+      "statusActive": "فعال",
+      "statusInactive": "غیرفعال",
+      "saveButton": "ذخیره",
+      "deployButton": "استقرار",
+      "systemPrompt": {
+        "title": "دستور سیستم",
+        "instructionsLabel": "دستورالعمل‌های رفتاری",
+        "temperatureLabel": "دما",
+        "maxTokensLabel": "حداکثر توکن"
+      },
+      "knowledgeBase": {
+        "title": "پایگاه دانش",
+        "description": "اسنادی که این دستیار می‌تواند به آن‌ها ارجاع دهد را فعال یا غیرفعال کنید."
+      },
+      "tools": {
+        "title": "فراخوانی ابزار",
+        "description": "به این دستیار اجازه دهید در حین اجرا ابزارهای بیرونی را فراخوانی کند.",
+        "webSearch": { "label": "رابط برنامه‌نویسی جستجوی وب" },
+        "webhook": {
+          "label": "webhook اختصاصی",
+          "methodLabel": "روش",
+          "urlLabel": "نشانی webhook",
+          "urlPlaceholder": "https://example.com/webhook"
+        },
+        "sqlQuery": {
+          "label": "اجرای پرس‌وجوی SQL",
+          "templateLabel": "الگوی پرس‌وجوی مجاز",
+          "templatePlaceholder": "SELECT * FROM orders WHERE customer_id = {{customer_id}}",
+          "mockHint": "هنوز اتصال زنده به پایگاه داده وجود ندارد. این فقط الگو را برای آینده تعریف می‌کند."
+        }
+      },
+      "variables": {
+        "title": "متغیرهای دستور پویا",
+        "description": "مقادیر زمان اجرا که در هر درخواست به دستور سیستم تزریق می‌شوند.",
+        "keyLabel": "نام متغیر",
+        "defaultValueLabel": "مقدار پیش‌فرض",
+        "addButton": "+ افزودن متغیر",
+        "removeButton": "حذف متغیر"
+      },
+      "playground": {
+        "title": "محیط آزمایش",
+        "inputPlaceholder": "یک پیام آزمایشی ارسال کنید…",
+        "sendButton": "ارسال",
+        "emptyHint": "برای آزمایش پاسخ‌های این دستیار یک پیام ارسال کنید.",
+        "simulatedReply": "پاسخ شبیه‌سازی‌شده بر اساس پایگاه دانش تخصیص‌یافته برای: «{message}»"
+      }
+    },
     "team": {
       "title": "تیم",
       "yourOrganization": "سازمان شما",
@@ -1086,6 +1605,16 @@
       "remove": "حذف",
       "removeAria": "حذف {name}",
       "roleAria": "نقش {name}",
+      "columns": {
+        "member": "عضو",
+        "role": "نقش",
+        "actions": "عملیات"
+      },
+      "roles": {
+        "owner": "مالک",
+        "admin": "مدیر",
+        "member": "عضو"
+      },
       "invite": {
         "title": "دعوت عضو",
         "onlyAdmins": "فقط مالکان و مدیران می‌توانند عضو جدید دعوت کنند.",
@@ -1100,6 +1629,8 @@
         "title": "دعوت‌های در انتظار ({count})",
         "emptyTitle": "دعوت در انتظاری وجود ندارد",
         "emptyDescription": "دعوت‌هایی که می‌فرستید تا زمان پذیرش یا لغو اینجا نمایش داده می‌شوند.",
+        "columnEmail": "ایمیل",
+        "columnRole": "نقش / انقضا",
         "expires": "{role} · انقضا در {date}",
         "revoke": "لغو",
         "revoking": "در حال لغو…"
@@ -1223,6 +1754,18 @@
       "errors": {
         "generic": "مشکلی پیش آمد. لطفاً دوباره تلاش کنید.",
         "forbidden": "فقط مالکان و مدیران می‌توانند تنظیمات سازمان را ویرایش کنند."
+      },
+      "security": {
+        "title": "امنیت",
+        "currentPasswordLabel": "رمز عبور فعلی",
+        "newPasswordLabel": "رمز عبور جدید",
+        "confirmPasswordLabel": "تأیید رمز عبور جدید",
+        "updateButton": "به‌روزرسانی رمز عبور"
+      },
+      "notifications": {
+        "title": "تنظیمات اعلان‌ها",
+        "emailLabel": "اعلان‌های ایمیل",
+        "productUpdatesLabel": "به‌روزرسانی‌های محصول"
       }
     }
   },

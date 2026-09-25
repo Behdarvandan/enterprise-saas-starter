@@ -47,7 +47,7 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "flex h-9 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-slate-400 transition-colors outline-none hover:bg-slate-800/60 hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-ring/60",
+          "flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-xs font-semibold text-muted-foreground transition-colors outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60",
           className,
         )}
         aria-label={t("changeLanguage")}
@@ -60,10 +60,7 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
           <DropdownMenuItem
             key={candidate}
             dir={isRtlLocale(candidate) ? "rtl" : "ltr"}
-            className={cn(
-              "justify-between",
-              candidate === locale && "font-semibold text-slate-100",
-            )}
+            className={cn("justify-between", candidate === locale && "font-semibold")}
             onSelect={() => router.replace(pathname, { locale: candidate })}
           >
             {LOCALE_NAMES[candidate]}

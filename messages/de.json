@@ -465,6 +465,212 @@
           "description": "Verweisen Sie Ihre eigene Domain auf die Plattform und wenden Sie Ihre Marke an."
         }
       }
+    },
+    "nav": {
+      "home": "Start",
+      "pricing": "Preise",
+      "appEngine": "App Engine"
+    },
+    "home": {
+      "hero": {
+        "badge": "Multi-Tenant Agent OS",
+        "title": "Ein Arbeitsbereich, um jeden KI-Agenten Ihres Unternehmens zu erstellen, bereitzustellen und zu verwalten",
+        "subtitle": "Die App Engine von Pasargad gibt Ihrem Team eigene KI-Agenten, RAG-gestütztes Wissen, autonome Workflows und White-Label-Branding — alles aus einem Dashboard.",
+        "ctaPrimary": "App Engine öffnen",
+        "ctaSecondary": "Preise ansehen"
+      },
+      "preview": {
+        "title": "Sehen Sie einer RAG-Anfrage beim Auflösen zu, Token für Token",
+        "description": "Ein skriptgesteuerter Durchlauf desselben Anfragepfads, den auch produktiver Traffic nimmt: Retrieval, Konfidenzbewertung, dann eine gestreamte Antwort.",
+        "queryLabel": "Beispielanfrage",
+        "query": "Wie ist Ihre Rückerstattungsrichtlinie für Jahrespläne?",
+        "retrievalStep": "Vektorsuche über pgvector: {chunks} Chunks abgerufen, höchste Ähnlichkeit {similarity}",
+        "confidenceStep": "Konfidenz {score} erreicht oder übersteigt den Schwellenwert {threshold}, Antwort aus der Wissensdatenbank",
+        "streamStep": "Antwort wird per SSE gestreamt",
+        "answer": "Jahrespläne können innerhalb von 30 Tagen nach Kauf erstattet werden, anteilig für ungenutzte Monate.",
+        "metricsLabel": "Stream-Metriken",
+        "metricFirstToken": "Erstes Token",
+        "metricTokensPerSecond": "Token pro Sekunde",
+        "metricTotalTokens": "Token insgesamt",
+        "replay": "Wiederholen",
+        "disclaimer": "Skriptgesteuerte Simulation zur Veranschaulichung. Keine Live-Anfrage an einen echten Workspace."
+      },
+      "features": {
+        "eyebrow": "Plattform",
+        "title": "Alles, was Ihr Team braucht, um KI-Agenten im großen Maßstab zu betreiben",
+        "items": {
+          "agents": {
+            "title": "KI-Agenten",
+            "description": "Erstellen und konfigurieren Sie eigene Assistenten mit eigenem System-Prompt, Modell und Wissensanbindung.",
+            "subBullets": [
+              "Eigener System-Prompt, Modell und Temperatur je Agent",
+              "Eine oder mehrere Wissensdatenbanken pro Agent verbinden",
+              "Änderungen in einer Sandbox testen, bevor sie veröffentlicht werden"
+            ]
+          },
+          "rag": {
+            "title": "RAG-Engine",
+            "description": "Verankern Sie jede Antwort in Ihren eigenen Dokumenten mit integrierter Erfassung und Vektorsuche.",
+            "subBullets": [
+              "Automatisches Chunking und Embedding beim Hochladen",
+              "pgvector-Ähnlichkeitssuche mit HNSW-Index",
+              "Antworten mit geringer Konfidenz werden zurückgehalten, nicht geraten"
+            ]
+          },
+          "workflows": {
+            "title": "Autonome Workflows",
+            "description": "Verketten Sie Agenten, Retriever und bedingte Logik zu automatisierten mehrstufigen Workflows.",
+            "subBullets": [
+              "Agenten, Retriever und bedingte Verzweigungen verketten",
+              "Auslösen bei neuen Dokumenten, Buchungen oder Webhooks",
+              "Schritte mit geringer Konfidenz werden zur Prüfung markiert"
+            ]
+          },
+          "whiteLabel": {
+            "title": "White-Label",
+            "description": "Vertreiben Sie die Plattform unter Ihrer eigenen Marke, Domain und Farbpalette.",
+            "subBullets": [
+              "Eigene Domain über einen einzigen CNAME-Eintrag",
+              "Logo, Name und Markenfarbe im gesamten Workspace",
+              "Nutzungskontingente je Kunde, die Sie selbst festlegen"
+            ]
+          }
+        }
+      },
+      "architecture": {
+        "title": "Vom Upload bis zur gestreamten Antwort",
+        "description": "Jede Stufe in diesem Diagramm läuft heute in der Plattform.",
+        "stages": {
+          "ingestion": {
+            "title": "Datenerfassung",
+            "description": "Dokumente werden beim Hochladen in Chunks zerlegt und eingebettet."
+          },
+          "vector": {
+            "title": "pgvector, HNSW-Index",
+            "description": "Kosinus-Ähnlichkeitssuche über einen HNSW-Index in Postgres."
+          },
+          "orchestration": {
+            "title": "Agenten-Orchestrierungs-Engine",
+            "description": "Retrieval, Konfidenzbewertung und Tool-Aufrufe laufen nacheinander ab."
+          },
+          "stream": {
+            "title": "SSE-Stream",
+            "description": "Die Antwort wird Token für Token an den Browser gestreamt."
+          }
+        }
+      },
+      "telemetry": {
+        "title": "Was Sie vor der Unterschrift prüfen können",
+        "description": "Drei Zahlen, zu denen wir uns verpflichten, und die Kontrollen dahinter.",
+        "uptimeLabel": "Ziel-Verfügbarkeit",
+        "uptimeValue": "99,9%",
+        "latencyLabel": "Latenzbudget (p95)",
+        "latencyValue": "<150ms",
+        "latencyNote": "Nur Plattform-Routing und Retrieval, nicht die Modellgenerierung.",
+        "isolationLabel": "Mandantentrennung",
+        "isolationValue": "RLS",
+        "controlsIntro": "Die Kontrollen hinter diesen Zahlen"
+      },
+      "cta": {
+        "title": "Stellen Sie ein KI-Agent-OS an Ihre Rezeption",
+        "subtitle": "Öffnen Sie die App Engine und konfigurieren Sie Ihren ersten Agenten in wenigen Minuten.",
+        "footerTagline": "Das Agent-OS für KI-Agenten, RAG und White-Label-Workspaces.",
+        "footerCopyright": "© {year} Pasargad. Alle Rechte vorbehalten."
+      }
+    },
+    "pricingPage": {
+      "title": "Einfache, transparente Preise",
+      "subtitle": "Jeder Plan nutzt die vollständige Pasargad App Engine. Upgraden Sie, sobald Ihr Team wächst.",
+      "popularBadge": "Beliebt",
+      "perMonth": "/Monat",
+      "tiers": {
+        "starter": {
+          "name": "Starter",
+          "price": "49 $",
+          "description": "Für kleine Teams, die ihren ersten KI-Agenten starten.",
+          "cta": "Starter wählen",
+          "features": [
+            "Bis zu 3 KI-Agenten",
+            "5.000 monatliche API-Aufrufe",
+            "1 GB Vektorspeicher",
+            "E-Mail-Support"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "149 $",
+          "description": "Für wachsende Teams, die Agenten im gesamten Unternehmen betreiben.",
+          "cta": "Pro wählen",
+          "features": [
+            "Bis zu 15 KI-Agenten",
+            "50.000 monatliche API-Aufrufe",
+            "10 GB Vektorspeicher",
+            "Priorisierter Support",
+            "Einfaches White-Label-Branding"
+          ]
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "499 $",
+          "description": "Für Organisationen, die Skalierung, Branding und dedizierten Support benötigen.",
+          "cta": "Vertrieb kontaktieren",
+          "features": [
+            "Unbegrenzte KI-Agenten",
+            "Unbegrenzte API-Aufrufe",
+            "100 GB Vektorspeicher",
+            "Dedizierter Support",
+            "Vollständiges White-Label + eigene Domain"
+          ]
+        }
+      },
+      "comparison": {
+        "title": "Pläne vergleichen",
+        "columns": {
+          "feature": "Funktion",
+          "starter": "Starter",
+          "pro": "Pro",
+          "enterprise": "Enterprise"
+        },
+        "rows": {
+          "agents": { "label": "KI-Agenten", "starter": "Bis zu 3", "pro": "Bis zu 15", "enterprise": "Unbegrenzt" },
+          "documents": { "label": "Wissensdatenbank-Dokumente", "starter": "Bis zu 50", "pro": "Bis zu 500", "enterprise": "Unbegrenzt" },
+          "workflows": { "label": "Workflows", "starter": "1", "pro": "10", "enterprise": "Unbegrenzt" },
+          "apiCalls": { "label": "Monatliche API-Aufrufe", "starter": "5.000", "pro": "50.000", "enterprise": "Unbegrenzt" },
+          "vectorStorage": { "label": "Vektorspeicher", "starter": "1 GB", "pro": "10 GB", "enterprise": "100 GB" },
+          "whiteLabel": { "label": "White-Label-Branding", "starter": "—", "pro": "Einfach", "enterprise": "Vollständig" },
+          "customDomain": { "label": "Eigene Domain", "starter": "—", "pro": "—", "enterprise": "✓" },
+          "support": { "label": "Support", "starter": "E-Mail", "pro": "Priorisiert", "enterprise": "Dediziert" }
+        }
+      },
+      "faq": {
+        "title": "Häufig gestellte Fragen",
+        "items": {
+          "trial": {
+            "question": "Gibt es eine kostenlose Testphase?",
+            "answer": "Jeder Plan enthält eine Testphase, damit Ihr Team die App Engine vollständig bewerten kann, bevor Sie sich festlegen."
+          },
+          "changePlan": {
+            "question": "Kann ich meinen Plan später ändern?",
+            "answer": "Ja — upgraden oder downgraden Sie jederzeit in Ihren Abrechnungseinstellungen. Änderungen gelten ab dem nächsten Abrechnungszyklus."
+          },
+          "cancelData": {
+            "question": "Was passiert mit meinen Daten, wenn ich kündige?",
+            "answer": "Ihre Agenten, Dokumente und Workflows bleiben nach der Kündigung 30 Tage lang zugänglich, damit Sie alles Benötigte exportieren können."
+          },
+          "languages": {
+            "question": "Unterstützt Pasargad mehrere Sprachen?",
+            "answer": "Ja — die gesamte Plattform, einschließlich der Agentenantworten, ist auf Englisch, Türkisch, Deutsch und Persisch verfügbar."
+          },
+          "customDomain": {
+            "question": "Kann ich meine eigene Domain verwenden?",
+            "answer": "Enterprise-Pläne beinhalten vollständiges White-Label-Branding mit einer eigenen Domain über CNAME."
+          },
+          "isolation": {
+            "question": "Sind meine Daten von anderen Mandanten isoliert?",
+            "answer": "Ja — jede Mandantentabelle ist auf Datenbankebene durch Row Level Security geschützt, es gibt keinen mandantenübergreifenden Abfragepfad."
+          }
+        }
+      }
     }
   },
   "auth": {
@@ -676,6 +882,7 @@
     "userMenu": "Benutzermenü",
     "signedInAs": "Angemeldet als",
     "backToDashboard": "Zurück zum Dashboard",
+    "landingPage": "Startseite",
     "adminBadge": "Operator-Administration",
     "groups": {
       "agent": "KI-Agent",
@@ -968,15 +1175,27 @@
     "knowledgeBase": {
       "title": "Wissensdatenbank",
       "description": "Laden Sie die Dokumente hoch, aus denen Ihr Agent antwortet. Dateien werden in Chunks zerlegt und für die Suche eingebettet.",
+      "metrics": {
+        "totalDocuments": "Dokumente insgesamt",
+        "totalChunks": "Vektor-Chunks insgesamt",
+        "storageUsed": "Verwendeter Speicher"
+      },
       "tabs": {
         "files": "Dateien hochladen",
-        "text": "Text einfügen"
+        "text": "Text einfügen",
+        "url": "Von URL hinzufügen"
       },
       "dropzone": {
         "label": "Dateien zur Wissensdatenbank hochladen",
         "title": "Dateien hierher ziehen oder zum Durchsuchen klicken",
         "dragActive": "Zum Hochladen loslassen",
         "hint": "PDF, TXT, MD, CSV, JSON oder HTML · bis zu {size} MB pro Datei"
+      },
+      "url": {
+        "label": "Seiten-URL",
+        "placeholder": "https://example.com/artikel",
+        "hint": "Wir rufen die Seite ab und lesen sie. Demnächst verfügbar.",
+        "submit": "Seite hinzufügen"
       },
       "queue": {
         "title": "Uploads",
@@ -1006,6 +1225,8 @@
       },
       "list": {
         "title": "Dokumente",
+        "searchPlaceholder": "Dokumente durchsuchen…",
+        "filterAll": "Alle",
         "count": "{count} von {limit} Dokumenten in Ihrem Tarif",
         "countUnlimited": "{count, plural, one {# Dokument} other {# Dokumente}}",
         "emptyTitle": "Noch keine Dokumente",
@@ -1060,6 +1281,27 @@
         "similarity": "Ähnlichkeit",
         "untitled": "Unbenanntes Dokument"
       },
+      "chunking": {
+        "title": "Chunking-Strategie",
+        "description": "Legen Sie fest, wie Dokumente vor dem Embedding in Abschnitte aufgeteilt werden.",
+        "strategy": {
+          "recursive": "Rekursiv nach Zeichen",
+          "semantic": "Semantisches Chunking"
+        },
+        "chunkSizeLabel": "Chunk-Größe",
+        "overlapLabel": "Überlappung",
+        "semantic": {
+          "thresholdLabel": "Ähnlichkeitsschwelle",
+          "hint": "Semantisches Chunking gruppiert Text nach Bedeutung. Chunk-Größe und Überlappung gelten hier nicht."
+        },
+        "preview": "≈{chunks} Chunks · ≈{tokens} Tokens"
+      },
+      "hybridSearch": {
+        "title": "Hybride Suchgewichtung",
+        "description": "Gleichen Sie semantische Ähnlichkeit mit exakten Stichwort-Treffern aus.",
+        "denseLabel": "Dichte Vektorsuche {percent}%",
+        "bm25Label": "BM25-Stichwortsuche {percent}%"
+      },
       "errors": {
         "unsupported_type": "Dieser Dateityp wird nicht unterstützt.",
         "too_large": "Diese Datei ist zu groß.",
@@ -1077,6 +1319,283 @@
         "noMembership": "Sie gehören keiner Organisation an."
       }
     },
+    "workflows": {
+      "status": {
+        "active": "Aktiv",
+        "completed": "Abgeschlossen",
+        "pending": "Ausstehend",
+        "awaitingApproval": "Wartet auf Freigabe"
+      },
+      "actions": {
+        "addNode": "+ Knoten hinzufügen",
+        "runTest": "Test ausführen"
+      },
+      "palette": {
+        "title": "Knotenpalette",
+        "aiAgent": "KI-Assistent",
+        "ragRetriever": "RAG-Retriever",
+        "conditional": "Bedingung",
+        "webhook": "Webhook",
+        "approvalGate": "Freigabe-Gate"
+      },
+      "canvas": {
+        "title": "Workflow-Übersicht"
+      },
+      "hitl": {
+        "actionLabel": "Aktion",
+        "payloadLabel": "Payload",
+        "approveButton": "Genehmigen",
+        "rejectButton": "Ablehnen",
+        "statusApproved": "Genehmigt",
+        "statusRejected": "Abgelehnt"
+      }
+    },
+    "logs": {
+      "metrics": {
+        "totalRequests": "Anfragen gesamt",
+        "avgLatency": "Durchschn. Latenz",
+        "errorRate": "Fehlerquote",
+        "activeTokens": "Aktive Tokens"
+      },
+      "searchPlaceholder": "Protokolle durchsuchen…",
+      "levels": {
+        "all": "Alle",
+        "info": "INFO",
+        "warn": "WARN",
+        "error": "ERROR"
+      },
+      "columns": {
+        "timestamp": "Zeitstempel",
+        "service": "Dienst",
+        "level": "Stufe",
+        "message": "Meldung",
+        "duration": "Dauer",
+        "authorization": "Autorisierung",
+        "trace": "Trace"
+      },
+      "hitl": {
+        "filterLabel": "Erfordert Freigabe",
+        "statusPending": "Ausstehend",
+        "statusApproved": "Genehmigt",
+        "statusRejected": "Abgelehnt",
+        "none": "—"
+      },
+      "trace": {
+        "dialogTitle": "Ausführungs-Trace",
+        "totalDurationLabel": "Gesamtdauer",
+        "span": {
+          "embeddingGeneration": "Embedding-Erstellung",
+          "vectorSearch": "Vektorsuche",
+          "llmTokenStream": "LLM-Token-Stream"
+        },
+        "viewButtonLabel": "Trace anzeigen",
+        "expandLabel": "Erweitern",
+        "collapseLabel": "Einklappen"
+      }
+    },
+    "whiteLabel": {
+      "title": "Markenanpassung",
+      "description": "Passen Sie das Branding, die Farben und die eigene Domain Ihres Arbeitsbereichs an.",
+      "brandAssets": {
+        "title": "Markenmaterialien",
+        "appNameLabel": "App-Name",
+        "appNamePlaceholder": "Acme Workspace",
+        "logoLabel": "Logo",
+        "logoHint": "PNG oder SVG, bis zu 2MB",
+        "faviconLabel": "Favicon",
+        "faviconHint": "ICO oder PNG, 32x32"
+      },
+      "colorPalette": {
+        "title": "Farbpalette",
+        "primaryAccentLabel": "Primärakzent",
+        "sidebarBackgroundLabel": "Seitenleisten-Hintergrund",
+        "previewLabel": "Vorschau"
+      },
+      "domain": {
+        "title": "Eigene Domain & SSL",
+        "domainLabel": "Eigene Domain",
+        "domainPlaceholder": "app.ihrunternehmen.com",
+        "cnameLabel": "CNAME-Ziel",
+        "copyButton": "Kopieren",
+        "statusVerified": "Verifiziert",
+        "statusPending": "Ausstehend"
+      },
+      "widget": {
+        "title": "Einbettbares Chat-Widget",
+        "description": "Kopieren Sie diesen Code auf Ihre Website, um das Chat-Widget einzubetten.",
+        "positionLabel": "Position",
+        "positionBottomRight": "Unten rechts",
+        "positionBottomLeft": "Unten links",
+        "accentColorLabel": "Akzentfarbe",
+        "greetingLabel": "Begrüßungsnachricht",
+        "greetingPlaceholder": "Hallo! Wie können wir helfen?",
+        "agentNameLabel": "Agentenname",
+        "agentNamePlaceholder": "Support-Triage",
+        "snippetLabel": "Einbettungscode",
+        "copyButton": "Kopieren",
+        "previewLabel": "Vorschau"
+      }
+    },
+    "appSettings": {
+      "title": "Einstellungen",
+      "description": "Verwalten Sie API-Zugriff, die Vektor-Engine und Arbeitsbereichseinstellungen.",
+      "apiKeys": {
+        "title": "API-Schlüssel",
+        "currentKeyLabel": "Aktueller Schlüssel",
+        "generateButton": "+ Neuen Schlüssel generieren",
+        "copyButton": "Kopieren",
+        "revealButton": "Anzeigen",
+        "hideButton": "Verbergen"
+      },
+      "vectorEngine": {
+        "title": "Vektor-Engine-Synchronisierung",
+        "embeddingModelLabel": "Embedding-Modell",
+        "chunkSizeLabel": "Chunk-Größe",
+        "chunkOverlapLabel": "Chunk-Überlappung",
+        "syncButton": "Jetzt synchronisieren"
+      },
+      "preferences": {
+        "title": "Systemeinstellungen",
+        "defaultLocaleLabel": "Standardsprache",
+        "timezoneLabel": "Zeitzone",
+        "emailNotificationsLabel": "E-Mail-Benachrichtigungen",
+        "productUpdatesLabel": "Produktupdates"
+      }
+    },
+    "appBilling": {
+      "title": "Abrechnung & Abonnement",
+      "description": "Verwalten Sie Ihren Plan, Ihre Nutzung und Ihren Zahlungsverlauf.",
+      "currentPlan": {
+        "title": "Aktueller Plan",
+        "planName": "Pro-Plan",
+        "renewsLabel": "Verlängert sich am",
+        "statusActive": "Aktiv",
+        "manageButton": "Abonnement verwalten"
+      },
+      "usage": {
+        "title": "Nutzung in diesem Zeitraum",
+        "vectorStorageLabel": "Vektorspeicher",
+        "tokenUsageLabel": "KI-Token-Nutzung",
+        "apiCallsLabel": "Monatliche API-Aufrufe"
+      },
+      "plans": {
+        "title": "Pläne vergleichen",
+        "currentBadge": "Aktueller Plan",
+        "upgradeButton": "Plan upgraden",
+        "starter": {
+          "name": "Starter",
+          "price": "49 $/Monat",
+          "features": [
+            "Bis zu 3 Assistenten",
+            "5.000 monatliche API-Aufrufe",
+            "1 GB Vektorspeicher",
+            "E-Mail-Support"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "149 $/Monat",
+          "features": [
+            "Bis zu 15 Assistenten",
+            "50.000 monatliche API-Aufrufe",
+            "10 GB Vektorspeicher",
+            "Priorisierter Support"
+          ]
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "499 $/Monat",
+          "features": [
+            "Unbegrenzte Assistenten",
+            "Unbegrenzte API-Aufrufe",
+            "100 GB Vektorspeicher",
+            "Dedizierter Support"
+          ]
+        }
+      },
+      "invoices": {
+        "title": "Zahlungsverlauf",
+        "columns": {
+          "date": "Rechnungsdatum",
+          "amount": "Betrag",
+          "status": "Status",
+          "receipt": "Beleg"
+        },
+        "statusPaid": "Bezahlt",
+        "viewReceipt": "Ansehen"
+      }
+    },
+    "appOverview": {
+      "title": "Übersicht",
+      "description": "Ein Überblick über die Agenten, Dokumente und Workflows Ihres Arbeitsbereichs.",
+      "statusOperational": "Betriebsbereit",
+      "newAgentButton": "+ Neuer Agent",
+      "kpis": {
+        "activeAgents": "Aktive KI-Agenten",
+        "totalDocuments": "Erfasste Dokumente insgesamt",
+        "activeWorkflows": "Aktive Workflows",
+        "executionVolume": "Ausführungsvolumen (24 Std.)"
+      },
+      "agentsOverview": {
+        "title": "Aktive Agenten",
+        "viewAll": "Alle anzeigen"
+      },
+      "activityFeed": {
+        "title": "Live-Aktivitätsfeed",
+        "ragIngest": "Dokument erfasst: {name}",
+        "workflowRun": "Workflow ausgeführt: {name}",
+        "systemEvent": "{message}"
+      }
+    },
+    "appAgentDetail": {
+      "agentIdLabel": "Agent-ID: {id}",
+      "statusActive": "Aktiv",
+      "statusInactive": "Inaktiv",
+      "saveButton": "Speichern",
+      "deployButton": "Bereitstellen",
+      "systemPrompt": {
+        "title": "System-Prompt",
+        "instructionsLabel": "Verhaltensanweisungen",
+        "temperatureLabel": "Temperatur",
+        "maxTokensLabel": "Max. Tokens"
+      },
+      "knowledgeBase": {
+        "title": "Wissensdatenbank",
+        "description": "Legen Sie fest, auf welche Dokumente dieser Agent zugreifen kann."
+      },
+      "tools": {
+        "title": "Tool-Aufrufe",
+        "description": "Erlauben Sie diesem Agenten, während eines Laufs externe Tools aufzurufen.",
+        "webSearch": { "label": "Web-Search-API" },
+        "webhook": {
+          "label": "Eigener Webhook",
+          "methodLabel": "Methode",
+          "urlLabel": "Webhook-URL",
+          "urlPlaceholder": "https://example.com/webhook"
+        },
+        "sqlQuery": {
+          "label": "SQL-Abfrageausführung",
+          "templateLabel": "Zulässige Abfragevorlage",
+          "templatePlaceholder": "SELECT * FROM orders WHERE customer_id = {{customer_id}}",
+          "mockHint": "Noch kein Live-Datenbank-Connector. Dies definiert die Vorlage für später."
+        }
+      },
+      "variables": {
+        "title": "Dynamische Prompt-Variablen",
+        "description": "Laufzeitwerte, die bei jeder Anfrage in den System-Prompt eingefügt werden.",
+        "keyLabel": "Variablenname",
+        "defaultValueLabel": "Standardwert",
+        "addButton": "+ Variable hinzufügen",
+        "removeButton": "Variable entfernen"
+      },
+      "playground": {
+        "title": "Test-Umgebung",
+        "inputPlaceholder": "Eine Testnachricht senden…",
+        "sendButton": "Senden",
+        "emptyHint": "Senden Sie eine Nachricht, um die Antworten dieses Agenten zu testen.",
+        "simulatedReply": "Simulierte Antwort basierend auf der zugewiesenen Wissensdatenbank für: \"{message}\""
+      }
+    },
     "team": {
       "title": "Team",
       "yourOrganization": "Ihre Organisation",
@@ -1086,6 +1605,16 @@
       "remove": "Entfernen",
       "removeAria": "{name} entfernen",
       "roleAria": "Rolle von {name}",
+      "columns": {
+        "member": "Mitglied",
+        "role": "Rolle",
+        "actions": "Aktionen"
+      },
+      "roles": {
+        "owner": "Inhaber",
+        "admin": "Administrator",
+        "member": "Mitglied"
+      },
       "invite": {
         "title": "Mitglied einladen",
         "onlyAdmins": "Nur Inhaber und Administratoren können neue Mitglieder einladen.",
@@ -1100,6 +1629,8 @@
         "title": "Ausstehende Einladungen ({count})",
         "emptyTitle": "Keine ausstehenden Einladungen",
         "emptyDescription": "Gesendete Einladungen erscheinen hier, bis sie angenommen oder widerrufen werden.",
+        "columnEmail": "E-Mail",
+        "columnRole": "Rolle / läuft ab",
         "expires": "{role} · läuft ab am {date}",
         "revoke": "Widerrufen",
         "revoking": "Wird widerrufen …"
@@ -1223,6 +1754,18 @@
       "errors": {
         "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
         "forbidden": "Nur Inhaber und Administratoren können die Einstellungen der Organisation bearbeiten."
+      },
+      "security": {
+        "title": "Sicherheit",
+        "currentPasswordLabel": "Aktuelles Passwort",
+        "newPasswordLabel": "Neues Passwort",
+        "confirmPasswordLabel": "Neues Passwort bestätigen",
+        "updateButton": "Passwort aktualisieren"
+      },
+      "notifications": {
+        "title": "Benachrichtigungseinstellungen",
+        "emailLabel": "E-Mail-Benachrichtigungen",
+        "productUpdatesLabel": "Produktupdates"
       }
     }
   },
