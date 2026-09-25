@@ -1,3 +1,3 @@
-export default function HomePage() {
-  return <h1>Home</h1>;
+export default function MarketingPage() {
+  return <div className="min-h-screen bg-white" />;
 }

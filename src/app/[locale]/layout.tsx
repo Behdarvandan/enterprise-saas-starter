@@ -103,7 +103,7 @@ export default async function RootLayout({
       // (and portaled dialogs under <body>) already use it.
       style={agency ? (getBrandingCssVars(agency.branding) as CSSProperties) : undefined}
     >
-      <body className="min-h-screen bg-canvas font-sans text-ink-primary antialiased">
+      <body className="min-h-screen bg-white font-sans antialiased">
         <NextIntlClientProvider messages={messages}>
           <AgencyBrandingProvider agency={agency}>
             <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>

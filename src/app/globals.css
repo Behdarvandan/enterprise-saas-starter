@@ -120,14 +120,10 @@
   }
 }
 
-/* Semantic design tokens — Liquid Glass, neutral zinc primary throughout.
-   `:root` carries the light theme; `.dark` overrides the palette-specific
-   vars for the Dark Neutral theme. `next-themes` toggles the `.dark` class on
-   <html> (see ThemeToggle) — both share --radius/--touch-target-min since
-   those aren't theme-dependent. The agency white-label layer
-   (getBrandingCssVars) overrides --primary/--primary-hover/--ring/
-   --primary-foreground on <html> in both themes, which every `bg-primary`
-   consumer follows. */
+/* Semantic design tokens — pure white reset, dark theme removed. The agency
+   white-label layer (getBrandingCssVars) still overrides --primary/
+   --primary-hover/--ring/--primary-foreground on <html>, which every
+   `bg-primary` consumer follows. */
 :root {
   color-scheme: light;
 
@@ -136,8 +132,8 @@
   /* Minimum comfortable tap-target size for touch devices (44px). */
   --touch-target-min: 2.75rem;
 
-  --background: #f2f3f8; /* soft lavender-grey canvas */
-  --foreground: #0f172a; /* slate-900 */
+  --background: #ffffff;
+  --foreground: #000000;
   --card: rgb(255 255 255 / 0.6); /* frosted white glass */
   --card-foreground: #0f172a;
   --popover: #ffffff;
@@ -171,44 +167,6 @@
   --sidebar-ring: #3f3f46;
 }
 
-.dark {
-  color-scheme: dark;
-
-  --background: #020617; /* slate-950 */
-  --foreground: #f1f5f9; /* slate-100 */
-  --card: rgb(15 23 42 / 0.5); /* slate-900/50 */
-  --card-foreground: #f1f5f9;
-  --popover: #0f172a; /* slate-900 */
-  --popover-foreground: #f1f5f9;
-  --primary: #f4f4f5; /* zinc-100 — inverted so the button stays visible on a near-black page */
-  --primary-hover: #e4e4e7; /* zinc-200 */
-  --primary-foreground: #18181b; /* zinc-900 — paired with --primary, must flip together */
-  --secondary: #1e293b; /* slate-800 */
-  --secondary-foreground: #f1f5f9;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8; /* slate-400 */
-  --accent: #1e293b;
-  --accent-foreground: #f1f5f9;
-  --destructive: #dc2626;
-  --destructive-foreground: #f8fafc;
-  --border: #1e293b; /* slate-800 */
-  --input: #334155; /* slate-700 */
-  --ring: #a1a1aa; /* zinc-400 */
-  --chart-1: #f4f4f5;
-  --chart-2: #a1a1aa;
-  --chart-3: #10b981;
-  --chart-4: #f87171;
-  --chart-5: #94a3b8;
-  --sidebar: #020617;
-  --sidebar-foreground: #f1f5f9;
-  --sidebar-primary: #f4f4f5;
-  --sidebar-primary-foreground: #18181b; /* paired with --primary-foreground, must flip together */
-  --sidebar-accent: #1e293b;
-  --sidebar-accent-foreground: #f1f5f9;
-  --sidebar-border: #1e293b;
-  --sidebar-ring: #a1a1aa;
-}
-
 @layer base {
   html {
     @apply font-sans;
@@ -219,7 +177,8 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: #ffffff !important;
+    color: #000000;
   }
 
   ::selection {
