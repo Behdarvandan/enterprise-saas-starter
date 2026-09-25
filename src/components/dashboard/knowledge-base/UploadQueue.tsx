@@ -3,7 +3,7 @@
 import { AlertCircle, CheckCircle2, FileText, RotateCw, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Progress } from "@/core/ui/primitives/progress";
-import Spinner from "@/components/ui/Spinner";
+import { Spinner } from "@/core/ui/primitives/spinner";
 import type { UploadItem } from "@/components/dashboard/knowledge-base/useUploadQueue";
 import { formatBytes } from "@/lib/format";
 import { cn } from "@/lib/utils";

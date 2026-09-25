@@ -34,20 +34,20 @@ export default function Toaster() {
             onOpenChange={(open) => {
               if (!open) dismissToast(item.id);
             }}
-            className="flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-900 p-3.5 shadow-xl shadow-black/30 data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0"
+            className="flex items-start gap-3 rounded-xl border border-border bg-popover p-3.5 shadow-xl data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0"
           >
             <Icon aria-hidden className={cn("mt-0.5 size-4 shrink-0", toneIconClass[item.tone])} />
             <div className="min-w-0 flex-1">
-              <Toast.Title className="text-sm font-medium text-slate-100">{item.title}</Toast.Title>
+              <Toast.Title className="text-sm font-medium text-popover-foreground">{item.title}</Toast.Title>
               {item.description ? (
-                <Toast.Description className="mt-0.5 text-xs text-slate-400">
+                <Toast.Description className="mt-0.5 text-xs text-muted-foreground">
                   {item.description}
                 </Toast.Description>
               ) : null}
             </div>
             <Toast.Close
               aria-label={t("dismiss")}
-              className="rounded p-0.5 text-slate-500 transition-colors hover:text-slate-200"
+              className="rounded p-0.5 text-muted-foreground transition-colors hover:text-foreground"
             >
               <X aria-hidden className="size-3.5" />
             </Toast.Close>

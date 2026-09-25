@@ -3,7 +3,7 @@
 import { Check, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -56,7 +56,7 @@ export default function OnboardingChecklist({ userId, items }: OnboardingCheckli
   }
 
   return (
-    <LiquidCard className="p-5">
+    <Card className="p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("title")}</h2>
@@ -97,6 +97,6 @@ export default function OnboardingChecklist({ userId, items }: OnboardingCheckli
           </li>
         ))}
       </ul>
-    </LiquidCard>
+    </Card>
   );
 }

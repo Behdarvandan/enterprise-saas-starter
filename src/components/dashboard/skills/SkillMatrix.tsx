@@ -5,9 +5,9 @@ import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { updateEnabledSkills } from "@/app/[locale]/dashboard/skills/actions";
 import SkillConfigDialog from "@/components/dashboard/skills/SkillConfigDialog";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import { Switch } from "@/core/ui/primitives/switch";
 import { Link } from "@/i18n/navigation";
 import type { PlanTier } from "@/lib/plans";
@@ -37,10 +37,10 @@ const skillIcon: Record<SkillId, LucideIcon> = {
   calendar_booking: Calendar,
 };
 
-const tierTone: Record<PlanTier, BadgeTone> = {
-  starter: "neutral",
-  pro: "violet",
-  enterprise: "warn",
+const tierVariant: Record<PlanTier, "outline" | "default" | "secondary"> = {
+  starter: "outline",
+  pro: "default",
+  enterprise: "secondary",
 };
 
 /**
@@ -88,8 +88,7 @@ export default function SkillMatrix({ skills, canManage }: SkillMatrixProps) {
 
           return (
             <li key={skill.id}>
-              <LiquidCard
-                variant="item"
+              <Card
                 className={cn("flex flex-wrap items-center gap-4 p-4 sm:flex-nowrap", !skill.unlocked && "opacity-90")}
               >
                 <div
@@ -105,7 +104,7 @@ export default function SkillMatrix({ skills, canManage }: SkillMatrixProps) {
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-                    <Badge tone={tierTone[skill.minTier]}>{tierName}</Badge>
+                    <Badge variant={tierVariant[skill.minTier]}>{tierName}</Badge>
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">{t(`catalog.${skill.id}.description`)}</p>
                 </div>
@@ -144,7 +143,7 @@ export default function SkillMatrix({ skills, canManage }: SkillMatrixProps) {
                     </>
                   )}
                 </div>
-              </LiquidCard>
+              </Card>
             </li>
           );
         })}

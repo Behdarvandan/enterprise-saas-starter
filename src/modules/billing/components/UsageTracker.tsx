@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { LiquidCard, CardContent, CardHeader, CardTitle } from "@/components/ui/liquid/LiquidCard";
+import { Card, CardContent, CardHeader, CardTitle } from "@/core/ui/primitives/card";
 import { requireUser } from "@/lib/auth";
 import { getUserMembership } from "@/lib/team";
 import { getTenantUsage } from "@/modules/billing/service";
@@ -27,7 +27,7 @@ export default async function UsageTracker() {
     : [];
 
   return (
-    <LiquidCard>
+    <Card>
       <CardHeader>
         <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
@@ -45,6 +45,6 @@ export default async function UsageTracker() {
           ))
         )}
       </CardContent>
-    </LiquidCard>
+    </Card>
   );
 }

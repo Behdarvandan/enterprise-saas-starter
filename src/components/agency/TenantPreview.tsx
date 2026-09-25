@@ -11,7 +11,7 @@ interface TenantPreviewProps {
   title: string;
   /** A validated https logo URL, or null for the default mark. */
   logoUrl: string | null;
-  /** A validated `#rrggbb` colour, or null for the platform violet. */
+  /** A validated `#rrggbb` colour, or null for the platform default accent. */
   color: string | null;
   domain: string | null;
   onLogoError: () => void;
@@ -22,7 +22,7 @@ interface TenantPreviewProps {
  * scoped CSS variables — the same variables `getBrandingCssVars` sets on
  * `<html>` on the agency's domain. Only what really follows the brand
  * (primary actions, active nav, chat bubble) changes; metric values stay
- * violet, exactly as on the live dashboard.
+ * on the platform's default accent, exactly as on the live dashboard.
  */
 export default function TenantPreview({ title, logoUrl, color, domain, onLogoError }: TenantPreviewProps) {
   const t = useTranslations("agency.branding.preview");

@@ -4,7 +4,7 @@ import { Check, Lock } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import GlassPanel from "@/components/marketing/GlassPanel";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Button } from "@/core/ui/primitives/button";
 import {
   Dialog,
@@ -75,7 +75,10 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
             )}
           >
             {plan.highlight ? (
-              <Badge tone="violet" className="absolute -top-3 start-6 bg-popover">
+              <Badge
+                variant="outline"
+                className="absolute -top-3 start-6 border-primary/25 bg-popover text-primary"
+              >
                 {t("popular")}
               </Badge>
             ) : null}
@@ -103,7 +106,7 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
             </ul>
             <Button
               asChild
-              variant={plan.highlight ? "glow" : "secondary"}
+              variant={plan.highlight ? "default" : "secondary"}
               size="lg"
               className="mt-8 w-full"
             >
@@ -181,7 +184,7 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
                 <Button variant="ghost" onClick={() => setUpsell(null)}>
                   {t("upsell.dismiss")}
                 </Button>
-                <Button asChild variant="glow">
+                <Button asChild variant="default">
                   <Link href={upsell.tier === "enterprise" ? "/solutions#quote" : "/pricing"}>
                     {t(upsell.tier === "enterprise" ? "upsell.talkToSales" : "upsell.viewPlan", {
                       tier: tTier(upsell.tier),

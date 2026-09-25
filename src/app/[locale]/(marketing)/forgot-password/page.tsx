@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { KeyRound } from "lucide-react";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import { Button } from "@/core/ui/primitives/button";
 import { requestPasswordReset } from "./actions";
 
@@ -35,8 +35,8 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <LiquidCard className="p-8">
-        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
+      <Card className="p-8">
+        <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-primary text-primary-foreground">
           <KeyRound size={22} />
         </div>
         <h1 className="text-xl font-bold text-ink-primary">{t("title")}</h1>
@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim"
+              className="w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-ring"
             />
           </div>
 
@@ -80,11 +80,11 @@ export default function ForgotPasswordPage() {
 
         <p className="mt-6 text-center text-sm text-ink-muted">
           {t("rememberedPassword")}{" "}
-          <Link href="/login" className="font-semibold text-violet-dim hover:text-primary">
+          <Link href="/login" className="font-semibold text-ring hover:text-primary">
             {t("signIn")}
           </Link>
         </p>
-      </LiquidCard>
+      </Card>
     </div>
   );
 }

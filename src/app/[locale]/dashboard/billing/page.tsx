@@ -1,9 +1,8 @@
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import BillingPortalButton from "@/components/billing/BillingPortalButton";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
-import { LemonSqueezyCheckoutButton } from "@/modules/billing/components/LemonSqueezyCheckoutButton";
-import { getLemonSqueezyInvoices } from "@/modules/billing";
+import { Card } from "@/core/ui/primitives/card";
+import { getLemonSqueezyInvoices, LemonSqueezyCheckoutButton } from "@/modules/billing";
 import EmptyState from "@/components/ui/EmptyState";
 import { Receipt } from "lucide-react";
 import {
@@ -72,7 +71,7 @@ export default async function BillingPage() {
       <PageHeader title={t("title")} description={t("description")} />
 
       {isTrialing && daysLeft !== null ? (
-        <LiquidCard className="p-5">
+        <Card className="p-5">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-semibold text-foreground">{t("trialCountdown", { days: daysLeft })}</p>
             <span className="text-xs text-muted-foreground">{TRIAL_LENGTH_DAYS - daysLeft}/{TRIAL_LENGTH_DAYS}</span>
@@ -83,17 +82,17 @@ export default async function BillingPage() {
               style={{ width: `${trialProgressPct}%` }}
             />
           </div>
-        </LiquidCard>
+        </Card>
       ) : null}
 
       {organization?.subscription_status === "inactive" || organization?.subscription_status === "past_due" ? (
-        <LiquidCard className="border-transparent p-5">
+        <Card className="border-transparent p-5">
           <p className="text-sm font-medium text-foreground">{t("trialExpiredBanner")}</p>
-        </LiquidCard>
+        </Card>
       ) : null}
 
       {organization ? (
-        <LiquidCard className="p-6">
+        <Card className="p-6">
           <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
             <div className="border-b border-border pb-2">
               <dt className="text-xs font-medium text-muted-foreground">{t("plan")}</dt>
@@ -124,9 +123,9 @@ export default async function BillingPage() {
               </>
             ) : null}
           </div>
-        </LiquidCard>
+        </Card>
       ) : (
-        <LiquidCard className="p-6">
+        <Card className="p-6">
           <p className="text-sm text-muted-foreground">
             {t.rich("noOrganization", {
               link: (chunks) => (
@@ -136,11 +135,11 @@ export default async function BillingPage() {
               ),
             })}
           </p>
-        </LiquidCard>
+        </Card>
       )}
 
       {organization?.provider_subscription_id ? (
-        <LiquidCard className="overflow-hidden p-0">
+        <Card className="overflow-hidden p-0">
           <div className="flex items-center gap-2 p-6 pb-0">
             <Receipt aria-hidden className="size-4 text-primary" />
             <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("invoiceHistory.title")}</h2>
@@ -188,7 +187,7 @@ export default async function BillingPage() {
               </Table>
             </div>
           )}
-        </LiquidCard>
+        </Card>
       ) : null}
     </PageContainer>
   );

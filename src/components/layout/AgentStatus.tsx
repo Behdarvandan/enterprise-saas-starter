@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import LiveDot from "@/components/ui/LiveDot";
 import { cn } from "@/lib/utils";

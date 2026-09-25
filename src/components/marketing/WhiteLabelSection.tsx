@@ -48,7 +48,7 @@ export default async function WhiteLabelSection() {
               ))}
             </ul>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Button asChild variant="glow" size="lg">
+              <Button asChild variant="default" size="lg">
                 <Link href="/solutions#quote">{t("ctaApply")}</Link>
               </Button>
               <Button asChild variant="secondary" size="lg">

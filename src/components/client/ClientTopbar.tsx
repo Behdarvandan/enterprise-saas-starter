@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
-import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import Logo from "@/components/layout/Logo";
 import UserMenu from "@/components/layout/UserMenu";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -57,7 +57,7 @@ export default function ClientTopbar({ userEmail }: ClientTopbarProps) {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
-          <LanguageSwitcher />
+          <LocaleSwitcher />
           <ThemeToggle />
           <UserMenu email={userEmail} />
         </div>

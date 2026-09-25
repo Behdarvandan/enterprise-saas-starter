@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/layout/PageHeader";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Card } from "@/core/ui/primitives/card";
 import { Link } from "@/i18n/navigation";
 import { asLeadCategory, asLeadStatus, asWorkingMode } from "@/lib/admin/enums";
@@ -54,7 +54,7 @@ export default async function AdminLeadDetailPage({ params }: LeadDetailPageProp
             {lead.email}
           </p>
         </div>
-        <Badge tone={lead.kind === "saas" ? "neutral" : "warn"}>
+        <Badge variant={lead.kind === "saas" ? "secondary" : "outline"}>
           {lead.kind === "saas" ? t("kind.saas") : t("kind.freelance")}
         </Badge>
       </div>

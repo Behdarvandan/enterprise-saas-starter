@@ -117,7 +117,7 @@ export default function RoiCalculator({ plans }: RoiCalculatorProps) {
             </div>
           </div>
 
-          <Button asChild variant="glow" size="lg" className="w-full sm:w-auto">
+          <Button asChild variant="default" size="lg" className="w-full sm:w-auto">
             <Link href="/signup">{t("cta")}</Link>
           </Button>
         </div>

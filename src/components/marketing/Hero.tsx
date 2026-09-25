@@ -36,7 +36,7 @@ export default async function Hero() {
           <p className="mt-5 max-w-xl text-pretty text-lg text-slate-400">{t("subtitle")}</p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button asChild variant="glow" size="lg">
+            <Button asChild variant="default" size="lg">
               <Link href="/signup">{t("ctaPrimary")}</Link>
             </Button>
             <Button asChild variant="secondary" size="lg">

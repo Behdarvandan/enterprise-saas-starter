@@ -57,13 +57,13 @@ describe("brandingFormSchema", () => {
       brandingFormSchema.parse({
         title: " Acme AI ",
         logo_url: "https://cdn.acme.com/logo.svg",
-        primary_color: "#7C3AED",
+        primary_color: "#52525B",
         cname_domain: "https://AI.Acme.com/some/path?x=1",
       }),
     ).toEqual({
       title: "Acme AI",
       logo_url: "https://cdn.acme.com/logo.svg",
-      primary_color: "#7c3aed",
+      primary_color: "#52525b",
       cname_domain: "ai.acme.com",
     });
   });

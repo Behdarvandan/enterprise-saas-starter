@@ -2,9 +2,7 @@ import { Bot, Building2, Palette, Search } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidButton } from "@/components/ui/liquid/LiquidButton";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
-import { AmbientGlow } from "@/components/ui/liquid/AmbientGlow";
+import { Card } from "@/core/ui/primitives/card";
 import { getPlans } from "@/lib/plans";
 import { getPricingRegion } from "@/lib/geo";
 
@@ -26,19 +24,18 @@ export default async function ProductPage() {
   return (
     <div>
       <section className="animate-reveal-up relative isolate overflow-hidden mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
-        <AmbientGlow position="top" />
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
             {t("heroTitle")}
           </h1>
           <p className="mt-5 text-lg text-ink-muted">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild variant="glow" size="lg">
+            <Button asChild variant="default" size="lg">
               <Link href="/signup">{t("ctaPrimary")}</Link>
             </Button>
-            <LiquidButton asChild size="lg">
+            <Button asChild variant="secondary" size="lg">
               <Link href="/pricing">{t("ctaSecondary")}</Link>
-            </LiquidButton>
+            </Button>
           </div>
           <p className="mt-4 text-sm text-ink-muted">
             <Link href="/solutions" className="font-semibold text-ink-primary hover:text-primary">
@@ -58,7 +55,7 @@ export default async function ProductPage() {
               const Icon = MODULE_ICONS[key];
               const bullets = t.raw(`modules.${key}.bullets`) as string[];
               return (
-                <LiquidCard key={key} id={key} interactive className="scroll-mt-28 p-6">
+                <Card key={key} id={key} variant="item" className="scroll-mt-28 p-6">
                   <Icon size={20} className="text-primary" />
                   <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-ink-muted">
                     {tNav(`products.${key}.tag`)}
@@ -76,7 +73,7 @@ export default async function ProductPage() {
                       </li>
                     ))}
                   </ul>
-                </LiquidCard>
+                </Card>
               );
             })}
           </div>
@@ -92,9 +89,9 @@ export default async function ProductPage() {
         </h2>
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
           {plans.map((plan) => (
-            <LiquidCard
+            <Card
               key={plan.name}
-              interactive
+              variant="item"
               className={plan.highlight ? "border-primary/50 p-6" : "p-6"}
             >
               <h3 className="text-sm font-semibold text-ink-primary">{plan.name}</h3>
@@ -107,7 +104,7 @@ export default async function ProductPage() {
                 )}
               </div>
               <p className="mt-2 text-sm text-ink-muted">{plan.description}</p>
-            </LiquidCard>
+            </Card>
           ))}
         </div>
         <div className="mt-6">

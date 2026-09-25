@@ -3,7 +3,7 @@
 import { ArrowRight, X } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Card } from "@/core/ui/primitives/card";
 import { Link, useRouter } from "@/i18n/navigation";
 import { asLeadCategory, LEAD_STATUSES, type KnownLeadStatus } from "@/lib/admin/enums";
@@ -71,7 +71,7 @@ export default function LeadPipelineBoard({ leads }: LeadPipelineBoardProps) {
                       <Link href={`/admin/leads/${lead.id}`} className="text-sm font-semibold text-slate-100 hover:text-primary">
                         {lead.full_name}
                       </Link>
-                      <Badge tone={lead.kind === "saas" ? "neutral" : "warn"}>
+                      <Badge variant={lead.kind === "saas" ? "secondary" : "outline"}>
                         {lead.kind === "saas" ? t("kind.saas") : t("kind.freelance")}
                       </Badge>
                     </div>

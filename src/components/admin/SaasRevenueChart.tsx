@@ -29,7 +29,7 @@ interface SaasRevenueChartProps {
  * across active/trialing organizations, computed at request time — a
  * single categorical series, using --chart-2 (the same green as the
  * "success"/"paid" status color) since it reads as "money already coming
- * in," distinct from chart-1's freelance-invoice violet.
+ * in," distinct from chart-1's freelance-invoice hue.
  */
 export default function SaasRevenueChart({ data }: SaasRevenueChartProps) {
   const t = useTranslations("ui.charts");

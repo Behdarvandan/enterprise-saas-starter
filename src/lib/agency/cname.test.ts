@@ -27,7 +27,7 @@ const {
 const ROW = {
   id: "99999999-0000-0000-0000-000000000009",
   master_tenant_id: "11111111-0000-0000-0000-000000000001",
-  branding: { title: "Acme AI", primary_color: "#7c3aed", api_key: "sk-secret" },
+  branding: { title: "Acme AI", primary_color: "#52525b", api_key: "sk-secret" },
 };
 
 describe("normalizeHost", () => {
@@ -92,7 +92,7 @@ describe("getAgencyByDomain", () => {
     expect(agency).toEqual({
       id: ROW.id,
       masterTenantId: ROW.master_tenant_id,
-      branding: { title: "Acme AI", primary_color: "#7c3aed" },
+      branding: { title: "Acme AI", primary_color: "#52525b" },
     });
   });
 

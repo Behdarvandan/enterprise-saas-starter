@@ -1,14 +1,12 @@
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 
 /**
- * Landing-page card. Now a thin pass-through to `LiquidCard` (the frosted
- * Liquid Glass material), kept as its own export since callers pass a plain
- * `<div>`-shaped `className` (padding, layout) rather than Card's variant
- * props — this preserves that call shape while retiring the standalone
- * glass recipe this component used to hand-roll.
+ * Landing-page card. A thin pass-through to the core `Card` primitive, kept
+ * as its own export since callers pass a plain `<div>`-shaped `className`
+ * (padding, layout) rather than Card's variant props.
  */
 export default function GlassPanel({ className, ...props }: ComponentProps<"div">) {
-  return <LiquidCard className={cn("rounded-2xl", className)} {...props} />;
+  return <Card variant="section" className={cn("rounded-2xl", className)} {...props} />;
 }

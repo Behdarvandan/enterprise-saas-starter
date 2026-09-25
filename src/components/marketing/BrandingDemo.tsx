@@ -7,10 +7,11 @@ import { Input } from "@/core/ui/primitives/input";
 import { Label } from "@/core/ui/primitives/label";
 import { cn } from "@/lib/utils";
 
+// Neutral option first so the demo's default swatch isn't violet/purple.
 const PRESETS = [
-  { key: "violet", color: "#7c3aed" },
   { key: "emerald", color: "#059669" },
   { key: "amber", color: "#d97706" },
+  { key: "violet", color: "#7c3aed" },
 ] as const;
 
 const MAX_NAME_LENGTH = 24;

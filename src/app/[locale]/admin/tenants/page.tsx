@@ -2,8 +2,8 @@ import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Building2, Clock, TrendingUp, Wallet } from "lucide-react";
 import SaasRevenueChart, { type PlanRevenuePoint } from "@/components/admin/SaasRevenueChart";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import {
   Table,
@@ -24,12 +24,12 @@ export const dynamic = "force-dynamic";
 
 const EXPIRING_SOON_DAYS = 7;
 
-const STATUS_TONE: Record<KnownSubscriptionStatus, BadgeTone> = {
-  active: "success",
-  trialing: "violet",
-  past_due: "warn",
-  canceled: "neutral",
-  inactive: "neutral",
+const STATUS_VARIANT: Record<KnownSubscriptionStatus, "default" | "secondary" | "destructive" | "outline"> = {
+  active: "default",
+  trialing: "default",
+  past_due: "secondary",
+  canceled: "destructive",
+  inactive: "outline",
 };
 
 function isStripePlan(plan: Plan): plan is Plan & { checkout: Extract<PlanCheckout, { kind: "stripe" }> } {
@@ -122,7 +122,7 @@ export default async function AdminTenantsPage() {
         <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("healthTitle")}</h2>
         <div className="mt-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {statTiles.map(({ label, value, icon: Icon }) => (
-            <LiquidCard key={label} className="p-5">
+            <Card key={label} className="p-5">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Icon aria-hidden className="size-4" />
                 <p className="text-xs font-medium">{label}</p>
@@ -130,12 +130,12 @@ export default async function AdminTenantsPage() {
               <p dir="ltr" className="mt-2 text-start font-mono text-2xl font-semibold tabular-nums text-foreground">
                 {value}
               </p>
-            </LiquidCard>
+            </Card>
           ))}
         </div>
       </section>
 
-      <LiquidCard className="p-6">
+      <Card className="p-6">
         <div className="flex items-baseline justify-between gap-3">
           <h2 className="flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
             <Wallet aria-hidden className="size-4 text-primary" />
@@ -154,9 +154,9 @@ export default async function AdminTenantsPage() {
         <div className="mt-4">
           <SaasRevenueChart data={saasRevenue} />
         </div>
-      </LiquidCard>
+      </Card>
 
-      <LiquidCard className="overflow-hidden p-0">
+      <Card className="overflow-hidden p-0">
         {orgs.length === 0 ? (
           <EmptyState icon={Building2} title={t("empty")} description={t("description")} />
         ) : (
@@ -188,7 +188,7 @@ export default async function AdminTenantsPage() {
                         </p>
                       </TableCell>
                       <TableCell>
-                        <Badge tone={status ? STATUS_TONE[status] : "neutral"}>
+                        <Badge variant={status ? STATUS_VARIANT[status] : "outline"}>
                           {status ? tStatus(status) : org.subscription_status}
                         </Badge>
                       </TableCell>
@@ -213,7 +213,7 @@ export default async function AdminTenantsPage() {
             </Table>
           </div>
         )}
-      </LiquidCard>
+      </Card>
     </PageContainer>
   );
 }

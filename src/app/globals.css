@@ -54,16 +54,11 @@
   --color-primary-hover: var(--primary-hover);
 
   /* Marketing-site aliases — the public pages still read these names. The
-     app portals use literal slate/zinc utilities instead. --color-violet*
-     now alias the neutral primary token; names kept for backward
-     compatibility rather than chasing every `bg-violet`/`text-violet`/
-     `border-violet` consumer through a rename. */
+     app portals use literal slate/zinc utilities instead. */
   --color-canvas: var(--background);
   --color-surface: var(--card);
   --color-surface-raised: var(--popover);
   --color-subtle: var(--border);
-  --color-violet: var(--primary);
-  --color-violet-dim: var(--ring);
   --color-ink-primary: var(--foreground);
   --color-ink-muted: var(--muted-foreground);
 

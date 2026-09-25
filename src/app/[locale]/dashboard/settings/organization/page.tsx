@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import { requireMembership } from "@/lib/auth";
 import { getOrganizationName } from "@/lib/organizations";
 import { canManageMembers } from "@/lib/team";
@@ -16,13 +16,13 @@ export default async function OrganizationSettingsPage() {
   return (
     <PageContainer className="max-w-4xl">
       <PageHeader title={t("label")} description={t("description")} />
-      <LiquidCard className="p-6">
+      <Card className="p-6">
         {canManage ? (
           <OrganizationForm name={organizationName ?? ""} />
         ) : (
           <p className="text-sm text-muted-foreground">{t("onlyAdmins")}</p>
         )}
-      </LiquidCard>
+      </Card>
     </PageContainer>
   );
 }

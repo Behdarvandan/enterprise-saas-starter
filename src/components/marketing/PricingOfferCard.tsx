@@ -3,11 +3,15 @@
 import { useState, type CSSProperties } from "react";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
-// Imported directly (not via @/modules/billing's barrel) because this is a
-// Client Component: the barrel also re-exports the webhook helpers in
-// lemonsqueezy.ts, which reach into next/headers via the admin DB client —
-// pulling that into a client bundle breaks the build.
+import { Card } from "@/core/ui/primitives/card";
+// Imported directly (not via @/modules/billing's public barrel) because this
+// is a Client Component: the barrel also re-exports UsageTracker and the
+// lemonsqueezy webhook helpers, both of which pull in `next/headers` via the
+// server Supabase/admin clients — bundling that into a client component
+// fails the production build. Verified with `npm run build`: switching this
+// to the barrel import throws "You're importing a component that needs
+// next/headers" for src/core/db/server-client.ts, src/lib/supabase/server.ts,
+// and src/lib/team.ts, all reached through @/modules/billing/index.ts.
 import { LemonSqueezyCheckoutButton } from "@/modules/billing/components/LemonSqueezyCheckoutButton";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +32,7 @@ export function PricingOfferCard() {
   const features = t.raw("features") as string[];
 
   return (
-    <LiquidCard className="mx-auto max-w-lg p-8 text-center sm:p-10">
+    <Card variant="section" className="mx-auto max-w-lg p-8 text-center sm:p-10">
       <h1 className="text-balance font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
         {t("title")}
       </h1>
@@ -84,6 +88,6 @@ export function PricingOfferCard() {
         <LemonSqueezyCheckoutButton interval={interval} label={isYearly ? t("ctaYearly") : t("ctaMonthly")} />
       </div>
       <p className="mt-3 text-xs text-muted-foreground">{t("setupFeeNote")}</p>
-    </LiquidCard>
+    </Card>
   );
 }

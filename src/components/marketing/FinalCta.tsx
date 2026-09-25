@@ -20,7 +20,7 @@ export default async function FinalCta() {
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-muted-foreground">{t("subtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild variant="glow" size="lg">
+            <Button asChild variant="default" size="lg">
               <Link href="/signup">{t("primary")}</Link>
             </Button>
             <Button asChild variant="secondary" size="lg">

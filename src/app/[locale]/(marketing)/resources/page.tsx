@@ -1,7 +1,6 @@
 import { Bot, Building2, Palette, Search } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { AmbientGlow } from "@/components/ui/liquid/AmbientGlow";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import SystemStatus from "@/components/marketing/SystemStatus";
 
 const GUIDE_KEYS = ["digitalWorkforce", "knowledgeBase", "multiCompany", "whiteLabelPortal"] as const;
@@ -13,7 +12,6 @@ export default async function ResourcesPage() {
   return (
     <div>
       <section className="animate-reveal-up relative isolate overflow-hidden mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
-        <AmbientGlow position="top" />
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
             {t("heroTitle")}
@@ -38,7 +36,7 @@ export default async function ResourcesPage() {
             {GUIDE_KEYS.map((key) => {
               const Icon = GUIDE_ICONS[key];
               return (
-                <LiquidCard key={key} interactive className="flex items-start gap-4 p-6">
+                <Card key={key} variant="item" className="flex items-start gap-4 p-6">
                   <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
                     <Icon aria-hidden size={20} />
                   </span>
@@ -46,7 +44,7 @@ export default async function ResourcesPage() {
                     <h3 className="text-base font-semibold text-ink-primary">{t(`guides.${key}.title`)}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-ink-muted">{t(`guides.${key}.description`)}</p>
                   </div>
-                </LiquidCard>
+                </Card>
               );
             })}
           </div>

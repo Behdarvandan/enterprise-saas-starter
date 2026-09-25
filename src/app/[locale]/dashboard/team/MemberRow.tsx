@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { NativeSelect } from "@/core/ui/primitives/native-select";
 import { useRouter } from "@/i18n/navigation";
 import type { MembershipRole } from "@/types";
@@ -17,10 +17,10 @@ interface MemberRowProps {
   canManage: boolean;
 }
 
-const roleTone: Record<MembershipRole, BadgeTone> = {
-  owner: "violet",
-  admin: "violet",
-  member: "neutral",
+const roleVariant: Record<MembershipRole, "default" | "secondary"> = {
+  owner: "default",
+  admin: "default",
+  member: "secondary",
 };
 
 const ASSIGNABLE_ROLES: readonly MembershipRole[] = ["admin", "member"];
@@ -93,7 +93,7 @@ export default function MemberRow({
             <option value="admin">{tRoles("admin")}</option>
           </NativeSelect>
         ) : (
-          <Badge tone={roleTone[role]}>{tRoles(role)}</Badge>
+          <Badge variant={roleVariant[role]}>{tRoles(role)}</Badge>
         )}
 
         {showActions && !isCurrentUser ? (

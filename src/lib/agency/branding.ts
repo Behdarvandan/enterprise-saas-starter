@@ -74,10 +74,9 @@ export function decodeAgencyContext(value: string | null | undefined): AgencyCon
 
 /**
  * CSS custom properties applied to `<html>` for the agency's palette.
- * `--primary`/`--ring` are what the design system's `--color-primary` /
- * `--color-violet` tokens resolve from; an inline `<html style>` beats both
- * the `:root` and `.dark` declarations in globals.css. `--primary-color` is
- * the agency-facing alias.
+ * `--primary`/`--ring` are what the design system's `--color-primary` tokens
+ * resolve from; an inline `<html style>` beats both the `:root` and `.dark`
+ * declarations in globals.css. `--primary-color` is the agency-facing alias.
  */
 export function getBrandingCssVars(branding: AgencyBranding): Record<string, string> {
   const color = branding.primary_color;

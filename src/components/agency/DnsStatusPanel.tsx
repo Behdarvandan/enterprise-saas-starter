@@ -3,7 +3,7 @@
 import { Check, CheckCircle2, CircleAlert, Clock, Copy, Eye, EyeOff, RefreshCw } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Button } from "@/core/ui/primitives/button";
 import LiveDot from "@/components/ui/LiveDot";
 import type { CnameStatus } from "@/lib/agency/cname";
@@ -32,7 +32,11 @@ interface DnsStatusPanelProps {
   target: string;
 }
 
-const STATUS_TONE = { active: "success", pending: "warn", failed: "error" } as const;
+const STATUS_VARIANT = {
+  active: "default",
+  pending: "secondary",
+  failed: "destructive",
+} as const satisfies Record<CnameStatus, "default" | "secondary" | "destructive">;
 
 function StatusIcon({ status }: { status: CnameStatus }) {
   if (status === "active") return <CheckCircle2 aria-hidden className="size-5 text-emerald-400" />;
@@ -234,7 +238,7 @@ export default function DnsStatusPanel({
           {watching ? <EyeOff aria-hidden /> : <Eye aria-hidden />}
           {watching ? t("stopWatching") : t("startWatching")}
         </Button>
-        <Badge tone={STATUS_TONE[status]}>{t(`status.${status}`)}</Badge>
+        <Badge variant={STATUS_VARIANT[status]}>{t(`status.${status}`)}</Badge>
         {watching ? (
           <span role="status" className="flex items-center gap-2 text-xs text-slate-300">
             <LiveDot />

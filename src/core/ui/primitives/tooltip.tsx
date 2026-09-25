@@ -22,7 +22,7 @@ function Tooltip({ content, children, side = "top", className }: TooltipProps) {
             side={side}
             sideOffset={6}
             className={cn(
-              "z-50 max-w-xs rounded-md border border-slate-800 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-200 shadow-xl shadow-black/30 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0",
+              "z-50 max-w-xs rounded-md border border-border bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-xl data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0",
               className
             )}
           >

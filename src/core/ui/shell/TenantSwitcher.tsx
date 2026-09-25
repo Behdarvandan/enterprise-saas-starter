@@ -3,7 +3,7 @@
 import { ChevronsUpDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
-import Spinner from "@/components/ui/Spinner";
+import { Spinner } from "@/core/ui/primitives/spinner";
 import {
   DropdownMenu,
   DropdownMenuContent,

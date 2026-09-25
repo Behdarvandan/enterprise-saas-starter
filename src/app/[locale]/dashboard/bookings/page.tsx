@@ -3,7 +3,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import AppointmentStatusBadge from "@/components/dashboard/AppointmentStatusBadge";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import { Input } from "@/core/ui/primitives/input";
 import { Label } from "@/core/ui/primitives/label";
@@ -74,7 +74,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
   function AppointmentRow({ appointment }: { appointment: Appointment }) {
     const isActive = appointment.status === "confirmed" || appointment.status === "pending";
     return (
-      <LiquidCard variant="item" className="p-4 sm:p-5">
+      <Card variant="item" className="p-4 sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -98,7 +98,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
           </div>
           {isActive ? <AppointmentActions appointmentId={appointment.id} /> : null}
         </div>
-      </LiquidCard>
+      </Card>
     );
   }
 
@@ -106,7 +106,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
     <PageContainer className="max-w-5xl">
       <PageHeader title={t("title")} description={t("description")} />
 
-      <LiquidCard className="p-5">
+      <Card className="p-5">
         <form method="get" action="/dashboard/bookings" className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="grid flex-1 gap-1.5">
             <Label htmlFor="status">{t("filter.status")}</Label>
@@ -130,14 +130,14 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
             </Button>
           ) : null}
         </form>
-      </LiquidCard>
+      </Card>
 
       <section>
         <h2 className="mb-3 text-sm font-semibold tracking-tight text-foreground">
           {t("upcoming", { count: upcoming.length })}
         </h2>
         {upcoming.length === 0 ? (
-          <LiquidCard>
+          <Card>
             <EmptyState
               icon={CalendarX2}
               title={isFiltered ? t("emptyFilteredTitle") : t("emptyUpcomingTitle")}
@@ -156,7 +156,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
                 ) : undefined
               }
             />
-          </LiquidCard>
+          </Card>
         ) : (
           <div className="space-y-3">
             {upcoming.map((appointment) => (
@@ -171,9 +171,9 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
           {t("past", { count: past.length })}
         </h2>
         {past.length === 0 ? (
-          <LiquidCard>
+          <Card>
             <EmptyState icon={CalendarX2} title={t("emptyPastTitle")} description={t("emptyPastDescription")} />
-          </LiquidCard>
+          </Card>
         ) : (
           <div className="space-y-3">
             {past.map((appointment) => (

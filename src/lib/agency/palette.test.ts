@@ -10,8 +10,8 @@ describe("contrastRatio", () => {
 });
 
 describe("deriveBrandPalette", () => {
-  it("uses white text on the default violet and passes AA", () => {
-    const palette = deriveBrandPalette("#7c3aed");
+  it("uses white text on the default primary color and passes AA", () => {
+    const palette = deriveBrandPalette("#52525b");
     expect(palette.foreground).toBe("#ffffff");
     expect(palette.passesAA).toBe(true);
     expect(palette.hover).not.toBe(palette.base);
@@ -28,9 +28,9 @@ describe("deriveBrandPalette", () => {
   });
 
   it("normalizes case and emits a translucent tint", () => {
-    const palette = deriveBrandPalette("#7C3AED");
-    expect(palette.base).toBe("#7c3aed");
-    expect(palette.subtle).toBe("rgb(124 58 237 / 0.15)");
+    const palette = deriveBrandPalette("#52525B");
+    expect(palette.base).toBe("#52525b");
+    expect(palette.subtle).toBe("rgb(82 82 91 / 0.15)");
   });
 });
 
@@ -41,8 +41,8 @@ describe("shade / isHexColor", () => {
   });
 
   it("validates 6-digit hex only", () => {
-    expect(isHexColor("#7c3aed")).toBe(true);
+    expect(isHexColor("#52525b")).toBe(true);
     expect(isHexColor("#7c3")).toBe(false);
-    expect(isHexColor("7c3aed")).toBe(false);
+    expect(isHexColor("52525b")).toBe(false);
   });
 });

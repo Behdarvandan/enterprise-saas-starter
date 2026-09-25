@@ -11,7 +11,7 @@ import { getTranslations } from "next-intl/server";
 import GlassPanel from "@/components/marketing/GlassPanel";
 import Reveal from "@/components/marketing/Reveal";
 import SectionHeading from "@/components/marketing/SectionHeading";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import LiveDot from "@/components/ui/LiveDot";
 
 const OPS_POINTS = ["always", "rag", "booking"] as const;
@@ -49,7 +49,7 @@ export default async function DualCrew() {
               </span>
               <h3 className="text-xl font-semibold tracking-tight text-foreground">{t("ops.title")}</h3>
             </div>
-            <Badge tone="success">
+            <Badge variant="outline" className="border-emerald-500/20 bg-emerald-500/10 text-emerald-400">
               <LiveDot />
               {t("ops.tag")}
             </Badge>
@@ -86,7 +86,9 @@ export default async function DualCrew() {
               </span>
               <h3 className="text-xl font-semibold tracking-tight text-foreground">{t("dev.title")}</h3>
             </div>
-            <Badge tone="violet">{t("dev.tag")}</Badge>
+            <Badge variant="outline" className="border-primary/25 bg-primary/10 text-primary">
+              {t("dev.tag")}
+            </Badge>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">{t("dev.description")}</p>
           <CrewPoints items={DEV_POINTS.map((key) => t(`dev.points.${key}`))} icon={LineChart} />

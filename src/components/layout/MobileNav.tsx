@@ -4,8 +4,8 @@ import { ChevronDown, Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Logo from "@/components/layout/Logo";
 import { Button } from "@/core/ui/primitives/button";
-import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
-import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import {
   Sheet,
   SheetClose,
@@ -95,7 +95,7 @@ export default function MobileNav() {
 
         <div className="mt-auto grid gap-3">
           <div className="flex items-center gap-2">
-            <LanguageSwitcher className="flex-1 justify-center" />
+            <LocaleSwitcher className="flex-1 justify-center" />
             <ThemeToggle />
           </div>
           <SheetClose asChild>
@@ -104,7 +104,7 @@ export default function MobileNav() {
             </Button>
           </SheetClose>
           <SheetClose asChild>
-            <Button asChild variant="glow" size="lg">
+            <Button asChild variant="default" size="lg">
               <Link href="/solutions#quote">{t("requestDemo")}</Link>
             </Button>
           </SheetClose>

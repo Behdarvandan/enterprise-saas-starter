@@ -3,9 +3,9 @@
 import { AlertCircle, FileText, Layers, Trash2, TypeIcon } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import { Checkbox } from "@/core/ui/primitives/checkbox";
 import {
   Dialog,
@@ -17,7 +17,7 @@ import {
 } from "@/core/ui/primitives/dialog";
 import EmptyState from "@/components/ui/EmptyState";
 import { Skeleton } from "@/core/ui/primitives/skeleton";
-import Spinner from "@/components/ui/Spinner";
+import { Spinner } from "@/core/ui/primitives/spinner";
 import {
   Table,
   TableBody,
@@ -98,7 +98,7 @@ export default function DocumentList({
       : t("list.count", { count: formatMetricNumber(locale, rows.length), limit: formatMetricNumber(locale, limit) });
 
   return (
-    <LiquidCard>
+    <Card>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
         <div>
           <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("list.title")}</h2>
@@ -186,7 +186,7 @@ export default function DocumentList({
                     ) : null}
                   </TableCell>
                   <TableCell>
-                    <Badge tone={doc.status === "ready" ? "success" : doc.status === "failed" ? "error" : "warn"}>
+                    <Badge variant={doc.status === "ready" ? "default" : doc.status === "failed" ? "destructive" : "secondary"}>
                       {doc.status === "processing" ? <Spinner className="size-3" /> : null}
                       {t(`list.status.${doc.status}`)}
                     </Badge>
@@ -246,6 +246,6 @@ export default function DocumentList({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </LiquidCard>
+    </Card>
   );
 }

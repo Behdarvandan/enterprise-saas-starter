@@ -1,16 +1,16 @@
 import { Lightbulb } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Badge } from "@/core/ui/primitives/badge";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import { Link } from "@/i18n/navigation";
 import { deriveSeverity, parseRecommendation } from "@/lib/dev-crew/recommendation";
 import type { CrewInsight, CrewSeverity } from "@/types";
 
-const severityTone: Record<CrewSeverity, BadgeTone> = {
-  critical: "error",
-  warning: "warn",
-  info: "neutral",
+const severityToneClass: Record<CrewSeverity, string> = {
+  critical: "border-status-error/30 bg-status-error/10 text-status-error",
+  warning: "border-status-warn/30 bg-status-warn/10 text-status-warn",
+  info: "border-border bg-muted text-muted-foreground",
 };
 
 interface LatestCrewAlertProps {
@@ -26,7 +26,7 @@ export default async function LatestCrewAlert({ insight }: LatestCrewAlertProps)
   const parsed = insight ? parseRecommendation(insight.recommendation) : null;
 
   return (
-    <LiquidCard className="flex flex-col p-5">
+    <Card className="flex flex-col p-5">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("title")}</h2>
         <Lightbulb aria-hidden className="size-4 text-muted-foreground" />
@@ -35,7 +35,7 @@ export default async function LatestCrewAlert({ insight }: LatestCrewAlertProps)
       {insight && severity && parsed ? (
         <div className="mt-3 space-y-3">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge tone={severityTone[severity]}>{tSeverity(severity)}</Badge>
+            <Badge variant="outline" className={severityToneClass[severity]}>{tSeverity(severity)}</Badge>
             <span className="text-xs text-muted-foreground">
               {t("signals", { count: insight.negativeCount })}
             </span>
@@ -55,6 +55,6 @@ export default async function LatestCrewAlert({ insight }: LatestCrewAlertProps)
       >
         {t("viewAll")}
       </Link>
-    </LiquidCard>
+    </Card>
   );
 }

@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import CrewInsightCard from "@/components/dashboard/crew/CrewInsightCard";
 import { useCrewFeed, type FeedConnection } from "@/components/dashboard/crew/useCrewFeed";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import LiveDot from "@/components/ui/LiveDot";
 import MetricCard from "@/components/ui/MetricCard";
@@ -63,7 +63,7 @@ export default function CrewFeed({ initial, initialHasMore, serverTime }: CrewFe
         <MetricCard label={t("stats.warning")} value={formatMetricNumber(locale, counts.warning)} />
       </section>
 
-      <LiquidCard>
+      <Card>
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
           <div role="status" className="flex items-center gap-2 text-xs text-foreground">
             <LiveDot tone={dotTone[feed.connection]} />
@@ -123,7 +123,7 @@ export default function CrewFeed({ initial, initialHasMore, serverTime }: CrewFe
             </Button>
           </div>
         ) : null}
-      </LiquidCard>
+      </Card>
     </div>
   );
 }

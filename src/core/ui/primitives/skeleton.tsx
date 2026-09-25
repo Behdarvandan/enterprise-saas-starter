@@ -10,7 +10,7 @@ function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="skeleton"
       aria-hidden
       className={cn(
-        "animate-shimmer bg-size-[200%_100%] rounded-md bg-[linear-gradient(110deg,var(--color-slate-800)_8%,var(--color-slate-700)_18%,var(--color-slate-800)_33%)] opacity-60",
+        "animate-shimmer bg-size-[200%_100%] rounded-md bg-[linear-gradient(110deg,var(--color-muted)_8%,var(--color-border)_18%,var(--color-muted)_33%)] opacity-60",
         className,
       )}
       {...props}

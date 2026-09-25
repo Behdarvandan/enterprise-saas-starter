@@ -2,9 +2,7 @@ import { Building2, Code2, Handshake } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidButton } from "@/components/ui/liquid/LiquidButton";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
-import { AmbientGlow } from "@/components/ui/liquid/AmbientGlow";
+import { Card } from "@/core/ui/primitives/card";
 import LeadForm from "../_components/LeadForm";
 import { getPortfolioItems } from "@/lib/portfolio";
 
@@ -19,19 +17,18 @@ export default async function SolutionsPage() {
   return (
     <div>
       <section className="animate-reveal-up relative isolate overflow-hidden mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
-        <AmbientGlow position="top" />
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
             {t("heroTitle")}
           </h1>
           <p className="mt-5 text-lg text-ink-muted">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild variant="glow" size="lg">
+            <Button asChild variant="default" size="lg">
               <Link href="#quote">{t("ctaPrimary")}</Link>
             </Button>
-            <LiquidButton asChild size="lg">
+            <Button asChild variant="secondary" size="lg">
               <Link href="#segments">{t("ctaSecondary")}</Link>
-            </LiquidButton>
+            </Button>
           </div>
           <p className="mt-4 text-sm text-ink-muted">
             <Link href="/product" className="font-semibold text-ink-primary hover:text-primary">
@@ -55,7 +52,7 @@ export default async function SolutionsPage() {
               const Icon = SEGMENT_ICONS[key];
               const bullets = t.raw(`segments.${key}.bullets`) as string[];
               return (
-                <LiquidCard key={key} id={key} interactive className="scroll-mt-28 p-6">
+                <Card key={key} id={key} variant="item" className="scroll-mt-28 p-6">
                   <Icon size={20} className="text-primary" />
                   <h3 className="mt-4 text-base font-semibold text-ink-primary">
                     {tNav(`solutions.${key}.title`)}
@@ -70,7 +67,7 @@ export default async function SolutionsPage() {
                       </li>
                     ))}
                   </ul>
-                </LiquidCard>
+                </Card>
               );
             })}
           </div>
@@ -91,7 +88,7 @@ export default async function SolutionsPage() {
             <Link
               key={item.slug}
               href={`/solutions/portfolio/${item.slug}`}
-              className="liquid-surface block rounded-2xl border-transparent p-6 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10"
+              className="block rounded-2xl border border-subtle bg-surface p-6 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10"
             >
               <h3 className="text-base font-semibold text-ink-primary">
                 {item.title}

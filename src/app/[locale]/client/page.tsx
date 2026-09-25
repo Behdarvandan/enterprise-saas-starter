@@ -1,6 +1,7 @@
 import { LayoutDashboard } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import { requireMembership } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -62,9 +63,9 @@ function ProjectStageCard({
   const currentIndex = stages.findIndex((stage) => stage.key === project.stage);
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-md">
-      <h2 className="text-lg font-semibold tracking-tight text-slate-100">{project.name}</h2>
-      {project.notes ? <p className="mt-2 text-sm text-slate-400">{project.notes}</p> : null}
+    <Card className="p-6">
+      <h2 className="text-lg font-semibold tracking-tight text-card-foreground">{project.name}</h2>
+      {project.notes ? <p className="mt-2 text-sm text-muted-foreground">{project.notes}</p> : null}
 
       <ol className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
         {stages.map((stage, index) => {
@@ -84,19 +85,19 @@ function ProjectStageCard({
                     "flex size-8 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
                     done
                       ? "border-primary bg-primary text-primary-foreground"
-                      : "border-slate-700 bg-slate-800 text-slate-400",
+                      : "border-border bg-muted text-muted-foreground",
                   )}
                 >
                   {index + 1}
                 </div>
-                <span className={cn("text-xs font-medium", done ? "text-slate-100" : "text-slate-400")}>
+                <span className={cn("text-xs font-medium", done ? "text-card-foreground" : "text-muted-foreground")}>
                   {stage.label}
                 </span>
               </div>
               {isLast ? null : (
                 <div
                   aria-hidden
-                  className={cn("mx-2 hidden h-0.5 flex-1 sm:block", index < currentIndex ? "bg-primary" : "bg-slate-800")}
+                  className={cn("mx-2 hidden h-0.5 flex-1 sm:block", index < currentIndex ? "bg-primary" : "bg-border")}
                 />
               )}
             </li>
@@ -105,7 +106,7 @@ function ProjectStageCard({
       </ol>
 
       {project.repo_url || project.live_url ? (
-        <div className="mt-6 flex flex-wrap gap-4 border-t border-slate-800 pt-4">
+        <div className="mt-6 flex flex-wrap gap-4 border-t border-border pt-4">
           {project.repo_url ? (
             <a href={project.repo_url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:text-primary-hover">
               {viewRepo} <span aria-hidden className="inline-block rtl:-scale-x-100">→</span>
@@ -118,6 +119,6 @@ function ProjectStageCard({
           ) : null}
         </div>
       ) : null}
-    </div>
+    </Card>
   );
 }

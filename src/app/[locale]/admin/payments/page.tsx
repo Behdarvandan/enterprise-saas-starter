@@ -1,7 +1,7 @@
 import { Receipt } from "lucide-react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import MetricCard from "@/components/ui/MetricCard";
@@ -28,7 +28,11 @@ function paymentState(status: string): PaymentState {
   return "failed";
 }
 
-const STATE_TONE: Record<PaymentState, BadgeTone> = { paid: "success", pending: "warn", failed: "error" };
+const STATE_VARIANT: Record<PaymentState, "default" | "secondary" | "destructive"> = {
+  paid: "default",
+  pending: "secondary",
+  failed: "destructive",
+};
 
 export default async function AdminPaymentsPage() {
   const { supabase } = await requireOperatorAdmin();
@@ -102,7 +106,7 @@ export default async function AdminPaymentsPage() {
                         {formatMoney(locale, invoice.amount)}
                       </TableCell>
                       <TableCell>
-                        <Badge tone={STATE_TONE[state]}>{t(`status.${state}`)}</Badge>
+                        <Badge variant={STATE_VARIANT[state]}>{t(`status.${state}`)}</Badge>
                       </TableCell>
                     </TableRow>
                   );

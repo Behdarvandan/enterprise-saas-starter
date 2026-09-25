@@ -5,9 +5,9 @@ import AppointmentStatusBadge from "@/components/dashboard/AppointmentStatusBadg
 import LatestCrewAlert from "@/components/dashboard/LatestCrewAlert";
 import OnboardingChecklist from "@/components/dashboard/OnboardingChecklist";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import LiveRefresh from "@/components/ui/LiveRefresh";
 import MetricCard from "@/components/ui/MetricCard";
@@ -36,11 +36,11 @@ import type { CrewInsight } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const SUBSCRIPTION_TONE: Record<string, BadgeTone> = {
-  active: "success",
-  trialing: "success",
-  past_due: "warn",
-  canceled: "error",
+const SUBSCRIPTION_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+  active: "default",
+  trialing: "default",
+  past_due: "secondary",
+  canceled: "destructive",
 };
 
 async function loadLatestInsight(organizationId: string): Promise<CrewInsight | null> {
@@ -108,7 +108,7 @@ export default async function DashboardPage() {
         description={user.email ? t("welcome", { email: user.email }) : t("welcomeAnonymous")}
         actions={
           <>
-            <Badge tone={SUBSCRIPTION_TONE[subscriptionStatus] ?? "neutral"}>
+            <Badge variant={SUBSCRIPTION_VARIANT[subscriptionStatus] ?? "outline"}>
               {knownSubscription ? tStatus(`subscription.${knownSubscription}`) : subscriptionStatus}
             </Badge>
             <span className="hidden text-sm text-muted-foreground sm:inline">{t("plan", { plan: planName })}</span>
@@ -188,7 +188,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <LiquidCard className="p-5">
+      <Card className="p-5">
         <div className="flex items-baseline justify-between gap-3">
           <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("recent.title")}</h2>
           <Link href="/dashboard/bookings" className="text-sm font-medium text-primary hover:text-primary">
@@ -250,7 +250,7 @@ export default async function DashboardPage() {
             </TableBody>
           </Table>
         )}
-      </LiquidCard>
+      </Card>
     </PageContainer>
   );
 }

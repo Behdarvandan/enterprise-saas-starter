@@ -24,7 +24,7 @@ export interface BrandingFormValues {
   cname_domain: string;
 }
 
-const FALLBACK_PICKER_COLOR = "#7c3aed";
+const FALLBACK_PICKER_COLOR = "#52525b";
 
 function httpsUrlOrNull(value: string): string | null {
   const trimmed = value.trim();
@@ -151,7 +151,7 @@ export default function BrandingStudio({ initial }: { initial: BrandingFormValue
               id={`${id}-color`}
               name="primary_color"
               dir="ltr"
-              placeholder="#7c3aed"
+              placeholder="#52525b"
               maxLength={7}
               autoComplete="off"
               spellCheck={false}

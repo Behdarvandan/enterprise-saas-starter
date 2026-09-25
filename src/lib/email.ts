@@ -51,8 +51,8 @@ export async function sendEmail({
 // ----------------------------------------------------------------------------
 // Pasargad email shell — hardcoded hex, not CSS custom properties: email
 // clients don't reliably support `:root`/`var()`, so these mirror
-// globals.css's slate/violet tokens as literal values instead of
-// referencing them. No inline SVG motif for the same reason (inconsistent
+// globals.css's slate tokens as literal values instead of referencing
+// them. No inline SVG motif for the same reason (inconsistent
 // email-client support) — the wordmark is styled text.
 // ----------------------------------------------------------------------------
 const EMAIL_COLORS = {

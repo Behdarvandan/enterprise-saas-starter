@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import ChatSimulator from "@/components/chat-widget/ChatSimulator";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import { requireMembership } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +26,7 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
         <ChatSimulator organizationId={organizationId} initialQuery={q} />
 
         <div className="grid content-start gap-6">
-          <LiquidCard className="p-5">
+          <Card className="p-5">
             <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("embed.title")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{t("embed.description")}</p>
             <pre
@@ -39,16 +39,16 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
   organizationId="${organizationId}"
 />`}</code>
             </pre>
-          </LiquidCard>
+          </Card>
 
-          <LiquidCard className="p-5">
+          <Card className="p-5">
             <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("how.title")}</h2>
             <ol className="mt-3 list-decimal space-y-1.5 ps-5 text-sm text-muted-foreground marker:text-primary">
               {steps.map((step) => (
                 <li key={step}>{step}</li>
               ))}
             </ol>
-          </LiquidCard>
+          </Card>
         </div>
       </div>
     </PageContainer>

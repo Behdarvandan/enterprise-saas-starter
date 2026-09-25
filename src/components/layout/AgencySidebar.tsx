@@ -3,6 +3,7 @@
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { getAgencyNavGroups } from "@/components/layout/nav-config";
+import Logo from "@/components/layout/Logo";
 import Sidebar from "@/core/ui/shell/Sidebar";
 import { Link } from "@/i18n/navigation";
 
@@ -16,7 +17,7 @@ export default function AgencySidebar({ agencyName }: AgencySidebarProps) {
   return (
     <Sidebar
       homeHref="/agency/tenants"
-      subtitle={agencyName}
+      logo={<Logo subtitle={agencyName} />}
       groups={getAgencyNavGroups()}
       label={t("nav.agencyLabel")}
       bottom={

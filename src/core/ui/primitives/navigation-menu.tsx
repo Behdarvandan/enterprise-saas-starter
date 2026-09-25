@@ -53,7 +53,7 @@ function NavigationMenuItem({
 }
 
 const navigationMenuTriggerStyle =
-  "group inline-flex h-9 items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-ring/60 disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-white/5 data-[state=open]:text-white"
+  "group inline-flex h-9 items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring/60 disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
 
 function NavigationMenuTrigger({
   className,
@@ -100,9 +100,7 @@ function NavigationMenuViewport({
       <NavigationMenuPrimitive.Viewport
         data-slot="navigation-menu-viewport"
         className={cn(
-          // Intentionally theme-invariant dark glass, matching the floating
-          // capsule header this primitive currently only opens beneath.
-          "relative mt-2 h-[var(--radix-navigation-menu-viewport-height)] w-full origin-top-center overflow-hidden rounded-2xl border border-white/10 bg-neutral-950/95 text-white shadow-2xl backdrop-blur-2xl duration-200 data-[state=open]:animate-in data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 md:w-[var(--radix-navigation-menu-viewport-width)]",
+          "relative mt-2 h-[var(--radix-navigation-menu-viewport-height)] w-full origin-top-center overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-2xl duration-200 data-[state=open]:animate-in data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 md:w-[var(--radix-navigation-menu-viewport-width)]",
           className
         )}
         {...props}
@@ -119,7 +117,7 @@ function NavigationMenuLink({
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       className={cn(
-        "flex flex-col gap-1 rounded-xl p-3 text-sm text-white outline-none transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-ring/60 data-[active]:bg-white/5 [&_svg:not([class*='text-'])]:text-slate-400",
+        "flex flex-col gap-1 rounded-xl p-3 text-sm text-popover-foreground outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/60 data-[active]:bg-accent [&_svg:not([class*='text-'])]:text-muted-foreground",
         className
       )}
       {...props}

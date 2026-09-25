@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import AcceptInviteButton from "./AcceptInviteButton";
 
 export default async function InvitePage({
@@ -51,14 +51,14 @@ export default async function InvitePage({
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <LiquidCard className="p-8">
+      <Card className="p-8">
         {!user ? (
           <>
             <h1 className="text-xl font-bold text-ink-primary">{t("signInTitle")}</h1>
             <p className="mt-1 text-sm text-ink-muted">{t("signInSubtitle")}</p>
             <Link
               href={`/login?next=/invite/${token}`}
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-violet px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet/90"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
             >
               {t("signInButton")}
             </Link>
@@ -84,13 +84,13 @@ export default async function InvitePage({
             </p>
             <Link
               href="/dashboard"
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-violet px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet/90"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
             >
               {t("goToDashboard")}
             </Link>
           </>
         )}
-      </LiquidCard>
+      </Card>
     </div>
   );
 }

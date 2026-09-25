@@ -1,7 +1,7 @@
 import { Building2 } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import {
@@ -102,7 +102,7 @@ export default async function AdminClientsPage() {
                       <TableCell className="text-slate-400">{category ? tLeads(`categories.${category}`) : "—"}</TableCell>
                       <TableCell className="text-slate-400">{mode ? tLeads(`modes.${mode}`) : "—"}</TableCell>
                       <TableCell>
-                        <Badge tone={active ? "success" : "neutral"}>{active ? t("state.active") : t("state.dormant")}</Badge>
+                        <Badge variant={active ? "default" : "secondary"}>{active ? t("state.active") : t("state.dormant")}</Badge>
                       </TableCell>
                       <TableCell className="text-xs text-slate-400">
                         {format.dateTime(new Date(project.updated_at), { dateStyle: "medium" })}

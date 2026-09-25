@@ -23,8 +23,8 @@ interface FreelanceRevenueChartProps {
 /**
  * Single-series monthly trend, so per the dataviz skill's rule a legend box
  * is unnecessary — the card title already names the series. Uses the
- * design system's own --chart-1 token (the same violet used for buttons/
- * links throughout the app) rather than a one-off color.
+ * design system's own --chart-1 token (the same primary hue used for
+ * buttons/links throughout the app) rather than a one-off color.
  */
 export default function FreelanceRevenueChart({ data }: FreelanceRevenueChartProps) {
   const t = useTranslations("ui.charts");

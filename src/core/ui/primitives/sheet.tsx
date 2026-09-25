@@ -24,9 +24,7 @@ const sheetVariants = cva(
       },
       variant: {
         /** Opaque panel — the existing look, for dense content that shouldn't show what's behind it. */
-        default: "border-slate-800 bg-slate-900 text-slate-100",
-        /** Liquid Glass drawer — frosted material, for the mobile nav sheet. */
-        liquid: "liquid-surface border-transparent text-foreground",
+        default: "border-border bg-popover text-popover-foreground",
       },
     },
     defaultVariants: { side: "end", variant: "default" },

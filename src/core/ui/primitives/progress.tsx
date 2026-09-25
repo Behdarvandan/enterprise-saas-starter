@@ -27,7 +27,7 @@ function Progress({ className, value, tone = "primary", ...props }: ProgressProp
     <ProgressPrimitive.Root
       data-slot="progress"
       value={clamped}
-      className={cn("relative h-1.5 w-full overflow-hidden rounded-full bg-slate-800", className)}
+      className={cn("relative h-1.5 w-full overflow-hidden rounded-full bg-secondary", className)}
       {...props}
     >
       <ProgressPrimitive.Indicator

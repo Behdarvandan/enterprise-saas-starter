@@ -6,8 +6,8 @@ import { getAdministeredAgency } from "@/lib/agency/admin";
 import { fetchCrewInsights } from "@/lib/dev-crew/queries";
 import { collapseInsights } from "@/lib/dev-crew/recommendation";
 import { getOrganizationSnapshot } from "@/lib/dashboard/queries";
-import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
-import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import AgentStatus from "@/components/layout/AgentStatus";
 import type { TenantRole } from "@/core/auth/types";
 import { moduleRegistry } from "@/core/registry";
@@ -90,7 +90,7 @@ export default async function DashboardLayout({
             <Slot id={SHELL_SLOTS.HEADER_ACTIONS} />
             <AgentStatus state={agentState} quotaPercent={Math.round(quotaPercent)} className="hidden md:inline-flex" />
             <NotificationsMenu items={notifications} />
-            <LanguageSwitcher />
+            <LocaleSwitcher />
             <ThemeToggle />
             <UserMenu email={user.email ?? ""} />
           </>

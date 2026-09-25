@@ -5,7 +5,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "@/i18n/navigation";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/core/ui/primitives/sheet";
 import Header from "@/core/ui/shell/Header";
-import Toaster from "@/components/ui/Toaster";
+import Toaster from "@/core/ui/shell/Toaster";
 
 interface AppShellProps {
   /** Sidebar content (Sidebar). Rendered in the desktop rail and the mobile drawer. */

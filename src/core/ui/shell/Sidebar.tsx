@@ -3,7 +3,6 @@
 import type { LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
-import Logo from "@/components/layout/Logo";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -39,8 +38,8 @@ export function resolveActiveHref(pathname: string, hrefs: readonly string[]): s
 interface SidebarProps<TItemLabelKey extends string, TGroupLabelKey extends string> {
   /** Where the logo links to (the portal's home). */
   homeHref: string;
-  /** Line under the wordmark, e.g. the portal name. */
-  subtitle?: string;
+  /** Brand mark rendered at the top of the sidebar (core has no knowledge of the app's Logo component). */
+  logo: ReactNode;
   /** Pinned under the logo — the tenant switcher on the dashboard. */
   top?: ReactNode;
   /** Grouped, config-driven navigation. */
@@ -54,7 +53,7 @@ interface SidebarProps<TItemLabelKey extends string, TGroupLabelKey extends stri
 /** The one dynamic sidebar: brand + optional switcher, grouped config-driven nav, pinned footer. Reused by every portal. */
 export default function Sidebar<TItemLabelKey extends string, TGroupLabelKey extends string>({
   homeHref,
-  subtitle,
+  logo,
   top,
   groups,
   label,
@@ -71,7 +70,7 @@ export default function Sidebar<TItemLabelKey extends string, TGroupLabelKey ext
     <div className="flex h-full flex-col">
       <div className="flex h-14 shrink-0 items-center px-4">
         <Link href={homeHref} className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring/60">
-          <Logo subtitle={subtitle} />
+          {logo}
         </Link>
       </div>
       {top ? <div className="px-3 pb-3">{top}</div> : null}

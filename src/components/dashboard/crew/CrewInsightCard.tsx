@@ -2,7 +2,7 @@
 
 import { useFormatter, useTranslations } from "next-intl";
 import { useMemo } from "react";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import {
   deriveSeverity,
   parseRecommendation,
@@ -11,10 +11,10 @@ import {
 import { cn } from "@/lib/utils";
 import type { CrewSeverity } from "@/types";
 
-const severityTone: Record<CrewSeverity, BadgeTone> = {
-  critical: "error",
-  warning: "warn",
-  info: "neutral",
+const severityToneClass: Record<CrewSeverity, string> = {
+  critical: "border-status-error/30 bg-status-error/10 text-status-error",
+  warning: "border-status-warn/30 bg-status-warn/10 text-status-warn",
+  info: "border-border bg-muted text-muted-foreground",
 };
 
 interface CrewInsightCardProps {
@@ -43,11 +43,15 @@ export default function CrewInsightCard({ item, fresh = false, now, tenantName }
       )}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <Badge tone={severityTone[severity]}>{t(`severity.${severity}`)}</Badge>
+        <Badge variant="outline" className={severityToneClass[severity]}>{t(`severity.${severity}`)}</Badge>
         <span className="text-xs text-foreground">{t("card.signals", { count: item.negativeCount })}</span>
-        {tenantName ? <Badge>{tenantName}</Badge> : null}
-        {item.repeats > 1 ? <Badge tone="violet">{t("card.repeated", { count: item.repeats })}</Badge> : null}
-        {fresh ? <Badge tone="success">{t("card.new")}</Badge> : null}
+        {tenantName ? <Badge variant="secondary">{tenantName}</Badge> : null}
+        {item.repeats > 1 ? <Badge variant="secondary">{t("card.repeated", { count: item.repeats })}</Badge> : null}
+        {fresh ? (
+          <Badge variant="outline" className="border-status-success/30 bg-status-success/10 text-status-success">
+            {t("card.new")}
+          </Badge>
+        ) : null}
         <time
           dateTime={item.createdAt}
           title={format.dateTime(created, { dateStyle: "medium", timeStyle: "medium" })}

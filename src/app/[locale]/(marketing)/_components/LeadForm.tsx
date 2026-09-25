@@ -16,7 +16,7 @@ type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
 const WORKING_MODES = ["hourly", "project", "either"] as const;
 
 const inputClass =
-  "w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-violet-dim";
+  "w-full rounded-control border border-subtle bg-surface-raised px-3 py-2 text-sm text-ink-primary outline-none transition-colors focus:border-ring";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide text-ink-muted";
 

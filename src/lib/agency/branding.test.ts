@@ -12,12 +12,12 @@ describe("parseAgencyBranding", () => {
     expect(
       parseAgencyBranding({
         logo_url: "https://cdn.acme.com/logo.svg",
-        primary_color: "#7c3aed",
+        primary_color: "#52525b",
         title: "  Acme AI  ",
       }),
     ).toEqual({
       logo_url: "https://cdn.acme.com/logo.svg",
-      primary_color: "#7c3aed",
+      primary_color: "#52525b",
       title: "Acme AI",
     });
   });
@@ -91,10 +91,10 @@ describe("getBrandingCssVars", () => {
   });
 
   it("sets the alias and the design-system variables", () => {
-    const vars = getBrandingCssVars({ primary_color: "#7c3aed" });
-    expect(vars["--primary-color"]).toBe("#7c3aed");
-    expect(vars["--primary"]).toBe("#7c3aed");
-    expect(vars["--ring"]).toBe("#7c3aed");
+    const vars = getBrandingCssVars({ primary_color: "#52525b" });
+    expect(vars["--primary-color"]).toBe("#52525b");
+    expect(vars["--primary"]).toBe("#52525b");
+    expect(vars["--ring"]).toBe("#52525b");
   });
 
   it("picks a readable foreground for dark and light colors", () => {

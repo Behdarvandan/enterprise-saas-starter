@@ -4,6 +4,7 @@ import { LayoutDashboard, Package, type LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { switchOrganization } from "@/app/[locale]/dashboard/actions";
 import AgentStatus from "@/components/layout/AgentStatus";
+import Logo from "@/components/layout/Logo";
 import { getDashboardNavGroups } from "@/components/layout/nav-config";
 import type { ModuleNavigationItem } from "@/core/registry";
 import Sidebar from "@/core/ui/shell/Sidebar";
@@ -48,6 +49,7 @@ export default function DashboardSidebar({
   return (
     <Sidebar
       homeHref="/dashboard"
+      logo={<Logo />}
       top={
         <TenantSwitcher
           organizations={organizations}

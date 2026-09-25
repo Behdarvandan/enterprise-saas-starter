@@ -5,12 +5,12 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/core/ui/primitives/button";
 import {
-  LiquidCard,
+  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/liquid/LiquidCard";
+} from "@/core/ui/primitives/card";
 import { Input } from "@/core/ui/primitives/input";
 import { Progress } from "@/core/ui/primitives/progress";
 import { formatMetricPercent } from "@/lib/format";
@@ -51,7 +51,7 @@ export default function RetrievalSimulator() {
   }
 
   return (
-    <LiquidCard>
+    <Card>
       <CardHeader>
         <CardTitle>{t("simulator.title")}</CardTitle>
         <CardDescription>{t("simulator.description")}</CardDescription>
@@ -107,6 +107,6 @@ export default function RetrievalSimulator() {
           </div>
         ) : null}
       </CardContent>
-    </LiquidCard>
+    </Card>
   );
 }

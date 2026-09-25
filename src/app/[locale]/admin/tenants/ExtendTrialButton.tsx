@@ -4,7 +4,6 @@ import { useState } from "react";
 import { CalendarClock, Loader2 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { extendTrialAction } from "./actions";
-import { LiquidButton } from "@/components/ui/liquid/LiquidButton";
 import {
   Dialog,
   DialogContent,
@@ -56,10 +55,10 @@ export function ExtendTrialButton({ organizationId, organizationName }: ExtendTr
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <LiquidButton type="button" size="sm" onClick={() => setOpen(true)}>
+      <Button type="button" variant="secondary" size="sm" onClick={() => setOpen(true)}>
         <CalendarClock aria-hidden className="size-3.5" />
         {t("extendTrial")}
-      </LiquidButton>
+      </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t("extendTrialDialogTitle", { name: organizationName })}</DialogTitle>

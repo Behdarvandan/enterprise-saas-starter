@@ -10,8 +10,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/core/ui/primitives/navigation-menu";
-import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
-import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Link } from "@/i18n/navigation";
 
 const PRODUCT_KEYS = ["digitalWorkforce", "knowledgeBase", "multiCompany", "whiteLabelPortal"] as const;
@@ -21,7 +21,7 @@ const SOLUTION_KEYS = ["enterprise", "agencies", "devTeams"] as const;
  * Payhawk-style floating capsule nav for the public marketing surface.
  * Intentionally theme-invariant (bg-neutral-950/80 regardless of light/dark
  * mode) — a deliberate dark-glass marketing-chrome pattern, not a bug to
- * "fix" toward the adaptive .liquid-surface treatment used elsewhere.
+ * "fix" toward the adaptive token-driven surfaces used elsewhere.
  */
 export default async function Header() {
   const t = await getTranslations("marketing.megaNav");
@@ -112,7 +112,7 @@ export default async function Header() {
 
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 lg:flex">
-            <LanguageSwitcher />
+            <LocaleSwitcher />
             <ThemeToggle />
             <Link
               href="/login"
@@ -120,7 +120,7 @@ export default async function Header() {
             >
               {tNav("signIn")}
             </Link>
-            <Button asChild variant="glow" size="sm">
+            <Button asChild variant="default" size="sm">
               <Link href="/solutions#quote">{t("requestDemo")}</Link>
             </Button>
           </div>

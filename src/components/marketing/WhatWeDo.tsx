@@ -25,7 +25,7 @@ export default async function WhatWeDo() {
             <Link
               key={key}
               href={`/product#${key}`}
-              className="liquid-surface block rounded-2xl border-transparent p-5 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10"
+              className="block rounded-2xl border border-border bg-card p-5 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-xl"
             >
               <Icon aria-hidden size={20} className="text-primary" />
               <h3 className="mt-3 text-sm font-semibold text-foreground">{t(`products.${key}.title`)}</h3>

@@ -10,7 +10,7 @@ import TextIngestForm from "@/components/dashboard/knowledge-base/TextIngestForm
 import UploadQueue from "@/components/dashboard/knowledge-base/UploadQueue";
 import { useDocuments } from "@/components/dashboard/knowledge-base/useDocuments";
 import { useUploadQueue } from "@/components/dashboard/knowledge-base/useUploadQueue";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/core/ui/primitives/tabs";
 import type { DocumentListItem } from "@/types";
 
@@ -33,7 +33,7 @@ export default function KnowledgeBasePanel({ documentLimit }: KnowledgeBasePanel
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
       <div className="grid content-start gap-6">
-        <LiquidCard className="p-5">
+        <Card className="p-5">
           <Tabs defaultValue="files">
             <TabsList>
               <TabsTrigger value="files">{t("tabs.files")}</TabsTrigger>
@@ -47,7 +47,7 @@ export default function KnowledgeBasePanel({ documentLimit }: KnowledgeBasePanel
             </TabsContent>
           </Tabs>
           <UploadQueue items={queue.items} onRetry={queue.retry} onDismiss={queue.dismiss} />
-        </LiquidCard>
+        </Card>
 
         <DocumentList
           documents={documents}

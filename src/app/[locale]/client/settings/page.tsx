@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import ProfileForm from "@/app/[locale]/dashboard/settings/profile/ProfileForm";
 import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/core/ui/primitives/tabs";
@@ -16,10 +16,10 @@ export const dynamic = "force-dynamic";
 const LICENSE_STATUSES = ["active", "suspended", "cancelled"] as const;
 type LicenseStatus = (typeof LICENSE_STATUSES)[number];
 
-const STATUS_TONE: Record<LicenseStatus, BadgeTone> = {
-  active: "success",
-  suspended: "warn",
-  cancelled: "error",
+const STATUS_VARIANT: Record<LicenseStatus, "default" | "secondary" | "destructive" | "outline"> = {
+  active: "default",
+  suspended: "secondary",
+  cancelled: "destructive",
 };
 
 function asLicenseStatus(value: string): LicenseStatus | null {
@@ -109,7 +109,7 @@ export default async function ClientSettingsPage() {
                     {knownTier ? tTiers(knownTier) : subscription.tier}
                   </p>
                 </div>
-                <Badge tone={licenseStatus ? STATUS_TONE[licenseStatus] : "neutral"}>
+                <Badge variant={licenseStatus ? STATUS_VARIANT[licenseStatus] : "outline"}>
                   {licenseStatus ? t(`license.status.${licenseStatus}`) : subscription.status}
                 </Badge>
               </div>

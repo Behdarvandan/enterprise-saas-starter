@@ -1,7 +1,7 @@
 import { Download, FileText, Receipt } from "lucide-react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import Badge, { type BadgeTone } from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Card } from "@/core/ui/primitives/card";
 import EmptyState from "@/components/ui/EmptyState";
 import {
@@ -17,12 +17,12 @@ import type { ClientProject } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_TONE: Record<KnownInvoiceStatus, BadgeTone> = {
-  draft: "neutral",
-  sent: "warn",
-  paid: "success",
-  overdue: "error",
-  void: "neutral",
+const STATUS_VARIANT: Record<KnownInvoiceStatus, "default" | "secondary" | "destructive" | "outline"> = {
+  draft: "outline",
+  sent: "secondary",
+  paid: "default",
+  overdue: "destructive",
+  void: "outline",
 };
 
 const INVOICE_STATUSES = ["draft", "sent", "paid", "overdue", "void"] as const;
@@ -96,7 +96,7 @@ export default async function ClientInvoicesPage() {
                         }).format(invoice.amount / 100)}
                       </TableCell>
                       <TableCell>
-                        <Badge tone={status ? STATUS_TONE[status] : "neutral"}>
+                        <Badge variant={status ? STATUS_VARIANT[status] : "outline"}>
                           {status ? t(`status.${status}`) : invoice.status}
                         </Badge>
                       </TableCell>

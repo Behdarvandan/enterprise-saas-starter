@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { createLemonSqueezyCheckoutAction } from "@/modules/billing/actions";
-import { LiquidButton } from "@/components/ui/liquid/LiquidButton";
+import { Button } from "@/core/ui/primitives/button";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
@@ -44,21 +43,14 @@ export function LemonSqueezyCheckoutButton({
   }
 
   return (
-    <LiquidButton
+    <Button
       type="button"
       size={size}
-      className={cn("w-full bg-primary text-primary-foreground hover:bg-primary-hover", className)}
+      className={cn("w-full", className)}
       onClick={handleClick}
-      disabled={loading}
+      loading={loading}
     >
-      {loading ? (
-        <>
-          <Loader2 aria-hidden className="size-4 animate-spin" />
-          {t("redirecting")}
-        </>
-      ) : (
-        label
-      )}
-    </LiquidButton>
+      {loading ? t("redirecting") : label}
+    </Button>
   );
 }

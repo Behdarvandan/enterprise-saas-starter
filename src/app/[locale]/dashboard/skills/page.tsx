@@ -2,9 +2,9 @@ import { Building2 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import SkillMatrix, { type SkillRow } from "@/components/dashboard/skills/SkillMatrix";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { Card } from "@/core/ui/primitives/card";
 import { Link } from "@/i18n/navigation";
 import { requireMembership } from "@/lib/auth";
 import { getOrganizationSnapshot } from "@/lib/dashboard/queries";
@@ -53,7 +53,7 @@ export default async function SkillsPage() {
       <PageHeader
         title={t("title")}
         description={t("description")}
-        actions={<Badge tone="violet">{t("currentPlan", { plan: t(`tiers.${tier}`) })}</Badge>}
+        actions={<Badge>{t("currentPlan", { plan: t(`tiers.${tier}`) })}</Badge>}
       />
 
       {canManage ? null : (
@@ -65,7 +65,7 @@ export default async function SkillsPage() {
       <SkillMatrix skills={rows} canManage={canManage} />
 
       {tier === "enterprise" ? null : (
-        <LiquidCard className="flex flex-wrap items-center gap-4 border-amber-500/20 p-5">
+        <Card className="flex flex-wrap items-center gap-4 border-amber-500/20 p-5">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
             <Building2 aria-hidden className="size-5" />
           </div>
@@ -76,7 +76,7 @@ export default async function SkillsPage() {
           <Button asChild variant="secondary" size="sm">
             <Link href={salesHref}>{t("enterprise.cta")}</Link>
           </Button>
-        </LiquidCard>
+        </Card>
       )}
     </PageContainer>
   );

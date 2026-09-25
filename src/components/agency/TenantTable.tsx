@@ -4,7 +4,7 @@ import { Gauge, SlidersHorizontal, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useSkillLabel } from "@/components/dashboard/skills/useSkillLabel";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/core/ui/primitives/badge";
 import { Button } from "@/core/ui/primitives/button";
 import {
   Table,
@@ -84,7 +84,7 @@ export default function TenantTable({ tenants, allowedSkills, poolUnallocated }:
                   </TableCell>
                   <TableCell>
                     {noAllocation ? (
-                      <Badge tone="warn">{t("noAllocation")}</Badge>
+                      <Badge variant="secondary">{t("noAllocation")}</Badge>
                     ) : (
                       <div className="space-y-1.5">
                         <QuotaMeter percent={percent} label={t("consumption", { name: tenant.name })} />
@@ -109,7 +109,9 @@ export default function TenantTable({ tenants, allowedSkills, poolUnallocated }:
                     ) : (
                       <div className="flex flex-wrap gap-1">
                         {tenant.enabledSkills.map((skill) => (
-                          <Badge key={skill}>{skillLabel(skill).title}</Badge>
+                          <Badge key={skill} variant="outline">
+                            {skillLabel(skill).title}
+                          </Badge>
                         ))}
                       </div>
                     )}

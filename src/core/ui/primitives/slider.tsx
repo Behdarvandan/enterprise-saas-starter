@@ -25,10 +25,10 @@ function Slider({
       )}
       {...props}
     >
-      <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-slate-800">
+      <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-secondary">
         <SliderPrimitive.Range className="absolute h-full bg-primary" />
       </SliderPrimitive.Track>
-      <SliderPrimitive.Thumb aria-label={thumbLabel} className="block size-5 rounded-full border-2 border-primary bg-slate-950 shadow-[0_0_0_4px_rgba(100,116,139,0.15)] transition-[box-shadow] duration-150 outline-none hover:shadow-[0_0_0_6px_rgba(100,116,139,0.25)] focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" />
+      <SliderPrimitive.Thumb aria-label={thumbLabel} className="block size-5 rounded-full border-2 border-primary bg-background shadow-[0_0_0_4px_rgba(100,116,139,0.15)] transition-[box-shadow] duration-150 outline-none hover:shadow-[0_0_0_6px_rgba(100,116,139,0.25)] focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
     </SliderPrimitive.Root>
   )
 }
