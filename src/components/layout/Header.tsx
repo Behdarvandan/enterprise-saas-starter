@@ -1,60 +1,130 @@
 import { getTranslations } from "next-intl/server";
 import Logo from "@/components/layout/Logo";
-import MobileNav, { type MarketingNavLink } from "@/components/layout/MobileNav";
+import MobileNav from "@/components/layout/MobileNav";
 import { Button } from "@/core/ui/primitives/button";
-import { LiquidButton } from "@/components/ui/liquid/LiquidButton";
-import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/core/ui/primitives/navigation-menu";
 import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
-import LiveDot from "@/components/ui/LiveDot";
+import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
 import { Link } from "@/i18n/navigation";
 
-/** Liquid Glass navbar of the public marketing surface. */
-export default async function Header() {
-  const t = await getTranslations("marketing.landing.nav");
+const PRODUCT_KEYS = ["digitalWorkforce", "knowledgeBase", "multiCompany", "whiteLabelPortal"] as const;
+const SOLUTION_KEYS = ["enterprise", "agencies", "devTeams"] as const;
 
-  const links: MarketingNavLink[] = [
-    { href: "/#capabilities", label: t("capabilities") },
-    { href: "/#pricing", label: t("pricing") },
-    { href: "/#agency", label: t("agency") },
-  ];
+/**
+ * Payhawk-style floating capsule nav for the public marketing surface.
+ * Intentionally theme-invariant (bg-neutral-950/80 regardless of light/dark
+ * mode) — a deliberate dark-glass marketing-chrome pattern, not a bug to
+ * "fix" toward the adaptive .liquid-surface treatment used elsewhere.
+ */
+export default async function Header() {
+  const t = await getTranslations("marketing.megaNav");
+  const tNav = await getTranslations("marketing.landing.nav");
 
   return (
-    <header className="liquid-surface sticky top-0 z-50 w-full rounded-none">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="rounded-lg focus-visible:ring-2 focus-visible:ring-ring/60">
-            <Logo />
-          </Link>
-          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-secondary/60 px-2.5 py-1 text-[11px] font-medium text-muted-foreground sm:inline-flex">
-            <LiveDot />
-            {t("agentOs")}
-          </span>
-        </div>
+    <header className="fixed left-1/2 top-6 z-50 w-[92%] max-w-7xl -translate-x-1/2 rounded-full border border-white/10 bg-neutral-950/80 px-8 py-3.5 shadow-2xl backdrop-blur-2xl">
+      <div className="flex items-center justify-between gap-4">
+        <Link href="/" className="rounded-lg focus-visible:ring-2 focus-visible:ring-ring/60">
+          <Logo iconless />
+        </Link>
 
-        <nav aria-label={t("primaryNav")} className="hidden items-center gap-1 lg:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <NavigationMenu viewport className="hidden lg:flex" delayDuration={100}>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>{t("productsEyebrow")}</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[min(90vw,56rem)] grid-cols-4 gap-2 p-4">
+                  {PRODUCT_KEYS.map((key) => (
+                    <li key={key}>
+                      <NavigationMenuLink asChild>
+                        <Link href={`/product#${key}`}>
+                          <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                            {t(`products.${key}.tag`)}
+                          </span>
+                          <span className="font-semibold text-white">{t(`products.${key}.title`)}</span>
+                          <span className="text-slate-400">{t(`products.${key}.description`)}</span>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>{t("solutionsEyebrow")}</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[min(90vw,42rem)] grid-cols-3 gap-2 p-4">
+                  {SOLUTION_KEYS.map((key) => (
+                    <li key={key}>
+                      <NavigationMenuLink asChild>
+                        <Link href={`/solutions#${key}`}>
+                          <span className="font-semibold text-white">{t(`solutions.${key}.title`)}</span>
+                          <span className="text-slate-400">{t(`solutions.${key}.description`)}</span>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link
+                  href="/customers"
+                  className="inline-flex h-9 items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-ring/60"
+                >
+                  {t("customers")}
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link
+                  href="/resources"
+                  className="inline-flex h-9 items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-ring/60"
+                >
+                  {t("resources")}
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link
+                  href="/pricing"
+                  className="inline-flex h-9 items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-ring/60"
+                >
+                  {t("pricing")}
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
 
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 lg:flex">
             <LanguageSwitcher />
             <ThemeToggle />
-            <LiquidButton asChild size="sm">
-              <Link href="/login">{t("signIn")}</Link>
-            </LiquidButton>
+            <Link
+              href="/login"
+              className="px-2 text-sm font-medium text-slate-300 transition-colors hover:text-white"
+            >
+              {tNav("signIn")}
+            </Link>
             <Button asChild variant="glow" size="sm">
-              <Link href="/signup">{t("startFree")}</Link>
+              <Link href="/services#quote">{t("requestDemo")}</Link>
             </Button>
           </div>
-          <MobileNav links={links} />
+          <MobileNav />
         </div>
       </div>
     </header>

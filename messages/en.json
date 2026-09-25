@@ -383,6 +383,50 @@
           "unreachable": "Status unavailable"
         }
       }
+    },
+    "megaNav": {
+      "productsEyebrow": "Products",
+      "products": {
+        "digitalWorkforce": {
+          "title": "Digital Workforce",
+          "tag": "Autonomous AI Assistants",
+          "description": "Autonomous AI assistants that respond to your customers around the clock."
+        },
+        "knowledgeBase": {
+          "title": "Smart Knowledge Base",
+          "tag": "Document Search Engine",
+          "description": "A search engine grounded in your own documents, finding the right answer instantly."
+        },
+        "multiCompany": {
+          "title": "Multi-Company Management",
+          "tag": "Security & Isolation",
+          "description": "Every company's data is fully isolated from the others, secured at the database level."
+        },
+        "whiteLabelPortal": {
+          "title": "White-Label Portal",
+          "tag": "Branding & Domain Management",
+          "description": "Your own brand, your own domain — the platform stays behind the scenes."
+        }
+      },
+      "solutionsEyebrow": "Solutions",
+      "solutions": {
+        "enterprise": {
+          "title": "Enterprise Companies",
+          "description": "Digitize your business processes and free your team from repetitive work."
+        },
+        "agencies": {
+          "title": "Agencies",
+          "description": "Serve your clients under your own brand while the platform runs behind the scenes."
+        },
+        "devTeams": {
+          "title": "Dev Teams",
+          "description": "Integrate into your own product and extend it with the API."
+        }
+      },
+      "customers": "Customers",
+      "resources": "Resources",
+      "pricing": "Pricing",
+      "requestDemo": "Request a demo"
     }
   },
   "auth": {

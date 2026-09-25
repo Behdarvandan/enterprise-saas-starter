@@ -383,6 +383,50 @@
           "unreachable": "Durum alınamadı"
         }
       }
+    },
+    "megaNav": {
+      "productsEyebrow": "Ürünler",
+      "products": {
+        "digitalWorkforce": {
+          "title": "Dijital İş Gücü",
+          "tag": "Otonom AI Asistanları",
+          "description": "7/24 çalışan otonom AI asistanları müşterilerinize yanıt verir."
+        },
+        "knowledgeBase": {
+          "title": "Akıllı Bilgi Bankası",
+          "tag": "Doküman Arama Motoru",
+          "description": "Kendi dokümanlarınızdan beslenen bir arama motoru, doğru cevabı anında bulur."
+        },
+        "multiCompany": {
+          "title": "Çoklu Şirket Yönetimi",
+          "tag": "Güvenlik & İzolasyon",
+          "description": "Her şirketin verisi birbirinden tamamen izole, veritabanı seviyesinde güvenli."
+        },
+        "whiteLabelPortal": {
+          "title": "Markaya Özel Portal",
+          "tag": "White-Label & Domain Yönetimi",
+          "description": "Kendi markanız, kendi alan adınız — platform arka planda kalır."
+        }
+      },
+      "solutionsEyebrow": "Çözümler",
+      "solutions": {
+        "enterprise": {
+          "title": "Kurumsal Şirketler",
+          "description": "İş süreçlerinizi dijitalleştirin, ekibinizi tekrarlayan işlerden kurtarın."
+        },
+        "agencies": {
+          "title": "Ajanslar",
+          "description": "Kendi markanızla müşterilerinize hizmet sunun, platformu arka planda kullanın."
+        },
+        "devTeams": {
+          "title": "Yazılım Ekipleri",
+          "description": "Kendi ürününüze entegre edin, API ile genişletin."
+        }
+      },
+      "customers": "Müşteriler",
+      "resources": "Kaynaklar",
+      "pricing": "Fiyatlandırma",
+      "requestDemo": "Demo İsteyin"
     }
   },
   "auth": {

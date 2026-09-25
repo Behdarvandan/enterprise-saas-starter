@@ -1,60 +1,91 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Logo from "@/components/layout/Logo";
 import { Button } from "@/core/ui/primitives/button";
 import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
-import LiveDot from "@/components/ui/LiveDot";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/core/ui/primitives/sheet";
 import { Link } from "@/i18n/navigation";
 
-export interface MarketingNavLink {
-  href: string;
-  label: string;
-}
+const PRODUCT_KEYS = ["digitalWorkforce", "knowledgeBase", "multiCompany", "whiteLabelPortal"] as const;
+const SOLUTION_KEYS = ["enterprise", "agencies", "devTeams"] as const;
 
-interface MobileNavProps {
-  links: readonly MarketingNavLink[];
-}
-
-/** Hamburger drawer for the marketing header below the `md` breakpoint. */
-export default function MobileNav({ links }: MobileNavProps) {
-  const t = useTranslations("marketing.landing.nav");
+/** Hamburger drawer for the marketing header below the `lg` breakpoint. */
+export default function MobileNav() {
+  const t = useTranslations("marketing.megaNav");
+  const tNav = useTranslations("marketing.landing.nav");
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t("openMenu")}>
+        <Button variant="ghost" size="icon" className="lg:hidden text-slate-300 hover:bg-white/5 hover:text-white" aria-label={tNav("openMenu")}>
           <Menu aria-hidden />
         </Button>
       </SheetTrigger>
-      <SheetContent side="end" variant="liquid" className="sm:max-w-sm">
+      <SheetContent side="end" variant="default" className="border-white/10 bg-neutral-950 text-white sm:max-w-sm">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <Logo />
+          <SheetTitle className="text-white">
+            <Logo iconless />
           </SheetTitle>
-          <SheetDescription className="flex items-center gap-1.5">
-            <LiveDot />
-            {t("agentOs")}
-          </SheetDescription>
         </SheetHeader>
 
-        <nav aria-label={t("menuTitle")} className="mt-2 grid gap-1">
-          {links.map((link) => (
+        <nav aria-label={tNav("menuTitle")} className="mt-2 flex flex-1 flex-col gap-1 overflow-y-auto">
+          <details className="group rounded-lg">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-lg px-3 py-3 text-base font-medium text-white transition-colors hover:bg-white/5">
+              {t("productsEyebrow")}
+              <ChevronDown aria-hidden className="size-4 text-slate-400 transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="grid gap-1 py-1 ps-3">
+              {PRODUCT_KEYS.map((key) => (
+                <SheetClose asChild key={key}>
+                  <Link
+                    href={`/product#${key}`}
+                    className="flex min-h-11 flex-col justify-center rounded-lg px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                  >
+                    {t(`products.${key}.title`)}
+                  </Link>
+                </SheetClose>
+              ))}
+            </div>
+          </details>
+
+          <details className="group rounded-lg">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-lg px-3 py-3 text-base font-medium text-white transition-colors hover:bg-white/5">
+              {t("solutionsEyebrow")}
+              <ChevronDown aria-hidden className="size-4 text-slate-400 transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="grid gap-1 py-1 ps-3">
+              {SOLUTION_KEYS.map((key) => (
+                <SheetClose asChild key={key}>
+                  <Link
+                    href={`/solutions#${key}`}
+                    className="flex min-h-11 flex-col justify-center rounded-lg px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                  >
+                    {t(`solutions.${key}.title`)}
+                  </Link>
+                </SheetClose>
+              ))}
+            </div>
+          </details>
+
+          {[
+            { href: "/customers", label: t("customers") },
+            { href: "/resources", label: t("resources") },
+            { href: "/pricing", label: t("pricing") },
+          ].map((link) => (
             <SheetClose asChild key={link.href}>
               <Link
                 href={link.href}
-                className="flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-secondary/60 focus-visible:ring-2 focus-visible:ring-ring/60"
+                className="flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-medium text-white transition-colors hover:bg-white/5"
               >
                 {link.label}
               </Link>
@@ -69,12 +100,12 @@ export default function MobileNav({ links }: MobileNavProps) {
           </div>
           <SheetClose asChild>
             <Button asChild variant="secondary" size="lg">
-              <Link href="/login">{t("signIn")}</Link>
+              <Link href="/login">{tNav("signIn")}</Link>
             </Button>
           </SheetClose>
           <SheetClose asChild>
             <Button asChild variant="glow" size="lg">
-              <Link href="/signup">{t("startFree")}</Link>
+              <Link href="/services#quote">{t("requestDemo")}</Link>
             </Button>
           </SheetClose>
         </div>

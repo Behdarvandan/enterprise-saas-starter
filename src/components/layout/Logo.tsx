@@ -31,6 +31,14 @@ interface LogoProps {
   className?: string;
   /** Optional line rendered under the wordmark (e.g. "Admin", "Client portal"). */
   subtitle?: string;
+  /**
+   * Drops the icon badge for a pure typographic wordmark on the default
+   * (non-white-labelled) mark — used by the marketing header's floating
+   * capsule nav, where a plain "Pasargad" reads cleaner than icon + text.
+   * Has no effect on the white-label branch: an agency's custom logo_url
+   * image still renders exactly as it does everywhere else.
+   */
+  iconless?: boolean;
 }
 
 /**
@@ -38,7 +46,7 @@ interface LogoProps {
  * agency's custom domain (see AgencyBrandingProvider) it shows the agency's
  * own logo/title instead; everywhere else it is the default Pasargad mark.
  */
-export default function Logo({ className, subtitle }: LogoProps) {
+export default function Logo({ className, subtitle, iconless = false }: LogoProps) {
   const branding = useAgencyBranding();
   const logoUrl = branding?.logo_url;
   // A white-labelled logo must never sit next to the "Pasargad" wordmark: with
@@ -56,7 +64,7 @@ export default function Logo({ className, subtitle }: LogoProps) {
           alt={branding?.title ?? ""}
           className="h-8 w-auto max-w-32 shrink-0 object-contain"
         />
-      ) : (
+      ) : iconless ? null : (
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-zinc-950/50">
           <LogoMark className="h-4 w-4" />
         </div>
@@ -64,7 +72,12 @@ export default function Logo({ className, subtitle }: LogoProps) {
       {name || subtitle ? (
         <div>
           {name ? (
-            <span className="block text-sm font-semibold tracking-tight text-slate-100">
+            <span
+              className={cn(
+                "block font-semibold tracking-tight text-slate-100",
+                iconless && !logoUrl ? "text-2xl font-bold" : "text-sm",
+              )}
+            >
               {name}
             </span>
           ) : null}

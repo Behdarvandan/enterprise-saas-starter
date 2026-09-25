@@ -383,6 +383,50 @@
           "unreachable": "Status nicht verfügbar"
         }
       }
+    },
+    "megaNav": {
+      "productsEyebrow": "Produkte",
+      "products": {
+        "digitalWorkforce": {
+          "title": "Digitale Belegschaft",
+          "tag": "Autonome KI-Assistenten",
+          "description": "Autonome KI-Assistenten, die rund um die Uhr auf Ihre Kunden reagieren."
+        },
+        "knowledgeBase": {
+          "title": "Intelligente Wissensdatenbank",
+          "tag": "Dokumenten-Suchmaschine",
+          "description": "Eine Suchmaschine, die auf Ihren eigenen Dokumenten basiert und sofort die richtige Antwort findet."
+        },
+        "multiCompany": {
+          "title": "Multi-Unternehmensverwaltung",
+          "tag": "Sicherheit & Isolierung",
+          "description": "Die Daten jedes Unternehmens sind vollständig voneinander isoliert und auf Datenbankebene gesichert."
+        },
+        "whiteLabelPortal": {
+          "title": "White-Label-Portal",
+          "tag": "Branding & Domainverwaltung",
+          "description": "Ihre eigene Marke, Ihre eigene Domain — die Plattform bleibt im Hintergrund."
+        }
+      },
+      "solutionsEyebrow": "Lösungen",
+      "solutions": {
+        "enterprise": {
+          "title": "Unternehmen",
+          "description": "Digitalisieren Sie Ihre Geschäftsprozesse und befreien Sie Ihr Team von sich wiederholenden Aufgaben."
+        },
+        "agencies": {
+          "title": "Agenturen",
+          "description": "Betreuen Sie Ihre Kunden unter Ihrer eigenen Marke, während die Plattform im Hintergrund läuft."
+        },
+        "devTeams": {
+          "title": "Entwicklerteams",
+          "description": "Integrieren Sie es in Ihr eigenes Produkt und erweitern Sie es über die API."
+        }
+      },
+      "customers": "Kunden",
+      "resources": "Ressourcen",
+      "pricing": "Preise",
+      "requestDemo": "Demo anfordern"
     }
   },
   "auth": {

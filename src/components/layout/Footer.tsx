@@ -48,14 +48,14 @@ export default async function Footer() {
   ];
 
   return (
-    <footer className="border-t border-border bg-background">
+    <footer className="border-t border-white/10 bg-neutral-950 text-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
           <div className="col-span-2">
             <Link href="/" className="inline-block rounded-lg focus-visible:ring-2 focus-visible:ring-ring/60">
-              <Logo />
+              <Logo iconless />
             </Link>
-            <p className="mt-4 max-w-sm text-sm text-muted-foreground">{t("tagline")}</p>
+            <p className="mt-4 max-w-sm text-sm text-slate-400">{t("tagline")}</p>
             <div className="mt-5">
               <SystemStatus />
             </div>
@@ -63,7 +63,7 @@ export default async function Footer() {
 
           {columns.map((column) => (
             <nav key={column.heading} aria-label={column.heading}>
-              <p className="text-xs font-semibold uppercase tracking-widest text-foreground/80">
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
                 {column.heading}
               </p>
               <ul className="mt-4 space-y-2.5">
@@ -71,7 +71,7 @@ export default async function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
+                      className="text-sm text-slate-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-ring/60"
                     >
                       {link.label}
                     </Link>
@@ -82,11 +82,11 @@ export default async function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">{t("copyright", { year: new Date().getFullYear() })}</p>
+        <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-slate-500">{t("copyright", { year: new Date().getFullYear() })}</p>
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
+            className="text-xs font-medium text-slate-500 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-ring/60"
           >
             {CONTACT_EMAIL}
           </a>
