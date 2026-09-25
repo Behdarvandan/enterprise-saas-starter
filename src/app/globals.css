@@ -209,22 +209,6 @@
   --sidebar-ring: #a1a1aa;
 }
 
-/* Public marketing surface — the landing page and the pages that share the
-   marketing layout (pricing, services, auth). Only re-points the surface
-   tokens, so the dashboard/admin/agency portals are untouched and the agency
-   white-label `--primary*` override still applies. */
-.marketing-surface {
-  --background: #f6f6fb;
-  --card: rgb(255 255 255 / 0.55);
-  --border: rgb(15 23 42 / 0.08);
-}
-
-.dark .marketing-surface {
-  --background: #0b0f17;
-  --card: rgb(19 27 46 / 0.5);
-  --border: rgb(30 41 59 / 0.8);
-}
-
 @layer base {
   html {
     @apply font-sans;
@@ -307,16 +291,6 @@
 }
 
 @layer utilities {
-  /* Hairline grid faded out towards the edges — hero/section backdrop. */
-  .marketing-grid {
-    background-image:
-      linear-gradient(to right, rgb(148 163 184 / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(148 163 184 / 0.06) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 80%);
-  }
-
   /* Liquid Glass surface: frosted material with an inner specular highlight
      and an inset edge highlight, approximating Apple's Liquid Glass on the
      web via backdrop-filter (there is no official web CSS for it). Reads
