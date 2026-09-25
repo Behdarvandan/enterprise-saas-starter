@@ -6,6 +6,7 @@ import Hero from "@/components/marketing/Hero";
 import PricingSection from "@/components/marketing/PricingSection";
 import RoiSection from "@/components/marketing/RoiSection";
 import TrustStrip from "@/components/marketing/TrustStrip";
+import WhatWeDo from "@/components/marketing/WhatWeDo";
 import WhiteLabelSection from "@/components/marketing/WhiteLabelSection";
 import { getAgencyContext } from "@/lib/agency/context";
 import type { Locale } from "@/i18n/routing";
@@ -31,6 +32,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <WhatWeDo />
       <TrustStrip />
       <RoiSection />
       <DualCrew />
