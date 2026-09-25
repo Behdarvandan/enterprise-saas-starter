@@ -83,3 +83,4 @@ repomix-output.txt
 
 # local Claude Code guidance (never shared/committed)
 CLAUDE.local.md
+.claude/
