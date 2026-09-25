@@ -5,7 +5,7 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import Badge from "@/components/ui/Badge";
 import { Button } from "@/core/ui/primitives/button";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import { Checkbox } from "@/core/ui/primitives/checkbox";
 import {
   Dialog,
@@ -98,16 +98,16 @@ export default function DocumentList({
       : t("list.count", { count: formatMetricNumber(locale, rows.length), limit: formatMetricNumber(locale, limit) });
 
   return (
-    <Card>
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 px-5 py-4">
+    <LiquidCard>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
         <div>
-          <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("list.title")}</h2>
-          {documents ? <p className="mt-0.5 text-xs text-slate-400">{countLabel}</p> : null}
+          <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("list.title")}</h2>
+          {documents ? <p className="mt-0.5 text-xs text-muted-foreground">{countLabel}</p> : null}
         </div>
 
         {selectedIds.length > 0 ? (
           <div role="toolbar" aria-label={t("list.bulkActions")} className="flex items-center gap-2">
-            <span className="text-xs text-slate-300">{t("list.selected", { count: selectedIds.length })}</span>
+            <span className="text-xs text-foreground">{t("list.selected", { count: selectedIds.length })}</span>
             <Button variant="ghost" size="sm" onClick={() => setSelected(new Set())}>
               {t("list.clearSelection")}
             </Button>
@@ -173,11 +173,11 @@ export default function DocumentList({
                   <TableCell className="max-w-64">
                     <div className="flex items-center gap-2">
                       {doc.sourceType === "file" ? (
-                        <FileText aria-hidden className="size-4 shrink-0 text-slate-500" />
+                        <FileText aria-hidden className="size-4 shrink-0 text-muted-foreground" />
                       ) : (
-                        <TypeIcon aria-hidden className="size-4 shrink-0 text-slate-500" />
+                        <TypeIcon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
                       )}
-                      <span className="truncate font-medium text-slate-100">{doc.title}</span>
+                      <span className="truncate font-medium text-foreground">{doc.title}</span>
                     </div>
                     {doc.status === "failed" && doc.error ? (
                       <p className="mt-0.5 truncate ps-6 text-xs text-red-300" title={doc.error}>
@@ -191,13 +191,13 @@ export default function DocumentList({
                       {t(`list.status.${doc.status}`)}
                     </Badge>
                   </TableCell>
-                  <TableCell dir="ltr" className="text-end font-mono text-xs text-slate-300">
+                  <TableCell dir="ltr" className="text-end font-mono text-xs text-foreground">
                     {formatMetricNumber(locale, doc.chunkCount)}
                   </TableCell>
-                  <TableCell dir="ltr" className="text-end font-mono text-xs text-slate-400">
+                  <TableCell dir="ltr" className="text-end font-mono text-xs text-muted-foreground">
                     {doc.byteSize === null ? "—" : formatBytes(locale, doc.byteSize)}
                   </TableCell>
-                  <TableCell className="text-xs text-slate-400">
+                  <TableCell className="text-xs text-muted-foreground">
                     {format.dateTime(new Date(doc.createdAt), { dateStyle: "medium" })}
                   </TableCell>
                   <TableCell>
@@ -246,6 +246,6 @@ export default function DocumentList({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </Card>
+    </LiquidCard>
   );
 }

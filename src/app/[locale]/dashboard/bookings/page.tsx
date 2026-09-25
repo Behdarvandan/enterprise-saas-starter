@@ -3,7 +3,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import AppointmentStatusBadge from "@/components/dashboard/AppointmentStatusBadge";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import { Button } from "@/core/ui/primitives/button";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import EmptyState from "@/components/ui/EmptyState";
 import { Input } from "@/core/ui/primitives/input";
 import { Label } from "@/core/ui/primitives/label";
@@ -74,31 +74,31 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
   function AppointmentRow({ appointment }: { appointment: Appointment }) {
     const isActive = appointment.status === "confirmed" || appointment.status === "pending";
     return (
-      <Card variant="item" className="p-4 sm:p-5">
+      <LiquidCard variant="item" className="p-4 sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <p className="text-sm font-semibold text-slate-100">{appointment.customer_name}</p>
+              <p className="text-sm font-semibold text-foreground">{appointment.customer_name}</p>
               <AppointmentStatusBadge status={appointment.status} />
             </div>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-muted-foreground">
               {serviceMap.get(appointment.service_id) ?? t("fallbackService")}
             </p>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-muted-foreground">
               {t("when", {
                 date: formatDay(appointment.start_time),
                 start: formatTime(appointment.start_time),
                 end: formatTime(appointment.end_time),
               })}
             </p>
-            <p dir="ltr" className="mt-1 text-start text-xs text-slate-400">
+            <p dir="ltr" className="mt-1 text-start text-xs text-muted-foreground">
               {appointment.customer_email}
               {appointment.customer_phone ? ` · ${appointment.customer_phone}` : ""}
             </p>
           </div>
           {isActive ? <AppointmentActions appointmentId={appointment.id} /> : null}
         </div>
-      </Card>
+      </LiquidCard>
     );
   }
 
@@ -106,7 +106,7 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
     <PageContainer className="max-w-5xl">
       <PageHeader title={t("title")} description={t("description")} />
 
-      <Card className="p-5">
+      <LiquidCard className="p-5">
         <form method="get" action="/dashboard/bookings" className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="grid flex-1 gap-1.5">
             <Label htmlFor="status">{t("filter.status")}</Label>
@@ -130,14 +130,14 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
             </Button>
           ) : null}
         </form>
-      </Card>
+      </LiquidCard>
 
       <section>
-        <h2 className="mb-3 text-sm font-semibold tracking-tight text-slate-100">
+        <h2 className="mb-3 text-sm font-semibold tracking-tight text-foreground">
           {t("upcoming", { count: upcoming.length })}
         </h2>
         {upcoming.length === 0 ? (
-          <Card>
+          <LiquidCard>
             <EmptyState
               icon={CalendarX2}
               title={isFiltered ? t("emptyFilteredTitle") : t("emptyUpcomingTitle")}
@@ -150,13 +150,13 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
               }
               action={
                 isFiltered ? (
-                  <Link href="/dashboard/bookings" className="mt-2 text-sm font-medium text-violet-300 hover:text-violet-200">
+                  <Link href="/dashboard/bookings" className="mt-2 text-sm font-medium text-primary hover:text-primary">
                     {t("filter.resetFilter")}
                   </Link>
                 ) : undefined
               }
             />
-          </Card>
+          </LiquidCard>
         ) : (
           <div className="space-y-3">
             {upcoming.map((appointment) => (
@@ -167,13 +167,13 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
       </section>
 
       <section>
-        <h2 className="mb-3 text-sm font-semibold tracking-tight text-slate-100">
+        <h2 className="mb-3 text-sm font-semibold tracking-tight text-foreground">
           {t("past", { count: past.length })}
         </h2>
         {past.length === 0 ? (
-          <Card>
+          <LiquidCard>
             <EmptyState icon={CalendarX2} title={t("emptyPastTitle")} description={t("emptyPastDescription")} />
-          </Card>
+          </LiquidCard>
         ) : (
           <div className="space-y-3">
             {past.map((appointment) => (

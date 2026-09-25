@@ -31,6 +31,72 @@ export function verifyLemonSqueezySignature(rawBody: string, signatureHeader: st
   return timingSafeEqual(expectedBuffer, receivedBuffer);
 }
 
+export interface LemonSqueezyInvoice {
+  id: string;
+  status: string;
+  total: number;
+  currency: string;
+  createdAt: string;
+  invoiceUrl: string | null;
+}
+
+interface LemonSqueezyInvoiceListResponse {
+  data?: {
+    id: string;
+    attributes?: {
+      status?: string;
+      total?: number;
+      currency?: string;
+      created_at?: string;
+      urls?: { invoice_url?: string };
+    };
+  }[];
+}
+
+/**
+ * Billing history for a subscription, from Lemon Squeezy's own API (this
+ * codebase keeps no local invoice ledger for SaaS billing). Never throws —
+ * billing history is UI chrome, not something a fetch failure should take
+ * the whole billing page down for — so any missing config or request
+ * failure degrades to an empty list, logged for operators to notice.
+ */
+export async function getLemonSqueezyInvoices(subscriptionId: string): Promise<LemonSqueezyInvoice[]> {
+  const apiKey = getLemonSqueezyApiKey();
+  if (!apiKey || !subscriptionId) return [];
+
+  try {
+    const response = await fetch(
+      `https://api.lemonsqueezy.com/v1/subscription-invoices?filter[subscription_id]=${encodeURIComponent(subscriptionId)}&page[size]=20&sort=-created_at`,
+      {
+        headers: {
+          Accept: "application/vnd.api+json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        // Invoice history changes infrequently; avoid hitting the API on every render.
+        next: { revalidate: 300 },
+      },
+    );
+
+    if (!response.ok) {
+      console.error("[billing] Lemon Squeezy invoice list request failed:", response.status);
+      return [];
+    }
+
+    const json = (await response.json().catch(() => null)) as LemonSqueezyInvoiceListResponse | null;
+    return (json?.data ?? []).map((item) => ({
+      id: item.id,
+      status: item.attributes?.status ?? "unknown",
+      total: item.attributes?.total ?? 0,
+      currency: item.attributes?.currency ?? "USD",
+      createdAt: item.attributes?.created_at ?? new Date(0).toISOString(),
+      invoiceUrl: item.attributes?.urls?.invoice_url ?? null,
+    }));
+  } catch (error) {
+    console.error("[billing] Lemon Squeezy invoice list request failed:", error);
+    return [];
+  }
+}
+
 export interface LemonSqueezyWebhookPayload {
   meta?: {
     event_name?: string;

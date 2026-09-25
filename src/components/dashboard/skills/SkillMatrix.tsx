@@ -7,7 +7,7 @@ import { updateEnabledSkills } from "@/app/[locale]/dashboard/skills/actions";
 import SkillConfigDialog from "@/components/dashboard/skills/SkillConfigDialog";
 import Badge, { type BadgeTone } from "@/components/ui/Badge";
 import { Button } from "@/core/ui/primitives/button";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import { Switch } from "@/core/ui/primitives/switch";
 import { Link } from "@/i18n/navigation";
 import type { PlanTier } from "@/lib/plans";
@@ -88,7 +88,7 @@ export default function SkillMatrix({ skills, canManage }: SkillMatrixProps) {
 
           return (
             <li key={skill.id}>
-              <Card
+              <LiquidCard
                 variant="item"
                 className={cn("flex flex-wrap items-center gap-4 p-4 sm:flex-nowrap", !skill.unlocked && "opacity-90")}
               >
@@ -96,7 +96,7 @@ export default function SkillMatrix({ skills, canManage }: SkillMatrixProps) {
                   aria-hidden
                   className={cn(
                     "flex size-10 shrink-0 items-center justify-center rounded-lg",
-                    skill.unlocked ? "bg-violet-500/15 text-violet-300" : "bg-slate-800 text-slate-500",
+                    skill.unlocked ? "bg-primary/15 text-primary" : "bg-secondary text-muted-foreground",
                   )}
                 >
                   {skill.unlocked ? <Icon className="size-5" /> : <Lock className="size-5" />}
@@ -104,10 +104,10 @@ export default function SkillMatrix({ skills, canManage }: SkillMatrixProps) {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-sm font-semibold text-slate-100">{title}</h3>
+                    <h3 className="text-sm font-semibold text-foreground">{title}</h3>
                     <Badge tone={tierTone[skill.minTier]}>{tierName}</Badge>
                   </div>
-                  <p className="mt-1 text-sm text-slate-400">{t(`catalog.${skill.id}.description`)}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{t(`catalog.${skill.id}.description`)}</p>
                 </div>
 
                 <div className="flex shrink-0 items-center gap-3">
@@ -133,7 +133,7 @@ export default function SkillMatrix({ skills, canManage }: SkillMatrixProps) {
                     </>
                   ) : (
                     <>
-                      <span className="hidden items-center gap-1.5 text-xs text-slate-400 sm:inline-flex">
+                      <span className="hidden items-center gap-1.5 text-xs text-muted-foreground sm:inline-flex">
                         <Lock aria-hidden className="size-3.5" />
                         {t("requires", { tier: tierName })}
                       </span>
@@ -144,7 +144,7 @@ export default function SkillMatrix({ skills, canManage }: SkillMatrixProps) {
                     </>
                   )}
                 </div>
-              </Card>
+              </LiquidCard>
             </li>
           );
         })}

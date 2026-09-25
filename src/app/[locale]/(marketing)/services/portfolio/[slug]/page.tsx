@@ -32,7 +32,7 @@ export default async function PortfolioDetailPage({
         {t("backLink")}
       </Link>
 
-      <h1 className="mt-6 font-serif text-3xl font-semibold tracking-tight text-ink-primary sm:text-4xl">
+      <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight text-ink-primary sm:text-4xl">
         {item.title}
       </h1>
       <p className="mt-4 text-lg text-ink-muted">{item.summary}</p>

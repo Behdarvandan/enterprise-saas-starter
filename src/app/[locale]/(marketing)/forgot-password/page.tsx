@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { KeyRound } from "lucide-react";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import { Button } from "@/core/ui/primitives/button";
 import { requestPasswordReset } from "./actions";
 
@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <Card className="p-8">
+      <LiquidCard className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <KeyRound size={22} />
         </div>
@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
             {t("signIn")}
           </Link>
         </p>
-      </Card>
+      </LiquidCard>
     </div>
   );
 }

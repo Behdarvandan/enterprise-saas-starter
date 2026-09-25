@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import { requireUser } from "@/lib/auth";
 import ProfileForm from "./ProfileForm";
 
@@ -17,9 +17,9 @@ export default async function ProfileSettingsPage() {
   return (
     <PageContainer className="max-w-4xl">
       <PageHeader title={t("label")} description={t("pageDescription")} />
-      <Card className="p-6">
+      <LiquidCard className="p-6">
         <ProfileForm email={profile?.email ?? user.email ?? ""} fullName={profile?.full_name ?? ""} />
-      </Card>
+      </LiquidCard>
     </PageContainer>
   );
 }

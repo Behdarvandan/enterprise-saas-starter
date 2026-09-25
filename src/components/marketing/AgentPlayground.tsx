@@ -32,14 +32,14 @@ export default function AgentPlayground() {
 
   return (
     <GlassPanel className="overflow-hidden">
-      <div className="flex items-center justify-between gap-3 border-b border-slate-800/80 px-4 py-3">
+      <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
         <div className="flex min-w-0 items-center gap-2.5">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-violet-400">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
             <Bot aria-hidden className="size-4" />
           </span>
           <div className="min-w-0">
-            <h2 className="truncate text-sm font-semibold tracking-tight text-slate-100">{t("title")}</h2>
-            <p className="flex items-center gap-1.5 text-xs text-slate-400">
+            <h2 className="truncate text-sm font-semibold tracking-tight text-foreground">{t("title")}</h2>
+            <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <LiveDot />
               {t("agentName")}
             </p>
@@ -53,20 +53,20 @@ export default function AgentPlayground() {
       <div className="space-y-4 p-4">
         <div className="min-h-44 space-y-3" aria-live="polite">
           {activeId === null ? (
-            <p className="pt-10 text-center text-sm text-slate-400">{t("pickPrompt")}</p>
+            <p className="pt-10 text-center text-sm text-muted-foreground">{t("pickPrompt")}</p>
           ) : (
             <>
               <p className="ms-auto max-w-[85%] rounded-2xl rounded-ee-md bg-primary px-3.5 py-2 text-sm text-primary-foreground">
                 {t(`scenarios.${activeId}.user`)}
               </p>
               {replyVisible ? (
-                <p className="animate-reveal-up max-w-[90%] rounded-2xl rounded-es-md border border-slate-800 bg-slate-900/80 px-3.5 py-2 text-sm text-slate-200">
+                <p className="animate-reveal-up max-w-[90%] rounded-2xl rounded-es-md border border-border bg-muted/60 px-3.5 py-2 text-sm text-foreground">
                   {t(`scenarios.${activeId}.reply`)}
                 </p>
               ) : (
                 <p
                   role="status"
-                  className="flex w-fit items-center gap-1 rounded-2xl rounded-es-md border border-slate-800 bg-slate-900/80 px-3.5 py-3"
+                  className="flex w-fit items-center gap-1 rounded-2xl rounded-es-md border border-border bg-muted/60 px-3.5 py-3"
                 >
                   <span className="sr-only">{t("thinking")}</span>
                   {[0, 1, 2].map((dot) => (
@@ -74,7 +74,7 @@ export default function AgentPlayground() {
                       key={dot}
                       aria-hidden
                       style={{ animationDelay: `${dot * 150}ms` }}
-                      className="size-1.5 animate-pulse rounded-full bg-slate-500"
+                      className="size-1.5 animate-pulse rounded-full bg-muted-foreground"
                     />
                   ))}
                 </p>
@@ -94,8 +94,8 @@ export default function AgentPlayground() {
               className={cn(
                 "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring/60 disabled:cursor-not-allowed disabled:opacity-60",
                 activeId === id
-                  ? "border-primary/60 bg-primary/15 text-slate-100"
-                  : "border-slate-700 text-slate-300 hover:border-slate-500 hover:text-slate-100",
+                  ? "border-primary/60 bg-primary/15 text-foreground"
+                  : "border-border text-foreground hover:border-ring hover:text-foreground",
               )}
             >
               {t(`scenarios.${id}.label`)}
@@ -118,7 +118,7 @@ export default function AgentPlayground() {
             aria-expanded={streamOpen}
             aria-controls={streamId}
             onClick={() => setStreamOpen((open) => !open)}
-            className="flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1.5 text-xs font-semibold uppercase tracking-widest text-slate-300 transition-colors hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-ring/60"
+            className="flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1.5 text-xs font-semibold uppercase tracking-widest text-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
           >
             {t("thoughtTitle")}
             <ChevronDown
@@ -131,7 +131,7 @@ export default function AgentPlayground() {
           </div>
         </div>
 
-        <p className="text-[11px] leading-relaxed text-slate-400">{t("disclaimer")}</p>
+        <p className="text-[11px] leading-relaxed text-muted-foreground">{t("disclaimer")}</p>
       </div>
     </GlassPanel>
   );

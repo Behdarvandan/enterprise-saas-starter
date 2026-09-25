@@ -39,19 +39,19 @@ export default function CrewInsightCard({ item, fresh = false, now, tenantName }
     <li
       className={cn(
         "px-5 py-4 transition-colors duration-700",
-        fresh && "animate-reveal-up bg-violet-500/5 ring-1 ring-inset ring-violet-500/30",
+        fresh && "animate-reveal-up bg-primary/5 ring-1 ring-inset ring-primary/30",
       )}
     >
       <div className="flex flex-wrap items-center gap-2">
         <Badge tone={severityTone[severity]}>{t(`severity.${severity}`)}</Badge>
-        <span className="text-xs text-slate-300">{t("card.signals", { count: item.negativeCount })}</span>
+        <span className="text-xs text-foreground">{t("card.signals", { count: item.negativeCount })}</span>
         {tenantName ? <Badge>{tenantName}</Badge> : null}
         {item.repeats > 1 ? <Badge tone="violet">{t("card.repeated", { count: item.repeats })}</Badge> : null}
         {fresh ? <Badge tone="success">{t("card.new")}</Badge> : null}
         <time
           dateTime={item.createdAt}
           title={format.dateTime(created, { dateStyle: "medium", timeStyle: "medium" })}
-          className="ms-auto text-xs text-slate-400"
+          className="ms-auto text-xs text-muted-foreground"
         >
           {format.relativeTime(created, now)}
         </time>
@@ -59,17 +59,17 @@ export default function CrewInsightCard({ item, fresh = false, now, tenantName }
 
       {parsed.advice ? (
         <div className="mt-3 grid gap-3">
-          <p className="text-sm text-slate-100">{parsed.advice}</p>
+          <p className="text-sm text-foreground">{parsed.advice}</p>
           <div className="grid gap-3 sm:grid-cols-2">
             <NameCounts label={t("card.actions")} entries={parsed.actions} />
             <NameCounts label={t("card.resources")} entries={parsed.resources} />
           </div>
           {parsed.analyzed !== null ? (
-            <p className="text-xs text-slate-400">{t("card.analyzed", { count: parsed.analyzed })}</p>
+            <p className="text-xs text-muted-foreground">{t("card.analyzed", { count: parsed.analyzed })}</p>
           ) : null}
         </div>
       ) : (
-        <p className="mt-3 text-sm whitespace-pre-wrap text-slate-100">{parsed.raw || t("card.noText")}</p>
+        <p className="mt-3 text-sm whitespace-pre-wrap text-foreground">{parsed.raw || t("card.noText")}</p>
       )}
     </li>
   );
@@ -79,15 +79,15 @@ function NameCounts({ label, entries }: { label: string; entries: { name: string
   if (entries.length === 0) return null;
   return (
     <div>
-      <p className="text-xs font-medium text-slate-400">{label}</p>
+      <p className="text-xs font-medium text-muted-foreground">{label}</p>
       <ul className="mt-1.5 flex flex-wrap gap-1.5">
         {entries.map((entry) => (
           <li
             key={entry.name}
             dir="ltr"
-            className="rounded-md border border-slate-800 bg-slate-950/60 px-2 py-0.5 font-mono text-xs text-violet-300"
+            className="rounded-md border border-border bg-muted/60 px-2 py-0.5 font-mono text-xs text-primary"
           >
-            {entry.name} <span className="text-slate-400">×{entry.count}</span>
+            {entry.name} <span className="text-muted-foreground">×{entry.count}</span>
           </li>
         ))}
       </ul>

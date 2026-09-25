@@ -2,9 +2,10 @@
 
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
-import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 import Logo from "@/components/layout/Logo";
 import { Button } from "@/core/ui/primitives/button";
+import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
 import LiveDot from "@/components/ui/LiveDot";
 import {
   Sheet,
@@ -37,7 +38,7 @@ export default function MobileNav({ links }: MobileNavProps) {
           <Menu aria-hidden />
         </Button>
       </SheetTrigger>
-      <SheetContent side="end" className="sm:max-w-sm">
+      <SheetContent side="end" variant="liquid" className="sm:max-w-sm">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <Logo />
@@ -53,7 +54,7 @@ export default function MobileNav({ links }: MobileNavProps) {
             <SheetClose asChild key={link.href}>
               <Link
                 href={link.href}
-                className="rounded-lg px-3 py-3 text-base font-medium text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:ring-2 focus-visible:ring-ring/60"
+                className="flex min-h-11 items-center rounded-lg px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-secondary/60 focus-visible:ring-2 focus-visible:ring-ring/60"
               >
                 {link.label}
               </Link>
@@ -62,7 +63,10 @@ export default function MobileNav({ links }: MobileNavProps) {
         </nav>
 
         <div className="mt-auto grid gap-3">
-          <LocaleSwitcher className="w-full justify-start" />
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher className="flex-1 justify-center" />
+            <ThemeToggle />
+          </div>
           <SheetClose asChild>
             <Button asChild variant="secondary" size="lg">
               <Link href="/login">{t("signIn")}</Link>

@@ -3,7 +3,7 @@
 import { Check, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -56,17 +56,17 @@ export default function OnboardingChecklist({ userId, items }: OnboardingCheckli
   }
 
   return (
-    <Card className="p-5">
+    <LiquidCard className="p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("title")}</h2>
-          <p className="mt-1 text-sm text-slate-400">{t("remaining", { count: remaining })}</p>
+          <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("title")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("remaining", { count: remaining })}</p>
         </div>
         <button
           type="button"
           onClick={dismiss}
           aria-label={t("dismiss")}
-          className="shrink-0 rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-ring/60"
+          className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
         >
           <X aria-hidden className="size-4" />
         </button>
@@ -77,7 +77,7 @@ export default function OnboardingChecklist({ userId, items }: OnboardingCheckli
           <li key={item.id}>
             <Link
               href={item.href}
-              className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950/40 px-3 py-2.5 text-sm transition-colors hover:border-slate-700 focus-visible:ring-2 focus-visible:ring-ring/60"
+              className="flex items-center gap-3 rounded-lg border border-border bg-muted/40 px-3 py-2.5 text-sm transition-colors hover:border-border focus-visible:ring-2 focus-visible:ring-ring/60"
             >
               <span
                 aria-hidden
@@ -85,18 +85,18 @@ export default function OnboardingChecklist({ userId, items }: OnboardingCheckli
                   "flex size-5 shrink-0 items-center justify-center rounded-full",
                   item.done
                     ? "bg-emerald-500/15 text-emerald-400"
-                    : "border border-slate-700 text-slate-500",
+                    : "border border-border text-muted-foreground",
                 )}
               >
                 {item.done ? <Check className="size-3" /> : null}
               </span>
-              <span className={item.done ? "text-slate-500 line-through" : "text-slate-100"}>
+              <span className={item.done ? "text-muted-foreground line-through" : "text-foreground"}>
                 {item.label}
               </span>
             </Link>
           </li>
         ))}
       </ul>
-    </Card>
+    </LiquidCard>
   );
 }

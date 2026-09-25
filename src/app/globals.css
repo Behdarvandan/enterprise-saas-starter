@@ -8,10 +8,11 @@
 @theme inline {
   /* Typography — wired to the next/font variables set on <html>.
      Inter carries all app UI copy; Vazirmatn is the per-glyph fallback that
-     supplies Persian/Arabic script (Inter has none). Fraunces (--font-serif)
-     is reserved for the marketing site's display headings. */
+     supplies Persian/Arabic script (Inter has none). Geist (--font-display)
+     is reserved for the marketing site's display headings, pairing with
+     Geist Mono for metrics/code. */
   --font-sans: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
-  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-display: var(--font-geist), var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   /* Map shadcn semantic tokens to Tailwind color utilities. */
@@ -121,20 +122,59 @@
   }
 }
 
-/* Semantic design tokens — Dark Violet palette (dark-only).
-   Canvas slate-950, hairline slate-800 borders, violet-600 primary. The
-   product is forced to dark via `forcedTheme="dark"` on `ThemeProvider`, so
-   `:root` and `.dark` share one block. The agency white-label layer
+/* Semantic design tokens — Liquid Glass, violet-600 primary throughout.
+   `:root` carries the light theme; `.dark` overrides the palette-specific
+   vars for the Dark Violet theme. `next-themes` toggles the `.dark` class on
+   <html> (see ThemeToggle) — both share --radius/--touch-target-min since
+   those aren't theme-dependent. The agency white-label layer
    (getBrandingCssVars) overrides --primary/--primary-hover/--ring/
-   --primary-foreground on <html>, which every `bg-primary` consumer follows. */
-:root,
-.dark {
-  color-scheme: dark;
+   --primary-foreground on <html> in both themes, which every `bg-primary`
+   consumer follows. */
+:root {
+  color-scheme: light;
 
   --radius: 0.5rem;
 
   /* Minimum comfortable tap-target size for touch devices (44px). */
   --touch-target-min: 2.75rem;
+
+  --background: #f2f3f8; /* soft lavender-grey canvas */
+  --foreground: #0f172a; /* slate-900 */
+  --card: rgb(255 255 255 / 0.6); /* frosted white glass */
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #7c3aed; /* violet-600 */
+  --primary-hover: #6d28d9; /* violet-700, darker for contrast on light */
+  --primary-foreground: #ffffff;
+  --secondary: #e8e9f3;
+  --secondary-foreground: #0f172a;
+  --muted: #e8e9f3;
+  --muted-foreground: #5b6472;
+  --accent: #ede9fc;
+  --accent-foreground: #4c1d95;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: rgb(15 23 42 / 0.1);
+  --input: rgb(15 23 42 / 0.18);
+  --ring: #7c3aed;
+  --chart-1: #7c3aed;
+  --chart-2: #a78bfa;
+  --chart-3: #059669;
+  --chart-4: #dc2626;
+  --chart-5: #5b6472;
+  --sidebar: #ececf5;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #7c3aed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e8e9f3;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: rgb(15 23 42 / 0.1);
+  --sidebar-ring: #7c3aed;
+}
+
+.dark {
+  color-scheme: dark;
 
   --background: #020617; /* slate-950 */
   --foreground: #f1f5f9; /* slate-100 */
@@ -173,9 +213,15 @@
 
 /* Public marketing surface — the landing page and the pages that share the
    marketing layout (pricing, services, auth). Only re-points the surface
-   tokens, so the app portals (`#020617`) are untouched and the agency
+   tokens, so the dashboard/admin/agency portals are untouched and the agency
    white-label `--primary*` override still applies. */
 .marketing-surface {
+  --background: #f6f6fb;
+  --card: rgb(255 255 255 / 0.55);
+  --border: rgb(15 23 42 / 0.08);
+}
+
+.dark .marketing-surface {
   --background: #0b0f17;
   --card: rgb(19 27 46 / 0.5);
   --border: rgb(30 41 59 / 0.8);
@@ -227,6 +273,27 @@
     textarea {
       min-height: var(--touch-target-min);
     }
+
+    /* Icon-only buttons (theme toggle, sheet close, sidebar collapse, …)
+       default to size-9 (36px) — bump the hit area to 44px on touch without
+       changing their visual size, matching the input rule above. */
+    [data-slot="button"][data-size="icon"] {
+      min-width: var(--touch-target-min);
+      min-height: var(--touch-target-min);
+    }
+  }
+}
+
+/* Liquid Glass GPU cost control: backdrop-filter blur is one of the more
+   expensive compositor operations on mobile GPUs, and .liquid-surface is
+   used liberally (nav, cards, sheets). Halving the blur radius below the
+   `sm` breakpoint keeps the frosted look recognizable while cutting the
+   per-frame cost on lower-power devices; desktop keeps the full-strength
+   recipe from the .liquid-surface rule above. */
+@media (max-width: 639px) {
+  .liquid-surface {
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
   }
 }
 
@@ -251,4 +318,152 @@
     mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 80%);
     -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 80%);
   }
+
+  /* Liquid Glass surface: frosted material with an inner specular highlight
+     and an inset edge highlight, approximating Apple's Liquid Glass on the
+     web via backdrop-filter (there is no official web CSS for it). Reads
+     --card so it adapts to light/dark automatically; consumed by the
+     "liquid" Card/Button variants, never applied directly to raw elements. */
+  .liquid-surface {
+    position: relative;
+    isolation: isolate;
+    background:
+      linear-gradient(135deg, rgb(255 255 255 / 0.35), rgb(255 255 255 / 0.06)),
+      var(--card);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.5),
+      inset 0 -1px 0 rgb(255 255 255 / 0.08),
+      0 12px 40px rgb(0 0 0 / 0.12);
+  }
+
+  .dark .liquid-surface {
+    background:
+      linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.02)),
+      var(--card);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.14),
+      inset 0 -1px 0 rgb(255 255 255 / 0.04),
+      0 12px 40px rgb(0 0 0 / 0.4);
+  }
+
+  .liquid-surface::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    border: 1px solid rgb(255 255 255 / 0.4);
+    pointer-events: none;
+  }
+
+  .dark .liquid-surface::after {
+    border-color: rgb(255 255 255 / 0.12);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .liquid-surface {
+      background: var(--card);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+}
+
+/* Liquid Glass motion (transitions-dev recipes: icon swap, toggle, staggered
+   reveal). Durations/easings match this file's own --animate-reveal-up
+   scale. Reduced motion is already handled by the blanket
+   `@media (prefers-reduced-motion: reduce)` rule above, which zeroes every
+   transition/animation duration — no per-class guard needed here. */
+.t-icon-swap {
+  position: relative;
+  display: inline-grid;
+}
+.t-icon-swap .t-icon {
+  grid-area: 1 / 1;
+  transition:
+    opacity 250ms ease-in-out,
+    filter 250ms ease-in-out,
+    transform 250ms ease-in-out;
+}
+.t-icon-swap[data-state="a"] .t-icon[data-icon="a"],
+.t-icon-swap[data-state="b"] .t-icon[data-icon="b"] {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1) rotate(0deg);
+}
+.t-icon-swap[data-state="a"] .t-icon[data-icon="b"],
+.t-icon-swap[data-state="b"] .t-icon[data-icon="a"] {
+  opacity: 0;
+  filter: blur(2px);
+  transform: scale(0.5) rotate(-90deg);
+}
+
+.t-toggle {
+  transition: background-color 150ms ease-out;
+}
+.t-toggle-thumb {
+  translate: 0 0;
+}
+.t-toggle[data-on="true"] .t-toggle-thumb {
+  translate: var(--toggle-travel, 18px) 0;
+}
+/* Mirrors the thumb's travel direction in RTL locales (fa) — the switch is a
+   directional/progress affordance, so it flips per the RTL mirroring rule. */
+[dir="rtl"] .t-toggle[data-on="true"] .t-toggle-thumb {
+  translate: calc(var(--toggle-travel, 18px) * -1) 0;
+}
+.t-toggle.is-init[data-on="true"] .t-toggle-thumb {
+  animation: t-toggle-on 350ms cubic-bezier(0.34, 1.35, 0.64, 1) both;
+}
+.t-toggle.is-init[data-on="false"] .t-toggle-thumb {
+  animation: t-toggle-off 350ms cubic-bezier(0.34, 1.35, 0.64, 1) both;
+}
+@keyframes t-toggle-on {
+  0% {
+    translate: 0 0;
+  }
+  55% {
+    translate: calc(var(--toggle-travel, 18px) + 1px) 0;
+  }
+  100% {
+    translate: var(--toggle-travel, 18px) 0;
+  }
+}
+@keyframes t-toggle-off {
+  0% {
+    translate: var(--toggle-travel, 18px) 0;
+  }
+  55% {
+    translate: -1px 0;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+.t-stagger-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(3px);
+  transition:
+    opacity 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.t-stagger.is-shown .t-stagger-line {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+.t-stagger-line--2 {
+  transition-delay: 40ms;
+}
+.t-stagger-line--3 {
+  transition-delay: 80ms;
+}
+.t-stagger-line--4 {
+  transition-delay: 120ms;
 }

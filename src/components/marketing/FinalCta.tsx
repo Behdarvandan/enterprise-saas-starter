@@ -15,10 +15,10 @@ export default async function FinalCta() {
             aria-hidden
             className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_80%_at_50%_100%,rgba(124,58,237,0.25),transparent_70%)]"
           />
-          <h2 className="mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-tight text-slate-100 sm:text-4xl">
+          <h2 className="mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             {t("title")}
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-slate-400">{t("subtitle")}</p>
+          <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-muted-foreground">{t("subtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button asChild variant="glow" size="lg">
               <Link href="/signup">{t("primary")}</Link>

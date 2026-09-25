@@ -58,13 +58,13 @@ export default function DropZone({ onFiles }: DropZoneProps) {
       className={cn(
         "flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
         active
-          ? "border-violet-500 bg-violet-500/10"
-          : "border-slate-700 bg-slate-950/40 hover:border-slate-600 hover:bg-slate-900/50",
+          ? "border-primary bg-primary/10"
+          : "border-border bg-muted/40 hover:border-border hover:bg-secondary/50",
       )}
     >
-      <UploadCloud aria-hidden className={cn("size-8", active ? "text-violet-400" : "text-slate-500")} />
-      <p className="text-sm font-medium text-slate-100">{active ? t("dragActive") : t("title")}</p>
-      <p className="text-xs text-slate-400">{t("hint", { size: MAX_FILE_BYTES / (1024 * 1024) })}</p>
+      <UploadCloud aria-hidden className={cn("size-8", active ? "text-primary" : "text-muted-foreground")} />
+      <p className="text-sm font-medium text-foreground">{active ? t("dragActive") : t("title")}</p>
+      <p className="text-xs text-muted-foreground">{t("hint", { size: MAX_FILE_BYTES / (1024 * 1024) })}</p>
       <input
         ref={inputRef}
         type="file"

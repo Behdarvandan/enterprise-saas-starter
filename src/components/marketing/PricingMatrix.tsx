@@ -75,27 +75,27 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
             )}
           >
             {plan.highlight ? (
-              <Badge tone="violet" className="absolute -top-3 start-6 bg-[#131B2E]">
+              <Badge tone="violet" className="absolute -top-3 start-6 bg-popover">
                 {t("popular")}
               </Badge>
             ) : null}
-            <h3 className="text-lg font-semibold tracking-tight text-slate-100">{tTier(plan.tier)}</h3>
-            <p className="mt-1 min-h-10 text-sm text-slate-400">{t(`plans.${plan.tier}.description`)}</p>
+            <h3 className="text-lg font-semibold tracking-tight text-foreground">{tTier(plan.tier)}</h3>
+            <p className="mt-1 min-h-10 text-sm text-muted-foreground">{t(`plans.${plan.tier}.description`)}</p>
             <p className="mt-5 flex items-baseline gap-1.5">
               {plan.priceLabel === null ? (
-                <span className="text-3xl font-semibold tracking-tight text-slate-100">{t("custom")}</span>
+                <span className="text-3xl font-semibold tracking-tight text-foreground">{t("custom")}</span>
               ) : (
                 <>
-                  <span dir="ltr" className="font-mono text-4xl font-semibold tracking-tight text-slate-100">
+                  <span dir="ltr" className="font-mono text-4xl font-semibold tracking-tight text-foreground">
                     {plan.priceLabel}
                   </span>
-                  <span className="text-sm text-slate-400">{t("perMonth")}</span>
+                  <span className="text-sm text-muted-foreground">{t("perMonth")}</span>
                 </>
               )}
             </p>
             <ul className="mt-6 flex-1 space-y-2.5">
               {limitLines(plan.limits).map((line) => (
-                <li key={line} className="flex items-start gap-2.5 text-sm text-slate-300">
+                <li key={line} className="flex items-start gap-2.5 text-sm text-foreground">
                   <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-emerald-400" />
                   {line}
                 </li>
@@ -114,13 +114,13 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
       </div>
 
       <GlassPanel className="mt-8 p-4 sm:p-6">
-        <h3 className="text-base font-semibold tracking-tight text-slate-100">{t("matrixTitle")}</h3>
-        <p className="mt-1 text-sm text-slate-400">{t("matrixHint")}</p>
+        <h3 className="text-base font-semibold tracking-tight text-foreground">{t("matrixTitle")}</h3>
+        <p className="mt-1 text-sm text-muted-foreground">{t("matrixHint")}</p>
 
         <div role="table" aria-label={t("matrixTitle")} className="mt-5 text-sm">
           <div
             role="row"
-            className="grid grid-cols-[minmax(0,1.3fr)_repeat(3,minmax(0,1fr))] items-center gap-2 border-b border-slate-800 pb-3 text-[10px] font-semibold uppercase tracking-normal text-slate-400 sm:grid-cols-[minmax(0,1.6fr)_repeat(3,minmax(0,1fr))] sm:text-xs sm:tracking-wider"
+            className="grid grid-cols-[minmax(0,1.3fr)_repeat(3,minmax(0,1fr))] items-center gap-2 border-b border-border pb-3 text-[10px] font-semibold uppercase tracking-normal text-muted-foreground sm:grid-cols-[minmax(0,1.6fr)_repeat(3,minmax(0,1fr))] sm:text-xs sm:tracking-wider"
           >
             <span role="columnheader">{t("skillColumn")}</span>
             {PLAN_TIERS.map((tier) => (
@@ -134,11 +134,11 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
             <div
               key={skill.id}
               role="row"
-              className="grid grid-cols-[minmax(0,1.3fr)_repeat(3,minmax(0,1fr))] items-center gap-2 border-b border-slate-800/60 py-4 last:border-b-0 sm:grid-cols-[minmax(0,1.6fr)_repeat(3,minmax(0,1fr))]"
+              className="grid grid-cols-[minmax(0,1.3fr)_repeat(3,minmax(0,1fr))] items-center gap-2 border-b border-border/60 py-4 last:border-b-0 sm:grid-cols-[minmax(0,1.6fr)_repeat(3,minmax(0,1fr))]"
             >
               <div role="rowheader" className="min-w-0 pe-2">
-                <p className="font-medium text-slate-100">{skillName(skill)}</p>
-                <p className="mt-0.5 hidden text-xs text-slate-400 sm:block">{skillDescription(skill)}</p>
+                <p className="font-medium text-foreground">{skillName(skill)}</p>
+                <p className="mt-0.5 hidden text-xs text-muted-foreground sm:block">{skillDescription(skill)}</p>
               </div>
               {PLAN_TIERS.map((tier) => (
                 <div key={tier} role="cell" className="flex justify-center">
@@ -155,7 +155,7 @@ export default function PricingMatrix({ plans, skills }: PricingMatrixProps) {
                       type="button"
                       onClick={() => setUpsell({ skill, tier: skill.minTier })}
                       aria-label={t("lockedOn", { skill: skillName(skill), tier: tTier(tier) })}
-                      className="inline-flex h-7 items-center justify-center gap-1 rounded-full border border-slate-700 bg-slate-900/60 px-2.5 text-xs font-medium text-slate-400 transition-colors hover:border-primary/60 hover:text-slate-100 focus-visible:ring-2 focus-visible:ring-ring/60"
+                      className="inline-flex h-7 items-center justify-center gap-1 rounded-full border border-border bg-secondary/60 px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
                     >
                       <Lock aria-hidden className="size-3.5" />
                     </button>

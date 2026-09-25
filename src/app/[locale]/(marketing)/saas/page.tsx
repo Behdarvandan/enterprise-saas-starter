@@ -2,6 +2,9 @@ import { Check } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/core/ui/primitives/button";
+import { LiquidButton } from "@/components/ui/liquid/LiquidButton";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { AmbientGlow } from "@/components/ui/liquid/AmbientGlow";
 import { getPlans } from "@/lib/plans";
 import { getPricingRegion } from "@/lib/geo";
 
@@ -18,19 +21,20 @@ export default async function SaasPage() {
 
   return (
     <div>
-      <section className="animate-reveal-up mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
+      <section className="animate-reveal-up relative isolate overflow-hidden mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
+        <AmbientGlow position="top" />
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="font-serif text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
+          <h1 className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
             {t("heroTitle")}
           </h1>
           <p className="mt-5 text-lg text-ink-muted">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild size="lg">
+            <Button asChild variant="glow" size="lg">
               <Link href="#features">{t("ctaPrimary")}</Link>
             </Button>
-            <Button asChild variant="secondary" size="lg">
+            <LiquidButton asChild size="lg">
               <Link href="/pricing">{t("ctaSecondary")}</Link>
-            </Button>
+            </LiquidButton>
           </div>
           <p className="mt-4 text-sm text-ink-muted">
             <Link href="/services" className="font-semibold text-ink-primary hover:text-primary">
@@ -46,7 +50,7 @@ export default async function SaasPage() {
         style={{ animationDelay: "80ms" }}
       >
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
+          <h2 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("featuresTitle")}
           </h2>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -58,13 +62,10 @@ export default async function SaasPage() {
               t("features.i18n"),
               t("features.observability"),
             ].map((feature) => (
-              <div
-                key={feature}
-                className="flex items-start gap-3 rounded-interactive border border-subtle bg-canvas p-5 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-primary/50 hover:shadow-md hover:shadow-primary/10"
-              >
+              <LiquidCard key={feature} interactive className="flex items-start gap-3 p-5">
                 <Check size={18} className="mt-0.5 shrink-0 text-status-success" />
                 <p className="text-sm text-ink-muted">{feature}</p>
-              </div>
+              </LiquidCard>
             ))}
           </div>
         </div>
@@ -74,18 +75,15 @@ export default async function SaasPage() {
         className="animate-reveal-up mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
         style={{ animationDelay: "140ms" }}
       >
-        <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
+        <h2 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
           {t("pricingTitle")}
         </h2>
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
           {plans.map((plan) => (
-            <div
+            <LiquidCard
               key={plan.name}
-              className={`rounded-interactive border p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:shadow-md hover:shadow-primary/10 ${
-                plan.highlight
-                  ? "border-primary/60 bg-surface-raised"
-                  : "border-subtle bg-surface hover:border-primary/50"
-              }`}
+              interactive
+              className={plan.highlight ? "border-primary/50 p-6" : "p-6"}
             >
               <h3 className="text-sm font-semibold text-ink-primary">{plan.name}</h3>
               <div className="mt-3 flex items-baseline gap-1">
@@ -97,7 +95,7 @@ export default async function SaasPage() {
                 )}
               </div>
               <p className="mt-2 text-sm text-ink-muted">{plan.description}</p>
-            </div>
+            </LiquidCard>
           ))}
         </div>
         <div className="mt-6">

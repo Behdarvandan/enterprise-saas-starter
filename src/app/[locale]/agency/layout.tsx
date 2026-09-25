@@ -1,7 +1,8 @@
 import * as Sentry from "@sentry/nextjs";
 import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
 import AgencySidebar from "@/components/layout/AgencySidebar";
 import AppShell from "@/core/ui/shell/AppShell";
 import UserMenu from "@/components/layout/UserMenu";
@@ -46,7 +47,8 @@ export default async function AgencyLayout({
       sidebar={<AgencySidebar agencyName={agency.name} />}
       headerEnd={
         <>
-          <LocaleSwitcher />
+          <LanguageSwitcher />
+          <ThemeToggle />
           <UserMenu email={user.email ?? ""} />
         </>
       }

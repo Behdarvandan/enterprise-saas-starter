@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import AcceptInviteButton from "./AcceptInviteButton";
 
 export default async function InvitePage({
@@ -51,7 +51,7 @@ export default async function InvitePage({
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <Card className="p-8">
+      <LiquidCard className="p-8">
         {!user ? (
           <>
             <h1 className="text-xl font-bold text-ink-primary">{t("signInTitle")}</h1>
@@ -90,7 +90,7 @@ export default async function InvitePage({
             </Link>
           </>
         )}
-      </Card>
+      </LiquidCard>
     </div>
   );
 }

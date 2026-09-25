@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
+import { getTranslations } from "next-intl/server";
 import {
   requireUser,
+  requireUserResult,
   requireUserOrResponse,
   type AuthContext,
 } from "@/lib/auth";
@@ -53,6 +55,26 @@ export async function requireOperatorAdmin(): Promise<OperatorContext> {
   if (!isOperatorAdmin) redirect("/dashboard");
 
   return context;
+}
+
+// --- Server Actions: returns a `{ error }` result on failure ----------------
+
+export type OperatorResult = OperatorContext | { error: string };
+
+/**
+ * Server Action flavor of `requireOperatorAdmin`: resolves the signed-in
+ * operator admin, or an `{ error }` result to return as-is.
+ */
+export async function requireOperatorAdminResult(): Promise<OperatorResult> {
+  const result = await requireUserResult();
+  if ("error" in result) return result;
+
+  const { data: isOperatorAdmin } = await result.supabase.rpc("is_operator_admin");
+  if (!isOperatorAdmin) {
+    return { error: (await getTranslations("errors"))("forbidden") };
+  }
+
+  return result;
 }
 
 // --- Route Handlers: returns a `NextResponse` on failure --------------------

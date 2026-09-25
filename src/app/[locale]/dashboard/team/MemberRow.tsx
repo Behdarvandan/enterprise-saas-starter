@@ -69,11 +69,11 @@ export default function MemberRow({
   return (
     <li className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-slate-100">
+        <p className="truncate text-sm font-medium text-foreground">
           {displayName}
-          {isCurrentUser ? <span className="ms-2 text-xs text-slate-400">{t("you")}</span> : null}
+          {isCurrentUser ? <span className="ms-2 text-xs text-muted-foreground">{t("you")}</span> : null}
         </p>
-        <p dir="ltr" className="truncate text-start text-xs text-slate-400">
+        <p dir="ltr" className="truncate text-start text-xs text-muted-foreground">
           {email}
         </p>
       </div>

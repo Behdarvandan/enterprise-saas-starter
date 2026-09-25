@@ -626,7 +626,8 @@
       "adminTasks": "Tasks",
       "agencyTenants": "Tenants",
       "agencyBranding": "Branding & domain",
-      "agencyAnalytics": "Analytics"
+      "agencyAnalytics": "Analytics",
+      "adminTenants": "Tenants"
     },
     "organization": {
       "label": "Organizations",
@@ -662,7 +663,9 @@
       "title": "Latest Dev Crew recommendations",
       "empty": "No recommendations yet.",
       "viewAll": "View all insights"
-    }
+    },
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
   },
   "chatWidget": {
     "defaultTitle": "AI assistant",
@@ -1086,7 +1089,29 @@
       "manage": "Manage billing",
       "loading": "Loading…",
       "noOrganization": "You don't belong to an organization yet. <link>Choose a plan</link> to get started.",
-      "error": "Couldn't open billing. Please try again."
+      "error": "Couldn't open billing. Please try again.",
+      "trialCountdown": "{days, plural, =0 {Trial ends today} one {# day left in your trial} other {# days left in your trial}}",
+      "trialExpiredBanner": "Your trial has ended. Upgrade to keep your agent live.",
+      "upgradeMonthly": "Upgrade monthly",
+      "upgradeYearly": "Upgrade yearly",
+      "usage": {
+        "title": "Usage this period",
+        "empty": "No usage recorded yet this period.",
+        "metrics": {
+          "apiCalls": "API calls",
+          "tokens": "Tokens used"
+        }
+      },
+      "invoiceHistory": {
+        "title": "Invoice history",
+        "emptyTitle": "No invoices yet",
+        "emptyDescription": "Invoices appear here after your first billing cycle completes.",
+        "date": "Date",
+        "amount": "Amount",
+        "status": "Status",
+        "receipt": "Receipt",
+        "view": "View"
+      }
     },
     "settings": {
       "title": "Settings",
@@ -1381,6 +1406,24 @@
     "checkout": {
       "redirecting": "Redirecting…",
       "error": "Couldn't start checkout. Please try again."
+    },
+    "offer": {
+      "title": "Start your 14-day free trial",
+      "subtitle": "One $300 setup fee, then simple billing. Cancel anytime.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlyBadge": "2 months free",
+      "setupFeeNote": "Billed once at checkout. Your card isn't charged again until the trial ends.",
+      "ctaMonthly": "Start free trial",
+      "ctaYearly": "Start free trial",
+      "features": [
+        "Full agent platform access",
+        "Unlimited team members",
+        "Priority email support",
+        "Cancel anytime, no lock-in"
+      ],
+      "calculatorTitle": "Estimate your savings",
+      "matrixTitle": "Compare what's included"
     }
   },
   "admin": {
@@ -1601,6 +1644,44 @@
         "when": "When",
         "system": "system"
       }
+    },
+    "tenants": {
+      "title": "Tenants",
+      "description": "Every organization on the platform — subscription status, trial windows, and quick actions.",
+      "healthTitle": "System health",
+      "stat": {
+        "total": "Total tenants",
+        "active": "Active",
+        "trialing": "Trialing",
+        "pastDue": "Past due",
+        "canceled": "Canceled",
+        "expiringSoon": "Trial ending within 7 days"
+      },
+      "mrrTitle": "Monthly recurring revenue",
+      "mrrSubtitle": "Estimated from active and trialing organizations' plans",
+      "arrLabel": "Annualized (ARR)",
+      "table": {
+        "name": "Organization",
+        "status": "Status",
+        "trial": "Trial",
+        "plan": "Plan",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "extendTrial": "Extend trial",
+      "extendTrialDialogTitle": "Extend trial for {name}?",
+      "extendTrialDialogDescription": "This moves the trial end date {days, plural, one {# day} other {# days}} forward, to {date}.",
+      "extendTrialConfirm": "Extend trial",
+      "extendTrialCancel": "Cancel",
+      "extendTrialSuccess": "Trial extended to {date}",
+      "extendTrialError": "Couldn't extend the trial. Try again.",
+      "noTrial": "No trial",
+      "trialEndedLabel": "Trial ended",
+      "trialDaysLeft": "{days, plural, =0 {Ends today} one {# day left} other {# days left}}",
+      "empty": "No organizations yet",
+      "days7": "+7 days",
+      "days14": "+14 days",
+      "days30": "+30 days"
     }
   }
 }

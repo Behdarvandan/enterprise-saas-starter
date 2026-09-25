@@ -19,12 +19,14 @@ export default function SectionHeading({
   return (
     <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center", className)}>
       {eyebrow ? (
-        <p className="text-xs font-semibold uppercase tracking-widest text-violet-400">{eyebrow}</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-primary">{eyebrow}</p>
       ) : null}
-      <h2 className="mt-2 text-balance text-3xl font-semibold tracking-tight text-slate-100 sm:text-4xl">
+      <h2 className="mt-2 text-balance font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
         {title}
       </h2>
-      {description ? <p className="mt-4 text-pretty text-base text-slate-400">{description}</p> : null}
+      {description ? (
+        <p className="mt-4 text-pretty text-base text-muted-foreground">{description}</p>
+      ) : null}
     </div>
   );
 }

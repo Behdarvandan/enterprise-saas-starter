@@ -170,10 +170,10 @@ function FieldRow({ skillId, field, value, disabled, onChange }: FieldRowProps) 
         value={invalid ? field.defaultValue : numeric}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
-        className="h-1.5 w-full cursor-pointer accent-violet-500"
+        className="h-1.5 w-full cursor-pointer accent-primary"
       />
-      <p className="text-xs text-slate-400">{description}</p>
-      <p className={invalid ? "text-xs text-status-error" : "text-xs text-slate-400"}>
+      <p className="text-xs text-muted-foreground">{description}</p>
+      <p className={invalid ? "text-xs text-status-error" : "text-xs text-muted-foreground"}>
         {invalid
           ? t("invalid", { min: field.min, max: field.max })
           : t("range", { min: field.min, max: field.max, default: field.defaultValue })}

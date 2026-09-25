@@ -17,7 +17,7 @@ export default function ProfileForm({ email, fullName }: { email: string; fullNa
       <div className="grid gap-1.5">
         <Label htmlFor="email">{t("profile.email")}</Label>
         <Input id="email" type="email" dir="ltr" value={email} disabled readOnly className="text-start" />
-        <p className="text-xs text-slate-400">{t("profile.emailHint")}</p>
+        <p className="text-xs text-muted-foreground">{t("profile.emailHint")}</p>
       </div>
 
       <div className="grid gap-1.5">

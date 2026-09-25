@@ -5,15 +5,20 @@ import { cn } from "cn"
 // Glass surface recipe shared by every panel: slate-900/50 on the slate-950
 // canvas with a hairline slate-800 border. Padding is the caller's concern
 // (`className="p-5"`) unless the CardHeader/Content/Footer parts are used.
-const cardVariants = cva("rounded-xl border border-slate-800", {
+const cardVariants = cva("rounded-xl", {
   variants: {
     variant: {
       /** Structural container: page sections, list wrappers. */
-      section: "bg-slate-900/50 backdrop-blur-md",
+      section: "border border-slate-800 bg-slate-900/50 backdrop-blur-md",
       /** A discrete interactive unit (a tile, a row) — border brightens on hover. */
-      item: "bg-slate-900/50 backdrop-blur-md transition-colors duration-150 hover:border-slate-700",
+      item: "border border-slate-800 bg-slate-900/50 backdrop-blur-md transition-colors duration-150 hover:border-slate-700",
       /** Popovers and floating panels — opaque so content behind never bleeds through. */
-      raised: "bg-slate-900 shadow-xl shadow-black/30",
+      raised: "border border-slate-800 bg-slate-900 shadow-xl shadow-black/30",
+      // Liquid Glass: frosted material (see .liquid-surface in globals.css),
+      // theme-aware via --card/--foreground, with an optional hover lift for
+      // interactive tiles (stat cards, pricing offer card).
+      liquid:
+        "liquid-surface border-transparent transition-[transform,box-shadow] duration-200 ease-out data-[interactive=true]:hover:-translate-y-1 data-[interactive=true]:hover:shadow-2xl data-[interactive=true]:hover:shadow-black/20",
     },
   },
   defaultVariants: {
@@ -24,12 +29,18 @@ const cardVariants = cva("rounded-xl border border-slate-800", {
 function Card({
   className,
   variant,
+  interactive = false,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof cardVariants>) {
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof cardVariants> & {
+    /** Liquid variant only: adds a hover lift, for a clickable tile rather than a static panel. */
+    interactive?: boolean
+  }) {
   return (
     <div
       data-slot="card"
       data-variant={variant}
+      data-interactive={interactive || undefined}
       className={cn(cardVariants({ variant }), className)}
       {...props}
     />

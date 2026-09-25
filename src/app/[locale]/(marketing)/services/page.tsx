@@ -2,6 +2,9 @@ import { Check, Code2, CreditCard, ShieldCheck, Sparkles } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/core/ui/primitives/button";
+import { LiquidButton } from "@/components/ui/liquid/LiquidButton";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
+import { AmbientGlow } from "@/components/ui/liquid/AmbientGlow";
 import LeadForm from "../_components/LeadForm";
 import { getPortfolioItems } from "@/lib/portfolio";
 
@@ -20,19 +23,20 @@ export default async function ServicesPage() {
 
   return (
     <div>
-      <section className="animate-reveal-up mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
+      <section className="animate-reveal-up relative isolate overflow-hidden mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
+        <AmbientGlow position="top" />
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="font-serif text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
+          <h1 className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-ink-primary sm:text-5xl">
             {t("heroTitle")}
           </h1>
           <p className="mt-5 text-lg text-ink-muted">{t("heroSubtitle")}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild size="lg">
+            <Button asChild variant="glow" size="lg">
               <Link href="#quote">{t("ctaPrimary")}</Link>
             </Button>
-            <Button asChild variant="secondary" size="lg">
+            <LiquidButton asChild size="lg">
               <Link href="#categories">{t("ctaSecondary")}</Link>
-            </Button>
+            </LiquidButton>
           </div>
           <p className="mt-4 text-sm text-ink-muted">
             <Link href="/saas" className="font-semibold text-ink-primary hover:text-primary">
@@ -48,7 +52,7 @@ export default async function ServicesPage() {
         style={{ animationDelay: "80ms" }}
       >
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
+          <h2 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("categoriesTitle")}
           </h2>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -56,10 +60,7 @@ export default async function ServicesPage() {
               const Icon = CATEGORY_ICONS[index];
               const bullets = t.raw(`categories.${key}.bullets`) as string[];
               return (
-                <div
-                  key={key}
-                  className="rounded-interactive border border-subtle bg-canvas p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-primary/50 hover:shadow-md hover:shadow-primary/10"
-                >
+                <LiquidCard key={key} interactive className="p-6">
                   <Icon size={20} className="text-primary" />
                   <h3 className="mt-4 text-base font-semibold text-ink-primary">
                     {t(`categories.${key}.title`)}
@@ -78,7 +79,7 @@ export default async function ServicesPage() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </LiquidCard>
               );
             })}
           </div>
@@ -90,7 +91,7 @@ export default async function ServicesPage() {
         style={{ animationDelay: "140ms" }}
       >
         <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
+          <h2 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("portfolioTitle")}
           </h2>
         </div>
@@ -99,7 +100,7 @@ export default async function ServicesPage() {
             <Link
               key={item.slug}
               href={`/services/portfolio/${item.slug}`}
-              className="rounded-interactive border border-subtle bg-surface p-6 transition-[transform,box-shadow,border-color] duration-200 hover:scale-[1.01] hover:border-primary/50 hover:shadow-md hover:shadow-primary/10"
+              className="liquid-surface block rounded-2xl border-transparent p-6 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10"
             >
               <h3 className="text-base font-semibold text-ink-primary">
                 {item.title}
@@ -128,7 +129,7 @@ export default async function ServicesPage() {
         style={{ animationDelay: "200ms" }}
       >
         <div className="mx-auto max-w-2xl px-4 py-20 sm:px-6 lg:px-8">
-          <h2 className="font-serif text-2xl font-semibold text-ink-primary sm:text-3xl">
+          <h2 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
             {t("formTitle")}
           </h2>
           <p className="mt-3 text-ink-muted">{t("formSubtitle")}</p>

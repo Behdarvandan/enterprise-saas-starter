@@ -4,7 +4,7 @@ import SkillMatrix, { type SkillRow } from "@/components/dashboard/skills/SkillM
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import Badge from "@/components/ui/Badge";
 import { Button } from "@/core/ui/primitives/button";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import { Link } from "@/i18n/navigation";
 import { requireMembership } from "@/lib/auth";
 import { getOrganizationSnapshot } from "@/lib/dashboard/queries";
@@ -57,7 +57,7 @@ export default async function SkillsPage() {
       />
 
       {canManage ? null : (
-        <p role="note" className="rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-3 text-sm text-slate-300">
+        <p role="note" className="rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground">
           {t("readOnly")}
         </p>
       )}
@@ -65,18 +65,18 @@ export default async function SkillsPage() {
       <SkillMatrix skills={rows} canManage={canManage} />
 
       {tier === "enterprise" ? null : (
-        <Card className="flex flex-wrap items-center gap-4 border-amber-500/20 p-5">
+        <LiquidCard className="flex flex-wrap items-center gap-4 border-amber-500/20 p-5">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
             <Building2 aria-hidden className="size-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="text-sm font-semibold text-slate-100">{t("enterprise.title")}</h2>
-            <p className="mt-1 text-sm text-slate-400">{t("enterprise.description")}</p>
+            <h2 className="text-sm font-semibold text-foreground">{t("enterprise.title")}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t("enterprise.description")}</p>
           </div>
           <Button asChild variant="secondary" size="sm">
             <Link href={salesHref}>{t("enterprise.cta")}</Link>
           </Button>
-        </Card>
+        </LiquidCard>
       )}
     </PageContainer>
   );

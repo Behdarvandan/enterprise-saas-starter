@@ -626,7 +626,8 @@
       "adminTasks": "Aufgaben",
       "agencyTenants": "Mandanten",
       "agencyBranding": "Branding & Domain",
-      "agencyAnalytics": "Analysen"
+      "agencyAnalytics": "Analysen",
+      "adminTenants": "Mandanten"
     },
     "organization": {
       "label": "Organisationen",
@@ -662,7 +663,9 @@
       "title": "Neueste Dev-Crew-Empfehlungen",
       "empty": "Noch keine Empfehlungen.",
       "viewAll": "Alle Einblicke anzeigen"
-    }
+    },
+    "switchToLight": "Zu hellem Modus wechseln",
+    "switchToDark": "Zu dunklem Modus wechseln"
   },
   "chatWidget": {
     "defaultTitle": "KI-Assistent",
@@ -1086,7 +1089,29 @@
       "manage": "Abrechnung verwalten",
       "loading": "Wird geladen …",
       "noOrganization": "Sie gehören noch keiner Organisation an. <link>Wählen Sie einen Tarif</link>, um zu beginnen.",
-      "error": "Die Abrechnung konnte nicht geöffnet werden. Bitte versuchen Sie es erneut."
+      "error": "Die Abrechnung konnte nicht geöffnet werden. Bitte versuchen Sie es erneut.",
+      "trialCountdown": "{days, plural, =0 {Ihre Testphase endet heute} one {Noch # Tag in Ihrer Testphase} other {Noch # Tage in Ihrer Testphase}}",
+      "trialExpiredBanner": "Ihre Testphase ist beendet. Führen Sie ein Upgrade durch, damit Ihr Agent aktiv bleibt.",
+      "upgradeMonthly": "Monatlich upgraden",
+      "upgradeYearly": "Jährlich upgraden",
+      "usage": {
+        "title": "Nutzung in diesem Zeitraum",
+        "empty": "In diesem Zeitraum wurde noch keine Nutzung erfasst.",
+        "metrics": {
+          "apiCalls": "API-Aufrufe",
+          "tokens": "Verwendete Tokens"
+        }
+      },
+      "invoiceHistory": {
+        "title": "Rechnungsverlauf",
+        "emptyTitle": "Noch keine Rechnungen",
+        "emptyDescription": "Rechnungen erscheinen hier, nachdem Ihr erster Abrechnungszeitraum abgeschlossen ist.",
+        "date": "Datum",
+        "amount": "Betrag",
+        "status": "Status",
+        "receipt": "Beleg",
+        "view": "Ansehen"
+      }
     },
     "settings": {
       "title": "Einstellungen",
@@ -1381,6 +1406,24 @@
     "checkout": {
       "redirecting": "Weiterleitung …",
       "error": "Der Checkout konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
+    },
+    "offer": {
+      "title": "Starten Sie Ihre 14-tägige kostenlose Testphase",
+      "subtitle": "Einmalige Einrichtungsgebühr von 300 USD, danach einfache Abrechnung. Jederzeit kündbar.",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "yearlyBadge": "2 Monate gratis",
+      "setupFeeNote": "Wird einmalig beim Checkout berechnet. Ihre Karte wird erst nach Ablauf der Testphase erneut belastet.",
+      "ctaMonthly": "Kostenlose Testphase starten",
+      "ctaYearly": "Kostenlose Testphase starten",
+      "features": [
+        "Voller Zugriff auf die Agentenplattform",
+        "Unbegrenzte Teammitglieder",
+        "Bevorzugter E-Mail-Support",
+        "Jederzeit kündbar, keine Bindung"
+      ],
+      "calculatorTitle": "Ersparnis schätzen",
+      "matrixTitle": "Vergleichen, was enthalten ist"
     }
   },
   "admin": {
@@ -1601,6 +1644,44 @@
         "when": "Zeitpunkt",
         "system": "System"
       }
+    },
+    "tenants": {
+      "title": "Mandanten",
+      "description": "Alle Organisationen auf der Plattform — Abonnementstatus, Testphasen und Schnellaktionen.",
+      "healthTitle": "Systemzustand",
+      "stat": {
+        "total": "Mandanten insgesamt",
+        "active": "Aktiv",
+        "trialing": "In Testphase",
+        "pastDue": "Überfällig",
+        "canceled": "Gekündigt",
+        "expiringSoon": "Testphase endet innerhalb von 7 Tagen"
+      },
+      "mrrTitle": "Monatlich wiederkehrender Umsatz",
+      "mrrSubtitle": "Geschätzt aus den Plänen aktiver und in der Testphase befindlicher Organisationen",
+      "arrLabel": "Hochgerechnet (ARR)",
+      "table": {
+        "name": "Organisation",
+        "status": "Status",
+        "trial": "Testphase",
+        "plan": "Plan",
+        "created": "Erstellt",
+        "actions": "Aktionen"
+      },
+      "extendTrial": "Testphase verlängern",
+      "extendTrialDialogTitle": "Testphase für {name} verlängern?",
+      "extendTrialDialogDescription": "Dadurch verschiebt sich das Ende der Testphase um {days, plural, one {# Tag} other {# Tage}} nach hinten, auf den {date}.",
+      "extendTrialConfirm": "Testphase verlängern",
+      "extendTrialCancel": "Abbrechen",
+      "extendTrialSuccess": "Testphase bis {date} verlängert",
+      "extendTrialError": "Testphase konnte nicht verlängert werden. Bitte erneut versuchen.",
+      "noTrial": "Keine Testphase",
+      "trialEndedLabel": "Testphase beendet",
+      "trialDaysLeft": "{days, plural, =0 {Endet heute} one {Noch # Tag} other {Noch # Tage}}",
+      "empty": "Noch keine Organisationen",
+      "days7": "+7 Tage",
+      "days14": "+14 Tage",
+      "days30": "+30 Tage"
     }
   }
 }

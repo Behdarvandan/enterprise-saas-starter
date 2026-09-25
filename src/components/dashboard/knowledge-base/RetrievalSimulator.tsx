@@ -4,7 +4,13 @@ import { Search } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/core/ui/primitives/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/core/ui/primitives/card";
+import {
+  LiquidCard,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/liquid/LiquidCard";
 import { Input } from "@/core/ui/primitives/input";
 import { Progress } from "@/core/ui/primitives/progress";
 import { formatMetricPercent } from "@/lib/format";
@@ -45,7 +51,7 @@ export default function RetrievalSimulator() {
   }
 
   return (
-    <Card>
+    <LiquidCard>
       <CardHeader>
         <CardTitle>{t("simulator.title")}</CardTitle>
         <CardDescription>{t("simulator.description")}</CardDescription>
@@ -73,7 +79,7 @@ export default function RetrievalSimulator() {
 
         {outcome ? (
           <div aria-live="polite" className="grid gap-3">
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted-foreground">
               {outcome.hits.length === 0
                 ? t("simulator.none", { threshold: formatMetricPercent(locale, outcome.threshold * 100) })
                 : t("simulator.summary", {
@@ -84,23 +90,23 @@ export default function RetrievalSimulator() {
             </p>
             <ol className="grid gap-2">
               {outcome.hits.map((hit, index) => (
-                <li key={hit.chunkId} className="rounded-lg border border-slate-800 bg-slate-950/50 p-3">
+                <li key={hit.chunkId} className="rounded-lg border border-border bg-muted/50 p-3">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="min-w-0 truncate text-xs font-medium text-slate-300">
+                    <p className="min-w-0 truncate text-xs font-medium text-foreground">
                       {index + 1}. {hit.documentTitle || t("simulator.untitled")} · {t("chunks.chunk", { index: hit.chunkIndex + 1 })}
                     </p>
-                    <p dir="ltr" className="shrink-0 font-mono text-sm font-semibold text-violet-400">
+                    <p dir="ltr" className="shrink-0 font-mono text-sm font-semibold text-primary">
                       {formatMetricPercent(locale, hit.similarity * 100)}
                     </p>
                   </div>
                   <Progress value={hit.similarity * 100} className="mt-2 h-1" aria-label={t("simulator.similarity")} />
-                  <p className="mt-2 line-clamp-4 text-sm whitespace-pre-wrap text-slate-200">{hit.content}</p>
+                  <p className="mt-2 line-clamp-4 text-sm whitespace-pre-wrap text-foreground">{hit.content}</p>
                 </li>
               ))}
             </ol>
           </div>
         ) : null}
       </CardContent>
-    </Card>
+    </LiquidCard>
   );
 }

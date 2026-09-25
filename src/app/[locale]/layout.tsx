@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist_Mono, Inter, Vazirmatn } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Vazirmatn } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound, unstable_rethrow } from "next/navigation";
@@ -11,20 +11,19 @@ import { getBrandingCssVars } from "@/lib/agency/branding";
 import { getAgencyContext } from "@/lib/agency/context";
 import "../globals.css";
 
-// Inter carries body/UI copy; Fraunces is reserved for the marketing site's
-// display headings. Geist Mono carries metrics/code. Vazirmatn supplies the
-// Persian glyphs Inter lacks (per-glyph fallback via unicode-range, so the
-// file is only fetched when Persian text actually renders).
+// Inter carries body/UI copy; Geist is reserved for the marketing site's
+// display headings (pairs with Geist Mono, which carries metrics/code).
+// Vazirmatn supplies the Persian glyphs Inter lacks (per-glyph fallback via
+// unicode-range, so the file is only fetched when Persian text renders).
 const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter" });
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
   variable: "--font-vazirmatn",
   preload: false,
 });
-const fraunces = Fraunces({
+const geist = Geist({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-fraunces",
+  variable: "--font-geist",
 });
 const geistMono = Geist_Mono({
   subsets: ["latin"],
@@ -99,7 +98,7 @@ export default async function RootLayout({
       lang={locale}
       dir={isRtlLocale(locale) ? "rtl" : "ltr"}
       suppressHydrationWarning
-      className={`${inter.variable} ${vazirmatn.variable} ${fraunces.variable} ${geistMono.variable}`}
+      className={`${inter.variable} ${vazirmatn.variable} ${geist.variable} ${geistMono.variable}`}
       // Agency palette as CSS variables on <html>, so the very first paint
       // (and portaled dialogs under <body>) already use it.
       style={agency ? (getBrandingCssVars(agency.branding) as CSSProperties) : undefined}
@@ -107,7 +106,7 @@ export default async function RootLayout({
       <body className="min-h-screen bg-canvas font-sans text-ink-primary antialiased">
         <NextIntlClientProvider messages={messages}>
           <AgencyBrandingProvider agency={agency}>
-            <ThemeProvider attribute="class" forcedTheme="dark" enableSystem={false}>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
               {children}
             </ThemeProvider>
           </AgencyBrandingProvider>

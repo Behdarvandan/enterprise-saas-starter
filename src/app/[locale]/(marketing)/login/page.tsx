@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { LogIn } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import { Button } from "@/core/ui/primitives/button";
 import { OAuthButtons } from "@/modules/auth";
 
@@ -44,7 +44,7 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-20 sm:px-6">
-      <Card className="p-8">
+      <LiquidCard className="p-8">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-control bg-violet text-white">
           <LogIn size={22} />
         </div>
@@ -121,7 +121,7 @@ export default function LoginPage() {
             {t("signUp")}
           </Link>
         </p>
-      </Card>
+      </LiquidCard>
     </div>
   );
 }

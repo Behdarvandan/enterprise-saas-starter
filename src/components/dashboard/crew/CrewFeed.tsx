@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import CrewInsightCard from "@/components/dashboard/crew/CrewInsightCard";
 import { useCrewFeed, type FeedConnection } from "@/components/dashboard/crew/useCrewFeed";
 import { Button } from "@/core/ui/primitives/button";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import EmptyState from "@/components/ui/EmptyState";
 import LiveDot from "@/components/ui/LiveDot";
 import MetricCard from "@/components/ui/MetricCard";
@@ -63,15 +63,15 @@ export default function CrewFeed({ initial, initialHasMore, serverTime }: CrewFe
         <MetricCard label={t("stats.warning")} value={formatMetricNumber(locale, counts.warning)} />
       </section>
 
-      <Card>
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 px-5 py-3">
-          <div role="status" className="flex items-center gap-2 text-xs text-slate-300">
+      <LiquidCard>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
+          <div role="status" className="flex items-center gap-2 text-xs text-foreground">
             <LiveDot tone={dotTone[feed.connection]} />
             <span className="font-medium">{connectionLabel}</span>
-            <span className="text-slate-500" aria-hidden>
+            <span className="text-muted-foreground" aria-hidden>
               ·
             </span>
-            <span className="text-slate-400">
+            <span className="text-muted-foreground">
               {t("updated", { time: format.relativeTime(feed.lastUpdated, now) })}
             </span>
           </div>
@@ -81,7 +81,7 @@ export default function CrewFeed({ initial, initialHasMore, serverTime }: CrewFe
           </Button>
         </div>
 
-        <div className="border-b border-slate-800 px-5 py-3">
+        <div className="border-b border-border px-5 py-3">
           <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
             <TabsList>
               <TabsTrigger value="all">{t("filters.all")}</TabsTrigger>
@@ -96,7 +96,7 @@ export default function CrewFeed({ initial, initialHasMore, serverTime }: CrewFe
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          <p className="mt-2 text-xs text-slate-400">{t("derivedNote")}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{t("derivedNote")}</p>
         </div>
 
         {collapsed.length === 0 ? (
@@ -104,7 +104,7 @@ export default function CrewFeed({ initial, initialHasMore, serverTime }: CrewFe
         ) : visible.length === 0 ? (
           <EmptyState icon={Lightbulb} title={t("emptyFilteredTitle")} description={t("emptyFilteredDescription")} />
         ) : (
-          <ol aria-label={t("title")} className="divide-y divide-slate-800">
+          <ol aria-label={t("title")} className="divide-y divide-border">
             {visible.map((item) => (
               <CrewInsightCard key={item.id} item={item} fresh={feed.freshIds.has(item.id)} now={now} />
             ))}
@@ -112,7 +112,7 @@ export default function CrewFeed({ initial, initialHasMore, serverTime }: CrewFe
         )}
 
         {feed.hasMore ? (
-          <div className="border-t border-slate-800 p-4 text-center">
+          <div className="border-t border-border p-4 text-center">
             {feed.loadMoreFailed ? (
               <p role="alert" className="mb-2 text-xs text-status-error">
                 {t("loadFailed")}
@@ -123,7 +123,7 @@ export default function CrewFeed({ initial, initialHasMore, serverTime }: CrewFe
             </Button>
           </div>
         ) : null}
-      </Card>
+      </LiquidCard>
     </div>
   );
 }

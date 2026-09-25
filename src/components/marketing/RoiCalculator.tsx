@@ -32,15 +32,15 @@ interface ResultCardProps {
 
 function ResultCard({ icon, label, value, valueClassName, note }: ResultCardProps) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-950/50 p-4">
-      <p className="flex items-center gap-2 text-xs font-medium text-slate-400">
+    <div className="rounded-xl border border-border bg-muted/50 p-4">
+      <p className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
         {icon}
         {label}
       </p>
       <p dir="ltr" className={`mt-2 text-start font-mono text-3xl font-semibold tabular-nums ${valueClassName}`}>
         {value}
       </p>
-      <p className="mt-2 text-xs text-slate-400">{note}</p>
+      <p className="mt-2 text-xs text-muted-foreground">{note}</p>
     </div>
   );
 }
@@ -69,10 +69,10 @@ export default function RoiCalculator({ plans }: RoiCalculatorProps) {
         <div className="space-y-8">
           <div>
             <div className="flex items-baseline justify-between gap-3">
-              <span className="text-sm font-medium text-slate-200">
+              <span className="text-sm font-medium text-foreground">
                 {t("volumeLabel")}
               </span>
-              <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-violet-400">
+              <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-primary">
                 {number(volume)}
               </span>
             </div>
@@ -86,7 +86,7 @@ export default function RoiCalculator({ plans }: RoiCalculatorProps) {
               value={[volume]}
               onValueChange={([next]) => setVolume(next ?? VOLUME_RANGE.initial)}
             />
-            <div dir="ltr" className="mt-2 flex justify-between font-mono text-[11px] text-slate-400">
+            <div dir="ltr" className="mt-2 flex justify-between font-mono text-[11px] text-muted-foreground">
               <span>{number(VOLUME_RANGE.min)}</span>
               <span>{number(VOLUME_RANGE.max)}</span>
             </div>
@@ -94,10 +94,10 @@ export default function RoiCalculator({ plans }: RoiCalculatorProps) {
 
           <div>
             <div className="flex items-baseline justify-between gap-3">
-              <span className="text-sm font-medium text-slate-200">
+              <span className="text-sm font-medium text-foreground">
                 {t("agentsLabel")}
               </span>
-              <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-violet-400">
+              <span dir="ltr" className="font-mono text-lg font-semibold tabular-nums text-primary">
                 {number(agents)}
               </span>
             </div>
@@ -111,7 +111,7 @@ export default function RoiCalculator({ plans }: RoiCalculatorProps) {
               value={[agents]}
               onValueChange={([next]) => setAgents(next ?? AGENT_RANGE.initial)}
             />
-            <div dir="ltr" className="mt-2 flex justify-between font-mono text-[11px] text-slate-400">
+            <div dir="ltr" className="mt-2 flex justify-between font-mono text-[11px] text-muted-foreground">
               <span>{number(AGENT_RANGE.min)}</span>
               <span>{number(AGENT_RANGE.max)}</span>
             </div>
@@ -124,17 +124,17 @@ export default function RoiCalculator({ plans }: RoiCalculatorProps) {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <ResultCard
-            icon={<Clock aria-hidden className="size-3.5 text-violet-400" />}
+            icon={<Clock aria-hidden className="size-3.5 text-primary" />}
             label={t("hoursLabel")}
             value={number(Math.round(result.hoursSaved))}
-            valueClassName="text-violet-400"
+            valueClassName="text-primary"
             note={t("hoursNote", { rate: formatMetricPercent(locale, assumptions.automationRate * 100) })}
           />
           <ResultCard
-            icon={<Timer aria-hidden className="size-3.5 text-violet-400" />}
+            icon={<Timer aria-hidden className="size-3.5 text-primary" />}
             label={t("responseLabel")}
             value={formatMetricPercent(locale, result.responseTimeReductionPct)}
-            valueClassName="text-violet-400"
+            valueClassName="text-primary"
             note={t("responseNote", {
               human: number(assumptions.humanFirstResponseMinutes),
               agent: number(assumptions.agentResponseSeconds),
@@ -156,11 +156,11 @@ export default function RoiCalculator({ plans }: RoiCalculatorProps) {
         </div>
       </div>
 
-      <details className="group mt-8 rounded-xl border border-slate-800 bg-slate-950/40 px-4 py-3">
-        <summary className="cursor-pointer list-none text-sm font-medium text-slate-300 focus-visible:ring-2 focus-visible:ring-ring/60">
+      <details className="group mt-8 rounded-xl border border-border bg-muted/40 px-4 py-3">
+        <summary className="cursor-pointer list-none text-sm font-medium text-foreground focus-visible:ring-2 focus-visible:ring-ring/60">
           {t("assumptionsTitle")}
         </summary>
-        <ul className="mt-3 grid gap-2 text-xs text-slate-400 sm:grid-cols-2">
+        <ul className="mt-3 grid gap-2 text-xs text-muted-foreground sm:grid-cols-2">
           <li>{t("assumptions.handle", { minutes: number(assumptions.handleMinutesPerConversation) })}</li>
           <li>{t("assumptions.automation", { rate: formatMetricPercent(locale, assumptions.automationRate * 100) })}</li>
           <li>{t("assumptions.hourly", { cost: usd(assumptions.hourlyCostUsd) })}</li>

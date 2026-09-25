@@ -39,6 +39,7 @@ export type NavLabelKey =
   | "adminSettings"
   | "adminAnalytics"
   | "adminTasks"
+  | "adminTenants"
   | "agencyTenants"
   | "agencyBranding"
   | "agencyAnalytics";
@@ -98,6 +99,7 @@ export function getAdminNavGroups(): ShellNavGroup<NavLabelKey, NavGroupKey>[] {
     {
       labelKey: "operations",
       items: [
+        { labelKey: "adminTenants", href: "/admin/tenants", icon: Building2 },
         { labelKey: "adminLeads", href: "/admin/leads", icon: UserSquare2 },
         { labelKey: "adminClients", href: "/admin/clients", icon: Building2 },
         { labelKey: "adminAppointments", href: "/admin/appointments", icon: CalendarDays },

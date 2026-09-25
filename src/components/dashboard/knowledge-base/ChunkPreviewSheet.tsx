@@ -68,14 +68,14 @@ export default function ChunkPreviewSheet({ document, onClose }: ChunkPreviewShe
 
         <ol className="grid gap-3">
           {chunks.map((chunk) => (
-            <li key={chunk.id} className="rounded-lg border border-slate-800 bg-slate-950/50 p-3">
-              <p className="text-xs font-medium text-violet-300">
+            <li key={chunk.id} className="rounded-lg border border-border bg-muted/50 p-3">
+              <p className="text-xs font-medium text-primary">
                 {t("chunks.chunk", { index: chunk.chunkIndex + 1 })}
                 {chunk.tokenCount !== null ? (
-                  <span className="ms-2 font-mono text-slate-400">{t("chunks.tokens", { count: chunk.tokenCount })}</span>
+                  <span className="ms-2 font-mono text-muted-foreground">{t("chunks.tokens", { count: chunk.tokenCount })}</span>
                 ) : null}
               </p>
-              <p className="mt-1.5 text-sm whitespace-pre-wrap text-slate-200">{chunk.content}</p>
+              <p className="mt-1.5 text-sm whitespace-pre-wrap text-foreground">{chunk.content}</p>
             </li>
           ))}
           {loading
@@ -88,7 +88,7 @@ export default function ChunkPreviewSheet({ document, onClose }: ChunkPreviewShe
         </ol>
 
         {!loading && !failed && chunks.length === 0 ? (
-          <p className="text-sm text-slate-400">{t("chunks.empty")}</p>
+          <p className="text-sm text-muted-foreground">{t("chunks.empty")}</p>
         ) : null}
         {failed ? (
           <p role="alert" className="text-sm text-status-error">

@@ -24,14 +24,14 @@ export default async function Hero() {
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 pb-20 pt-14 sm:px-6 sm:pt-20 lg:grid-cols-2 lg:gap-14 lg:px-8 lg:pb-28">
         <div className="animate-reveal-up">
-          <span className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-xs font-medium text-slate-300 backdrop-blur-md">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1.5 text-xs font-medium text-foreground backdrop-blur-md">
             <LiveDot />
             {t("badge")}
           </span>
-          <h1 className="mt-5 text-balance text-4xl font-semibold leading-[1.08] tracking-tight text-slate-100 sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 text-balance font-display text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             {t("title")}
           </h1>
-          <p className="mt-5 max-w-xl text-pretty text-lg text-slate-400">{t("subtitle")}</p>
+          <p className="mt-5 max-w-xl text-pretty text-lg text-muted-foreground">{t("subtitle")}</p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button asChild variant="glow" size="lg">
@@ -44,8 +44,8 @@ export default async function Hero() {
 
           <ul className="mt-10 grid gap-3 sm:grid-cols-3">
             {POINTS.map(({ key, icon: Icon }) => (
-              <li key={key} className="flex items-start gap-2.5 text-sm text-slate-400">
-                <Icon aria-hidden className="mt-0.5 size-4 shrink-0 text-violet-400" />
+              <li key={key} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                <Icon aria-hidden className="mt-0.5 size-4 shrink-0 text-primary" />
                 {t(`points.${key}`)}
               </li>
             ))}

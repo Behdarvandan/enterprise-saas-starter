@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import ChatSimulator from "@/components/chat-widget/ChatSimulator";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import { requireMembership } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -26,12 +26,12 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
         <ChatSimulator organizationId={organizationId} initialQuery={q} />
 
         <div className="grid content-start gap-6">
-          <Card className="p-5">
-            <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("embed.title")}</h2>
-            <p className="mt-1 text-sm text-slate-400">{t("embed.description")}</p>
+          <LiquidCard className="p-5">
+            <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("embed.title")}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t("embed.description")}</p>
             <pre
               dir="ltr"
-              className="mt-4 overflow-x-auto rounded-lg border border-slate-800 bg-slate-950 p-4 text-start font-mono text-xs leading-relaxed text-violet-300"
+              className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 text-start font-mono text-xs leading-relaxed text-primary"
             >
               <code>{`import { ChatWidget } from "@/components/chat-widget";
 
@@ -39,16 +39,16 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
   organizationId="${organizationId}"
 />`}</code>
             </pre>
-          </Card>
+          </LiquidCard>
 
-          <Card className="p-5">
-            <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("how.title")}</h2>
-            <ol className="mt-3 list-decimal space-y-1.5 ps-5 text-sm text-slate-400 marker:text-violet-400">
+          <LiquidCard className="p-5">
+            <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("how.title")}</h2>
+            <ol className="mt-3 list-decimal space-y-1.5 ps-5 text-sm text-muted-foreground marker:text-primary">
               {steps.map((step) => (
                 <li key={step}>{step}</li>
               ))}
             </ol>
-          </Card>
+          </LiquidCard>
         </div>
       </div>
     </PageContainer>

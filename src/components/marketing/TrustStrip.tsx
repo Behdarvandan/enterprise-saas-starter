@@ -15,19 +15,19 @@ export default async function TrustStrip() {
   const t = await getTranslations("marketing.security");
 
   return (
-    <section aria-labelledby="trust-heading" className="border-y border-slate-800/80 bg-slate-900/20">
+    <section aria-labelledby="trust-heading" className="border-y border-border bg-secondary/20">
       <Reveal className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <h2 id="trust-heading" className="max-w-2xl text-lg font-semibold tracking-tight text-slate-100">
+        <h2 id="trust-heading" className="max-w-2xl text-lg font-semibold tracking-tight text-foreground">
           {t("title")}
         </h2>
         <ul className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {CONTROLS.map(({ key, icon: Icon }) => (
             <li key={key}>
               <div className="flex items-center gap-2.5">
-                <Icon aria-hidden className="size-4 shrink-0 text-violet-400" />
-                <p className="text-sm font-semibold text-slate-100">{t(`controls.${key}.label`)}</p>
+                <Icon aria-hidden className="size-4 shrink-0 text-primary" />
+                <p className="text-sm font-semibold text-foreground">{t(`controls.${key}.label`)}</p>
               </div>
-              <p className="mt-2 text-xs leading-relaxed text-slate-400">{t(`controls.${key}.detail`)}</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{t(`controls.${key}.detail`)}</p>
             </li>
           ))}
         </ul>

@@ -7,7 +7,7 @@ import OnboardingChecklist from "@/components/dashboard/OnboardingChecklist";
 import PageHeader, { PageContainer } from "@/components/layout/PageHeader";
 import Badge, { type BadgeTone } from "@/components/ui/Badge";
 import { Button } from "@/core/ui/primitives/button";
-import { Card } from "@/core/ui/primitives/card";
+import { LiquidCard } from "@/components/ui/liquid/LiquidCard";
 import EmptyState from "@/components/ui/EmptyState";
 import LiveRefresh from "@/components/ui/LiveRefresh";
 import MetricCard from "@/components/ui/MetricCard";
@@ -111,7 +111,7 @@ export default async function DashboardPage() {
             <Badge tone={SUBSCRIPTION_TONE[subscriptionStatus] ?? "neutral"}>
               {knownSubscription ? tStatus(`subscription.${knownSubscription}`) : subscriptionStatus}
             </Badge>
-            <span className="hidden text-sm text-slate-400 sm:inline">{t("plan", { plan: planName })}</span>
+            <span className="hidden text-sm text-muted-foreground sm:inline">{t("plan", { plan: planName })}</span>
             <Button asChild variant="secondary" size="sm">
               <Link href="/dashboard/billing">{t("manageBilling")}</Link>
             </Button>
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
           <Tooltip content={t("metrics.ragSuccess.tooltip")}>
             <button
               type="button"
-              className="self-start rounded text-xs text-slate-400 underline decoration-dotted underline-offset-4 outline-none hover:text-slate-200 focus-visible:ring-2 focus-visible:ring-ring/60"
+              className="self-start rounded text-xs text-muted-foreground underline decoration-dotted underline-offset-4 outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
             >
               {t("metrics.ragSuccess.label")}?
             </button>
@@ -188,10 +188,10 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <Card className="p-5">
+      <LiquidCard className="p-5">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 className="text-sm font-semibold tracking-tight text-slate-100">{t("recent.title")}</h2>
-          <Link href="/dashboard/bookings" className="text-sm font-medium text-violet-300 hover:text-violet-200">
+          <h2 className="text-sm font-semibold tracking-tight text-foreground">{t("recent.title")}</h2>
+          <Link href="/dashboard/bookings" className="text-sm font-medium text-primary hover:text-primary">
             {t("recent.viewAll")}
           </Link>
         </div>
@@ -229,11 +229,11 @@ export default async function DashboardPage() {
             <TableBody>
               {appointments.map((appointment) => (
                 <TableRow key={appointment.id}>
-                  <TableCell className="font-medium text-slate-100">{appointment.customer_name}</TableCell>
-                  <TableCell className="text-slate-400">
+                  <TableCell className="font-medium text-foreground">{appointment.customer_name}</TableCell>
+                  <TableCell className="text-muted-foreground">
                     {serviceNameById.get(appointment.service_id) ?? t("recent.fallbackService")}
                   </TableCell>
-                  <TableCell className="font-mono text-xs text-slate-400">
+                  <TableCell className="font-mono text-xs text-muted-foreground">
                     {/* Appointments are anchored to UTC by the booking engine. */}
                     {format.dateTime(new Date(appointment.start_time), {
                       dateStyle: "medium",
@@ -250,7 +250,7 @@ export default async function DashboardPage() {
             </TableBody>
           </Table>
         )}
-      </Card>
+      </LiquidCard>
     </PageContainer>
   );
 }

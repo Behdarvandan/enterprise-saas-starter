@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { requireOperatorAdmin } from "@/lib/operator";
-import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
+import { LanguageSwitcher } from "@/components/ui/liquid/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ui/liquid/ThemeToggle";
 import AdminSidebar from "@/components/layout/AdminSidebar";
 import AppShell from "@/core/ui/shell/AppShell";
 import UserMenu from "@/components/layout/UserMenu";
@@ -24,7 +25,8 @@ export default async function AdminLayout({
       sidebar={<AdminSidebar />}
       headerEnd={
         <>
-          <LocaleSwitcher />
+          <LanguageSwitcher />
+          <ThemeToggle />
           <UserMenu email={user.email ?? ""} />
         </>
       }

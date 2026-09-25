@@ -626,7 +626,8 @@
       "adminTasks": "Görevler",
       "agencyTenants": "Kiracılar",
       "agencyBranding": "Marka ve alan adı",
-      "agencyAnalytics": "Analitik"
+      "agencyAnalytics": "Analitik",
+      "adminTenants": "Kiracılar"
     },
     "organization": {
       "label": "Kuruluşlar",
@@ -662,7 +663,9 @@
       "title": "Son Dev Crew önerileri",
       "empty": "Henüz öneri yok.",
       "viewAll": "Tüm içgörüleri gör"
-    }
+    },
+    "switchToLight": "Açık temaya geç",
+    "switchToDark": "Koyu temaya geç"
   },
   "chatWidget": {
     "defaultTitle": "Yapay zekâ asistanı",
@@ -1086,7 +1089,29 @@
       "manage": "Faturalamayı yönet",
       "loading": "Yükleniyor…",
       "noOrganization": "Henüz bir kuruluşa üye değilsiniz. Başlamak için <link>bir plan seçin</link>.",
-      "error": "Faturalama açılamadı. Lütfen tekrar deneyin."
+      "error": "Faturalama açılamadı. Lütfen tekrar deneyin.",
+      "trialCountdown": "{days, plural, =0 {Deneme süreniz bugün sona eriyor} other {Deneme sürenizde # gün kaldı}}",
+      "trialExpiredBanner": "Deneme süreniz sona erdi. Ajanınızın çalışmaya devam etmesi için yükseltin.",
+      "upgradeMonthly": "Aylık yükselt",
+      "upgradeYearly": "Yıllık yükselt",
+      "usage": {
+        "title": "Bu dönemki kullanım",
+        "empty": "Bu dönem henüz kullanım kaydedilmedi.",
+        "metrics": {
+          "apiCalls": "API çağrıları",
+          "tokens": "Kullanılan token"
+        }
+      },
+      "invoiceHistory": {
+        "title": "Fatura geçmişi",
+        "emptyTitle": "Henüz fatura yok",
+        "emptyDescription": "Faturalar, ilk faturalandırma döneminiz tamamlandıktan sonra burada görünür.",
+        "date": "Tarih",
+        "amount": "Tutar",
+        "status": "Durum",
+        "receipt": "Makbuz",
+        "view": "Görüntüle"
+      }
     },
     "settings": {
       "title": "Ayarlar",
@@ -1381,6 +1406,24 @@
     "checkout": {
       "redirecting": "Yönlendiriliyor…",
       "error": "Ödeme başlatılamadı. Lütfen tekrar deneyin."
+    },
+    "offer": {
+      "title": "14 günlük ücretsiz denemenizi başlatın",
+      "subtitle": "Tek seferlik 300 ABD doları kurulum ücreti, ardından basit faturalandırma. İstediğiniz zaman iptal edin.",
+      "monthly": "Aylık",
+      "yearly": "Yıllık",
+      "yearlyBadge": "2 ay ücretsiz",
+      "setupFeeNote": "Ödeme sırasında tek seferlik tahsil edilir. Deneme süresi bitene kadar kartınızdan tekrar çekim yapılmaz.",
+      "ctaMonthly": "Ücretsiz denemeyi başlat",
+      "ctaYearly": "Ücretsiz denemeyi başlat",
+      "features": [
+        "Tam ajan platformu erişimi",
+        "Sınırsız takım üyesi",
+        "Öncelikli e-posta desteği",
+        "İstediğiniz zaman iptal edin, taahhüt yok"
+      ],
+      "calculatorTitle": "Tasarrufunuzu hesaplayın",
+      "matrixTitle": "Neler dahil, karşılaştırın"
     }
   },
   "admin": {
@@ -1601,6 +1644,44 @@
         "when": "Zaman",
         "system": "sistem"
       }
+    },
+    "tenants": {
+      "title": "Kiracılar",
+      "description": "Platformdaki tüm organizasyonlar — abonelik durumu, deneme süreleri ve hızlı eylemler.",
+      "healthTitle": "Sistem sağlığı",
+      "stat": {
+        "total": "Toplam kiracı",
+        "active": "Aktif",
+        "trialing": "Deneme süresinde",
+        "pastDue": "Vadesi geçmiş",
+        "canceled": "İptal edildi",
+        "expiringSoon": "7 gün içinde deneme süresi bitecek"
+      },
+      "mrrTitle": "Aylık tekrarlayan gelir",
+      "mrrSubtitle": "Aktif ve deneme süresindeki organizasyonların planlarından tahmin edilmiştir",
+      "arrLabel": "Yıllıklaştırılmış (ARR)",
+      "table": {
+        "name": "Organizasyon",
+        "status": "Durum",
+        "trial": "Deneme",
+        "plan": "Plan",
+        "created": "Oluşturulma",
+        "actions": "Eylemler"
+      },
+      "extendTrial": "Deneme süresini uzat",
+      "extendTrialDialogTitle": "{name} için deneme süresi uzatılsın mı?",
+      "extendTrialDialogDescription": "Bu, deneme bitiş tarihini {days, plural, other {# gün}} ileri alarak {date} tarihine taşır.",
+      "extendTrialConfirm": "Deneme süresini uzat",
+      "extendTrialCancel": "Vazgeç",
+      "extendTrialSuccess": "Deneme süresi {date} tarihine uzatıldı",
+      "extendTrialError": "Deneme süresi uzatılamadı. Tekrar deneyin.",
+      "noTrial": "Deneme yok",
+      "trialEndedLabel": "Deneme sona erdi",
+      "trialDaysLeft": "{days, plural, =0 {Bugün sona eriyor} other {# gün kaldı}}",
+      "empty": "Henüz organizasyon yok",
+      "days7": "+7 gün",
+      "days14": "+14 gün",
+      "days30": "+30 gün"
     }
   }
 }

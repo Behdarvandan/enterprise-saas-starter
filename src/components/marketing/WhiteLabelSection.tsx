@@ -29,7 +29,7 @@ export default async function WhiteLabelSection() {
   ];
 
   return (
-    <section id="agency" className="scroll-mt-20 border-t border-slate-800/80 bg-slate-900/20">
+    <section id="agency" className="scroll-mt-20 border-t border-border bg-secondary/20">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-14">
           <Reveal>
@@ -37,12 +37,12 @@ export default async function WhiteLabelSection() {
             <ul className="mt-8 space-y-5">
               {POINTS.map(({ key, icon: Icon }) => (
                 <li key={key} className="flex items-start gap-4">
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-violet-400">
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
                     <Icon aria-hidden className="size-4" />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-slate-100">{t(`points.${key}.title`)}</p>
-                    <p className="mt-1 text-sm text-slate-400">{t(`points.${key}.body`)}</p>
+                    <p className="text-sm font-semibold text-foreground">{t(`points.${key}.title`)}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{t(`points.${key}.body`)}</p>
                   </div>
                 </li>
               ))}
@@ -60,7 +60,7 @@ export default async function WhiteLabelSection() {
           <Reveal delay={120} className="space-y-4">
             <GlassPanel className="p-5">
               <div className="flex items-center justify-between gap-3">
-                <h3 className="text-sm font-semibold text-slate-100">{t("dns.title")}</h3>
+                <h3 className="text-sm font-semibold text-foreground">{t("dns.title")}</h3>
                 <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-400">
                   <LiveDot />
                   {t("dns.status")}
@@ -70,14 +70,14 @@ export default async function WhiteLabelSection() {
                 {records.map((record) => (
                   <div
                     key={record.label}
-                    className="flex items-center justify-between gap-4 rounded-lg border border-slate-800 bg-slate-950/60 px-3 py-2"
+                    className="flex items-center justify-between gap-4 rounded-lg border border-border bg-muted/60 px-3 py-2"
                   >
-                    <dt className="text-slate-400">{record.label}</dt>
-                    <dd className="truncate text-violet-400">{record.value}</dd>
+                    <dt className="text-muted-foreground">{record.label}</dt>
+                    <dd className="truncate text-primary">{record.value}</dd>
                   </div>
                 ))}
               </dl>
-              <p className="mt-3 text-xs text-slate-400">{t("dns.hint")}</p>
+              <p className="mt-3 text-xs text-muted-foreground">{t("dns.hint")}</p>
             </GlassPanel>
 
             <GlassPanel className="p-5">
