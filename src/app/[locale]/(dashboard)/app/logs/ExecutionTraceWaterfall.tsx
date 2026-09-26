@@ -55,7 +55,10 @@ export default function ExecutionTraceWaterfall({
                     onClick={() => setExpandedId(isExpanded ? null : span.id)}
                     aria-label={isExpanded ? copy.collapseLabel : copy.expandLabel}
                   >
-                    {isExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+                    <span className="t-icon-swap" data-state={isExpanded ? "b" : "a"}>
+                      <ChevronDown className="t-icon size-4" data-icon="a" aria-hidden />
+                      <ChevronUp className="t-icon size-4" data-icon="b" aria-hidden />
+                    </span>
                   </Button>
                 </div>
               </div>
@@ -65,7 +68,14 @@ export default function ExecutionTraceWaterfall({
                   style={{ insetInlineStart: `${offsetPct}%`, width: `${widthPct}%` }}
                 />
               </div>
-              {isExpanded ? <p className="text-xs text-muted-foreground">{span.detail}</p> : null}
+              <div
+                className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-out"
+                style={isExpanded ? { gridTemplateRows: "1fr" } : undefined}
+              >
+                <div className="overflow-hidden">
+                  <p className="text-xs text-muted-foreground">{span.detail}</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         );

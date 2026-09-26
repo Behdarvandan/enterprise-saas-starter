@@ -5,6 +5,15 @@
 /* Class-based dark mode — `next-themes` toggles `.dark` on <html>. */
 @custom-variant dark (&:is(.dark *));
 
+/* Registers --beam-angle as an animatable <angle> so `--animate-border-beam`
+   (below) can rotate it smoothly. Used by `.aceternity-border-beam-active`
+   only — a thin, low-alpha ring, never a bright always-on decoration. */
+@property --beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 @theme inline {
   /* Typography — wired to the next/font variables set on <html>.
      Inter carries all app UI copy; Vazirmatn is the per-glyph fallback that
@@ -132,6 +141,23 @@
     }
     50% {
       opacity: 0.4;
+    }
+  }
+
+  /* Rotating border highlight — hand-built, Magic UI/Aceternity-inspired
+     "border beam" (no such package is installed; see the .aceternity-*
+     utilities below for the same honesty convention as .liquid-surface).
+     Kept to a low-alpha mix of the existing --primary token, never a bright
+     line, and used sparingly (Bento card hover, one open pipeline stage at
+     a time) — never as an always-on decoration. */
+  --animate-border-beam: border-beam 3s linear infinite;
+
+  @keyframes border-beam {
+    0% {
+      --beam-angle: 0deg;
+    }
+    100% {
+      --beam-angle: 360deg;
     }
   }
 }
@@ -359,6 +385,118 @@
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
+  }
+
+  /* Hand-built, Magic UI-inspired button shimmer (no such package is
+     installed). Opt-in only via Button's `shimmer` variant — never the
+     button default. Reuses the existing --animate-shimmer keyframe on a
+     ::before sweep, restrained to a low-alpha primary-foreground highlight. */
+  .magic-shimmer-btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .magic-shimmer-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 40%,
+      rgb(255 255 255 / 0.2) 50%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+    pointer-events: none;
+  }
+
+  /* Hand-built, Aceternity-inspired mouse-tracking spotlight (no such
+     package is installed). Driven by --spot-x/--spot-y custom properties
+     set from a client component's onMouseMove; opacity 0 at rest so it
+     never appears without hover/focus. Capped at 8% of --primary, well
+     under the project's "no bright outer glow" rule. */
+  .aceternity-spotlight {
+    position: relative;
+  }
+
+  .aceternity-spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      400px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+      color-mix(in srgb, var(--primary) 8%, transparent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+    pointer-events: none;
+  }
+
+  .aceternity-spotlight:hover::before,
+  .aceternity-spotlight:focus-within::before {
+    opacity: 1;
+  }
+
+  /* CSS-only hover/focus border highlight — the restrained default for
+     Card's "liquid"/"glass" variants. No JS, no animation, just a subtle
+     tint of the existing border on interaction. */
+  .aceternity-border-beam {
+    transition: box-shadow 200ms ease-out;
+  }
+
+  .aceternity-border-beam:hover,
+  .aceternity-border-beam:focus-within {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 40%, var(--border));
+  }
+
+  /* Animated variant of the border highlight above — a thin rotating
+     highlight along the border only (masked to a ring via mask-composite),
+     reserved for a single open/active node at a time (Architecture
+     Pipeline), never all elements at once. */
+  .aceternity-border-beam-active {
+    position: relative;
+  }
+
+  .aceternity-border-beam-active::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--beam-angle),
+      transparent 0%,
+      color-mix(in srgb, var(--primary) 60%, transparent) 8%,
+      transparent 16%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: var(--animate-border-beam);
+    opacity: 0;
+    transition: opacity 150ms ease-out;
+    pointer-events: none;
+  }
+
+  /* Only plays while the native <details> element is actually open — so at
+     most one node animates at a time, never all of them. */
+  .aceternity-border-beam-active[open]::before {
+    opacity: 1;
+  }
+
+  /* Badge "live" status dot glow — reuses --animate-status-pulse. Ring
+     capped at 20% alpha of the existing status-success token; only ever
+     applied when Badge's `status="live"` prop conveys a real semantic
+     state, never as decoration (see badge.tsx). */
+  .pulse-glow {
+    animation: var(--animate-status-pulse);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-status-success) 20%, transparent);
   }
 }
 

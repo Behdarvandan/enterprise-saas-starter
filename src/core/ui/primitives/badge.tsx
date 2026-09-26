@@ -24,9 +24,15 @@ function Badge({
   className,
   variant,
   asChild = false,
+  status,
+  children,
   ...props
 }: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+  VariantProps<typeof badgeVariants> & {
+    asChild?: boolean
+    /** Renders a small status dot before the label. Only "live" pulses (via `.pulse-glow`, reusing --animate-status-pulse) — reserve for a genuine live/online state, never as decoration. "offline" renders the same dot static and muted. */
+    status?: "live" | "offline"
+  }) {
   const Comp = asChild ? Slot.Root : "span"
 
   return (
@@ -34,7 +40,18 @@ function Badge({
       data-slot="badge"
       className={cn(badgeVariants({ variant }), className)}
       {...props}
-    />
+    >
+      {status ? (
+        <span
+          aria-hidden
+          className={cn(
+            "size-1.5 rounded-full",
+            status === "live" ? "pulse-glow bg-status-success" : "bg-current opacity-50",
+          )}
+        />
+      ) : null}
+      {children}
+    </Comp>
   )
 }
 

@@ -32,7 +32,7 @@ export async function ArchitecturePipeline() {
               key={key}
               className="flex flex-col items-stretch gap-2 lg:flex-1 lg:flex-row lg:items-center"
             >
-              <details className="group flex-1 rounded-xl border border-border bg-card transition-colors open:bg-accent/40">
+              <details className="group aceternity-border-beam-active flex-1 rounded-xl border border-border bg-card transition-colors open:bg-accent/40">
                 <summary className="flex cursor-pointer items-center gap-3 rounded-xl p-4 outline-none marker:content-none focus-visible:ring-2 focus-visible:ring-ring/60 [&::-webkit-details-marker]:hidden">
                   <Icon aria-hidden className="size-5 shrink-0 text-primary" />
                   <span className="flex-1 text-sm font-semibold text-foreground">
@@ -43,9 +43,13 @@ export async function ArchitecturePipeline() {
                     className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90"
                   />
                 </summary>
-                <p className="px-4 pb-4 text-sm text-muted-foreground">
-                  {t(`stages.${key}.description`)}
-                </p>
+                <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-out group-open:grid-rows-[1fr]">
+                  <div className="overflow-hidden">
+                    <p className="px-4 pb-4 text-sm text-muted-foreground">
+                      {t(`stages.${key}.description`)}
+                    </p>
+                  </div>
+                </div>
               </details>
               {index < STAGE_KEYS.length - 1 ? (
                 <ArrowRight

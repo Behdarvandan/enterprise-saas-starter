@@ -49,7 +49,7 @@ export default function ChunkingStrategyCard({ copy }: { copy: ChunkingStrategyC
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <Tabs value={strategy} onValueChange={(value) => setStrategy(value as ChunkingStrategy)}>
-          <TabsList>
+          <TabsList variant="line">
             <TabsTrigger value="recursive">{copy.strategyRecursiveLabel}</TabsTrigger>
             <TabsTrigger value="semantic">{copy.strategySemanticLabel}</TabsTrigger>
           </TabsList>

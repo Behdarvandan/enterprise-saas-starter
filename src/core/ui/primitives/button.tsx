@@ -15,6 +15,12 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         link: "text-primary underline-offset-4 hover:text-primary-hover hover:underline",
+        /** Opt-in only — a restrained, hand-built shimmer sweep (Magic UI-inspired, no package installed). Never the default look. */
+        shimmer:
+          "magic-shimmer-btn bg-primary text-primary-foreground shadow-lg hover:bg-primary-hover",
+        /** Opt-in only — a hover-only, low-alpha glow (Aceternity-inspired, no package installed). Never an always-on outer glow. */
+        glow:
+          "bg-primary text-primary-foreground shadow-lg hover:bg-primary-hover hover:shadow-[0_0_2px_6px_color-mix(in_srgb,var(--primary)_12%,transparent)]",
       },
       size: {
         default: "h-9 px-4",

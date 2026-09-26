@@ -69,7 +69,10 @@ export default function DomainSetupCard({
               onClick={handleCopy}
               aria-label={copy.copyButton}
             >
-              {copied ? <Check className="text-primary" /> : <Copy />}
+              <span className="t-icon-swap" data-state={copied ? "b" : "a"}>
+                <Copy className="t-icon" data-icon="a" aria-hidden />
+                <Check className="t-icon text-primary" data-icon="b" aria-hidden />
+              </span>
             </Button>
           </div>
         </div>

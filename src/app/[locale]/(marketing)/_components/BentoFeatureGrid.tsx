@@ -1,8 +1,8 @@
 import { Bot, BookOpen, Palette, Workflow } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { Card } from "@/core/ui/primitives/card";
 import { cn } from "@/lib/utils";
+import { BentoRevealCard } from "./BentoRevealCard";
 
 const FEATURE_ICON: Record<string, LucideIcon> = {
   agents: Bot,
@@ -45,10 +45,11 @@ export async function BentoFeatureGrid() {
           const subBullets = t.raw(`items.${key}.subBullets`) as string[];
 
           return (
-            <Card
+            <BentoRevealCard
               key={key}
               variant="section"
-              className={cn("flex flex-col gap-3 p-6", tint, className)}
+              wrapperClassName={className}
+              className={cn("flex flex-col gap-3 p-6", tint)}
             >
               <Icon aria-hidden className="size-7 text-primary" />
               <h3 className="text-base font-semibold text-foreground">
@@ -63,7 +64,7 @@ export async function BentoFeatureGrid() {
                   </li>
                 ))}
               </ul>
-            </Card>
+            </BentoRevealCard>
           );
         })}
       </div>

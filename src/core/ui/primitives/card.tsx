@@ -16,9 +16,9 @@ const cardVariants = cva("rounded-xl border border-border bg-card text-card-fore
       raised: "bg-popover text-popover-foreground shadow-xl",
       /** Interactive tile with an optional hover lift (stat cards, pricing offer card). */
       liquid:
-        "transition-[transform,box-shadow] duration-200 ease-out data-[interactive=true]:hover:-translate-y-1 data-[interactive=true]:hover:shadow-xl",
+        "aceternity-border-beam transition-[transform,box-shadow] duration-200 ease-out data-[interactive=true]:hover:-translate-y-1 data-[interactive=true]:hover:shadow-xl",
       /** Frosted-glass surface — opt-in, scoped to the Pasargad App Engine routes only. Never the default; every other consumer keeps the flat surface from ARCHITECTURE.md §7. */
-      glass: "border-border/40 bg-card/60 backdrop-blur-md",
+      glass: "aceternity-border-beam border-border/40 bg-card/60 backdrop-blur-md",
     },
   },
   defaultVariants: {

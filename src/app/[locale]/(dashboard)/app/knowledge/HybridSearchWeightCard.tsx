@@ -26,8 +26,14 @@ export default function HybridSearchWeightCard({ copy }: { copy: HybridSearchWei
         <Slider value={[denseWeight]} onValueChange={([value]) => setDenseWeight(value)} min={0} max={100} step={5} />
 
         <div className="flex h-2 w-full overflow-hidden rounded-full">
-          <div className="h-full bg-primary" style={{ width: `${denseWeight}%` }} />
-          <div className="h-full bg-muted-foreground/40" style={{ width: `${bm25Weight}%` }} />
+          <div
+            className="h-full bg-primary transition-[width] duration-200 ease-out"
+            style={{ width: `${denseWeight}%` }}
+          />
+          <div
+            className="h-full bg-muted-foreground/40 transition-[width] duration-200 ease-out"
+            style={{ width: `${bm25Weight}%` }}
+          />
         </div>
 
         <div className="flex items-center justify-between text-sm">

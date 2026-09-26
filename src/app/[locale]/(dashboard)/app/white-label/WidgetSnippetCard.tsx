@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Copy, MessageCircle } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import { useMemo, useState } from "react";
 import { Button } from "@/core/ui/primitives/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/core/ui/primitives/card";
@@ -52,6 +53,7 @@ export default function WidgetSnippetCard({ copy }: { copy: WidgetSnippetCardCop
   const [greeting, setGreeting] = useState("Hi! How can we help?");
   const [agentName, setAgentName] = useState("Support triage");
   const [copied, setCopied] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const snippet = useMemo(
     () => buildWidgetSnippet({ position, accentColor, greeting, agentName }),
@@ -139,12 +141,14 @@ export default function WidgetSnippetCard({ copy }: { copy: WidgetSnippetCardCop
                 <p className="font-medium">{agentName}</p>
                 <p className="text-muted-foreground">{greeting}</p>
               </div>
-              <div
+              <motion.div
                 className="flex size-11 items-center justify-center self-end rounded-full shadow-popover"
                 style={{ backgroundColor: accentColor }}
+                whileHover={reduceMotion ? undefined : { scale: 1.04, y: -2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
                 <MessageCircle aria-hidden className="size-5 text-white" />
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -153,7 +157,10 @@ export default function WidgetSnippetCard({ copy }: { copy: WidgetSnippetCardCop
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-foreground">{copy.snippetLabel}</span>
             <Button type="button" variant="ghost" size="sm" onClick={handleCopy}>
-              {copied ? <Check className="text-primary" /> : <Copy />}
+              <span className="t-icon-swap" data-state={copied ? "b" : "a"}>
+                <Copy className="t-icon" data-icon="a" aria-hidden />
+                <Check className="t-icon text-primary" data-icon="b" aria-hidden />
+              </span>
               {copy.copyButton}
             </Button>
           </div>
