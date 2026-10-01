@@ -100,7 +100,7 @@ describe("updateAgencyBranding", () => {
 
     expect(result).toEqual({ success: true, domainChanged: false });
     expect(updateMock).toHaveBeenCalledTimes(1);
-    const [table, values] = updateMock.mock.calls[0];
+    const [table, values] = updateMock.mock.calls[0] ?? [];
     expect(table).toBe("agencies");
     expect(values).toEqual({ branding: { title: "Acme AI", primary_color: "#7c3aed" } });
     expect(values).not.toHaveProperty("cname_domain");
@@ -114,7 +114,7 @@ describe("updateAgencyBranding", () => {
 
     await updateAgencyBranding(form({ title: "New", logo_url: "", primary_color: "#222222" }));
 
-    const [, values] = updateMock.mock.calls[0];
+    const [, values] = updateMock.mock.calls[0] ?? [];
     expect(values.branding).toEqual({ title: "New", theme_note: { keep: true }, primary_color: "#222222" });
   });
 
@@ -124,7 +124,7 @@ describe("updateAgencyBranding", () => {
     const result = await updateAgencyBranding(form({ title: "Acme", cname_domain: "https://New.Acme.com/" }));
 
     expect(result).toEqual({ success: true, domainChanged: true });
-    expect(updateMock.mock.calls[0][1]).toMatchObject({ cname_domain: "new.acme.com" });
+    expect(updateMock.mock.calls[0]?.[1]).toMatchObject({ cname_domain: "new.acme.com" });
     expect(invalidateMock).toHaveBeenCalledWith("old.acme.com");
     expect(invalidateMock).toHaveBeenCalledWith("new.acme.com");
     expect(revalidatePathMock).toHaveBeenCalledWith("/agency/branding");
@@ -136,7 +136,7 @@ describe("updateAgencyBranding", () => {
     const result = await updateAgencyBranding(form({ title: "Acme" }));
 
     expect(result.domainChanged).toBe(true);
-    expect(updateMock.mock.calls[0][1]).toMatchObject({ cname_domain: null });
+    expect(updateMock.mock.calls[0]?.[1]).toMatchObject({ cname_domain: null });
     expect(invalidateMock).toHaveBeenCalledWith("ai.acme.com");
     expect(invalidateMock).toHaveBeenCalledTimes(1);
   });

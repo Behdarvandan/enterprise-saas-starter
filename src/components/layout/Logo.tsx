@@ -103,8 +103,10 @@ const WORD: Record<"en" | "fa", string> = {
 type LogoVariant = "horizontal" | "stacked" | "mark" | "wordmark";
 type LogoLang = "en" | "fa";
 
+type LayoutVariant = "horizontal" | "stacked" | "wordmark";
+
 const LAYOUTS: Record<
-  string,
+  `${LayoutVariant}-${LogoLang}`,
   { vb: [number, number, number, number]; mark: [number, number] | null; word: [LogoLang, number, number] }
 > = {
   "horizontal-en": { vb: [0, 0, 235.79, 48], mark: [0, 0], word: ["en", 60.75, 38.4] },
@@ -163,7 +165,9 @@ export default function Logo({
     );
   }
 
-  const layout = LAYOUTS[`${variant === "wordmark" ? "wordmark" : variant === "stacked" ? "stacked" : "horizontal"}-${lang}`];
+  const layoutVariant: LayoutVariant =
+    variant === "wordmark" ? "wordmark" : variant === "stacked" ? "stacked" : "horizontal";
+  const layout = LAYOUTS[`${layoutVariant}-${lang}`];
   const scale = resolved / 48;
   const [vx, vy, vw, vh] = layout.vb;
 

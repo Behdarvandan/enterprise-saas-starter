@@ -89,7 +89,7 @@ export async function mapWithConcurrency<T, R>(
   async function worker(): Promise<void> {
     while (cursor < items.length) {
       const index = cursor++;
-      results[index] = await fn(items[index], index);
+      results[index] = await fn(items[index] as T, index);
     }
   }
 

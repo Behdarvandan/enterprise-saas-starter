@@ -92,7 +92,7 @@ describe("skills actions", () => {
     it("saves valid rag_search settings through the versioned writer", async () => {
       expect(await updateSkillConfig("rag_search", valid)).toEqual({ success: true });
       expect(applyUpdateMock).toHaveBeenCalledWith(ORG, expect.any(Function));
-      const mutate = applyUpdateMock.mock.calls[0][1] as (config: unknown) => Record<string, unknown>;
+      const mutate = applyUpdateMock.mock.calls[0]?.[1] as (config: unknown) => Record<string, unknown>;
       expect(mutate({ rag_params: { embedding_model: "m" } }).rag_params).toEqual({
         embedding_model: "m",
         ...valid,

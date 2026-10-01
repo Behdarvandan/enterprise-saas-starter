@@ -60,7 +60,7 @@ export default function ChunkingStrategyCard({ copy }: { copy: ChunkingStrategyC
                 <span className="text-sm font-medium text-foreground">{copy.chunkSizeLabel}</span>
                 <span className="text-sm text-muted-foreground">{chunkSize}</span>
               </div>
-              <Slider value={[chunkSize]} onValueChange={([value]) => setChunkSize(value)} min={128} max={2048} step={64} />
+              <Slider value={[chunkSize]} onValueChange={([value]) => value !== undefined && setChunkSize(value)} min={128} max={2048} step={64} />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -68,7 +68,7 @@ export default function ChunkingStrategyCard({ copy }: { copy: ChunkingStrategyC
                 <span className="text-sm font-medium text-foreground">{copy.overlapLabel}</span>
                 <span className="text-sm text-muted-foreground">{overlap}</span>
               </div>
-              <Slider value={[overlap]} onValueChange={([value]) => setOverlap(value)} min={0} max={256} step={16} />
+              <Slider value={[overlap]} onValueChange={([value]) => value !== undefined && setOverlap(value)} min={0} max={256} step={16} />
             </div>
 
             <p className="text-sm text-muted-foreground">{preview}</p>
@@ -80,7 +80,7 @@ export default function ChunkingStrategyCard({ copy }: { copy: ChunkingStrategyC
                 <span className="text-sm font-medium text-foreground">{copy.semanticThresholdLabel}</span>
                 <span className="text-sm text-muted-foreground">{threshold.toFixed(2)}</span>
               </div>
-              <Slider value={[threshold]} onValueChange={([value]) => setThreshold(value)} min={0} max={1} step={0.05} />
+              <Slider value={[threshold]} onValueChange={([value]) => value !== undefined && setThreshold(value)} min={0} max={1} step={0.05} />
             </div>
             <p className="text-sm text-muted-foreground">{copy.semanticHint}</p>
           </TabsContent>

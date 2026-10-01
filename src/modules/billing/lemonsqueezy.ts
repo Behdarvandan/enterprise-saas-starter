@@ -1,5 +1,6 @@
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { z } from "zod";
 import { createCoreAdminClient } from "@/core/db";
+import { verifyHmacSha256Hex } from "@/lib/security";
 
 const HANDLED_EVENTS = new Set([
   "subscription_created",
@@ -14,21 +15,27 @@ export function getLemonSqueezyApiKey(): string | undefined {
   return process.env.LEMONSQUEEZY_API_KEY?.trim() || undefined;
 }
 
-/** HMAC-SHA256 signature check, mirroring pasargad-core's own `_verify_signature`. */
+/** Reads the webhook signing secret; `undefined` when unset. */
+export function getLemonSqueezyWebhookSecret(): string | undefined {
+  return process.env.LEMONSQUEEZY_WEBHOOK_SECRET?.trim() || undefined;
+}
+
+/**
+ * HMAC-SHA256 signature check, mirroring pasargad-core's own
+ * `_verify_signature`.
+ *
+ * Fails closed: without a configured secret every request is rejected. The
+ * webhook route reports that as a configuration error (500) before calling
+ * this, so an unset secret can never turn the endpoint into an unauthenticated
+ * write path to `organizations`.
+ */
 export function verifyLemonSqueezySignature(rawBody: string, signatureHeader: string | null): boolean {
-  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+  const secret = getLemonSqueezyWebhookSecret();
   if (!secret) {
-    console.warn("[billing] LEMONSQUEEZY_WEBHOOK_SECRET not set; skipping signature verification");
-    return true;
+    console.error("[billing] LEMONSQUEEZY_WEBHOOK_SECRET not set; rejecting webhook");
+    return false;
   }
-  if (!signatureHeader) return false;
-
-  const expected = createHmac("sha256", secret).update(rawBody).digest("hex");
-  const expectedBuffer = Buffer.from(expected);
-  const receivedBuffer = Buffer.from(signatureHeader);
-
-  if (expectedBuffer.length !== receivedBuffer.length) return false;
-  return timingSafeEqual(expectedBuffer, receivedBuffer);
+  return verifyHmacSha256Hex(rawBody, signatureHeader, secret);
 }
 
 export interface LemonSqueezyInvoice {
@@ -97,23 +104,46 @@ export async function getLemonSqueezyInvoices(subscriptionId: string): Promise<L
   }
 }
 
-export interface LemonSqueezyWebhookPayload {
-  meta?: {
-    event_name?: string;
-    custom_data?: { tenant_id?: string; tenantId?: string; plan_name?: string };
-  };
-  data?: {
-    id?: string | number;
-    attributes?: {
-      id?: string | number;
-      status?: string;
-      renews_at?: string;
-      ends_at?: string;
-      customer_id?: string | number;
-      variant_name?: string;
-    };
-  };
-}
+const idLike = z.union([z.string(), z.number()]);
+
+/**
+ * Runtime schema for the subset of the Lemon Squeezy webhook payload this
+ * handler reads. Unknown keys are ignored; everything read is optional here
+ * and checked explicitly in `applyLemonSqueezySubscriptionEvent`.
+ */
+export const lemonSqueezyWebhookPayloadSchema = z.object({
+  meta: z
+    .object({
+      event_name: z.string().optional(),
+      custom_data: z
+        .object({
+          tenant_id: z.string().optional(),
+          tenantId: z.string().optional(),
+          plan_name: z.string().optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+  data: z
+    .object({
+      id: idLike.optional(),
+      attributes: z
+        .object({
+          id: idLike.optional(),
+          status: z.string().optional(),
+          renews_at: z.string().nullish(),
+          ends_at: z.string().nullish(),
+          customer_id: idLike.nullish(),
+          variant_name: z.string().optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+});
+
+export type LemonSqueezyWebhookPayload = z.infer<typeof lemonSqueezyWebhookPayloadSchema>;
+
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * Applies a Lemon Squeezy subscription webhook event to the shared
@@ -132,8 +162,8 @@ export async function applyLemonSqueezySubscriptionEvent(
 
   const customData = payload.meta?.custom_data ?? {};
   const tenantId = customData.tenant_id ?? customData.tenantId;
-  if (!tenantId) {
-    throw new Error("meta.custom_data.tenant_id is required");
+  if (!tenantId || !UUID_PATTERN.test(tenantId)) {
+    throw new Error("meta.custom_data.tenant_id must be a valid organization id");
   }
 
   const attributes = payload.data?.attributes ?? {};
@@ -156,7 +186,7 @@ export async function applyLemonSqueezySubscriptionEvent(
 
   const subscriptionStatus = eventName === "subscription_cancelled" ? "cancelled" : (attributes.status ?? "unknown");
 
-  const updateRow: Record<string, unknown> = {
+  const updateRow: Record<string, string | null | undefined> = {
     provider_subscription_id: subscriptionId,
     plan_id: customData.plan_name ?? attributes.variant_name,
     subscription_status: subscriptionStatus,

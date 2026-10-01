@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { authorizeCronRequest } from "@/lib/cron-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
@@ -19,22 +20,8 @@ export const dynamic = "force-dynamic";
  * an external scheduler.
  */
 export async function GET(request: Request) {
-  const secret = process.env.CRON_SECRET;
-
-  if (!secret) {
-    console.error(
-      "[cleanup-pending-appointments] CRON_SECRET is not configured.",
-    );
-    return NextResponse.json(
-      { error: "CRON_SECRET is not configured." },
-      { status: 500 },
-    );
-  }
-
-  const authorization = request.headers.get("authorization");
-  if (authorization !== `Bearer ${secret}`) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
+  const denied = authorizeCronRequest(request, "cleanup-pending-appointments");
+  if (denied) return denied;
 
   // 35-minute cutoff: only cancels appointments whose 30-minute Stripe
   // Checkout session should already have expired, plus a 5-minute grace buffer.

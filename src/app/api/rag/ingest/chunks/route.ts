@@ -49,7 +49,7 @@ export const GET = withApiErrorHandling(
 
     return NextResponse.json({
       chunks,
-      nextCursor: rows.length > limit ? page[page.length - 1].chunk_index : null,
+      nextCursor: rows.length > limit ? (page[page.length - 1]?.chunk_index ?? null) : null,
     });
   },
 );

@@ -342,9 +342,11 @@ canonical entrypoint (`npm test` runs the separate Vitest unit suite).
   iframe on our side — outbound framing, unaffected by our own
   `X-Frame-Options`.)
 - **Standalone output** (`output: "standalone"` in `next.config.js`) feeds
-  the multi-stage `Dockerfile` (`deps` → `builder` → `runner`, `node:20
-  -alpine`, non-root `nextjs:nodejs` UID/GID 1001, `HEALTHCHECK` against
-  `GET /api/health`).
+  the multi-stage `Dockerfile` (`deps` → `builder` → `runner`, `node:22
+  -alpine`, non-root `nextjs:nodejs` UID/GID 1001, `tini` as PID 1,
+  `HEALTHCHECK` against `GET /api/health`). `docker-compose.yml` adds a
+  read-only root filesystem, `cap_drop: ALL`, `no-new-privileges`,
+  loopback-only port binding and resource limits.
 - **Migration integrity**: `supabase/migrations/*.sql` filenames are
   `YYYYMMDDHHMMSS_description.sql` and apply in lexicographic order.
   Verified: no duplicate timestamp prefixes, chronological order intact
@@ -375,13 +377,15 @@ canonical entrypoint (`npm test` runs the separate Vitest unit suite).
    | Variable | Purpose |
    | --- | --- |
    | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | Supabase project connection and privileged server operations |
-   | `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_ENTERPRISE` | Stripe billing and checkout |
+   | `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_STARTER_EUR`, `STRIPE_PRICE_PRO_EUR`, `STRIPE_PRICE_STARTER_USD`, `STRIPE_PRICE_PRO_USD` | Stripe billing and checkout (per-currency price IDs; Enterprise is contact-only) |
    | `NEXT_PUBLIC_PAYMENT_PROVIDER`, `PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`, `PAYTR_MERCHANT_SALT` | Payment provider routing and PayTR credentials |
    | `RESEND_API_KEY`, `EMAIL_FROM` (optional) | Transactional email |
    | `GOOGLE_API_KEY` | Document embeddings (Gemini `gemini-embedding-001`, 1536d) |
    | `OPENAI_API_KEY`, `GROQ_API_KEY` | AI chat completions |
    | `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | Error tracking and source map upload |
-   | `CRON_SECRET` | Authorizes the pending-appointment cleanup cron endpoint |
+   | `CRON_SECRET` | Bearer token (constant-time compared) for the `/api/cron/*` endpoints; they return 500 while unset |
+   | `APP_URL` | Trusted public origin for e-mail / payment-redirect links; without it the request `Host` header is used (spoofable) |
+   | `LEMONSQUEEZY_WEBHOOK_SECRET` | Required: the Lemon Squeezy webhook fails closed (500) while unset |
    | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Rate limiting for public API routes |
    | `PASARGAD_API_URL` | Base URL of the `pasargad-core` FastAPI service (see the env var naming note above) |
    | `PASARGAD_OPENAPI_URL` (codegen-time only) | Where `npm run generate:api` fetches `/openapi.json` from — defaults to `http://localhost:8000/openapi.json` |
@@ -439,9 +443,13 @@ reconciled** — documented honestly rather than picking one to assert:
   in the Vercel project settings.
 - `.github/workflows/ci-cd.yml` was later rewritten to a two-job pipeline
   targeting **AWS ECS Fargate**:
-  1. `quality-gate` — checkout, Node 20 + npm cache, `npm ci`,
-     `npm run check:boundaries`, `npm run build`.
-  2. `build-and-deploy` (`needs: quality-gate`, `main`-push only) — OIDC
+  1. `quality-gate` — checkout, Node 22 + npm cache, `npm ci`,
+     `npm run check:boundaries`, `tsc --noEmit`, `npm run lint`,
+     `npm test`, `npm audit` (production deps, critical gate),
+     `npm run build`.
+  2. `iac-security` — `checkov -d .` (config in `.checkov.yaml`); any
+     failed Dockerfile / GitHub Actions / secrets check fails the pipeline.
+  3. `build-and-deploy` (`needs: [quality-gate, iac-security]`, `main`-push only) — OIDC
      `aws-actions/configure-aws-credentials`, `amazon-ecr-login`, Docker
      build/push (tagged with both the commit SHA and `latest`), then
      `aws ecs update-service --force-new-deployment`. This job depends on

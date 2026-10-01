@@ -2,7 +2,7 @@ import { ArrowRight, Boxes, ChevronRight, Cpu, Database, Radio } from "lucide-re
 import type { LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-const STAGE_ICON: Record<string, LucideIcon> = {
+const STAGE_ICON: Record<(typeof STAGE_KEYS)[number], LucideIcon> = {
   ingestion: Database,
   vector: Boxes,
   orchestration: Cpu,

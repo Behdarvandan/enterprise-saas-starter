@@ -33,8 +33,8 @@ export function readRagSearchValues(config: unknown): RagSearchValues {
 
   for (const field of RAG_SEARCH_FIELDS) {
     const candidate = stored[field.key];
-    const valid = ragSearchSchema.shape[field.key].safeParse(candidate);
-    values[field.key] = valid.success ? valid.data : field.defaultValue;
+    const valid = ragSearchSchema.shape[field.key]?.safeParse(candidate);
+    values[field.key] = valid?.success ? valid.data : field.defaultValue;
   }
   return values;
 }

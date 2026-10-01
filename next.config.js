@@ -5,20 +5,46 @@ const createNextIntlPlugin = require("next-intl/plugin");
 // instead of next-intl's default ./i18n/request.ts location.
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+/**
+ * Baseline response headers applied to every route.
+ *
+ * The CSP is deliberately limited to directives that do not restrict script /
+ * style / connect sources: Next.js inline bootstrap scripts, Sentry, PostHog
+ * and Stripe.js need a nonce-based policy (via middleware) before
+ * `script-src` can be tightened without breaking the app. These directives
+ * already close clickjacking, `<base>` hijacking, plugin content and
+ * cross-origin form posts.
+ */
+const securityHeaders = [
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'",
+  },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+  { key: "X-DNS-Prefetch-Control", value: "off" },
+  { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
+  {
+    key: "Permissions-Policy",
+    // Stripe Checkout is a full-page redirect, so `payment` stays disabled.
+    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
+  },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
   reactStrictMode: true,
+  // Don't advertise the framework via `X-Powered-By`.
+  poweredByHeader: false,
   async headers() {
     return [
       {
         source: "/:path*",
-        headers: [
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-        ],
+        headers: securityHeaders,
       },
     ];
   },

@@ -22,7 +22,11 @@
       "@/*": ["./src/*"],
       "@/core/*": ["./src/core/*"],
       "@/modules/*": ["./src/modules/*"]
-    }
+    },
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

@@ -1,0 +1,10 @@
+# Checkov configuration — picked up automatically by `checkov -d .`.
+# i18n catalogs are plain UI copy, not IaC or configuration. The entropy-based
+# secrets scanner flags German strings such as "KI-Token-Nutzung" ("AI token
+# usage") because they contain the keyword "token" next to a hyphenated word;
+# they are translations, not credentials.
+skip-path:
+  - messages/
+  - node_modules/
+  - .next/
+

@@ -26,7 +26,7 @@ function flatten(tree: MessageValue, prefix = ""): Map<string, string> {
 /** ICU argument names (`{count}`, `{count, plural, …}`) a message interpolates. */
 function icuArguments(message: string): string[] {
   const names = new Set<string>();
-  for (const match of message.matchAll(/\{\s*([A-Za-z_][\w]*)\s*[,}]/g)) names.add(match[1]);
+  for (const match of message.matchAll(/\{\s*([A-Za-z_][\w]*)\s*[,}]/g)) { if (match[1]) names.add(match[1]); }
   return [...names].sort();
 }
 
@@ -39,7 +39,7 @@ describe("message catalogs", () => {
 
   for (const locale of routing.locales.filter((l) => l !== "en")) {
     describe(locale, () => {
-      const flat = flatten(catalogs[locale]);
+      const flat = flatten(catalogs[locale] ?? {});
 
       it("has exactly the same keys as en", () => {
         const missing = [...reference.keys()].filter((k) => !flat.has(k));

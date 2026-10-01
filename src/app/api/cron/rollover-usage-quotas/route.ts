@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { authorizeCronRequest } from "@/lib/cron-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
@@ -15,20 +16,8 @@ const PERIOD_LENGTH_DAYS = 30;
  * /api/cron/cleanup-pending-appointments. Intended to run once a day.
  */
 export async function GET(request: Request) {
-  const secret = process.env.CRON_SECRET;
-
-  if (!secret) {
-    console.error("[rollover-usage-quotas] CRON_SECRET is not configured.");
-    return NextResponse.json(
-      { error: "CRON_SECRET is not configured." },
-      { status: 500 },
-    );
-  }
-
-  const authorization = request.headers.get("authorization");
-  if (authorization !== `Bearer ${secret}`) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
+  const denied = authorizeCronRequest(request, "rollover-usage-quotas");
+  if (denied) return denied;
 
   const cutoff = new Date(
     Date.now() - PERIOD_LENGTH_DAYS * 24 * 60 * 60_000,
