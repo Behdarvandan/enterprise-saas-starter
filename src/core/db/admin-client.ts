@@ -16,6 +16,13 @@ function getCoreAdminEnv(): { url: string; serviceRoleKey: string } {
 
   if (url && serviceRoleKey) return { url, serviceRoleKey };
 
+  // Production runtime only — `next build` has NODE_ENV=production but no secrets.
+  if (process.env.NODE_ENV === "production" && process.env.NEXT_PHASE !== "phase-production-build") {
+    throw new Error(
+      "NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set to use the admin client.",
+    );
+  }
+
   if (!warned) {
     warned = true;
     console.warn(

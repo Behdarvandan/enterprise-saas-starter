@@ -23,7 +23,7 @@ export default function HybridSearchWeightCard({ copy }: { copy: HybridSearchWei
         <CardDescription>{copy.description}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <Slider value={[denseWeight]} onValueChange={([value]) => setDenseWeight(value)} min={0} max={100} step={5} />
+        <Slider value={[denseWeight]} onValueChange={([value]) => value !== undefined && setDenseWeight(value)} min={0} max={100} step={5} />
 
         <div className="flex h-2 w-full overflow-hidden rounded-full">
           <div

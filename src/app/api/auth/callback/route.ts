@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createCoreServerClient } from "@/core/db";
+import { sanitizeRedirectPath } from "@/lib/security";
 
 /**
  * GET /api/auth/callback
@@ -13,7 +14,8 @@ import { createCoreServerClient } from "@/core/db";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/dashboard";
+  // `next` is attacker-controllable: only same-origin relative paths are honored.
+  const next = sanitizeRedirectPath(searchParams.get("next"));
 
   if (code) {
     const supabase = await createCoreServerClient();

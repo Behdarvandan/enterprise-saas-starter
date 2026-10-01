@@ -33,7 +33,7 @@ export class ModuleRegistry {
     if (!manifest) return false;
 
     if (manifest.featureFlagKey && activeFlags && manifest.featureFlagKey in activeFlags) {
-      return activeFlags[manifest.featureFlagKey];
+      return activeFlags[manifest.featureFlagKey] ?? manifest.enabled;
     }
 
     return manifest.enabled;

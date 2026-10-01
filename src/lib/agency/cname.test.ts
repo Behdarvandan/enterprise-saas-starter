@@ -172,7 +172,7 @@ describe("verifyCnameRecord", () => {
       records: ["cname.pasargad.app"],
     });
 
-    const [url, init] = fetchMock.mock.calls[0];
+    const [url, init] = fetchMock.mock.calls[0] ?? [];
     expect(url).toBe("https://cloudflare-dns.com/dns-query?name=ai.acme.com&type=CNAME");
     expect(init.headers.accept).toBe("application/dns-json");
   });

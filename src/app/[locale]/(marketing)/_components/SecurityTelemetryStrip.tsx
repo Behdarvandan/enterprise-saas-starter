@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/core/ui/primitives/card";
 
-const CONTROL_ICON: Record<string, LucideIcon> = {
+const CONTROL_ICON: Record<(typeof CONTROL_KEYS)[number], LucideIcon> = {
   isolation: Shield,
   serviceRole: KeyRound,
   paymentVerification: BadgeCheck,

@@ -48,7 +48,7 @@ export interface CreatePendingAppointmentInput {
 
 /** Converts a Postgres `time` value ("HH:MM[:SS]") to minutes since midnight. */
 function minutesOfDay(time: string): number {
-  const [hours, minutes] = time.split(":").map(Number);
+  const [hours = 0, minutes = 0] = time.split(":").map(Number);
   return hours * 60 + minutes;
 }
 

@@ -50,7 +50,7 @@ describe("getEmbedding", () => {
     const result = await getEmbedding("merhaba dünya");
 
     expect(result).toHaveLength(1536);
-    const [url, init] = fetchMock.mock.calls[0];
+    const [url, init] = fetchMock.mock.calls[0] ?? [];
     expect(url).toBe(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent",
     );
@@ -69,7 +69,7 @@ describe("getEmbedding", () => {
 
     await getEmbedding("hello");
 
-    expect(String(fetchMock.mock.calls[0][0])).not.toContain("test-google-key");
+    expect(String(fetchMock.mock.calls[0]?.[0])).not.toContain("test-google-key");
   });
 
   it("accepts the batch-shaped `embeddings` response", async () => {

@@ -1,25 +1,92 @@
-version: "3.8"
-
+# Production-style single-node deployment of the web app.
+#
+#   cp .env.example .env   # then fill in real values (never commit .env)
+#   docker compose up -d --build
+#
+# Secrets are read from the shell / `.env` at runtime and never baked into the
+# image: only the public `NEXT_PUBLIC_*` values are passed as build args.
 services:
   web:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
+        NEXT_PUBLIC_PAYMENT_PROVIDER: ${NEXT_PUBLIC_PAYMENT_PROVIDER:-stripe}
+        NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+    image: enterprise-saas-starter:local
+    # Loopback only: put a TLS-terminating reverse proxy (Caddy, nginx, a cloud
+    # load balancer) in front instead of exposing the container directly.
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
-      - NODE_ENV=production
-      - PORT=3000
-      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
-      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
-      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}
-      - STRIPE_PRICE_PRO=${STRIPE_PRICE_PRO:-}
-      - STRIPE_PRICE_ENTERPRISE=${STRIPE_PRICE_ENTERPRISE:-}
-      - NEXT_PUBLIC_PAYMENT_PROVIDER=${NEXT_PUBLIC_PAYMENT_PROVIDER:-stripe}
-      - PAYTR_MERCHANT_ID=${PAYTR_MERCHANT_ID:-}
-      - PAYTR_MERCHANT_KEY=${PAYTR_MERCHANT_KEY:-}
-      - PAYTR_MERCHANT_SALT=${PAYTR_MERCHANT_SALT:-}
-    restart: always
+      NODE_ENV: production
+      PORT: "3000"
+      # Absolute public origin, used for e-mail links and payment redirects.
+      APP_URL: ${APP_URL:-}
+      # --- Supabase (required) ---
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:?NEXT_PUBLIC_SUPABASE_URL is required}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY is required}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY is required}
+      # --- Stripe (required: an unset webhook secret rejects every event) ---
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:?STRIPE_SECRET_KEY is required}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:?STRIPE_WEBHOOK_SECRET is required}
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
+      STRIPE_PRICE_STARTER_EUR: ${STRIPE_PRICE_STARTER_EUR:-}
+      STRIPE_PRICE_PRO_EUR: ${STRIPE_PRICE_PRO_EUR:-}
+      STRIPE_PRICE_STARTER_USD: ${STRIPE_PRICE_STARTER_USD:-}
+      STRIPE_PRICE_PRO_USD: ${STRIPE_PRICE_PRO_USD:-}
+      NEXT_PUBLIC_PAYMENT_PROVIDER: ${NEXT_PUBLIC_PAYMENT_PROVIDER:-stripe}
+      # --- PayTR ---
+      PAYTR_MERCHANT_ID: ${PAYTR_MERCHANT_ID:-}
+      PAYTR_MERCHANT_KEY: ${PAYTR_MERCHANT_KEY:-}
+      PAYTR_MERCHANT_SALT: ${PAYTR_MERCHANT_SALT:-}
+      # --- Lemon Squeezy (webhook rejects every request while the secret is unset) ---
+      LEMONSQUEEZY_API_KEY: ${LEMONSQUEEZY_API_KEY:-}
+      LEMONSQUEEZY_WEBHOOK_SECRET: ${LEMONSQUEEZY_WEBHOOK_SECRET:-}
+      LEMONSQUEEZY_STORE_ID: ${LEMONSQUEEZY_STORE_ID:-}
+      LEMONSQUEEZY_VARIANT_ID_MONTHLY: ${LEMONSQUEEZY_VARIANT_ID_MONTHLY:-}
+      LEMONSQUEEZY_VARIANT_ID_YEARLY: ${LEMONSQUEEZY_VARIANT_ID_YEARLY:-}
+      # --- Scheduler / abuse protection ---
+      CRON_SECRET: ${CRON_SECRET:-}
+      UPSTASH_REDIS_REST_URL: ${UPSTASH_REDIS_REST_URL:-}
+      UPSTASH_REDIS_REST_TOKEN: ${UPSTASH_REDIS_REST_TOKEN:-}
+      # --- Email / AI / observability ---
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      PASARGAD_API_URL: ${PASARGAD_API_URL:-}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    # --- Container hardening ---
+    read_only: true
+    tmpfs:
+      - /tmp
+      # Next.js image-optimisation / fetch cache is the only runtime write path.
+      - /app/.next/cache:uid=1001,gid=1001
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    mem_limit: 1g
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

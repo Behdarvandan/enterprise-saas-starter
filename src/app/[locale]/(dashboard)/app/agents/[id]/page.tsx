@@ -17,7 +17,7 @@ interface MockAgent {
 }
 
 /** Same 6 identities as /app/agents' ASSISTANTS, copied locally so this page renders a coherent agent for any [id]. */
-const AGENTS: MockAgent[] = [
+const AGENTS: [MockAgent, ...MockAgent[]] = [
   { name: "Support triage", model: "Claude 3.5", active: true },
   { name: "Onboarding guide", model: "Llama 3.3", active: true },
   { name: "Booking assistant", model: "Claude 3.5", active: true },
@@ -29,7 +29,7 @@ const AGENTS: MockAgent[] = [
 /** No real agent ids exist yet (the real ASSISTANTS array uses plain "1"-"6"), so any [id] is hashed onto the same pool for a stable, coherent identity. */
 function resolveAgent(id: string): MockAgent {
   const sum = [...id].reduce((total, ch) => total + ch.charCodeAt(0), 0);
-  return AGENTS[sum % AGENTS.length];
+  return AGENTS[sum % AGENTS.length] ?? AGENTS[0];
 }
 
 export default async function AgentDetailPage({

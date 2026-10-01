@@ -23,14 +23,15 @@ export function relativeLuminance(hex: string): number {
   const [r, g, b] = channels(hex).map((value) => {
     const channel = value / 255;
     return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
-  });
+  }) as [number, number, number];
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
 /** WCAG contrast ratio between two colours, 1–21. */
 export function contrastRatio(a: string, b: string): number {
-  const [light, dark] = [relativeLuminance(a), relativeLuminance(b)].sort((x, y) => y - x);
-  return (light + 0.05) / (dark + 0.05);
+  const lumA = relativeLuminance(a);
+  const lumB = relativeLuminance(b);
+  return (Math.max(lumA, lumB) + 0.05) / (Math.min(lumA, lumB) + 0.05);
 }
 
 /** Mixes `hex` toward white (`amount` > 0) or black (`amount` < 0). */

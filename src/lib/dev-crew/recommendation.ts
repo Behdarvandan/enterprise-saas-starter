@@ -52,7 +52,7 @@ function parseCounted(list: string): CountedName[] {
     .filter(Boolean)
     .map((part) => {
       const match = /^(.*?)\s*\(x(\d+)\)$/.exec(part);
-      return match ? { name: match[1], count: Number(match[2]) } : { name: part, count: 1 };
+      return match ? { name: match[1] ?? part, count: Number(match[2]) } : { name: part, count: 1 };
     });
 }
 
@@ -63,9 +63,9 @@ export function parseRecommendation(text: string): ParsedRecommendation {
 
   return {
     analyzed: Number(match[1]),
-    actions: parseCounted(match[2]),
-    resources: parseCounted(match[3]),
-    advice: match[4].trim(),
+    actions: parseCounted(match[2] ?? ""),
+    resources: parseCounted(match[3] ?? ""),
+    advice: (match[4] ?? "").trim(),
     raw: text,
   };
 }

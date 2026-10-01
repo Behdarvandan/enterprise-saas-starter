@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
 import { BentoRevealCard } from "./BentoRevealCard";
 
-const FEATURE_ICON: Record<string, LucideIcon> = {
+const FEATURE_ICON: Record<FeatureCellConfig["key"], LucideIcon> = {
   agents: Bot,
   rag: BookOpen,
   workflows: Workflow,

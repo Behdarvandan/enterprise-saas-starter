@@ -1,6 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { getAllPlans, getPlans } from "./plans";
 
+type Region = Parameters<typeof getPlans>[0];
+
+/** The self-service tiers of a region; throws (instead of `undefined`) when one is missing. */
+function starterAndPro(region: Region) {
+  const plans = getPlans(region);
+  const starter = plans.find((plan) => plan.tier === "starter");
+  const pro = plans.find((plan) => plan.tier === "pro");
+  if (!starter || !pro) throw new Error(`starter/pro plan missing for region ${region}`);
+  return [starter, pro] as const;
+}
+
 describe("getPlans", () => {
   it("returns starter/pro/enterprise tiers for every region", () => {
     for (const region of ["tr", "eu", "global"] as const) {
@@ -11,13 +22,13 @@ describe("getPlans", () => {
   });
 
   it("prices the TR region in TRY via PayTR", () => {
-    const [starter, pro] = getPlans("tr");
+    const [starter, pro] = starterAndPro("tr");
     expect(starter.checkout).toEqual({ kind: "paytr", amount: 149_900, currency: "TRY" });
     expect(pro.checkout).toEqual({ kind: "paytr", amount: 399_900, currency: "TRY" });
   });
 
   it("prices the EU region in EUR via Stripe", () => {
-    const [starter, pro] = getPlans("eu");
+    const [starter, pro] = starterAndPro("eu");
     expect(starter.checkout.kind).toBe("stripe");
     expect(pro.checkout.kind).toBe("stripe");
     if (starter.checkout.kind === "stripe" && pro.checkout.kind === "stripe") {
@@ -28,7 +39,7 @@ describe("getPlans", () => {
   });
 
   it("prices the Global region in USD via Stripe", () => {
-    const [starter, pro] = getPlans("global");
+    const [starter, pro] = starterAndPro("global");
     if (starter.checkout.kind === "stripe" && pro.checkout.kind === "stripe") {
       expect(starter.checkout.currency).toBe("USD");
       expect(starter.checkout.amount).toBe(2_000);
